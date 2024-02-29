@@ -1,11 +1,12 @@
 {...}: {
   programs.nixvim = {
+    enable = true;
     plugins = {
       # lightline.enable = true;
       # comment.enable = true;
       gitsigns.enable = true;
       lualine.enable = true;
-      lsp.enable = {
+      lsp = {
         enable = true;
         servers = {
           rust-analyzer.enable = true;
