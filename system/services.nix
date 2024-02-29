@@ -4,12 +4,13 @@
     ./dual-function-keys.nix
   ];
   services = {
-    xserver = {
-      layout = "pl";
-      autoRepeatDelay = 150;
-      autoRepeatInterval = 300;
-      videoDrivers = ["amdgpu"];
-    };
+    # xserver = {
+    #   # enable = true;
+    #   layout = "pl";
+    #   autoRepeatDelay = 150;
+    #   autoRepeatInterval = 300;
+    #   videoDrivers = ["amdgpu"];
+    # };
     pipewire = {
       enable = true;
       alsa.enable = true;

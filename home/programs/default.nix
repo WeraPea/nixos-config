@@ -79,6 +79,7 @@
     wineWowPackages.stagingFull
     # wineWowPackages.waylandFull
     winetricks
+    protontricks
     qimgv
     prismlauncher
     xdg-utils

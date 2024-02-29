@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   wayland.windowManager.hyprland.enable = true;
-  wayland.windowManager.hyprland.package = pkgs.unstable.hyprland;
+  # wayland.windowManager.hyprland.package = pkgs.unstable.hyprland;
   wayland.windowManager.hyprland.settings = {
     monitor = [
       "DP-1,highrr,0x0,auto"
