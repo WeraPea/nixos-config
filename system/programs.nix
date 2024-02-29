@@ -82,10 +82,6 @@
         };
       };
     };
-    git = {
-      enable = true;
-      lfs.enable = true;
-    };
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
@@ -93,12 +89,4 @@
     };
   };
   hardware.xpadneo.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    # to be deleted
-    neovim
-    wget
-    # pulseaudio
-    # libsForQt5.polkit-kde-agent
-  ];
 }

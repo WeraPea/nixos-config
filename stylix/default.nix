@@ -21,6 +21,7 @@
     opacity.applications = 0.8;
     opacity.desktop = 0.8;
     opacity.popups = 0.8;
+    targets.nixvim.enable = true;
     opacity.terminal = 0.26;
   };
 }

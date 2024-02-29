@@ -15,6 +15,7 @@
     ./mako.nix
     ./lf.nix
     ./htop.nix
+    ./git.nix
     ./eww
     ./nixvim
   ];
