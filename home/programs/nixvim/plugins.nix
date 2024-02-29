@@ -1,4 +1,5 @@
 {
+  # TODO: Signs!
   programs.nixvim.plugins = {
     comment-nvim.enable = true;
     undotree.enable = true;
@@ -12,7 +13,7 @@
     # yuck.enable = true;
     crates-nvim.enable = true;
     rust-tools.enable = true;
-    # lsp_kind.enable = true;
+    lspkind.enable = true;
     cmp-nvim-lsp-signature-help.enable = true;
     treesitter.enable = true;
     cmp_luasnip.enable = true;
@@ -24,6 +25,7 @@
       servers = {
         # rust-analyzer.enable = true;
         lua-ls.enable = true;
+        pylsp.enable = true;
       };
     };
     nvim-cmp = {
@@ -33,49 +35,16 @@
         {name = "path";}
         {name = "buffer";}
         {name = "luasnip";}
+        {name = "nvim_lsp_signature_help";}
       ];
       mapping = {
+        "<Up>" = "cmp.mapping.select_prev_item()";
+        "<Down>" = "cmp.mapping.select_next_item()";
         "<C-k>" = "cmp.mapping.select_prev_item()";
         "<C-j>" = "cmp.mapping.select_next_item()";
-        # ["<C-Space>"] = cmp.mapping.complete(),
         "<C-e>" = "cmp.mapping.abort()";
-        "<CR>" = "cmp.mapping.confirm({ select = true })";
-        "<Tab>" = {
-          action = ''
-            function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                else
-                    fallback()
-                end
-            end
-          '';
-          # elseif luasnip.expandable() then
-          #     luasnip.expand()
-          # elseif luasnip.expand_or_jumpable() then
-          #     luasnip.expand_or_jump()
-          # elseif check_backspace() then
-          #     fallback()
-          modes = ["i" "s"];
-        };
-        "<S-Tab>" = {
-          action = ''
-            function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item()
-                else
-                    fallback()
-                end
-            end
-          '';
-          # elseif check_backspace() then
-          #     fallback()
-          # elseif luasnip.expandable() then
-          #     luasnip.expand()
-          # elseif luasnip.expand_or_jumpable() then
-          #     luasnip.expand_or_jump()
-          modes = ["i" "s"];
-        };
+        "<C-CR>" = "cmp.mapping.confirm({ select = true })";
+        "<CR>" = "cmp.mapping.confirm({ select = false })";
       };
     };
   };
