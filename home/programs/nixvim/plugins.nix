@@ -111,7 +111,17 @@
       servers = {
         # rust-analyzer.enable = true;
         lua-ls.enable = true;
-        pylsp.enable = true;
+        pyright.enable = true;
+        # pylsp = {
+        #   enable = true;
+        #   settings.plugins = {
+        #     black.enabled = true;
+        #     flake8.enabled = true;
+        #     pylint.enabled = true;
+        #     ruff.enabled = true;
+        #     rope.enabled = true;
+        #   };
+        # };
         nixd.enable = true;
       };
       #    onAttach = ''
@@ -138,11 +148,46 @@
         "<C-e>" = "cmp.mapping.abort()";
         "<C-CR>" = "cmp.mapping.confirm({ select = true })";
         "<CR>" = "cmp.mapping.confirm({ select = false })";
+        "<Tab>" = {
+          action = ''
+            function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item()
+                else
+                    fallback()
+                end
+            end
+          '';
+          # elseif luasnip.expandable() then
+          #     luasnip.expand()
+          # elseif luasnip.expand_or_jumpable() then
+          #     luasnip.expand_or_jump()
+          # elseif check_backspace() then
+          #     fallback()
+          modes = ["i" "s"];
+        };
+        "<S-Tab>" = {
+          action = ''
+            function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                else
+                    fallback()
+                end
+            end
+          '';
+          # elseif check_backspace() then
+          #     fallback()
+          # elseif luasnip.expandable() then
+          #     luasnip.expand()
+          # elseif luasnip.expand_or_jumpable() then
+          #     luasnip.expand_or_jump()
+          modes = ["i" "s"];
+        };
       };
     };
   };
   home.packages = with pkgs; [
-    python311Packages.python-lsp-server
     lua-language-server
     vscode-langservers-extracted
     nixd
