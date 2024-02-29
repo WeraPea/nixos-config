@@ -142,6 +142,7 @@
     };
   };
   home.packages = with pkgs; [
+    python311Packages.python-lsp-server
     lua-language-server
     vscode-langservers-extracted
     nixd
