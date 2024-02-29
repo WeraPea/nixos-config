@@ -20,7 +20,7 @@
     ./nixvim
   ];
 
-  nixpkgs.overlays = [outputs.overlays.unstable-packages];
+  # nixpkgs.overlays = [outputs.overlays.unstable-packages];
 
   gtk.enable = true;
   stylix.targets.waybar.enable = false;
@@ -53,7 +53,8 @@
 
   home.packages = with pkgs; [
     (python3.withPackages (ps: with ps; [python-lsp-server]))
-    pkgs.unstable.vesktop
+    # pkgs.unstable.vesktop
+    vesktop
     (discord.override {
       withOpenASAR = true;
       withVencord = true;
@@ -73,7 +74,8 @@
     lutris
     lsof
     ntfs3g
-    pkgs.unstable.hyprshot
+    # pkgs.unstable.hyprshot
+    hyprshot
     p7zip
     playerctl
     comma
@@ -88,8 +90,10 @@
     openjdk17
     krita
     lm_sensors
-    pkgs.unstable.osu-lazer-bin
-    pkgs.unstable.yuzu-early-access
+    # pkgs.unstable.osu-lazer-bin
+    # pkgs.unstable.yuzu-early-access
+    osu-lazer-bin
+    yuzu-early-access
     inputs.audiorelay.packages.${system}.audio-relay
   ];
 }
