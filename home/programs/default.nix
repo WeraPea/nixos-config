@@ -16,6 +16,7 @@
     ./lf.nix
     ./htop.nix
     ./eww
+    ./nixvim
   ];
 
   nixpkgs.overlays = [outputs.overlays.unstable-packages];

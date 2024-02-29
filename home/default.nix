@@ -11,6 +11,6 @@
     useUserPackages = true;
     extraSpecialArgs = {inherit inputs outputs;};
     users.wera = import ./home.nix;
-    sharedModules = [inputs.nur.hmModules.nur];
+    sharedModules = [inputs.nur.hmModules.nur inputs.nixvim.homeManagerModules.nixvim];
   };
 }
