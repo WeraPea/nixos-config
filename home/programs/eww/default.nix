@@ -18,7 +18,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.eww}/bin/eww daemon --no-daemonize";
+      ExecStart = "${lib.getExe pkgs.eww} daemon --no-daemonize";
       Restart = "on-failure";
       RestartSec = 10;
     };

@@ -18,11 +18,21 @@
       pulse.enable = true;
       jack.enable = true;
     };
-    getty.autologinUser = "wera";
     openssh.enable = true;
     vnstat.enable = true;
     fstrim.enable = true;
     ddccontrol.enable = true;
+    udev.packages = [pkgs.android-udev-rules];
+    greetd = {
+      enable = true;
+      settings = rec {
+        initial_session = {
+          command = "Hyprland";
+          user = "wera";
+        };
+        default_session = initial_session;
+      };
+    };
   };
   xdg.portal = {
     enable = true;

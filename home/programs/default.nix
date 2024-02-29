@@ -25,6 +25,7 @@
   gtk.enable = true;
   stylix.targets.waybar.enable = false;
   programs = {
+    zathura.enable = true;
     command-not-found.enable = false;
     nix-index.enable = true;
     aria2.enable = true;
@@ -50,10 +51,32 @@
   services = {
     cliphist.enable = true;
   };
+  systemd.user.services.hyprpaper = {
+    Unit = {
+      Description = "hyprpaper";
+      After = ["graphical-session-pre.target"];
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      ExecStart = "${lib.getExe pkgs.hyprpaper}";
+      Restart = "always";
+    };
+    Install = {WantedBy = ["graphical-session.target"];};
+  };
 
   home.packages = with pkgs; [
-    (python3.withPackages (ps: with ps; [python-lsp-server]))
-    # pkgs.unstable.vesktop
+    alejandra
+    python3
+    gnumake
+    yt-dlp
+    onefetch
+    gping
+    imagemagick
+    catimg
+    wget
+    jq
+    rsync
+    bottom
     vesktop
     (discord.override {
       withOpenASAR = true;
@@ -68,13 +91,12 @@
     # pwvucontrol
     pavucontrol
     neofetch
-    firefox # maybe also ↑
+    firefox
     gdu
     steam-run
     lutris
     lsof
     ntfs3g
-    # pkgs.unstable.hyprshot
     hyprshot
     p7zip
     playerctl
@@ -90,8 +112,6 @@
     openjdk17
     krita
     lm_sensors
-    # pkgs.unstable.osu-lazer-bin
-    # pkgs.unstable.yuzu-early-access
     osu-lazer-bin
     yuzu-early-access
     inputs.audiorelay.packages.${system}.audio-relay

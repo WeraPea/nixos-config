@@ -1,14 +1,16 @@
 {pkgs, ...}: {
   wayland.windowManager.hyprland.enable = true;
-  # wayland.windowManager.hyprland.package = pkgs.unstable.hyprland;
   wayland.windowManager.hyprland.settings = {
     monitor = [
+      ",highrr,auto,1"
       "DP-1,highrr,0x0,auto"
       "DVI-D-1,highrr,2560x0,auto"
     ];
     windowrulev2 = [
       "stayfocused, title:^()$,class:^(steam)$"
       "minsize 1 1, title:^()$,class:^(steam)$"
+      "float, title:^(Picture-in-Picture)$"
+      "pin, title:^(Picture-in-Picture)$"
     ];
     workspace = [
       "1,persistent:true,monitor:DP-1"
@@ -80,7 +82,7 @@
       disable_splash_rendering = true;
       vrr = 1;
       animate_mouse_windowdragging = true;
-      # background_color = "0x121212";
+      disable_autoreload = true; # autoreload is unnecessary on nixos, because the config is readonly anyway
     };
     env = [
       "SDL_VIDEODRIVER,wayland"
@@ -92,7 +94,10 @@
       "XDG_SESSION_DESKTOP,Hyprland"
       "QT_AUTO_SCREEN_SCALE_FACTOR,1"
       "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
-      "QT_QPA_PLATFORMTHEME,qt5ct"
+      "NIXOS_OZONE_WL,1"
+      "QT_QPA_PLATFORM,wayland;xcb"
+      "WLR_BACKEND,vulkan"
+      "WLR_RENDERER,vulkan"
     ];
     bind =
       [

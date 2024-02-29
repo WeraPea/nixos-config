@@ -1,4 +1,11 @@
 {pkgs, ...}: {
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+    ];
+  };
   programs = {
     adb.enable = true;
     droidcam.enable = true;

@@ -77,7 +77,5 @@
     ROC_ENABLE_PRE_VEGA = "1";
   };
 
-  security.sudo.wheelNeedsPassword = false;
-
   system.stateVersion = "23.11";
 }
