@@ -6,7 +6,8 @@
   ...
 }: {
   home.packages = with pkgs; [
-    eww-wayland
+    # eww-wayland
+    eww
     pamixer
   ];
 
