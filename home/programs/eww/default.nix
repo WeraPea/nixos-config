@@ -6,7 +6,6 @@
   ...
 }: {
   home.packages = with pkgs; [
-    # eww-wayland
     eww
     pamixer
   ];
@@ -19,7 +18,7 @@
     };
 
     Service = {
-      ExecStart = "${pkgs.eww-wayland}/bin/eww daemon --no-daemonize";
+      ExecStart = "${pkgs.eww}/bin/eww daemon --no-daemonize";
       Restart = "on-failure";
       RestartSec = 10;
     };

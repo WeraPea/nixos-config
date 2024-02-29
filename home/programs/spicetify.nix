@@ -14,10 +14,10 @@ in {
     colorScheme = "Spotify";
 
     enabledCustomApps = with spicePkgs.apps; [
-      # new-releases
-      # lyrics-plus
-      # reddit
-      # localFiles
+      new-releases
+      lyrics-plus
+      reddit
+      localFiles
     ];
 
     enabledExtensions = with spicePkgs.extensions; [
