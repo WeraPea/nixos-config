@@ -30,7 +30,7 @@
           command = "Hyprland";
           user = "wera";
         };
-        # default_session = initial_session;
+        default_session = initial_session;
       };
     };
   };
