@@ -55,4 +55,5 @@ torrent = " ".join(sys.argv[1:])
 
 torrent, magnet = get_torrent_from_user(torrent)
 
+os.chdir('@videoPath@')
 os.system('''mpv "{}" --slang=eng --alang=jpn'''.format(magnet))
