@@ -22,7 +22,7 @@
     vnstat.enable = true;
     fstrim.enable = true;
     ddccontrol.enable = true;
-    udev.packages = [pkgs.android-udev-rules];
+    udev.packages = with pkgs; [android-udev-rules platformio-core];
     greetd = {
       enable = true;
       settings = rec {

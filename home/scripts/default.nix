@@ -21,6 +21,7 @@
       aria2dl
       aria2dl-desktop-item
       nyaasi
+      libnotify
     ]
     ++ lib.forEach ["0x0" "micmute" "aria2dl-notify" "cliphist-rofi-img" "search" "rebuild"] (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh));
 }

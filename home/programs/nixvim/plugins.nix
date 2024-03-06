@@ -122,6 +122,8 @@
         #     rope.enabled = true;
         #   };
         # };
+        # clangd.enable = true;
+        ccls.enable = true;
         nixd.enable = true;
       };
       #    onAttach = ''
@@ -192,5 +194,6 @@
     vscode-langservers-extracted
     nixd
     rust-analyzer
+    clang
   ];
 }
