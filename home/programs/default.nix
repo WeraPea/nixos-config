@@ -42,7 +42,6 @@
     };
     eza = {
       enable = true;
-      enableAliases = true;
       git = true;
       icons = true;
       extraOptions = ["--group-directories-first"];
@@ -101,7 +100,6 @@
     p7zip
     playerctl
     comma
-    nixd
     wineWowPackages.stagingFull
     # wineWowPackages.waylandFull
     winetricks
@@ -113,7 +111,6 @@
     krita
     lm_sensors
     osu-lazer-bin
-    yuzu-early-access
     inputs.audiorelay.packages.${system}.audio-relay
   ];
 }
