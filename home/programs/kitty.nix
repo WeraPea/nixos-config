@@ -47,10 +47,10 @@ in
       settings.background_opacity = with config.stylix.opacity; "${builtins.toString terminal}";
       extraConfig = ''
         include ${theme}
+        active_tab_background   ${blue}
+        active_tab_foreground   ${base00}
         inactive_tab_background ${base00}
         inactive_tab_foreground ${base05}
-        active_tab_foreground   ${base00}
-        active_tab_background   ${blue}
         tab_bar_background      ${base00}
       '';
     };

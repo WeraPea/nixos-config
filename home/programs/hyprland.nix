@@ -85,19 +85,19 @@
       disable_autoreload = true; # autoreload is unnecessary on nixos, because the config is readonly anyway
     };
     env = [
-      "SDL_VIDEODRIVER,wayland"
       "CLUTTER_BACKEND,wayland"
-      "QT_QPA_PLATFORM,wayland"
       "GDK_BACKEND,wayland,x11"
-      "XDG_CURRENT_DESKTOP,Hyprland"
-      "XDG_SESSION_TYPE,wayland"
-      "XDG_SESSION_DESKTOP,Hyprland"
-      "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-      "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
       "NIXOS_OZONE_WL,1"
+      "QT_AUTO_SCREEN_SCALE_FACTOR,1"
+      "QT_QPA_PLATFORM,wayland"
       "QT_QPA_PLATFORM,wayland;xcb"
+      "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+      "SDL_VIDEODRIVER,wayland"
       "WLR_BACKEND,vulkan"
       "WLR_RENDERER,vulkan"
+      "XDG_CURRENT_DESKTOP,Hyprland"
+      "XDG_SESSION_DESKTOP,Hyprland"
+      "XDG_SESSION_TYPE,wayland"
     ];
     bind =
       [
@@ -134,17 +134,13 @@
         "super, w, fullscreen, 1"
         "super, f, fullscreen, 0"
         "super, g, fakefullscreen,"
-        #bind = super, u, togglesplit, # dwindle
 
-        # Move focus with mainMod + arrow keys
         "super, h, movefocus, l"
         "super, l, movefocus, r"
         "super, k, movefocus, u"
         "super, j, movefocus, d"
       ]
       ++ (
-        # workspaces
-        # binds $mod + [shift +] [f]{1..5} to [move to] workspace {1..10}
         builtins.concatLists (builtins.genList (
             x: let
               ws = builtins.toString (x + 1);
@@ -158,7 +154,6 @@
           5)
       );
     bindm = [
-      # Move/resize windows with mainMod + LMB/RMB and dragging
       "super, mouse:272, movewindow"
       "super, mouse:273, resizewindow"
     ];

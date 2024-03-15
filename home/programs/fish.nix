@@ -110,16 +110,16 @@
       '';
     };
     shellAbbrs = {
-      vim = "nvim";
-      x = "exit";
       cl = "clear";
       dc = "cd";
       lc = "clear";
-      sl = "ll";
-      vm = "mv";
+      ls = "ll";
       ns = "sudo nixos-rebuild switch --flake ~/nixos#nixos";
       nt = "sudo nixos-rebuild test --flake ~/nixos#nixos";
-      ls = "ll";
+      sl = "ll";
+      vim = "nvim";
+      vm = "mv";
+      x = "exit";
     };
   };
 }

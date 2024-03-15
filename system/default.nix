@@ -6,25 +6,25 @@
   ...
 }: {
   imports = [
-    ./hardware-configuration.nix
-    ./services.nix
-    ./programs.nix
     ./boot.nix
+    ./hardware-configuration.nix
+    ./programs.nix
+    ./services.nix
   ];
 
   users.users.wera = {
-    isNormalUser = true;
     extraGroups = ["networkmanager" "wheel" "adbusers" "dialout"];
-    openssh.authorizedKeys.keys = [
-      # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
-    ];
+    isNormalUser = true;
+    # openssh.authorizedKeys.keys = [
+    #   # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
+    # ];
   };
 
   networking = {
+    firewall.allowedTCPPorts = [25565 24454];
+    firewall.allowedUDPPorts = [59100 59200 59716 24454]; # for audiorelay
     hostName = "nixos";
     networkmanager.enable = true;
-    firewall.allowedUDPPorts = [59100 59200 59716 24454]; # for audiorelay
-    firewall.allowedTCPPorts = [25565 24454];
   };
 
   time.timeZone = "Europe/Warsaw";
@@ -45,30 +45,32 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
+    gc.automatic = true;
+    optimise.automatic = true;
     settings = {
       experimental-features = ["nix-command" "flakes"];
     };
-    optimise.automatic = true;
-    gc.automatic = true;
   };
 
   fileSystems = {
     "/mnt/2tb-mnt".label = ''Linux\x20Data'';
-    "/mnt/win".label = "Windows";
-    "/mnt/win".options = ["rw" "uid=1000"];
+    "/mnt/win" = {
+      label = "Windows";
+      options = ["rw" "uid=1000"];
+    };
   };
   swapDevices = [
     {
       device = "/mnt/2tb-mnt/swapfile";
-      size = 16 * 1024;
       options = ["nofail"];
+      size = 16 * 1024;
     }
   ];
 
   hardware.opengl = {
-    enable = true;
-    driSupport = true;
     driSupport32Bit = true;
+    driSupport = true;
+    enable = true;
     extraPackages = with pkgs; [
       rocmPackages.clr.icd
     ];

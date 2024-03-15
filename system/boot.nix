@@ -1,8 +1,8 @@
 {
   boot = {
     loader = {
-      systemd-boot.enable = true; # TODO: change to grub
       efi.canTouchEfiVariables = true;
+      systemd-boot.enable = true; # TODO: change to grub
     };
     supportedFilesystems = ["ntfs"];
   };

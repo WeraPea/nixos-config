@@ -1,19 +1,19 @@
 {
-  pkgs,
   outputs,
+  pkgs,
   ...
 }: {
   programs.mpv = {
     enable = true;
     scripts = with pkgs; [
-      mpvScripts.webtorrent-mpv-hook
       mpvScripts.mpris
       mpvScripts.thumbfast
+      mpvScripts.webtorrent-mpv-hook
       outputs.packages.progressbar
     ];
     config = {
-      osc = "no";
       ontop = "no";
+      osc = "no";
       slang = "en";
     };
     scriptOpts = {
@@ -21,12 +21,12 @@
         network = "yes";
       };
       "torque-progressbar/main" = {
+        bar-cache-height-active = 16;
+        bar-height-active = 16;
+        bar-hide-inactive = "yes";
+        enable-system-time = "no";
         hover-zone-height = 80;
         top-hover-zone-height = 80;
-        bar-hide-inactive = "yes";
-        bar-height-active = 16;
-        bar-cache-height-active = 16;
-        enable-system-time = "no";
       };
     };
     bindings = {

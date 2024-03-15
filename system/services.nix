@@ -1,28 +1,11 @@
 {pkgs, ...}: {
   imports = [
-    ./polkit.nix
     ./dual-function-keys.nix
+    ./polkit.nix
   ];
   services = {
-    # xserver = {
-    #   # enable = true;
-    #   layout = "pl";
-    #   autoRepeatDelay = 150;
-    #   autoRepeatInterval = 300;
-    #   videoDrivers = ["amdgpu"];
-    # };
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
-    };
-    openssh.enable = true;
-    vnstat.enable = true;
-    fstrim.enable = true;
     ddccontrol.enable = true;
-    udev.packages = with pkgs; [android-udev-rules platformio-core];
+    fstrim.enable = true;
     greetd = {
       enable = true;
       settings = rec {
@@ -33,14 +16,24 @@
         default_session = initial_session;
       };
     };
+    openssh.enable = true;
+    pipewire = {
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      enable = true;
+      jack.enable = true;
+      pulse.enable = true;
+    };
+    udev.packages = with pkgs; [android-udev-rules platformio-core];
+    vnstat.enable = true;
   };
   xdg.portal = {
     enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
   hardware = {
-    pulseaudio.enable = false;
     bluetooth.enable = true;
+    pulseaudio.enable = false;
   };
   sound.enable = true;
 }

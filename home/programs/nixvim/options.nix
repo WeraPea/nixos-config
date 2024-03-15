@@ -4,6 +4,7 @@
     cursorline = true;
     expandtab = true;
     foldenable = false;
+    ignorecase = true;
     lazyredraw = true;
     linebreak = true;
     listchars = "nbsp:¬,trail:•,space:•,tab:-->";
@@ -14,7 +15,6 @@
     showmode = false;
     sidescrolloff = 8;
     smartcase = true;
-    ignorecase = true;
     smartindent = true;
     splitbelow = true;
     splitright = true;

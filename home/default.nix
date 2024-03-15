@@ -8,9 +8,9 @@
   ];
 
   home-manager = {
-    useUserPackages = true;
     extraSpecialArgs = {inherit inputs outputs;};
+    sharedModules = [inputs.nixvim.homeManagerModules.nixvim];
     users.wera = import ./home.nix;
-    sharedModules = [inputs.nur.hmModules.nur inputs.nixvim.homeManagerModules.nixvim];
+    useUserPackages = true;
   };
 }

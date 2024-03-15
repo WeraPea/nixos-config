@@ -1,24 +1,24 @@
 {pkgs, ...}: {
   programs.nixvim.plugins = {
+    cmp_luasnip.enable = true;
+    cmp-nvim-lsp-signature-help.enable = true;
     comment-nvim.enable = true;
-    undotree.enable = true;
-    trouble.enable = true;
-    which-key.enable = true;
+    crates-nvim.enable = true;
+    gitsigns.enable = true;
+    illuminate.enable = true;
+    lastplace.enable = true;
+    lspkind.enable = true;
+    lualine.enable = true;
+    luasnip.enable = true;
+    nix.enable = true;
     notify.enable = true;
     oil.enable = true;
-    lastplace.enable = true;
-    # yuck.enable = true;
-    crates-nvim.enable = true;
     rust-tools.enable = true;
-    lspkind.enable = true;
-    cmp-nvim-lsp-signature-help.enable = true;
-    cmp_luasnip.enable = true;
-    luasnip.enable = true;
-    gitsigns.enable = true;
-    lualine.enable = true;
-    illuminate.enable = true;
     todo-comments.enable = true;
-    nix.enable = true;
+    trouble.enable = true;
+    undotree.enable = true;
+    which-key.enable = true;
+    # yuck.enable = true;
     conform-nvim = {
       enable = true;
       formatOnSave = {
@@ -218,10 +218,10 @@
     };
   };
   home.packages = with pkgs; [
+    clang
     lua-language-server
-    vscode-langservers-extracted
     # nixd
     rust-analyzer
-    clang
+    vscode-langservers-extracted
   ];
 }

@@ -1,6 +1,6 @@
 {
-  pkgs,
   config,
+  pkgs,
   ...
 }: {
   programs.htop = {
@@ -10,11 +10,11 @@
       {
         color_scheme = 5;
         cpu_count_from_one = 1;
-        show_program_path = 0;
-        show_cpu_frequency = 1;
-        show_cpu_temperature = 1;
         highlight_base_name = 1;
         highlight_threads = 1;
+        show_cpu_frequency = 1;
+        show_cpu_temperature = 1;
+        show_program_path = 0;
         fields = with config.lib.htop.fields; [
           PID
           USER

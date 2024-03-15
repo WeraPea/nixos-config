@@ -1,10 +1,15 @@
 {pkgs, ...}: {
   home.packages = [pkgs.pistol pkgs.ffmpegthumbnailer pkgs.file];
+  xdg.configFile."lf/icons".source = ./lf-icons;
   programs.lf = {
     enable = true;
     keybindings = {
       D = "trash";
       U = "!du -sh";
+    };
+    settings = {
+      hidden = true;
+      icons = true;
     };
     previewer.source = let
       vidthumb = pkgs.writeShellScript "vidthumb" ''

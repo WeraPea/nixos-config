@@ -1,40 +1,33 @@
 {
-  pkgs,
-  outputs,
   config,
   inputs,
   lib,
+  outputs,
+  pkgs,
   ...
 }: {
   imports = [
-    ./hyprland.nix
-    ./fish.nix
-    ./kitty.nix
-    ./mpv.nix
-    ./spicetify.nix
-    ./mako.nix
-    ./lf.nix
-    ./htop.nix
-    ./git.nix
     ./eww
+    ./fish.nix
+    ./git.nix
+    ./htop.nix
+    ./hyprland.nix
+    ./kitty.nix
+    ./lf.nix
+    ./mako.nix
+    ./mpv.nix
     ./nixvim
+    ./spicetify.nix
   ];
 
-  # nixpkgs.overlays = [outputs.overlays.unstable-packages];
-
   gtk.enable = true;
-  stylix.targets.waybar.enable = false;
   programs = {
-    zathura.enable = true;
-    command-not-found.enable = false;
-    nix-index.enable = true;
     aria2.enable = true;
-    jq.enable = true;
     bash.enable = true;
-    waybar = {
-      enable = true;
-      systemd.enable = true;
-    };
+    command-not-found.enable = false;
+    jq.enable = true;
+    nix-index.enable = true;
+    zathura.enable = true;
     bat = {
       enable = true;
       extraPackages = with pkgs.bat-extras; [batdiff batwatch];
@@ -65,52 +58,45 @@
 
   home.packages = with pkgs; [
     alejandra
-    python3
-    gnumake
-    yt-dlp
-    onefetch
-    gping
-    imagemagick
+    appimage-run
     catimg
-    wget
-    jq
-    rsync
-    bottom
-    vesktop
-    (discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
-    qutebrowser
-    wl-clipboard
-    rofi-wayland
+    comma
+    firefox
+    gdu
+    gnumake
     hyprland-autoname-workspaces
     hyprpaper
     hyprpicker
-    # pwvucontrol
-    pavucontrol
-    neofetch
-    firefox
-    gdu
-    steam-run
-    lutris
-    lsof
-    ntfs3g
     hyprshot
-    p7zip
-    playerctl
-    comma
-    wineWowPackages.stagingFull
-    # wineWowPackages.waylandFull
-    winetricks
-    protontricks
-    qimgv
-    prismlauncher
-    xdg-utils
-    openjdk17
+    imagemagick
+    inputs.audiorelay.packages.${system}.audio-relay
+    jq
     krita
     lm_sensors
-    osu-lazer-bin
-    inputs.audiorelay.packages.${system}.audio-relay
+    lsof
+    lutris
+    neofetch
+    ntfs3g
+    onefetch
+    openjdk17
+    p7zip
+    pavucontrol
+    playerctl
+    prismlauncher
+    protontricks
+    python3
+    qimgv
+    rofi-wayland
+    rsync
+    steam-run
+    vesktop
+    wget
+    winetricks
+    wineWowPackages.stagingFull
+    # wineWowPackages.waylandFull
+    wl-clipboard
+    xdg-utils
+    xdragon
+    yt-dlp
   ];
 }

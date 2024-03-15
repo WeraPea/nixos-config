@@ -1,8 +1,8 @@
 {
-  pkgs,
-  lib,
-  inputs,
   config,
+  inputs,
+  lib,
+  pkgs,
   ...
 }: let
   spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
@@ -23,28 +23,28 @@ in {
     colorScheme = "Spotify";
 
     enabledCustomApps = with spicePkgs.apps; [
-      new-releases
-      lyrics-plus
-      reddit
       localFiles
+      lyrics-plus
+      new-releases
+      reddit
     ];
 
     enabledExtensions = with spicePkgs.extensions; [
+      adblock
+      autoSkip
+      bookmark
+      copyToClipboard
+      fullAlbumDate
       fullAppDisplay
-      shuffle
       hidePodcasts
+      history
       keyboardShortcut
       loopyLoop
-      bookmark
       playlistIcons
-      seekSong
-      fullAlbumDate
-      skipStats
-      copyToClipboard
-      history
-      adblock
       savePlaylists
-      autoSkip
+      seekSong
+      shuffle
+      skipStats
       volumePercentage
       # fullAppDisplayMod
       # genre # doesn't work??

@@ -12,8 +12,8 @@ in {
     enable = true;
     backgroundColor = base00 + makoOpacity;
     borderColor = orange;
-    textColor = base05;
     progressColor = "over ${yellow}";
+    textColor = base05;
     font = "${sansSerif.name} ${toString sizes.popups}";
     height = 150;
     width = 300;
