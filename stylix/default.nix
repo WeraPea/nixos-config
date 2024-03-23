@@ -4,7 +4,7 @@
     base16Scheme = ./molokai.yaml;
     fonts = {
       monospace.package = pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];};
-      monospace.name = "JetBrains NFM";
+      monospace.name = "JetBrainsMono NFM";
       sizes = {
         applications = 14;
         desktop = 12;

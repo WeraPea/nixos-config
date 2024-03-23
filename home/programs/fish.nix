@@ -1,10 +1,14 @@
 {
+  lib,
+  pkgs,
+  ...
+}: {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      export MANPAGER='nvim +Man!'
-      set fish_greeting
-      bind ! __history_previous_command
+      export MANPAGER='${lib.getExe pkgs.nvimpager}'
+        set fish_greeting
+        bind ! __history_previous_command
     '';
     functions = {
       __history_previous_command.body = ''

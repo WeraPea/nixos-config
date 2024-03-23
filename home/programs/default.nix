@@ -21,6 +21,7 @@
   ];
 
   gtk.enable = true;
+  stylix.targets.waybar.enable = false;
   programs = {
     aria2.enable = true;
     bash.enable = true;
@@ -38,6 +39,10 @@
       git = true;
       icons = true;
       extraOptions = ["--group-directories-first"];
+    };
+    waybar = {
+      enable = true;
+      systemd.enable = true;
     };
   };
   services = {

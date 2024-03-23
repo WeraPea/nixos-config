@@ -59,13 +59,14 @@
       options = ["rw" "uid=1000"];
     };
   };
-  swapDevices = [
-    {
-      device = "/mnt/2tb-mnt/swapfile";
-      options = ["nofail"];
-      size = 16 * 1024;
-    }
-  ];
+  # swapDevices = [
+  #   {
+  #     device = "/mnt/2tb-mnt/swapfile";
+  #     options = ["nofail"];
+  #     size = 16 * 1024;
+  #   }
+  # ];
+  zramSwap.enable = true;
 
   hardware.opengl = {
     driSupport32Bit = true;

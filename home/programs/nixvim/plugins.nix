@@ -46,8 +46,8 @@
         "<leader>ff" = "find_files";
         "<leader>fr" = "oldfiles";
         "<leader>gc" = "grep_string";
-        "<leader>g" = "live_grep";
-        "<leader>b" = "current_buffer_fuzzy_find";
+        "<leader>gg" = "live_grep";
+        "<leader>gb" = "current_buffer_fuzzy_find";
         "<leader>m" = "marks";
         "<leader>h" = "help_tags";
         "<leader>d" = "diagnostics";
@@ -63,7 +63,7 @@
         "<leader>ld" = "diagnostics";
         "<leader>lD" = "lsp_definitions";
         "<leader>lt" = "lsp_type_definitions";
-        "<leader><space>" = "buffers";
+        "<leader>b" = "buffers";
         # "<C-p>" = "git_files";
       };
       extraOptions.pickers.buffers = {
@@ -199,6 +199,8 @@
           "<CR>" = "cmp.mapping.confirm({ select = true })";
           "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
           "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
+          "<Up>" = "cmp.mapping.select_prev_item()";
+          "<Down>" = "cmp.mapping.select_next_item()";
         };
         snippet = {
           expand = "luasnip";

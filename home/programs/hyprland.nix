@@ -111,24 +111,26 @@
         "super, m, exec, rofi-mount"
         "super, u, exec, rofi-umount"
 
-        ",XF86AudioLowerVolume, exec, pamixer -d 5 --allow-boost"
-        ",XF86AudioRaiseVolume, exec, pamixer -i 5 --allow-boost"
+        ",XF86AudioLowerVolume, exec, pamixer -d 5"
+        ",XF86AudioRaiseVolume, exec, pamixer -i 5"
+        "shift,XF86AudioLowerVolume, exec, pamixer -d 5 --allow-boost"
+        "shift,XF86AudioRaiseVolume, exec, pamixer -i 5 --allow-boost"
         ",XF86AudioMute, exec, pamixer -t"
 
         ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
         ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
 
-        "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-5"
-        "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-5"
+        "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-8"
+        "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-8"
 
-        "super_shift, F10, exec, ddccontrol -r 0x10 -W +10 dev:/dev/i2c-4"
-        "super_shift, F9, exec, ddccontrol -r 0x10 -W -10 dev:/dev/i2c-4"
+        "super_shift, F10, exec, ddccontrol -r 0x10 -W +10 dev:/dev/i2c-7"
+        "super_shift, F9, exec, ddccontrol -r 0x10 -W -10 dev:/dev/i2c-7"
 
-        "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-5"
-        "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-5"
+        "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-8"
+        "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-8"
 
-        "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-5"
-        "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-5"
+        "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-8"
+        "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-8"
 
         "super, e, togglefloating,"
         "super, w, fullscreen, 1"

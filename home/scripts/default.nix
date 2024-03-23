@@ -9,7 +9,6 @@
       name = "aria2dl magnet handler";
       desktopName = "aria2dl magnet handler";
       exec = "${lib.getExe aria2dl} %U";
-      # terminal = true;
       mimeTypes = ["x-scheme-handler/magnet"];
     };
     nyaasi = writers.writePython3Bin "nyaasi" {libraries = [pkgs.python3Packages.papis-python-rofi];} (substituteAll {

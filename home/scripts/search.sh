@@ -4,7 +4,7 @@ if [ -z "$search" ]; then
 fi
 
 # delete a line that ONLY contains the search and no other text
-sed -i "/^$search$/d" ~/.cache/search-hist 
+sed -i "/^$search$/d" ~/.cache/search-hist
 
 echo $search >> ~/.cache/search-hist
 
@@ -12,7 +12,7 @@ words=$(echo $search | cut -d " " -f 2-)
 first_word=$(echo $search | cut -d " " -f 1)
 
 case "$first_word" in
-	"1")
+	"t")
 		$BROWSER "https://1337x.to/search/$words/1/"
 		;;
 	"rl")
@@ -35,9 +35,6 @@ case "$first_word" in
 		;;
 	"w")
 		$BROWSER "https://www.wolframalpha.com/input/?i=$words"
-		;;
-	"t")
-		1337x-torrent "$words"
 		;;
 	"n")
 		nyaasi "$words"
