@@ -99,6 +99,12 @@
       "XDG_SESSION_DESKTOP,Hyprland"
       "XDG_SESSION_TYPE,wayland"
     ];
+    binde = [
+      ",XF86AudioLowerVolume, exec, pamixer -d 1"
+      ",XF86AudioRaiseVolume, exec, pamixer -i 1"
+      "shift,XF86AudioLowerVolume, exec, pamixer -d 1 --allow-boost"
+      "shift,XF86AudioRaiseVolume, exec, pamixer -i 1 --allow-boost"
+    ];
     bind =
       [
         # ",XF86Tools, pass,^(VencordDiscord)$"
@@ -111,10 +117,6 @@
         "super, m, exec, rofi-mount"
         "super, u, exec, rofi-umount"
 
-        ",XF86AudioLowerVolume, exec, pamixer -d 5"
-        ",XF86AudioRaiseVolume, exec, pamixer -i 5"
-        "shift,XF86AudioLowerVolume, exec, pamixer -d 5 --allow-boost"
-        "shift,XF86AudioRaiseVolume, exec, pamixer -i 5 --allow-boost"
         ",XF86AudioMute, exec, pamixer -t"
 
         ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
@@ -179,7 +181,7 @@
     bind = super, s, exec, spotify
     bind = super, s, submap, reset
 
-    bind = ,escape, submap, reset
+    bind = ,catchall, submap, reset
     submap=reset
 
     bind = super, x, submap, spotify
@@ -196,14 +198,14 @@
     bind = super, j, submap, reset
     bind = super, k, exec, playerctl -p spotify volume 0.1+
     bind = super, k, submap, reset
-    bind = ,escape, submap, reset
+    bind = ,catchall, submap, reset
     submap = reset
 
     bind = super, q, submap, kill
     submap = kill
     bind = super, q, killactive,
     bind = super, q, submap, reset
-    bind = ,escape, submap, reset
+    bind = ,catchall, submap, reset
     submap = reset
   '';
 }
