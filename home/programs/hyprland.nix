@@ -11,6 +11,7 @@
       "minsize 1 1, title:^()$,class:^(steam)$"
       "float, title:^(Picture-in-Picture)$"
       "pin, title:^(Picture-in-Picture)$"
+      "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures
     ];
     workspace = [
       "1,persistent:true,monitor:DP-1"

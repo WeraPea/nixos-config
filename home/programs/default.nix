@@ -94,6 +94,7 @@
     rofi-wayland
     rsync
     steam-run
+    tldr
     vesktop
     wget
     winetricks
