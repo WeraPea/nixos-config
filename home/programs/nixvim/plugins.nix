@@ -2,7 +2,7 @@
   programs.nixvim.plugins = {
     cmp_luasnip.enable = true;
     cmp-nvim-lsp-signature-help.enable = true;
-    comment-nvim.enable = true;
+    comment.enable = true;
     crates-nvim.enable = true;
     gitsigns.enable = true;
     illuminate.enable = true;

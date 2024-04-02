@@ -1,5 +1,5 @@
 {
-  programs.nixvim.options = {
+  programs.nixvim.opts = {
     clipboard = "unnamedplus";
     cursorline = true;
     expandtab = true;
