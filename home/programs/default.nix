@@ -5,7 +5,8 @@
   outputs,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./eww
     ./fish.nix
@@ -31,14 +32,17 @@
     zathura.enable = true;
     bat = {
       enable = true;
-      extraPackages = with pkgs.bat-extras; [batdiff batwatch];
+      extraPackages = with pkgs.bat-extras; [
+        batdiff
+        batwatch
+      ];
       config.paging = "never";
     };
     eza = {
       enable = true;
       git = true;
       icons = true;
-      extraOptions = ["--group-directories-first"];
+      extraOptions = [ "--group-directories-first" ];
     };
     waybar = {
       enable = true;
@@ -51,14 +55,16 @@
   systemd.user.services.hyprpaper = {
     Unit = {
       Description = "hyprpaper";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
     Service = {
       ExecStart = "${lib.getExe pkgs.hyprpaper}";
       Restart = "always";
     };
-    Install = {WantedBy = ["graphical-session.target"];};
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 
   home.packages = with pkgs; [

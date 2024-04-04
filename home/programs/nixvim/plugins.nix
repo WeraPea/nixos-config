@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.nixvim.plugins = {
     cmp_luasnip.enable = true;
     cmp-nvim-lsp-signature-help.enable = true;
@@ -26,8 +27,8 @@
         lspFallback = true;
       };
       formattersByFt = {
-        nix = ["alejandra"];
-        rust = ["rustfmt"];
+        nix = [ "alejandra" ];
+        rust = [ "rustfmt" ];
       };
     };
     treesitter = {
@@ -206,15 +207,15 @@
           expand = "luasnip";
         };
         sources = [
-          {name = "nvim_lsp";}
-          {name = "path";}
+          { name = "nvim_lsp"; }
+          { name = "path"; }
           {
             name = "buffer";
             # Words from other open buffers can also be suggested.
             option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
           }
-          {name = "luasnip";}
-          {name = "nvim_lsp_signature_help";}
+          { name = "luasnip"; }
+          { name = "nvim_lsp_signature_help"; }
         ];
       };
     };

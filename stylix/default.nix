@@ -1,9 +1,10 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   stylix = {
     image = ./wallpaper.png;
     base16Scheme = ./molokai.yaml;
     fonts = {
-      monospace.package = pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];};
+      monospace.package = pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; };
       monospace.name = "JetBrainsMono NFM";
       sizes = {
         applications = 14;

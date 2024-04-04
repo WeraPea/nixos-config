@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ./dual-function-keys.nix
     ./polkit.nix
@@ -24,12 +25,15 @@
       jack.enable = true;
       pulse.enable = true;
     };
-    udev.packages = with pkgs; [android-udev-rules platformio-core];
+    udev.packages = with pkgs; [
+      android-udev-rules
+      platformio-core
+    ];
     vnstat.enable = true;
   };
   xdg.portal = {
     enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
   hardware = {
     bluetooth.enable = true;

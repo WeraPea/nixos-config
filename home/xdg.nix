@@ -1,5 +1,6 @@
-{pkgs, ...}: let
-  browser = ["firefox.desktop"];
+{ pkgs, ... }:
+let
+  browser = [ "firefox.desktop" ];
 
   associations = {
     "text/html" = browser;
@@ -15,13 +16,14 @@
     "application/x-extension-xhtml" = browser;
     "application/x-extension-xht" = browser;
 
-    "audio/*" = ["mpv.desktop"];
-    "video/*" = ["mpv.dekstop"];
-    "image/*" = ["qimgv.desktop"];
+    "audio/*" = [ "mpv.desktop" ];
+    "video/*" = [ "mpv.dekstop" ];
+    "image/*" = [ "qimgv.desktop" ];
     "application/json" = browser;
-    "application/pdf" = ["org.pwmt.zathura.desktop.desktop"];
+    "application/pdf" = [ "org.pwmt.zathura.desktop.desktop" ];
   };
-in {
+in
+{
   xdg = {
     # userDirs = {
     #   enable = true;

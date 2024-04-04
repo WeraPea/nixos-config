@@ -4,7 +4,8 @@
   inputs,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     ./boot.nix
     ./hardware-configuration.nix
@@ -13,7 +14,12 @@
   ];
 
   users.users.wera = {
-    extraGroups = ["networkmanager" "wheel" "adbusers" "dialout"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "adbusers"
+      "dialout"
+    ];
     isNormalUser = true;
     # openssh.authorizedKeys.keys = [
     #   # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
@@ -21,8 +27,16 @@
   };
 
   networking = {
-    firewall.allowedTCPPorts = [25565 24454];
-    firewall.allowedUDPPorts = [59100 59200 59716 24454]; # for audiorelay
+    firewall.allowedTCPPorts = [
+      25565
+      24454
+    ];
+    firewall.allowedUDPPorts = [
+      59100
+      59200
+      59716
+      24454
+    ]; # for audiorelay
     hostName = "nixos";
     networkmanager.enable = true;
   };
@@ -48,15 +62,21 @@
     gc.automatic = true;
     optimise.automatic = true;
     settings = {
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
   };
 
   fileSystems = {
-    "/mnt/2tb-mnt".label = ''Linux\x20Data'';
+    "/mnt/2tb-mnt".label = "Linux\\x20Data";
     "/mnt/win" = {
       label = "Windows";
-      options = ["rw" "uid=1000"];
+      options = [
+        "rw"
+        "uid=1000"
+      ];
     };
   };
   # swapDevices = [
@@ -72,9 +92,7 @@
     driSupport32Bit = true;
     driSupport = true;
     enable = true;
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-    ];
+    extraPackages = with pkgs; [ rocmPackages.clr.icd ];
   };
   environment.variables = {
     ROC_ENABLE_PRE_VEGA = "1";

@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     eww
     pamixer
@@ -13,8 +14,8 @@
   systemd.user.services.eww = {
     Unit = {
       Description = "eww";
-      After = ["graphical-session-pre.target"];
-      PartOf = ["graphical-session.target"];
+      After = [ "graphical-session-pre.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
 
     Service = {
@@ -23,19 +24,22 @@
       RestartSec = 10;
     };
 
-    Install = {WantedBy = ["graphical-session.target"];};
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
-  home.activation.linkEww = let
-    themeFile = config.lib.stylix.colors {
-      templateRepo = inputs.base16Styles;
-      target = "scss";
-    };
-    test = pkgs.substituteAll {
-      src = ./test;
-      test = "helloworldiguess";
-    };
-  in
-    lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.linkEww =
+    let
+      themeFile = config.lib.stylix.colors {
+        templateRepo = inputs.base16Styles;
+        target = "scss";
+      };
+      test = pkgs.substituteAll {
+        src = ./test;
+        test = "helloworldiguess";
+      };
+    in
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if [[ -e $HOME/.config/eww ]]; then
         $DRY_RUN_CMD rm -r $VERBOSE_ARG $HOME/.config/eww
       fi

@@ -1,5 +1,10 @@
-{...}: {
-  imports = [./keymaps.nix ./options.nix ./plugins.nix];
+{ ... }:
+{
+  imports = [
+    ./keymaps.nix
+    ./options.nix
+    ./plugins.nix
+  ];
   home.sessionVariables.EDITOR = "nvim";
   programs.nixvim = {
     enable = true;
@@ -12,7 +17,10 @@
       }
 
       {
-        event = ["BufEnter" "FocusGained"];
+        event = [
+          "BufEnter"
+          "FocusGained"
+        ];
         command = "checktime";
       }
 

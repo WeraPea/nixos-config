@@ -20,29 +20,30 @@
     stylix.url = "github:danth/stylix";
   };
 
-  outputs = {
-    nixpkgs,
-    self,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
-  in {
-    packages = import ./pkgs nixpkgs.legacyPackages.${system};
-    formatter.${system} = pkgs.alejandra;
-    overlays = import ./overlays {inherit inputs;};
+  outputs =
+    { nixpkgs, self, ... }@inputs:
+    let
+      inherit (self) outputs;
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+    in
+    {
+      packages = import ./pkgs nixpkgs.legacyPackages.${system};
+      formatter.${system} = pkgs.nixfmt-rfc-style;
+      overlays = import ./overlays { inherit inputs; };
 
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          inputs.stylix.nixosModules.stylix
-          ./home
-          ./stylix
-          ./system
-        ];
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [
+            inputs.stylix.nixosModules.stylix
+            ./home
+            ./stylix
+            ./system
+          ];
+        };
       };
     };
-  };
 }

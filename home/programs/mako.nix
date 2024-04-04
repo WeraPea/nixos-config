@@ -1,12 +1,10 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 with config.lib.stylix.colors.withHashtag;
-with config.stylix.fonts; let
+with config.stylix.fonts;
+let
   makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
-in {
+in
+{
   stylix.targets.mako.enable = false;
   services.mako = {
     enable = true;

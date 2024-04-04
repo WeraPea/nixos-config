@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   wayland.windowManager.hyprland.enable = true;
   wayland.windowManager.hyprland.settings = {
     monitor = [
@@ -145,19 +146,20 @@
         "super, k, movefocus, u"
         "super, j, movefocus, d"
       ]
-      ++ (
-        builtins.concatLists (builtins.genList (
-            x: let
-              ws = builtins.toString (x + 1);
-            in [
-              "super, ${ws}, workspace, ${ws}"
-              "super shift, ${ws}, movetoworkspace, ${ws}"
-              "super, f${ws}, workspace, ${toString (x + 6)}"
-              "super shift, f${ws}, movetoworkspace, ${toString (x + 6)}"
-            ]
-          )
-          5)
-      );
+      ++ (builtins.concatLists (
+        builtins.genList (
+          x:
+          let
+            ws = builtins.toString (x + 1);
+          in
+          [
+            "super, ${ws}, workspace, ${ws}"
+            "super shift, ${ws}, movetoworkspace, ${ws}"
+            "super, f${ws}, workspace, ${toString (x + 6)}"
+            "super shift, f${ws}, movetoworkspace, ${toString (x + 6)}"
+          ]
+        ) 5
+      ));
     bindm = [
       "super, mouse:272, movewindow"
       "super, mouse:273, resizewindow"

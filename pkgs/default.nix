@@ -1,3 +1,1 @@
-pkgs: {
-  progressbar = pkgs.callPackage ./progressbar.nix {};
-}
+pkgs: { progressbar = pkgs.callPackage ./progressbar.nix { }; }

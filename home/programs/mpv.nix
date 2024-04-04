@@ -1,8 +1,5 @@
+{ outputs, pkgs, ... }:
 {
-  outputs,
-  pkgs,
-  ...
-}: {
   programs.mpv = {
     enable = true;
     scripts = with pkgs; [
@@ -101,8 +98,8 @@
 
       o = ''cycle-values loop-file "inf" "no"'';
       O = "ab-loop";
-      i = ''show-text ''${playlist}'';
-      I = ''show-text ''${track-list}'';
+      i = "show-text \${playlist}";
+      I = "show-text \${track-list}";
 
       PGUP = "add chapter 1";
       PGDWN = "add chapter -1";

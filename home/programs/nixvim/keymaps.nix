@@ -29,12 +29,20 @@
       action = "gk";
     }
     {
-      mode = ["v" "o" "n"];
+      mode = [
+        "v"
+        "o"
+        "n"
+      ];
       key = "H";
       action = "^";
     }
     {
-      mode = ["v" "o" "n"];
+      mode = [
+        "v"
+        "o"
+        "n"
+      ];
       key = "L";
       action = "$";
     }
@@ -136,7 +144,9 @@
       mode = "c";
       key = "w!!";
       action = "w ! sudo tee %";
-      options = {noremap = true;};
+      options = {
+        noremap = true;
+      };
     } # delete this
   ];
 }

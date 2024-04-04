@@ -1,8 +1,5 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   programs.htop = {
     enable = true;
     package = pkgs.htop-vim;
@@ -31,14 +28,17 @@
           COMM
         ];
       }
-      // (with config.lib.htop;
+      // (
+        with config.lib.htop;
         leftMeters [
           (bar "LeftCPUs2")
           (bar "Blank")
           (bar "Memory")
           (bar "Swap")
-        ])
-      // (with config.lib.htop;
+        ]
+      )
+      // (
+        with config.lib.htop;
         rightMeters [
           (bar "rightCPUs2")
           (text "Tasks")
@@ -47,6 +47,7 @@
           (text "NetworkIO")
           (text "DiskIO")
           (text "Uptime")
-        ]);
+        ]
+      );
   };
 }

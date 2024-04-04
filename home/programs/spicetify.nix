@@ -4,10 +4,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
-in {
-  imports = [inputs.spicetify-nix.homeManagerModule];
+in
+{
+  imports = [ inputs.spicetify-nix.homeManagerModule ];
 
   home.packages = [
     (pkgs.writeShellScriptBin "spotify" ''
