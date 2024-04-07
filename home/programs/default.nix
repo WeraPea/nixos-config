@@ -21,6 +21,18 @@
     ./spicetify.nix
   ];
 
+  home.shellAliases = {
+    cl = "clear";
+    dc = "cd";
+    lc = "clear";
+    ls = "ll";
+    ns = "sudo nixos-rebuild switch --flake ~/nixos#nixos";
+    nt = "sudo nixos-rebuild test --flake ~/nixos#nixos";
+    sl = "ll";
+    vim = "nvim";
+    vm = "mv";
+    x = "exit";
+  };
   gtk.enable = true;
   stylix.targets.waybar.enable = false;
   programs = {
@@ -95,6 +107,7 @@
     playerctl
     prismlauncher
     protontricks
+    protonup-qt
     python3
     qimgv
     rofi-wayland

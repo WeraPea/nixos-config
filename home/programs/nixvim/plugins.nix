@@ -27,7 +27,7 @@
         lspFallback = true;
       };
       formattersByFt = {
-        nix = [ "alejandra" ];
+        nix = [ "nixfmt" ];
         rust = [ "rustfmt" ];
       };
     };
