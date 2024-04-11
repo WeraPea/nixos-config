@@ -20,6 +20,12 @@
     undotree.enable = true;
     which-key.enable = true;
     # yuck.enable = true;
+    instant = {
+      enable = true;
+      settings = {
+        username = "werapi";
+      };
+    };
     conform-nvim = {
       enable = true;
       formatOnSave = {

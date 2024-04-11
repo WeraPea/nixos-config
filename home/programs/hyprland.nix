@@ -5,7 +5,7 @@
     monitor = [
       ",highrr,auto,1"
       "DP-1,highrr,0x0,auto"
-      "DVI-D-1,highrr,2560x0,auto"
+      "HDMI-A-1,highrr,2560x0,auto"
     ];
     windowrulev2 = [
       "stayfocused, title:^()$,class:^(steam)$"
@@ -124,17 +124,14 @@
         ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
         ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
 
-        "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-8"
-        "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-8"
+        "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-10"
+        "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-10"
 
-        "super_shift, F10, exec, ddccontrol -r 0x10 -W +10 dev:/dev/i2c-7"
-        "super_shift, F9, exec, ddccontrol -r 0x10 -W -10 dev:/dev/i2c-7"
+        "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-10"
+        "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-10"
 
-        "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-8"
-        "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-8"
-
-        "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-8"
-        "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-8"
+        "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-10"
+        "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-10"
 
         "super, e, togglefloating,"
         "super, w, fullscreen, 1"

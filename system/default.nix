@@ -28,6 +28,7 @@
 
   networking = {
     firewall.allowedTCPPorts = [
+      9500
       25565
       24454
     ];
