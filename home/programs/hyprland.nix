@@ -4,7 +4,7 @@
   wayland.windowManager.hyprland.settings = {
     monitor = [
       ",highrr,auto,1"
-      "DP-1,highrr,0x0,auto"
+      "DP-2,highrr,0x0,auto"
       "HDMI-A-1,highrr,2560x0,auto"
     ];
     windowrulev2 = [
@@ -15,15 +15,15 @@
       "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures
     ];
     workspace = [
-      "1,persistent:true,monitor:DP-1"
-      "2,persistent:true,monitor:DP-1"
-      "3,persistent:true,monitor:DP-1"
-      "4,persistent:true,monitor:DP-1"
-      "5,persistent:true,monitor:DP-1"
+      "1,persistent:true,monitor:DP-2"
+      "2,persistent:true,monitor:DP-2"
+      "3,persistent:true,monitor:DP-2"
+      "4,persistent:true,monitor:DP-2"
+      "5,persistent:true,monitor:DP-2"
 
-      "6,persistent:true,monitor:DVI-D-1"
-      "7,persistent:true,monitor:DVI-D-1"
-      "8,persistent:true,monitor:DVI-D-1"
+      "6,persistent:true,monitor:HDMI-A-1"
+      "7,persistent:true,monitor:HDMI-A-1"
+      "8,persistent:true,monitor:HDMI-A-1"
     ];
     input = {
       kb_layout = "pl";

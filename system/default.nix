@@ -95,9 +95,6 @@
     enable = true;
     extraPackages = with pkgs; [ rocmPackages.clr.icd ];
   };
-  environment.variables = {
-    ROC_ENABLE_PRE_VEGA = "1";
-  };
 
   system.stateVersion = "23.11";
 }

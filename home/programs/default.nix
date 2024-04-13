@@ -106,6 +106,7 @@
     pavucontrol
     playerctl
     prismlauncher
+    progress
     protontricks
     protonup-qt
     python3
@@ -114,6 +115,7 @@
     rsync
     steam-run
     tldr
+    usbutils
     vesktop
     wget
     winetricks
