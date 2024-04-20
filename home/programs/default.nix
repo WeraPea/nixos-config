@@ -87,6 +87,7 @@
     firefox
     gdu
     gnumake
+    helvum
     hyprland-autoname-workspaces
     hyprpaper
     hyprpicker
@@ -99,6 +100,7 @@
     lsof
     lutris
     neofetch
+    nh
     ntfs3g
     onefetch
     openjdk17

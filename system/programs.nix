@@ -34,6 +34,7 @@
     hyprland.enable = true;
     mtr.enable = true;
     steam = {
+      extest.enable = true;
       enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
