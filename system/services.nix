@@ -30,10 +30,6 @@
       platformio-core
     ];
     vnstat.enable = true;
-    monado = {
-      enable = true;
-      defaultRuntime = true;
-    };
   };
   xdg.portal = {
     enable = true;
