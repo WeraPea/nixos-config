@@ -89,7 +89,6 @@
   # ];
   zramSwap.enable = true;
 
-  hardware.steam-hardware.enable = true;
   hardware.opengl = {
     driSupport32Bit = true;
     driSupport = true;

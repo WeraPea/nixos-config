@@ -30,6 +30,14 @@
       platformio-core
     ];
     vnstat.enable = true;
+    monado = {
+      enable = true;
+      defaultRuntime = true;
+    };
+  };
+  systemd.user.services.monado.environment = {
+    STEAMVR_LH_ENABLE = "1";
+    XRT_COMPOSITOR_COMPUTE = "1";
   };
   xdg.portal = {
     enable = true;
