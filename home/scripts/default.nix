@@ -10,17 +10,10 @@
         exec = "${lib.getExe aria2dl} %U";
         mimeTypes = [ "x-scheme-handler/magnet" ];
       };
-      nyaasi =
-        writers.writePython3Bin "nyaasi" { libraries = [ pkgs.python3Packages.papis-python-rofi ]; }
-          (substituteAll {
-            src = ./nyaasi.py;
-            videoPath = "/home/wera/videos";
-          });
     in
     [
       aria2dl
       aria2dl-desktop-item
-      nyaasi
       libnotify
     ]
     ++ lib.forEach [
@@ -30,5 +23,19 @@
       "cliphist-rofi-img"
       "search"
       "rebuild"
-    ] (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh));
+    ] (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
+    ++
+      lib.forEach
+        [
+          "nyaasi"
+          "1337x"
+        ]
+        (
+          x:
+          writers.writePython3Bin "${x}" { libraries = [ pkgs.python3Packages.papis-python-rofi ]; }
+            (substituteAll {
+              src = ./${x}.py;
+              videoPath = "/home/wera/videos";
+            })
+        );
 }
