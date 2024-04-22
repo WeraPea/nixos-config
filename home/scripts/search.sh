@@ -13,7 +13,7 @@ first_word=$(echo $search | cut -d " " -f 1)
 
 case "$first_word" in
 	"t")
-		$BROWSER "https://1337x.to/search/$words/1/"
+		1337x "$words"
 		;;
 	"rl")
 		$BROWSER "https://rutracker.org/forum/tracker.php?nm=$words&f=1992,2059"
