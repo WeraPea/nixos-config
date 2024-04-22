@@ -42,8 +42,7 @@ def get_torrent_from_user(torrent):
             torrent[3], torrent[4], torrent[2], torrent[0]))
 
     torrent_choice = r.select("Torrents", torrents_formated)
-    print(torrent_choice)
-    if torrent_choice == (-1, -1):
+    if torrent_choice == ([], -1):
         exit()
 
     magnet = torrents[torrent_choice[0][0]][1]

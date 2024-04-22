@@ -9,7 +9,6 @@ torrent = " ".join(sys.argv[1:])
 torrent = torrent.replace(" ", "+")
 html = os.popen(
     '''curl -s "https://1337x.to/search/{}/1/"'''.format(torrent)).read()
-print(html)
 html_orginal = html
 # get all search results and put them in a list
 torrents = []
@@ -50,9 +49,9 @@ for torrent in formated_torrents:
         torrent[1], torrent[2], torrent[3], torrent_name))
 
 torrent_choice = r.select("Torrents", string_torrents)
-if torrent_choice == (-1, -1):
+if torrent_choice == ([], -1):
     exit()
-torrent_choice = formated_torrents[torrent_choice[0]][0]
+torrent_choice = formated_torrents[torrent_choice[0][0]][0]
 
 html = os.popen(
     '''curl -s "https://1337x.to/torrent/{}/"'''.format(torrent_choice)).read()
