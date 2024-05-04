@@ -1,7 +1,7 @@
 # A rebuild script that commits on a successful build
 set -e
 
-pushd ~/nixos/
+pushd ~/nixos-config/
 nix fmt
 sudo nixos-rebuild switch --flake .
 while [ -z "$current" ]; do

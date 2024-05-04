@@ -1,6 +1,4 @@
 {
-  description = "Nixos config flake";
-
   inputs = {
     audiorelay.url = "github:niscolas/audiorelay-flake-fork";
     base16Styles = {
@@ -21,7 +19,13 @@
   };
 
   outputs =
-    { nixpkgs, self, ... }@inputs:
+    {
+      nixpkgs,
+      home-manager,
+      nixvim,
+      self,
+      ...
+    }@inputs:
     let
       inherit (self) outputs;
       system = "x86_64-linux";
@@ -32,6 +36,25 @@
       formatter.${system} = pkgs.nixfmt-rfc-style;
       overlays = import ./overlays { inherit inputs; };
 
+      # homeManagerConfigurations = {
+      #   "wera@nixos" = home-manager.lib.homeManagerConfiguration {
+      #     inherit pkgs;
+      #     modules = [
+      #       ./home
+      #       ./home/nixos.nix
+      #       nixvim.homeManagerModules.nixvim
+      #     ];
+      #   };
+      #   "wera@nixos-laptop" = home-manager.lib.homeManagerConfiguration {
+      #     inherit pkgs;
+      #     modules = [
+      #       ./home
+      #       ./home/nixos-laptop.nix
+      #       nixvim.homeManagerModules.nixvim
+      #     ];
+      #   };
+      # };
+
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
           specialArgs = {
@@ -39,9 +62,24 @@
           };
           modules = [
             inputs.stylix.nixosModules.stylix
-            ./home
+            ./home/nixos.nix
             ./stylix
             ./system
+            ./system/nixos.nix
+            ./system/hardware-configuration-nixos.nix
+          ];
+        };
+        nixos-laptop = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [
+            inputs.stylix.nixosModules.stylix
+            ./home/nixos-laptop.nix
+            ./stylix
+            ./system
+            ./system/nixos-laptop.nix
+            ./system/hardware-configuration-nixos-laptop.nix
           ];
         };
       };

@@ -1,4 +1,9 @@
-{ inputs, outputs, ... }:
+{
+  inputs,
+  outputs,
+  pkgs,
+  ...
+}:
 {
   imports = [ inputs.home-manager.nixosModules.home-manager ];
 
@@ -7,7 +12,10 @@
       inherit inputs outputs;
     };
     sharedModules = [ inputs.nixvim.homeManagerModules.nixvim ];
-    users.wera = import ./home.nix;
+    users.wera = import ./home.nix {
+      home.username = "wera";
+      home.homeDirectory = "/home/wera";
+    };
     useUserPackages = true;
   };
 }

@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # TODO: add caps to meta_esc
   environment.etc."dual-function-keys.yaml".text = ''
     MAPPINGS:
       - KEY: KEY_LEFTMETA

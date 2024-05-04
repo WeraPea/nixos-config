@@ -11,7 +11,6 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"
@@ -24,25 +23,28 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/8cf4f902-7e83-4c3d-86af-5424e65e4103";
-    fsType = "xfs";
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/8cf4f902-7e83-4c3d-86af-5424e65e4103";
+      fsType = "xfs";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/80D8-0B06";
+      fsType = "vfat";
+    };
+    "/mnt/2tb-mnt".label = "Linux\\x20Data";
+    "/mnt/win" = {
+      label = "Windows";
+      options = [
+        "rw"
+        "uid=1000"
+      ];
+    };
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/80D8-0B06";
-    fsType = "vfat";
-  };
+  zramSwap.enable = true;
 
-  swapDevices = [ ];
-
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
-
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   imports = [
     ./dual-function-keys.nix
@@ -12,7 +12,7 @@
       settings = rec {
         initial_session = {
           command = "Hyprland";
-          user = "wera";
+          user = config.user.username;
         };
         default_session = initial_session;
       };
@@ -34,6 +34,8 @@
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    configPackages = [ pkgs.xdg-desktop-portal-gtk ];
+    xdgOpenUsePortal = true;
   };
   hardware = {
     bluetooth.enable = true;
