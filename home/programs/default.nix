@@ -80,50 +80,54 @@
     cliphist.enable = lib.mkDefault true;
   };
 
-  home.packages = with pkgs; lib.mkMerge [ ([
-    appimage-run
-    catimg
-    comma
-    firefox # TODO: move to module
-    gdu
-    gnumake
-    helvum
-    imagemagick
-    inputs.audiorelay.packages.${system}.audio-relay
-    jq
-    krita
-    lm_sensors
-    lsof
-    neofetch
-    nh
-    ntfs3g
-    onefetch
-    openjdk17
-    p7zip
-    pavucontrol
-    playerctl
-    progress
-    python3
-    qimgv # TODO: move to module
-    rofi-wayland # TODO: move to module
-    rsync
-    steam-run
-    tldr
-    usbutils
-    vesktop
-    wget
-    wl-clipboard
-    xdg-utils
-    xdragon
-    yt-dlp
-  ])
-  (lib.mkIf osConfig.gaming.enable [
-    lutris
-    prismlauncher
-    protontricks
-    protonup-qt
-    winetricks
-    wineWowPackages.stagingFull
-    # wineWowPackages.waylandFull
-  ])];
+  home.packages =
+    with pkgs;
+    lib.mkMerge [
+      ([
+        appimage-run
+        catimg
+        comma
+        firefox # TODO: move to module
+        gdu
+        gnumake
+        helvum
+        imagemagick
+        inputs.audiorelay.packages.${system}.audio-relay
+        jq
+        krita
+        lm_sensors
+        lsof
+        neofetch
+        nh
+        ntfs3g
+        onefetch
+        openjdk17
+        p7zip
+        pavucontrol
+        playerctl
+        progress
+        python3
+        qimgv # TODO: move to module
+        rofi-wayland # TODO: move to module
+        rsync
+        steam-run
+        tldr
+        usbutils
+        vesktop
+        wget
+        wl-clipboard
+        xdg-utils
+        xdragon
+        yt-dlp
+      ])
+      (lib.mkIf osConfig.gaming.enable [
+        lutris
+        prismlauncher
+        protontricks
+        protonup-qt
+        winetricks
+        wineWowPackages.stagingFull
+        # wineWowPackages.waylandFull
+      ])
+    ];
 }

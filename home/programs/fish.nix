@@ -130,6 +130,7 @@
         vim = "nvim";
         vm = "mv";
         x = "exit";
+        lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
       };
     };
   };
