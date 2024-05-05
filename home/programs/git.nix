@@ -11,7 +11,7 @@
   config = lib.mkIf config.git.enable {
     programs.git = {
       enable = true;
-      userName = "werapi";
+      userName = "WeraPea";
       userEmail = "sokneip@tuta.io";
       ignores = [
         ".direnv/"
