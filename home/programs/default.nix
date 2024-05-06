@@ -20,6 +20,7 @@
     ./mpv.nix
     ./nixvim
     ./spicetify.nix
+    ./firefox.nix
   ];
 
   fish.enable = lib.mkDefault true;
@@ -87,7 +88,7 @@
         appimage-run
         catimg
         comma
-        firefox # TODO: move to module
+        # firefox # TODO: move to module
         gdu
         gnumake
         helvum
