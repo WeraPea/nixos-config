@@ -21,6 +21,7 @@
     ./nixvim
     ./spicetify.nix
     ./firefox.nix
+    ./waybar.nix
   ];
 
   fish.enable = lib.mkDefault true;
@@ -33,6 +34,7 @@
   mpv.enable = lib.mkDefault true;
   nixvim.enable = lib.mkDefault true;
   spicetify.enable = lib.mkDefault true;
+  waybar.enable = lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";
@@ -50,7 +52,6 @@
     x = "exit";
   };
   gtk.enable = lib.mkDefault true;
-  # stylix.targets.waybar.enable = lib.mkIf programs.waybar.enable false;
   programs = {
     aria2.enable = lib.mkDefault true;
     bash.enable = lib.mkDefault true;
@@ -72,10 +73,6 @@
       icons = true;
       extraOptions = [ "--group-directories-first" ];
     };
-    waybar = {
-      enable = lib.mkDefault true;
-      systemd.enable = true;
-    };
   };
   services = {
     cliphist.enable = lib.mkDefault true;
@@ -88,7 +85,6 @@
         appimage-run
         catimg
         comma
-        # firefox # TODO: move to module
         gdu
         gnumake
         helvum

@@ -11,11 +11,14 @@
     extraSpecialArgs = {
       inherit inputs outputs;
     };
-    sharedModules = [ inputs.nixvim.homeManagerModules.nixvim ];
-    users.wera = import ./home.nix {
-      home.username = "wera";
-      home.homeDirectory = "/home/wera";
-    };
+    sharedModules = [
+      inputs.nixvim.homeManagerModules.nixvim
+      {
+        home.username = "wera";
+        home.homeDirectory = "/home/wera";
+      }
+    ];
+    users.wera = import ./home.nix;
     useUserPackages = true;
   };
 }
