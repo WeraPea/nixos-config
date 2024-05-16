@@ -34,8 +34,8 @@
           "ctrl+shift+h" = "previous_tab";
           "ctrl+shift+l" = "next_tab";
 
-          "kitty_mod+k" = "change_font_size all +2.0";
-          "kitty_mod+j" = "change_font_size all -2.0";
+          "kitty_mod+k" = "change_font_size all +1.0";
+          "kitty_mod+j" = "change_font_size all -1.0";
         };
         settings = {
           placement_strategy = "top-left";

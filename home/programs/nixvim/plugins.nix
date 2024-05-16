@@ -62,7 +62,7 @@
         "<leader>c" = "commands";
         "<leader>C" = "command_history";
         "<leader>q" = "quickfix";
-        "<leader>r" = "registers";
+        # "<leader>r" = "registers";
         "<leader>v" = "vim_options";
         "<leader>x" = "spell_suggest";
         "<leader>lr" = "lsp_references";
