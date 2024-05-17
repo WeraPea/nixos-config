@@ -22,6 +22,14 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.kernelParams = [
+    # amdgpu fixing black screen thingy
+    "amdgpu.noretry=0"
+    "amdgpu.lockup_timeout=1000"
+    "amdgpu.gpu_recovery=1"
+    "iommu=soft"
+    "pcie_aspm=off"
+  ];
 
   fileSystems = {
     "/" = {
