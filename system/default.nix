@@ -44,6 +44,20 @@
       hostName = config.user.hostname;
       networkmanager.enable = true;
     };
+    networking.firewall = {
+      allowedTCPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
+      ];
+    };
 
     time.timeZone = "Europe/Warsaw";
 
