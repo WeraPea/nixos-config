@@ -11,14 +11,14 @@
     mouse = "a";
     number = true;
     scrolloff = 8;
-    shiftwidth = 4;
+    shiftwidth = 2;
     showmode = false;
     sidescrolloff = 8;
     smartcase = true;
     smartindent = true;
     splitbelow = true;
     splitright = true;
-    tabstop = 4;
+    tabstop = 2;
     termguicolors = true;
     undofile = true;
     updatetime = 300;
