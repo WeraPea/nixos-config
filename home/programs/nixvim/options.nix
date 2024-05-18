@@ -15,7 +15,6 @@
     showmode = false;
     sidescrolloff = 8;
     smartcase = true;
-    smartindent = true;
     splitbelow = true;
     splitright = true;
     tabstop = 2;
