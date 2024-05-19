@@ -29,13 +29,15 @@
       config = {
         ontop = "no";
         osc = "no";
+        image-display-duration = "inf";
+        loop-playlist = "inf";
+        background = "#121212";
 
         # video
         gpu-api = "vulkan";
         hwdec = "vaapi-copy";
         vo = "gpu-next";
         gpu-context = "waylandvk";
-
         hr-seek-framedrop = "no";
         msg-color = "yes";
         sub-auto = "fuzzy";
@@ -76,9 +78,9 @@
           top-hover-zone-height = 80;
         };
         detect_image = {
-          command_on_first_image_loaded = "enable-section image-viewer; script-message status-line-enable; set video-zoom 0";
-          command_on_image_loaded = "enable-section image-viewer; script-message status-line-enable; set video-zoom 0";
-          command_on_non_image_loaded = "disable-section image-viewer; script-message status-line-disable; set video-zoom 0";
+          command_on_first_image_loaded = "enable-section image-viewer; script-message status-line-enable; set video-zoom 0; set loop-file inf; hide-text";
+          command_on_image_loaded = "enable-section image-viewer; script-message status-line-enable; set video-zoom 0; set loop-file inf; hide-text";
+          command_on_non_image_loaded = "disable-section image-viewer; script-message status-line-disable; set video-zoom 0; set loop-file no; hide-text";
         };
         status_line = {
           enabled = "no";
