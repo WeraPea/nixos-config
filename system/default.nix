@@ -17,6 +17,7 @@
   };
   config = {
     gaming.enable = lib.mkDefault false;
+    sql.enable = lib.mkDefault false;
     user.username = lib.mkDefault "wera";
 
     users.users.${config.user.username} = {

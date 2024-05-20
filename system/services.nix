@@ -3,6 +3,7 @@
   imports = [
     ./dual-function-keys.nix
     ./polkit.nix
+    ./sql.nix
   ];
   services = {
     ddccontrol.enable = true;

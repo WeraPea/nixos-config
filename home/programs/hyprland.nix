@@ -140,6 +140,7 @@
           # ",XF86Tools, pass,^(VencordDiscord)$"
 
           ",Print, exec, ~/.scripts/screenshot"
+          "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
           "super, s, exec, search"
           "super, c, exec, rofi -modi clipboard:$HOME/.scripts/rofi/cliphist-rofi-img -show clipboard -show-icons"
           "super, o, exec, wl-paste -p | wl-copy"
