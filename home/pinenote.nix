@@ -2,6 +2,7 @@
   inputs,
   outputs,
   pkgs,
+  config,
   ...
 }:
 {
@@ -16,9 +17,12 @@
       {
         home.username = "wera";
         home.homeDirectory = "/home/wera";
-        home.packages = with pkgs; [
-          inputs.audiorelay.packages.${system}.audio-relay
-        ];
+        # home.packages = with pkgs; [ ... ];
+        hyprland.enable = false;
+        mpv.enable = false;
+        spicetify.enable = false;
+        programs.zathura.enable = false;
+        desktopPackages.enable = false;
       }
     ];
     users.wera = import ./home.nix;

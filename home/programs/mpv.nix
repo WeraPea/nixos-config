@@ -12,18 +12,18 @@
   config = lib.mkIf config.mpv.enable {
     programs.mpv = {
       enable = true;
-      scripts = with pkgs; [
-        mpvScripts.mpris
-        mpvScripts.thumbfast
-        mpvScripts.webtorrent-mpv-hook
-        outputs.packages.progressbar
-        outputs.packages.detect-image
-        outputs.packages.minimap
-        outputs.packages.image-positioning
-        outputs.packages.status-line
-        outputs.packages.ruler
-        outputs.packages.freeze-window
-        outputs.packages.equalizer
+      scripts = with pkgs.mpvScripts; with outputs.packages.${pkgs.system}; [
+        mpris
+        thumbfast
+        webtorrent-mpv-hook
+        progressbar
+        detect-image
+        minimap
+        image-positioning
+        status-line
+        ruler
+        freeze-window
+        equalizer
       ];
       defaultProfiles = [ "high-quality" ];
       config = {

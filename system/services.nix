@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, lib, config, ... }:
 {
   imports = [
     ./dual-function-keys.nix
@@ -6,7 +6,6 @@
     ./sql.nix
   ];
   services = {
-    ddccontrol.enable = true;
     fstrim.enable = true;
     greetd = {
       enable = true;
@@ -34,13 +33,11 @@
   };
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    configPackages = [ pkgs.xdg-desktop-portal-gtk ];
-    xdgOpenUsePortal = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-kde ];
+    configPackages = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-kde ];
   };
   hardware = {
     bluetooth.enable = true;
-    pulseaudio.enable = false;
     keyboard.qmk.enable = true;
   };
   sound.enable = true;

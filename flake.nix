@@ -23,37 +23,28 @@
       nixpkgs,
       home-manager,
       nixvim,
+      flake-utils,
       self,
       ...
     }@inputs:
     let
       inherit (self) outputs;
-      system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      systems = [ "x86_64-linux" "aarch64-linux" ];
+      foreachSystem = nixpkgs.lib.genAttrs systems;
+      pkgsBySystem = foreachSystem (
+        system:
+        import inputs.nixpkgs {
+          inherit system;
+          config = {allowUnfree = true;};
+          # overlays = self.overlays."${system}";
+        }
+      );
     in
     {
-      packages = import ./pkgs nixpkgs.legacyPackages.${system};
-      formatter.${system} = pkgs.nixfmt-rfc-style;
-      overlays = import ./overlays { inherit inputs; };
+      packages = foreachSystem  (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      formatter = foreachSystem (system: { system = pkgsBySystem.${system}.nixfmt-rfc-style; });
 
-      # homeManagerConfigurations = {
-      #   "wera@nixos" = home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     modules = [
-      #       ./home
-      #       ./home/nixos.nix
-      #       nixvim.homeManagerModules.nixvim
-      #     ];
-      #   };
-      #   "wera@nixos-laptop" = home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     modules = [
-      #       ./home
-      #       ./home/nixos-laptop.nix
-      #       nixvim.homeManagerModules.nixvim
-      #     ];
-      #   };
-      # };
+      # overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
@@ -80,6 +71,19 @@
             ./system
             ./system/nixos-laptop.nix
             ./system/hardware-configuration-nixos-laptop.nix
+          ];
+        };
+        pinenote = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [
+            inputs.stylix.nixosModules.stylix
+            ./home/pinenote.nix
+            ./stylix
+            ./system
+            ./system/pinenote.nix
+            ./system/hardware-configuration-pinenote.nix
           ];
         };
       };
