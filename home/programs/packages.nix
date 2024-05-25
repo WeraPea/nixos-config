@@ -47,6 +47,7 @@
           yt-dlp
           libxml2
           nixfmt-rfc-style
+          weylus
         ])
         (lib.mkIf osConfig.gaming.enable [
           lutris
