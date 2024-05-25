@@ -1,20 +1,26 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
     ./pinenote-kernel.nix
-    ];
+  ];
 
   boot.initrd.availableKernelModules = [ ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/0008c31c-dae8-454e-a9ca-8aee71dfb07f"; #!TODO:
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/0008c31c-dae8-454e-a9ca-8aee71dfb07f"; # !TODO:
+    fsType = "ext4";
+  };
 
   swapDevices = [ ];
 

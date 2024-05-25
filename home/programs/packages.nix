@@ -1,7 +1,17 @@
-{pkgs, lib, config, osConfig, inputs, ...}:
+{
+  pkgs,
+  lib,
+  config,
+  osConfig,
+  inputs,
+  ...
+}:
 {
   options = {
-    desktopPackages.enable = lib.mkEnableOption { description = "Desktop packages"; default = true; };
+    desktopPackages.enable = lib.mkEnableOption {
+      description = "Desktop packages";
+      default = true;
+    };
   };
   config = {
     home.packages =
@@ -35,6 +45,8 @@
           xdg-utils
           xdragon
           yt-dlp
+          libxml2
+          nixfmt-rfc-style
         ])
         (lib.mkIf osConfig.gaming.enable [
           lutris

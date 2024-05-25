@@ -16,9 +16,7 @@
       {
         home.username = "wera";
         home.homeDirectory = "/home/wera";
-        home.packages = with pkgs; [
-          inputs.audiorelay.packages.${system}.audio-relay
-        ];
+        home.packages = with pkgs; [ inputs.audiorelay.packages.${system}.audio-relay ];
       }
     ];
     users.wera = import ./home.nix;

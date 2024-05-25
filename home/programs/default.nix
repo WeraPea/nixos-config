@@ -35,6 +35,7 @@
   nixvim.enable = lib.mkDefault true;
   spicetify.enable = lib.mkDefault true;
   waybar.enable = lib.mkDefault true;
+  desktopPackages.enable = lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";

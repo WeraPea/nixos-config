@@ -1,4 +1,4 @@
-{lib, ...}:
+{ lib, ... }:
 {
   user.hostname = "pinenote";
   # Enables the generation of /boot/extlinux/extlinux.conf

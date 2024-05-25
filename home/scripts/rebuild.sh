@@ -2,7 +2,7 @@
 set -e
 
 pushd ~/nixos-config/
-nix fmt
+nixfmt .
 sudo nixos-rebuild switch --flake .
 while [ -z "$current" ]; do
     current=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')

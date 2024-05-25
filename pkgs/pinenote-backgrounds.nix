@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
 
   change-bg-image = lib.writeShellScriptBin "change-bg-image" ''
     ln -s $out/share/pinenote-backgrounds/Pinenotebg1.png /??? # what path???? https://discord.com/channels/463237927984693259/870707390998282292/1193276401579741214 ioctl python script for this!
-    '';
+  '';
 
   installPhase = ''
     install -Dm644 ${pinenotebg1} $out/share/pinenote-backgrounds/Pinenotebg1.png

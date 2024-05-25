@@ -29,20 +29,24 @@
     }@inputs:
     let
       inherit (self) outputs;
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
         system:
         import inputs.nixpkgs {
           inherit system;
-          config = {allowUnfree = true;};
+          config = {
+            allowUnfree = true;
+          };
           # overlays = self.overlays."${system}";
         }
       );
     in
     {
-      packages = foreachSystem  (system: import ./pkgs nixpkgs.legacyPackages.${system});
-      formatter = foreachSystem (system: { system = pkgsBySystem.${system}.nixfmt-rfc-style; });
+      packages = foreachSystem (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
       # overlays = import ./overlays { inherit inputs; };
 
