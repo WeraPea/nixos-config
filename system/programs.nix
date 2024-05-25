@@ -19,9 +19,9 @@
     };
     programs =
       {
-        weylus.enable = true;
-        weylus.openFirewall = true;
-        weylus.users = [ config.user.username ];
+        # weylus.enable = true; # doesnt do shit?????????
+        # weylus.openFirewall = true;
+        # weylus.users = [ config.user.username ];
         adb.enable = true;
         dconf.enable = true;
         gnupg.agent = {
