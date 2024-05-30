@@ -73,7 +73,7 @@
         "<leader>b" = "buffers";
         # "<C-p>" = "git_files";
       };
-      extraOptions.pickers.buffers = {
+      settings.pickers.buffers = {
         show_all_buffers = "true";
         theme = "dropdown";
         mappings = {
@@ -88,8 +88,7 @@
           };
         };
       };
-      keymapsSilent = true;
-      defaults = {
+      settings.defaults = {
         file_ignore_patterns = [
           "^.git/"
           "^__pycache__/"

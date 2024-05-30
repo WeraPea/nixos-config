@@ -35,8 +35,6 @@
         9500
         25565
         24454
-        1701 # weylus
-        9001 # weylus
       ];
       firewall.allowedUDPPorts = [
         59100
