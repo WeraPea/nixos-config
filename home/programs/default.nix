@@ -77,7 +77,5 @@
   };
   services = {
     cliphist.enable = lib.mkDefault true;
-    kdeconnect.enable = lib.mkDefault true;
-    kdeconnect.indicator = lib.mkDefault true;
   };
 }

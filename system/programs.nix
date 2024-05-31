@@ -30,7 +30,6 @@
         };
         hyprland.enable = true;
         mtr.enable = true;
-        # kdeconnect.enable = true; # this bullshit doesnt do shit
       }
       // lib.mkIf config.gaming.enable {
         corectrl.enable = true;

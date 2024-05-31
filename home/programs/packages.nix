@@ -47,6 +47,7 @@
           yt-dlp
           libxml2
           nixfmt-rfc-style
+          valent
         ])
         (lib.mkIf osConfig.gaming.enable [
           lutris

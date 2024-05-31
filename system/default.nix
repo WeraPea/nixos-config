@@ -41,7 +41,7 @@
         59200
         59716
         24454
-      ]; # for audiorelay
+      ]; # for audiorelay (some)
       hostName = config.user.hostname;
       networkmanager.enable = true;
     };
@@ -50,13 +50,13 @@
         {
           from = 1714;
           to = 1764;
-        } # KDE Connect
+        } # Valent
       ];
       allowedUDPPortRanges = [
         {
           from = 1714;
           to = 1764;
-        } # KDE Connect
+        } # Valent
       ];
     };
 
