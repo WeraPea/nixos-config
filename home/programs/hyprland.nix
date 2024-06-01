@@ -116,15 +116,13 @@
         disable_autoreload = true; # autoreload is unnecessary on nixos, because the config is readonly anyway
       };
       env = [
-        "CLUTTER_BACKEND,wayland"
-        "GDK_BACKEND,wayland;x11"
+        # "CLUTTER_BACKEND,wayland"
+        # "GDK_BACKEND,wayland,x11"
         "NIXOS_OZONE_WL,1"
         "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-        "QT_QPA_PLATFORM,wayland"
+        # "QT_QPA_PLATFORM,wayland"
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "SDL_VIDEODRIVER,wayland"
-        # "WLR_BACKEND,vulkan"
-        # "WLR_RENDERER,vulkan"
         "XDG_CURRENT_DESKTOP,Hyprland"
         "XDG_SESSION_DESKTOP,Hyprland"
         "XDG_SESSION_TYPE,wayland"
