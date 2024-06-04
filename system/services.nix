@@ -32,7 +32,7 @@
     };
     udev.packages = with pkgs; [
       android-udev-rules
-      platformio-core
+      platformio-core.udev
     ];
     vnstat.enable = true;
   };

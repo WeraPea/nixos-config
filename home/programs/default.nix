@@ -74,6 +74,10 @@
       icons = true;
       extraOptions = [ "--group-directories-first" ];
     };
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
   };
   services = {
     cliphist.enable = lib.mkDefault true;

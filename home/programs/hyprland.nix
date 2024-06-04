@@ -60,7 +60,6 @@
         repeat_delay = 300;
 
         follow_mouse = 1;
-        touchpad.natural_scroll = true;
       };
       general = {
         no_cursor_warps = true;
@@ -116,11 +115,8 @@
         disable_autoreload = true; # autoreload is unnecessary on nixos, because the config is readonly anyway
       };
       env = [
-        # "CLUTTER_BACKEND,wayland"
-        # "GDK_BACKEND,wayland,x11"
         "NIXOS_OZONE_WL,1"
         "QT_AUTO_SCREEN_SCALE_FACTOR,1"
-        # "QT_QPA_PLATFORM,wayland"
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
         "SDL_VIDEODRIVER,wayland"
         "XDG_CURRENT_DESKTOP,Hyprland"
