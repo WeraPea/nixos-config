@@ -51,6 +51,10 @@
 
         follow_mouse = 1;
       };
+      device = {
+        name = "alpsps/2-alps-dualpoint-touchpad";
+        middle_button_emulation = 1;
+      };
       general = {
         no_cursor_warps = true;
         gaps_in = 0;
