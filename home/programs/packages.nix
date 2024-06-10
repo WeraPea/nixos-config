@@ -4,6 +4,7 @@
   config,
   osConfig,
   inputs,
+  outputs,
   ...
 }:
 {
@@ -52,6 +53,7 @@
         (lib.mkIf osConfig.gaming.enable [
           lutris
           prismlauncher
+          alsa-oss
           protontricks
           protonup-qt
           winetricks
@@ -59,11 +61,13 @@
           # wineWowPackages.waylandFull
         ])
         (lib.mkIf config.desktopPackages.enable [
+          openscad
           steam-run
           helvum
           ntfs3g
           usbutils
           vesktop
+          outputs.packages.${pkgs.system}.blender
         ])
       ];
   };

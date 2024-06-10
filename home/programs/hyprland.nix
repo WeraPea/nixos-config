@@ -5,24 +5,14 @@
   ...
 }:
 {
+  imports = [
+    ./hyprpaper.nix
+    ./hyprland-autoname-workspaces.nix
+  ];
   options = {
     hyprland.enable = lib.mkEnableOption "enables hyprland";
   };
   config = lib.mkIf config.hyprland.enable {
-    systemd.user.services.hyprpaper = {
-      Unit = {
-        Description = "hyprpaper";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${lib.getExe pkgs.hyprpaper}";
-        Restart = "always";
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
-    };
     home.packages = with pkgs; [
       hyprland-autoname-workspaces
       hyprpaper
@@ -131,12 +121,10 @@
       ];
       bind =
         [
-          # ",XF86Tools, pass,^(VencordDiscord)$"
-
-          ",Print, exec, ~/.scripts/screenshot"
+          ",Print, exec, screenshot"
           "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
           "super, s, exec, search"
-          "super, c, exec, rofi -modi clipboard:$HOME/.scripts/rofi/cliphist-rofi-img -show clipboard -show-icons"
+          "super, c, exec, rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons"
           "super, o, exec, wl-paste -p | wl-copy"
           "super, p, exec, wl-paste | wl-copy -p"
           "super, m, exec, rofi-mount"

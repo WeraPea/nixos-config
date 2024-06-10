@@ -34,7 +34,6 @@
         osc = "no";
         image-display-duration = "inf";
         loop-playlist = "inf";
-        background = "#121212";
 
         # video
         gpu-api = "vulkan";

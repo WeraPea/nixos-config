@@ -10,11 +10,17 @@
         exec = "${lib.getExe aria2dl} %U";
         mimeTypes = [ "x-scheme-handler/magnet" ];
       };
+      rename-torrents = writers.writePython3Bin "rename-torrents" {
+        libraries = [ pkgs.python3Packages.bencode-py ];
+      } (builtins.readFile ./rename-torrents.py);
     in
     [
       aria2dl
       aria2dl-desktop-item
-      libnotify
+      libnotify # aria2dl-notify
+      tesseract # screenshot
+      imagemagick # screenshot
+      rename-torrents
     ]
     ++ lib.forEach [
       "0x0"
@@ -23,6 +29,7 @@
       "cliphist-rofi-img"
       "search"
       "rebuild"
+      "screenshot"
     ] (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
     ++
       lib.forEach

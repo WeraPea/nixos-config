@@ -19,7 +19,13 @@
     trouble.enable = true;
     undotree.enable = true;
     which-key.enable = true;
-    # yuck.enable = true;
+    openscad = {
+      enable = true;
+      keymaps = {
+        enable = true;
+        cheatsheetToggle = "<C-c>";
+      };
+    };
     instant = {
       enable = true;
       settings = {
@@ -116,8 +122,6 @@
       };
       servers = {
         # rust-analyzer.enable = true;
-        lua-ls.enable = true;
-        pyright.enable = true;
         # pylsp = {
         #   enable = true;
         #   settings.plugins = {
@@ -129,71 +133,12 @@
         #   };
         # };
         # clangd.enable = true;
-        ccls.enable = true;
         # nixd.enable = true;
+        lua-ls.enable = true;
+        pyright.enable = true;
+        ccls.enable = true;
       };
-      #    onAttach = ''
-      #          opts = {silent = true, buffer = bufnr}
-      # vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", )
-      #    '';
     };
-    # nvim-cmp = {
-    #   enable = true;
-    #   # settings.sources = [
-    #   #   {name = "nvim_lsp";}
-    #   #   {name = "path";}
-    #   #   {
-    #   #     name = "buffer";
-    #   #     # Words from other open buffers can also be suggested.
-    #   #     option.get_bufnrs.__raw = "vim.api.nvim_list_bufs";
-    #   #   }
-    #   #   {name = "luasnip";}
-    #   #   {name = "nvim_lsp_signature_help";}
-    #   # ];
-    #   mapping = {
-    #     "<Up>" = "cmp.mapping.select_prev_item()";
-    #     "<Down>" = "cmp.mapping.select_next_item()";
-    #     "<C-e>" = "cmp.mapping.abort()";
-    #     "<C-CR>" = "cmp.mapping.confirm({ select = true })";
-    #     "<CR>" = "cmp.mapping.confirm({ select = false })";
-    #     "<Tab>" = {
-    #       action = ''
-    #         function(fallback)
-    #             if cmp.visible() then
-    #                 cmp.select_next_item()
-    #             else
-    #                 fallback()
-    #             end
-    #         end
-    #       '';
-    #       # elseif luasnip.expandable() then
-    #       #     luasnip.expand()
-    #       # elseif luasnip.expand_or_jumpable() then
-    #       #     luasnip.expand_or_jump()
-    #       # elseif check_backspace() then
-    #       #     fallback()
-    #       modes = ["i" "s"];
-    #     };
-    #     "<S-Tab>" = {
-    #       action = ''
-    #         function(fallback)
-    #             if cmp.visible() then
-    #                 cmp.select_prev_item()
-    #             else
-    #                 fallback()
-    #             end
-    #         end
-    #       '';
-    #       # elseif check_backspace() then
-    #       #     fallback()
-    #       # elseif luasnip.expandable() then
-    #       #     luasnip.expand()
-    #       # elseif luasnip.expand_or_jumpable() then
-    #       #     luasnip.expand_or_jump()
-    #       modes = ["i" "s"];
-    #     };
-    #   };
-    # };
     cmp = {
       enable = true;
       settings = {

@@ -7,4 +7,5 @@ pkgs: {
   detect-image = pkgs.callPackage ./detect-image.nix { };
   freeze-window = pkgs.callPackage ./freeze-window.nix { };
   image-positioning = pkgs.callPackage ./image-positioning.nix { };
+  blender = pkgs.callPackage ./blender.nix { };
 }
