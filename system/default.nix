@@ -34,13 +34,13 @@
       firewall.allowedTCPPorts = [
         9500
         25565
-        24454
+        24454 # simple voice chat
       ];
       firewall.allowedUDPPorts = [
         59100
         59200
         59716
-        24454
+        24454 # simple voice chat
       ]; # for audiorelay (some)
       hostName = config.user.hostname;
       networkmanager.enable = true;

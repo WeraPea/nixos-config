@@ -139,6 +139,10 @@
           ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
           ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
 
+          ",XF86AudioPlay, exec, playerctl -p spotify play-pause"
+          ",XF86AudioPrev, exec, playerctl -p spotify previous"
+          ",XF86AudioNext, exec, playerctl -p spotify next"
+
           "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-10"
           "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-10"
 
@@ -179,6 +183,7 @@
     };
 
     wayland.windowManager.hyprland.extraConfig = ''
+      exec-once = waybar
       bind=super,r,submap,run
       submap=run
       bind = super, r, exec, rofi -show drun -show-icons

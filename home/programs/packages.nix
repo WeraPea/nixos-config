@@ -58,6 +58,7 @@
           protonup-qt
           winetricks
           wineWowPackages.stagingFull
+          mangohud
           # wineWowPackages.waylandFull
         ])
         (lib.mkIf config.desktopPackages.enable [
@@ -67,7 +68,11 @@
           ntfs3g
           usbutils
           vesktop
+          prusa-slicer
           outputs.packages.${pkgs.system}.blender
+          streamlink
+          streamlink-twitch-gui-bin
+          chatterino2
         ])
       ];
   };

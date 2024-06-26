@@ -11,7 +11,7 @@
         mimeTypes = [ "x-scheme-handler/magnet" ];
       };
       rename-torrents = writers.writePython3Bin "rename-torrents" {
-        libraries = [ pkgs.python3Packages.bencode-py ];
+        libraries = [ python3Packages.bencode-py ];
       } (builtins.readFile ./rename-torrents.py);
     in
     [
@@ -39,7 +39,7 @@
         ]
         (
           x:
-          writers.writePython3Bin "${x}" { libraries = [ pkgs.python3Packages.papis-python-rofi ]; }
+          writers.writePython3Bin "${x}" { libraries = [ python3Packages.papis-python-rofi ]; }
             (substituteAll {
               src = ./${x}.py;
               videoPath = "/home/wera/videos";

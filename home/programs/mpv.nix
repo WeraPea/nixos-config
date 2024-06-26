@@ -27,6 +27,7 @@
           ruler
           freeze-window
           equalizer
+          youtube-upnext
         ];
       defaultProfiles = [ "high-quality" ];
       config = {

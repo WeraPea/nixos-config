@@ -12,7 +12,7 @@ lib.mkIf config.hyprland.enable {
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${lib.getExe pkgs.hyprland-autoname-workspaces} --config ~/.config/hypr/hyprworkspaces.toml";
+      ExecStart = lib.getExe pkgs.hyprland-autoname-workspaces;
       Restart = "always";
     };
     Install = {

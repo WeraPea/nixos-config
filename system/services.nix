@@ -29,6 +29,13 @@
       enable = true;
       jack.enable = true;
       pulse.enable = true;
+      extraConfig.pipewire = {
+        "10-clock-rate" = {
+          "context.properties" = {
+            "default.clock.rate" = 48000;
+          };
+        };
+      };
     };
     udev.packages = with pkgs; [
       android-udev-rules
