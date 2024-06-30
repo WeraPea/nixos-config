@@ -57,6 +57,8 @@
             max-length = 40;
             on-click = "${lib.getExe pkgs.playerctl} -p spotify play-pause";
             escape = true;
+            on-scroll-up = "playerctl -p spotify volume 0.01+";
+            on-scroll-down = "playerctl -p spotify volume 0.01-";
             exec =
               let
                 spotify-status = pkgs.writeShellScriptBin "spotify-status" ''
@@ -69,6 +71,9 @@
                     fi
                     if [[ "$status" != "" ]]; then
                       echo $playing $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:title) - $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:artist)
+                    else
+                      echo
+                      sleep 5
                     fi
                     sleep 0.5 # bit overly expensive on cpu for what it does
                   done
@@ -83,60 +88,61 @@
           # };
         };
       };
-      style = ''
-        * {
-            font-family: "JetbrainsMono NFM", "Noto Sans CJK JP";
-            margin-bottom: -1;
-            margin-top: -1;
-            border: none;
-        }
+      style = # css
+        ''
+          * {
+              font-family: "JetbrainsMono NFM", "Noto Sans CJK JP";
+              margin-bottom: -1;
+              margin-top: -1;
+              border: none;
+          }
 
-        window#waybar {
-            font-size: 14px;
-            /* background-color: #121212; */
-            background-color: transparent;
-            color: #d0d0d0;
-            transition-property: background-color;
-            transition-duration: .5s;
-        }
+          window#waybar {
+              font-size: 14px;
+              /* background-color: #121212; */
+              background-color: transparent;
+              color: #d0d0d0;
+              transition-property: background-color;
+              transition-duration: .5s;
+          }
 
-        window#waybar.steam {
-            background-color: #171D25;
-            border: none;
-        }
-        #workspaces button {
-            color: #d0d0d0;
-        }
+          window#waybar.steam {
+              background-color: #171D25;
+              border: none;
+          }
+          #workspaces button {
+              color: #d0d0d0;
+          }
 
-        #workspaces button:hover {
-            box-shadow: inset 0 -6px #d0d0d0;
-        }
+          #workspaces button:hover {
+              box-shadow: inset 0 -6px #d0d0d0;
+          }
 
-        #workspaces button.active {
-            box-shadow: inset 0 -6px #d0d0d0;
-        }
+          #workspaces button.active {
+              box-shadow: inset 0 -6px #d0d0d0;
+          }
 
-        #workspaces button.urgent {
-            background-color: #eb4d4b;
-        }
+          #workspaces button.urgent {
+              background-color: #eb4d4b;
+          }
 
-        #pulseaudio.muted {
-            background-color: #90b1b1;
-            color: #2a5c45;
-        }
+          #pulseaudio.muted {
+              background-color: #90b1b1;
+              color: #2a5c45;
+          }
 
-        #custom-spotify {
-            color: #1ED760;
-        }
+          #custom-spotify {
+              color: #1ED760;
+          }
 
-        #custom-spotify.Paused {
-            color: #505050;
-        }
+          #custom-spotify.Paused {
+              color: #505050;
+          }
 
-        #custom-audiorelay.running {
-            background-color: #eb4d4b;
-        }
-      '';
+          #custom-audiorelay.running {
+              background-color: #eb4d4b;
+          }
+        '';
     };
   };
 }

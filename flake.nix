@@ -16,6 +16,7 @@
     };
     spicetify-nix.url = "github:A1ca7raz/spicetify-nix";
     stylix.url = "github:danth/stylix";
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs =
@@ -24,6 +25,7 @@
       home-manager,
       nixvim,
       flake-utils,
+      nur,
       self,
       ...
     }@inputs:
@@ -57,6 +59,8 @@
           };
           modules = [
             inputs.stylix.nixosModules.stylix
+            { nixpkgs.overlays = [ nur.overlay ]; }
+            nur.nixosModules.nur
             ./home/nixos.nix
             ./stylix
             ./system
@@ -70,6 +74,8 @@
           };
           modules = [
             inputs.stylix.nixosModules.stylix
+            { nixpkgs.overlays = [ nur.overlay ]; }
+            nur.nixosModules.nur
             ./home/nixos-laptop.nix
             ./stylix
             ./system
@@ -83,6 +89,8 @@
           };
           modules = [
             inputs.stylix.nixosModules.stylix
+            { nixpkgs.overlays = [ nur.overlay ]; }
+            nur.nixosModules.nur
             ./home/pinenote.nix
             ./stylix
             ./system

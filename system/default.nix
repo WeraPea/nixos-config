@@ -96,11 +96,8 @@
     #   }
     # ];
 
-    hardware.opengl = {
-      driSupport32Bit = true;
-      driSupport = true;
-      enable = true;
-    };
+    hardware.graphics.enable = true;
+    hardware.graphics.enable32Bit = true;
 
     system.stateVersion = "23.11";
   };

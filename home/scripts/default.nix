@@ -26,7 +26,7 @@
       "0x0"
       "micmute"
       "aria2dl-notify"
-      "cliphist-rofi-img"
+      # "cliphist-rofi-img" # now a part of cliphist isself?
       "search"
       "rebuild"
       "screenshot"
