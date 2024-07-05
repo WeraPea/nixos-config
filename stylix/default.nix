@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   stylix = {
+    enable = true;
     image = ./wallpaper.png;
     base16Scheme = ./molokai.yaml;
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/grayscale-light.yaml";

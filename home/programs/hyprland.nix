@@ -56,11 +56,9 @@
         middle_button_emulation = 1;
       };
       general = {
-        no_cursor_warps = true;
         gaps_in = 0;
         gaps_out = 0;
         border_size = 0;
-
         layout = "dwindle";
       };
       decoration = {
@@ -69,6 +67,9 @@
           enabled = false;
         };
         drop_shadow = false;
+      };
+      cursor = {
+        no_warps = true;
       };
 
       animations = {
