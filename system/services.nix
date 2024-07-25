@@ -61,5 +61,4 @@
     keyboard.qmk.enable = true;
     xpadneo.enable = true;
   };
-  sound.enable = true;
 }

@@ -6,6 +6,7 @@ case "$(printf "selected area\\nselected window\\nfull screen\\nselected area to
     *) exit ;;
 esac
 
+sleep 0.1
 if test -f /tmp/hyprshot_screenshot_to_text.png; then
 	mogrify -modulate 100,0 -resize 400% /tmp/hyprshot_screenshot_to_text.png
 	tesseract -l $(printf "eng\\njpn" | rofi -dmenu -l 2) /tmp/hyprshot_screenshot_to_text.png /tmp/tesseract_screenshot &> /dev/null

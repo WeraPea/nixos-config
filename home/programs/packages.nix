@@ -69,6 +69,7 @@
           usbutils
           vesktop
           prusa-slicer
+          orca-slicer
           outputs.packages.${pkgs.system}.blender
           streamlink
           streamlink-twitch-gui-bin
