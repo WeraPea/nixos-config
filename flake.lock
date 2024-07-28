@@ -580,11 +580,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1719772810,
-        "narHash": "sha256-N+nkr/FTJ/FbheWrV70KoA8MXpexDEJquZ/AhHMepts=",
+        "lastModified": 1720636998,
+        "narHash": "sha256-0KmIdWM+C9EJ0fQLW7H8hTWSgFGrL4flHiUYnUXNSHI=",
         "owner": "A1ca7raz",
         "repo": "spicetify-nix",
-        "rev": "0e3c78d31ff7b75e55ba3689e97e6dee25addd7d",
+        "rev": "b0506057e659e13bf696e8fb042cb11496aecfdc",
         "type": "github"
       },
       "original": {
