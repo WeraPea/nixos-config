@@ -46,13 +46,12 @@ def get_torrent_from_user(torrent):
         exit()
 
     magnet = torrents[torrent_choice[0][0]][1]
-    torrent = torrents[torrent_choice[0][0]]
-    return torrent, magnet
+    return magnet
 
 
 torrent = " ".join(sys.argv[1:])
-
-torrent, magnet = get_torrent_from_user(torrent)
+magnet = get_torrent_from_user(torrent)
+magnet = magnet.replace("&amp;", "&")
 
 os.chdir('@videoPath@')
 os.system('''mpv "{}" --slang=eng --alang=jpn'''.format(magnet))
