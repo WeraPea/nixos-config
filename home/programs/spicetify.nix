@@ -6,55 +6,58 @@
   ...
 }:
 {
-  imports = [ inputs.spicetify-nix.homeManagerModule ];
+  imports = [ inputs.spicetify-nix.homeManagerModules.default ];
 
   options = {
     spicetify.enable = lib.mkEnableOption "enables spicetify";
   };
   config =
     let
-      spicePkgs = inputs.spicetify-nix.packages.${pkgs.system}.default;
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     in
     lib.mkIf config.spicetify.enable {
-      home.packages = [
-        (pkgs.writeShellScriptBin "spotify" ''
-          export -n NIXOS_OZONE_WL
-          ${config.programs.spicetify.spicedSpotify}/bin/spotify
-        '')
-      ];
-
       programs.spicetify = {
         enable = true;
-        dontInstall = true;
+        windowManagerPatch = true;
         theme = spicePkgs.themes.text;
         colorScheme = "Spotify";
 
         enabledCustomApps = with spicePkgs.apps; [
+          betterLibrary
+          historyInSidebar
           localFiles
-          lyrics-plus
-          new-releases
+          lyricsPlus
+          newReleases
           reddit
         ];
 
         enabledExtensions = with spicePkgs.extensions; [
           adblock
           autoSkip
+          beautifulLyrics
+          betterGenres
           bookmark
           copyToClipboard
+          featureShuffle
           fullAlbumDate
           fullAppDisplay
+          groupSession
           hidePodcasts
           history
           keyboardShortcut
+          listPlaylistsWithSong
           loopyLoop
           playlistIcons
+          playlistIntersection
+          popupLyrics
+          powerBar
           savePlaylists
+          seekSong
           seekSong
           shuffle
           skipStats
           volumePercentage
-          # fullAppDisplayMod
-          # genre # doesn't work??
+          wikify
         ];
       };
     };

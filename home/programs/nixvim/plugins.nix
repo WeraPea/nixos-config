@@ -46,8 +46,10 @@
     treesitter = {
       enable = true;
       folding = true;
-      indent = true;
       nixvimInjections = true;
+      settings = {
+        indent.enable = true;
+      };
     };
     nvim-colorizer = {
       enable = true;

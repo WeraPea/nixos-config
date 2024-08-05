@@ -68,9 +68,9 @@
         };
         drop_shadow = false;
       };
-      # cursor = {
-      # no_warps = true;
-      # };
+      cursor = {
+        no_warps = true;
+      };
 
       animations = {
         # TODO
