@@ -56,9 +56,6 @@
           } # kdeconnect
         ];
       };
-      interfaces.enp10s0 = {
-        wakeOnLan.enable = true;
-      };
       hostName = config.user.hostname;
       networkmanager.enable = true;
     };
