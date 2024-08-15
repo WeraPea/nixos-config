@@ -156,7 +156,6 @@
           "super, e, togglefloating,"
           "super, w, fullscreen, 1"
           "super, f, fullscreen, 0"
-          "super, g, fakefullscreen,"
 
           "super, h, movefocus, l"
           "super, l, movefocus, r"

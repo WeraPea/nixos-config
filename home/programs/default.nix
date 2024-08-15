@@ -81,5 +81,9 @@
   };
   services = {
     cliphist.enable = lib.mkDefault true;
+    kdeconnect = {
+      enable = true;
+      indicator = true;
+    };
   };
 }

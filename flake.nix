@@ -20,6 +20,7 @@
     };
     stylix.url = "github:danth/stylix";
     nur.url = "github:nix-community/NUR";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
   };
 
   outputs =
@@ -27,7 +28,6 @@
       nixpkgs,
       home-manager,
       nixvim,
-      flake-utils,
       nur,
       self,
       ...

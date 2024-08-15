@@ -31,33 +31,36 @@
     };
 
     networking = {
-      firewall.allowedTCPPorts = [
-        9500
-        25565
-        24454 # simple voice chat
-      ];
-      firewall.allowedUDPPorts = [
-        59100
-        59200
-        59716
-        24454 # simple voice chat
-      ]; # for audiorelay (some)
+      firewall = {
+        allowedTCPPorts = [
+          9500
+          25565
+          24454 # simple voice chat
+        ];
+        allowedUDPPorts = [
+          59100
+          59200
+          59716
+          24454 # simple voice chat
+        ]; # for audiorelay (some)
+        allowedTCPPortRanges = [
+          {
+            from = 1714;
+            to = 1764;
+          } # kdeconnect
+        ];
+        allowedUDPPortRanges = [
+          {
+            from = 1714;
+            to = 1764;
+          } # kdeconnect
+        ];
+      };
+      interfaces.enp10s0 = {
+        wakeOnLan.enable = true;
+      };
       hostName = config.user.hostname;
       networkmanager.enable = true;
-    };
-    networking.firewall = {
-      allowedTCPPortRanges = [
-        {
-          from = 1714;
-          to = 1764;
-        } # Valent
-      ];
-      allowedUDPPortRanges = [
-        {
-          from = 1714;
-          to = 1764;
-        } # Valent
-      ];
     };
 
     time.timeZone = "Europe/Warsaw";
@@ -87,9 +90,13 @@
         ];
         substituters = [
           "https://nix-community.cachix.org"
+          "https://hyprland.cachix.org"
           "https://cache.nixos.org"
         ];
-        trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+        ];
       };
     };
 

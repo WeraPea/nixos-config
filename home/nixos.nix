@@ -13,6 +13,7 @@
     };
     sharedModules = [
       inputs.nixvim.homeManagerModules.nixvim
+      inputs.hyprland.homeManagerModules.default
       {
         home.username = "wera";
         home.homeDirectory = "/home/wera";
