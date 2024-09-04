@@ -15,11 +15,11 @@
   config = lib.mkIf config.hyprland.enable {
     home.packages = with pkgs; [
       hyprland-autoname-workspaces
-      hyprpaper
       hyprpicker
       hyprshot
     ];
     wayland.windowManager.hyprland.enable = true;
+    wayland.windowManager.hyprland.xwayland.enable = true;
     wayland.windowManager.hyprland.settings = {
       monitor = [
         ",highrr,auto,1"
