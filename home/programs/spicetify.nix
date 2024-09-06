@@ -19,8 +19,22 @@
       programs.spicetify = {
         enable = true;
         windowManagerPatch = true;
-        theme = spicePkgs.themes.text;
-        colorScheme = "Spotify";
+        theme = {
+          name = "stylix";
+          src =
+            with config.lib.stylix.colors;
+            pkgs.writeTextDir "color.ini" ''
+              [Stylix]
+              highlight = ${base03}
+              button = ${base0B}
+              button-active = ${base0B}
+              sidebar = ${base00}
+              main = ${base00}
+              text = ${base07}
+              notification = ${base0C}
+              notification-error = ${base08}
+            '';
+        };
 
         enabledCustomApps = with spicePkgs.apps; [
           betterLibrary
@@ -37,6 +51,7 @@
           beautifulLyrics
           betterGenres
           bookmark
+          copyLyrics
           copyToClipboard
           featureShuffle
           fullAlbumDate

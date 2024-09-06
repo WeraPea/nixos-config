@@ -84,6 +84,7 @@
         experimental-features = [
           "nix-command"
           "flakes"
+          "repl-flake"
         ];
         substituters = [
           "https://nix-community.cachix.org"

@@ -42,6 +42,16 @@
       platformio-core.udev
     ];
     vnstat.enable = true;
+    protonvpn = {
+      enable = true;
+      autostart = false;
+      interface.privateKeyFile = "/etc/protonvpn";
+      endpoint = {
+        publicKey = "agoivyLoPqor8MxA/s6UWJSMcA2pMl+ajO3vy/q3oWQ=";
+        ip = "103.125.235.18";
+        port = 51820;
+      };
+    };
   };
   xdg.portal = {
     enable = true;

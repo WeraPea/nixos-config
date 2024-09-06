@@ -21,6 +21,7 @@
     stylix.url = "github:danth/stylix";
     nur.url = "github:nix-community/NUR";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    erosanix.url = "github:emmanuelrosa/erosanix";
   };
 
   outputs =
@@ -61,6 +62,7 @@
             inherit inputs outputs;
           };
           modules = [
+            inputs.erosanix.nixosModules.protonvpn
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur
@@ -76,6 +78,7 @@
             inherit inputs outputs;
           };
           modules = [
+            inputs.erosanix.nixosModules.protonvpn
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur
@@ -91,6 +94,7 @@
             inherit inputs outputs;
           };
           modules = [
+            inputs.erosanix.nixosModules.protonvpn
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur

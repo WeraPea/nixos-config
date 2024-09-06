@@ -34,13 +34,15 @@
     };
     conform-nvim = {
       enable = true;
-      formatOnSave = {
-        timeoutMs = 500;
-        lspFallback = true;
-      };
-      formattersByFt = {
-        nix = [ "nixfmt" ];
-        rust = [ "rustfmt" ];
+      settings = {
+        format_on_save = {
+          timeoutMs = 500;
+          lspFallback = true;
+        };
+        formatters_by_ft = {
+          nix = [ "nixfmt" ];
+          rust = [ "rustfmt" ];
+        };
       };
     };
     treesitter = {
