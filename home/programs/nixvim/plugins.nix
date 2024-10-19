@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   programs.nixvim.plugins = {
+    web-devicons.enable = true;
     cmp_luasnip.enable = true;
     cmp-nvim-lsp-signature-help.enable = true;
     comment.enable = true;
@@ -138,7 +139,7 @@
         # };
         # clangd.enable = true;
         # nixd.enable = true;
-        lua-ls.enable = true;
+        lua_ls.enable = true;
         pyright.enable = true;
         ccls.enable = true;
       };

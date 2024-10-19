@@ -8,6 +8,7 @@
   imports = [
     ./programs
     ./scripts
+    ./../overlays
   ];
 
   nixpkgs.config.allowUnfree = true;

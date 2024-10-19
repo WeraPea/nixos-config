@@ -27,10 +27,12 @@
           imagemagick
           jq
           krita
+          libxml2
           lm_sensors
           lsof
           neofetch
           nh
+          nixfmt-rfc-style
           onefetch
           openjdk17
           p7zip
@@ -43,37 +45,37 @@
           tldr
           wget
           wl-clipboard
+          wol
           xdg-utils
           xdragon
           yt-dlp
-          libxml2
-          nixfmt-rfc-style
-          wol
         ])
         (lib.mkIf osConfig.gaming.enable [
-          lutris
-          prismlauncher
           alsa-oss
+          lutris
+          mangohud
+          prismlauncher
           protontricks
           protonup-qt
           winetricks
           wineWowPackages.stagingFull
-          mangohud
           # wineWowPackages.waylandFull
         ])
         (lib.mkIf config.desktopPackages.enable [
-          openscad
-          steam-run
+          chatterino2
+          flatpak
           helvum
           ntfs3g
-          usbutils
-          vesktop
-          prusa-slicer
+          openscad
           orca-slicer
           outputs.packages.${pkgs.system}.blender
+          prusa-slicer
+          ryujinx
+          steam-run
           streamlink
           streamlink-twitch-gui-bin
-          chatterino2
+          usbutils
+          vesktop
         ])
       ];
   };

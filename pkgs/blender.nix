@@ -37,6 +37,11 @@ let
     };
   };
 
-  blenderWithPySlvs = pkgs.blender-hip.withPackages (p: [ py-slvs ]);
+  blenderWithPySlvs = pkgs.blender-hip.withPackages (
+    p: with p; [
+      py-slvs
+      laspy
+    ]
+  );
 in
 blenderWithPySlvs

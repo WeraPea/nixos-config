@@ -47,14 +47,11 @@
           config = {
             allowUnfree = true;
           };
-          # overlays = self.overlays."${system}";
         }
       );
     in
     {
       packages = foreachSystem (system: import ./pkgs nixpkgs.legacyPackages.${system});
-
-      # overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
@@ -66,6 +63,7 @@
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur
+            (import ./overlays)
             ./home/nixos.nix
             ./stylix
             ./system
@@ -82,6 +80,7 @@
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur
+            (import ./overlays)
             ./home/nixos-laptop.nix
             ./stylix
             ./system
@@ -98,6 +97,7 @@
             inputs.stylix.nixosModules.stylix
             { nixpkgs.overlays = [ nur.overlay ]; }
             nur.nixosModules.nur
+            (import ./overlays)
             ./home/pinenote.nix
             ./stylix
             ./system

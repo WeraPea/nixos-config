@@ -8,7 +8,7 @@
 {
   imports = [
     ./hyprpaper.nix
-    ./hyprland-autoname-workspaces.nix
+    # ./hyprland-autoname-workspaces.nix
   ];
   options = {
     hyprland.enable = lib.mkEnableOption "enables hyprland";

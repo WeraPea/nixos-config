@@ -11,7 +11,7 @@
   config =
     let
       theme = config.lib.stylix.colors {
-        templateRepo = config.lib.stylix.templates.base16-kitty;
+        templateRepo = config.lib.stylix.templates.tinted-kitty;
         target = "default";
       };
     in

@@ -16,33 +16,32 @@
       spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
     in
     lib.mkIf config.spicetify.enable {
+      stylix.targets.spicetify.enable = false;
       programs.spicetify = {
         enable = true;
         windowManagerPatch = true;
-        theme = {
-          name = "stylix";
-          src =
-            with config.lib.stylix.colors;
-            pkgs.writeTextDir "color.ini" ''
-              [Stylix]
-              highlight = ${base03}
-              button = ${base0B}
-              button-active = ${base0B}
-              sidebar = ${base00}
-              main = ${base00}
-              text = ${base07}
-              notification = ${base0C}
-              notification-error = ${base08}
-            '';
+        theme = spicePkgs.themes.default;
+        colorScheme = "custom";
+        customColorScheme = with config.lib.stylix.colors; {
+          highlight = "${base03}";
+          button = "${base0B}";
+          button-active = "${base0B}";
+          sidebar = "${base00}";
+          main = "${base00}";
+          text = "${base07}";
+          notification = "${base0C}";
+          notification-error = "${base08}";
         };
+        extraCommands = ''
+          ./spicetify config sidebar_config 1
+          ./spicetify config experimental_features 1
+        '';
 
         enabledCustomApps = with spicePkgs.apps; [
           betterLibrary
           historyInSidebar
           localFiles
           lyricsPlus
-          newReleases
-          reddit
         ];
 
         enabledExtensions = with spicePkgs.extensions; [
@@ -53,21 +52,18 @@
           bookmark
           copyLyrics
           copyToClipboard
-          featureShuffle
           fullAlbumDate
           fullAppDisplay
-          groupSession
           hidePodcasts
           history
           keyboardShortcut
           listPlaylistsWithSong
           loopyLoop
+          oldSidebar
           playlistIcons
           playlistIntersection
           popupLyrics
-          powerBar
           savePlaylists
-          seekSong
           seekSong
           shuffle
           skipStats
