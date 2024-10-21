@@ -137,6 +137,7 @@
             "super, p, exec, wl-paste | wl-copy -p"
             "super, m, exec, rofi-mount"
             "super, u, exec, rofi-umount"
+            "super, d, exec, rofi -show window -show-icons"
 
             ",XF86AudioMute, exec, pamixer -t"
 
