@@ -1,9 +1,27 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   home.packages =
     with pkgs;
     let
       aria2dl = writeShellScriptBin "aria2dl" (builtins.readFile ./aria2dl.sh);
+      audiorelay = writeShellScriptBin "audiorelay-wrapper" (
+        builtins.readFile (substituteAll {
+          src = ./audiorelay.sh;
+          xdotool = "${lib.getExe xdotool}";
+          xvfb = "${lib.getExe' xorg.xvfb "Xvfb"}";
+          pactl = ''${lib.getExe' pulseaudio "pactl"}'';
+        })
+      );
+      audiorelay-desktop-item = makeDesktopItem {
+        name = "audiorelay auto connect wrapper";
+        desktopName = "audiorelay auto connect wrapper";
+        exec = "${lib.getExe audiorelay}";
+      };
       aria2dl-desktop-item = makeDesktopItem {
         name = "aria2dl magnet handler";
         desktopName = "aria2dl magnet handler";
@@ -20,13 +38,15 @@
       libnotify # aria2dl-notify
       tesseract # screenshot
       imagemagick # screenshot
+      audiorelay
+      audiorelay-desktop-item
+      inputs.audiorelay.packages.${system}.audio-relay
       rename-torrents
     ]
     ++ lib.forEach [
       "0x0"
       "micmute"
       "aria2dl-notify"
-      # "cliphist-rofi-img" # now a part of cliphist isself?
       "search"
       "rebuild"
       "screenshot"
