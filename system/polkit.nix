@@ -1,6 +1,11 @@
-{ config, pkgs, ... }:
 {
-  systemd = {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  systemd = lib.mkIf config.graphics.enable {
     user.services.polkit-kde-authentication-agent-1 = {
       description = "polkit-kde-authentication-agent-1";
       wantedBy = [ "graphical-session.target" ];
@@ -16,5 +21,5 @@
     };
   };
 
-  security.polkit.enable = true;
+  security.polkit.enable = lib.mkIf config.graphics.enable true;
 }

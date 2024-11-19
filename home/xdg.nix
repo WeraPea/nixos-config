@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, osConfig, ... }:
 let
   browser = [ "firefox.desktop" ];
 
@@ -24,7 +24,7 @@ let
   };
 in
 {
-  xdg = {
+  xdg = lib.mkIf osConfig.graphics.enable {
     # userDirs = {
     #   enable = true;
     #   documents = "$HOME/documents";

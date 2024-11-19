@@ -3,7 +3,6 @@
   lib,
   config,
   osConfig,
-  inputs,
   outputs,
   ...
 }:
@@ -11,7 +10,6 @@
   options = {
     desktopPackages.enable = lib.mkEnableOption {
       description = "Desktop packages";
-      default = true;
     };
   };
   config = {
@@ -19,14 +17,16 @@
       with pkgs;
       lib.mkMerge [
         [
+          (_7zz.override { enableUnfree = true; })
           appimage-run
+          bc
           catimg
           comma
+          ffmpeg
           gdu
           gnumake
           imagemagick
           jq
-          krita
           libxml2
           lm_sensors
           lsof
@@ -34,26 +34,23 @@
           nh
           nixfmt-rfc-style
           onefetch
-          openjdk17
-          p7zip
-          pavucontrol
-          playerctl
+          picocom
           progress
           python3
-          rofi-wayland # TODO: move to module
           rsync
+          tig
           tldr
           wget
           wl-clipboard
           wol
           xdg-utils
-          xdragon
           yt-dlp
         ]
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
           lutris
           mangohud
+          nvtopPackages.amd
           prismlauncher
           protontricks
           protonup-qt
@@ -62,20 +59,27 @@
           # wineWowPackages.waylandFull
         ])
         (lib.mkIf config.desktopPackages.enable [
+          android-tools
           chatterino2
           flatpak
           helvum
+          krita
           ntfs3g
+          openjdk17
           openscad
           orca-slicer
           outputs.packages.${pkgs.system}.blender
+          pavucontrol
+          playerctl
           prusa-slicer
+          rofi-wayland # TODO: move to module
           ryujinx
           steam-run
           streamlink
           streamlink-twitch-gui-bin
           usbutils
           vesktop
+          xdragon
         ])
       ];
   };

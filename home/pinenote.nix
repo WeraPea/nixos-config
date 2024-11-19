@@ -17,6 +17,7 @@
       {
         home.username = "wera";
         home.homeDirectory = "/home/wera";
+        home.stateVersion = "23.11";
         # home.packages = with pkgs; [ ... ];
         hyprland.enable = false;
         mpv.enable = false;

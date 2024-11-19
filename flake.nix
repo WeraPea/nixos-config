@@ -86,6 +86,23 @@
             ./system/hardware-configuration-nixos-laptop.nix
           ];
         };
+        server = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [
+            inputs.erosanix.nixosModules.protonvpn
+            inputs.stylix.nixosModules.stylix
+            { nixpkgs.overlays = [ nur.overlay ]; }
+            nur.nixosModules.nur
+            (import ./overlays)
+            ./home/nixos.nix
+            ./stylix
+            ./system
+            ./system/server.nix
+            ./system/hardware-configuration-server.nix
+          ];
+        };
         pinenote = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;

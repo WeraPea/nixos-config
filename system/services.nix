@@ -12,7 +12,7 @@
   ];
   services = {
     fstrim.enable = true;
-    greetd = {
+    greetd = lib.mkIf config.graphics.enable {
       enable = true;
       settings = rec {
         initial_session = {
@@ -23,7 +23,7 @@
       };
     };
     openssh.enable = true;
-    pipewire = {
+    pipewire = lib.mkIf config.graphics.enable {
       alsa.enable = true;
       alsa.support32Bit = true;
       enable = true;
@@ -53,7 +53,7 @@
       };
     };
   };
-  xdg.portal = {
+  xdg.portal = lib.mkIf config.graphics.enable {
     enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
@@ -66,7 +66,7 @@
       # pkgs.xdg-desktop-portal-kde
     ];
   };
-  hardware = {
+  hardware = lib.mkIf config.graphics.enable {
     bluetooth.enable = true;
     keyboard.qmk.enable = true;
     xpadneo.enable = true;

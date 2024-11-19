@@ -7,4 +7,5 @@
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.enable = lib.mkForce false;
   hardware.opengl.driSupport32Bit = lib.mkForce false;
+  system.stateVersion = "23.11";
 }

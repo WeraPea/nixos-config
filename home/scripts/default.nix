@@ -2,12 +2,16 @@
   pkgs,
   lib,
   inputs,
+  osConfig,
   ...
 }:
 {
   home.packages =
     with pkgs;
     let
+      ifElse =
+        p: yes: no:
+        if p then yes else no;
       aria2dl = writeShellScriptBin "aria2dl" (builtins.readFile ./aria2dl.sh);
       audiorelay = writeShellScriptBin "audiorelay-wrapper" (
         builtins.readFile (substituteAll {
@@ -34,29 +38,35 @@
     in
     [
       aria2dl
-      aria2dl-desktop-item
-      libnotify # aria2dl-notify
-      tesseract # screenshot
-      imagemagick # screenshot
-      audiorelay
-      audiorelay-desktop-item
-      inputs.audiorelay.packages.${system}.audio-relay
       rename-torrents
     ]
-    ++ lib.forEach [
-      "0x0"
-      "micmute"
-      "aria2dl-notify"
-      "search"
-      "rebuild"
-      "screenshot"
-    ] (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
+    ++ ifElse osConfig.graphics.enable [
+      aria2dl-desktop-item
+      audiorelay
+      audiorelay-desktop-item
+      imagemagick # screenshot
+      inputs.audiorelay.packages.${system}.audio-relay
+      libnotify # aria2dl-notify
+      tesseract # screenshot
+    ] [ ]
+    ++ lib.forEach (
+      [
+        "0x0"
+        "rebuild"
+      ]
+      ++ ifElse osConfig.graphics.enable [
+        "aria2dl-notify"
+        "micmute"
+        "screenshot"
+        "search"
+      ] [ ]
+    ) (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
     ++
       lib.forEach
-        [
-          "nyaasi"
+        (ifElse osConfig.graphics.enable [
           "1337x"
-        ]
+          "nyaasi"
+        ] [ ])
         (
           x:
           writers.writePython3Bin "${x}" { libraries = [ python3Packages.papis-python-rofi ]; }

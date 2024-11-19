@@ -1,7 +1,5 @@
 {
   config,
-  pkgs,
-  inputs,
   lib,
   ...
 }:
@@ -14,8 +12,10 @@
   options = {
     user.username = lib.mkOption { description = "Sets username"; };
     user.hostname = lib.mkOption { description = "Sets hostname"; };
+    graphics.enable = lib.mkEnableOption { description = "Enables gui"; };
   };
   config = {
+    graphics.enable = lib.mkDefault true;
     gaming.enable = lib.mkDefault false;
     sql.enable = lib.mkDefault false;
     user.username = lib.mkDefault "wera";
@@ -32,6 +32,7 @@
 
     networking = {
       firewall = {
+        # TODO:
         allowedTCPPorts = [
           9500
           25565
@@ -84,6 +85,7 @@
         experimental-features = [
           "nix-command"
           "flakes"
+          "pipe-operators"
         ];
         substituters = [
           "https://nix-community.cachix.org"
@@ -97,17 +99,7 @@
       };
     };
 
-    # swapDevices = [
-    #   {
-    #     device = "/mnt/2tb-mnt/swapfile";
-    #     options = ["nofail"];
-    #     size = 16 * 1024;
-    #   }
-    # ];
-
-    hardware.graphics.enable = true;
-    hardware.graphics.enable32Bit = true;
-
-    system.stateVersion = "23.11";
+    hardware.graphics.enable = lib.mkDefault true;
+    hardware.graphics.enable32Bit = lib.mkIf config.hardware.graphics.enable <| lib.mkDefault true;
   };
 }

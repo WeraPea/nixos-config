@@ -11,7 +11,7 @@
   };
 
   config = {
-    fonts = {
+    fonts = lib.mkIf config.graphics.enable {
       packages = with pkgs; [
         noto-fonts
         noto-fonts-cjk
@@ -20,16 +20,13 @@
     };
     programs =
       {
-        # weylus.enable = true; # doesnt do shit?????????
-        # weylus.openFirewall = true;
-        # weylus.users = [ config.user.username ];
         adb.enable = true;
-        dconf.enable = true;
+        dconf.enable = lib.mkIf config.graphics.enable true;
         gnupg.agent = {
           enable = true;
           enableSSHSupport = true;
         };
-        hyprland = {
+        hyprland = lib.mkIf config.graphics.enable {
           enable = true;
           package = inputs.hyprland.packages.${pkgs.system}.default;
           portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;

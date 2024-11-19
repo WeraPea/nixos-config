@@ -18,6 +18,7 @@
           username = "wera";
           homeDirectory = "/home/wera";
           packages = with pkgs; [ brightnessctl ];
+          stateVersion = "23.11";
         };
       }
     ];
