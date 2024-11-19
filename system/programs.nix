@@ -22,6 +22,7 @@
       {
         adb.enable = true;
         dconf.enable = lib.mkIf config.graphics.enable true;
+        fuse.userAllowOther = true;
         gnupg.agent = {
           enable = true;
           enableSSHSupport = true;

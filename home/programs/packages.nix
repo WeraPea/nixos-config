@@ -21,7 +21,6 @@
           appimage-run
           bc
           catimg
-          comma
           ffmpeg
           gdu
           gnumake

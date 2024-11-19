@@ -1,7 +1,6 @@
 {
   inputs,
   outputs,
-  pkgs,
   ...
 }:
 {
@@ -12,8 +11,9 @@
       inherit inputs outputs;
     };
     sharedModules = [
-      inputs.nixvim.homeManagerModules.nixvim
       inputs.hyprland.homeManagerModules.default
+      inputs.nix-index-database.hmModules.nix-index
+      inputs.nixvim.homeManagerModules.nixvim
       {
         home = {
           username = "wera";

@@ -1,8 +1,6 @@
 {
   inputs,
   outputs,
-  pkgs,
-  config,
   ...
 }:
 {
@@ -13,6 +11,7 @@
       inherit inputs outputs;
     };
     sharedModules = [
+      inputs.nix-index-database.hmModules.nix-index
       inputs.nixvim.homeManagerModules.nixvim
       {
         home.username = "wera";

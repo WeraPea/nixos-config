@@ -22,12 +22,15 @@
     nur.url = "github:nix-community/NUR";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     erosanix.url = "github:emmanuelrosa/erosanix";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       nixpkgs,
-      nur,
       self,
       ...
     }@inputs:
@@ -47,6 +50,15 @@
           };
         }
       );
+      commonModules = with inputs; [
+        erosanix.nixosModules.protonvpn
+        stylix.nixosModules.stylix
+        nur.nixosModules.nur
+        { nixpkgs.overlays = [ nur.overlay ]; }
+        ./overlays
+        ./stylix
+        ./system
+      ];
     in
     {
       packages = foreachSystem (system: import ./pkgs pkgsBySystem.${system});
@@ -56,15 +68,8 @@
           specialArgs = {
             inherit inputs outputs;
           };
-          modules = [
-            inputs.erosanix.nixosModules.protonvpn
-            inputs.stylix.nixosModules.stylix
-            { nixpkgs.overlays = [ nur.overlay ]; }
-            nur.nixosModules.nur
-            (import ./overlays)
+          modules = commonModules ++ [
             ./home/nixos.nix
-            ./stylix
-            ./system
             ./system/nixos.nix
             ./system/hardware-configuration-nixos.nix
           ];
@@ -73,15 +78,8 @@
           specialArgs = {
             inherit inputs outputs;
           };
-          modules = [
-            inputs.erosanix.nixosModules.protonvpn
-            inputs.stylix.nixosModules.stylix
-            { nixpkgs.overlays = [ nur.overlay ]; }
-            nur.nixosModules.nur
-            (import ./overlays)
+          modules = commonModules ++ [
             ./home/nixos-laptop.nix
-            ./stylix
-            ./system
             ./system/nixos-laptop.nix
             ./system/hardware-configuration-nixos-laptop.nix
           ];
@@ -90,15 +88,8 @@
           specialArgs = {
             inherit inputs outputs;
           };
-          modules = [
-            inputs.erosanix.nixosModules.protonvpn
-            inputs.stylix.nixosModules.stylix
-            { nixpkgs.overlays = [ nur.overlay ]; }
-            nur.nixosModules.nur
-            (import ./overlays)
-            ./home/nixos.nix
-            ./stylix
-            ./system
+          modules = commonModules ++ [
+            ./home/server.nix
             ./system/server.nix
             ./system/hardware-configuration-server.nix
           ];
@@ -107,15 +98,8 @@
           specialArgs = {
             inherit inputs outputs;
           };
-          modules = [
-            inputs.erosanix.nixosModules.protonvpn
-            inputs.stylix.nixosModules.stylix
-            { nixpkgs.overlays = [ nur.overlay ]; }
-            nur.nixosModules.nur
-            (import ./overlays)
+          modules = commonModules ++ [
             ./home/pinenote.nix
-            ./stylix
-            ./system
             ./system/pinenote.nix
             ./system/hardware-configuration-pinenote.nix
           ];

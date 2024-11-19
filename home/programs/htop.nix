@@ -21,6 +21,7 @@
           show_cpu_frequency = 1;
           show_cpu_temperature = 1;
           show_program_path = 0;
+          hide_userland_threads = 1;
           fields = with config.lib.htop.fields; [
             PID
             USER

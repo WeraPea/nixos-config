@@ -7,7 +7,6 @@
 }:
 {
   imports = [
-    ./firefox.nix
     ./fish.nix
     ./git.nix
     ./htop.nix
@@ -17,10 +16,10 @@
     ./mako.nix
     ./mpv.nix
     ./nixvim
-    ./packages.nix
     ./spicetify.nix
-    ./ssh.nix
+    ./firefox.nix
     ./waybar.nix
+    ./packages.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
