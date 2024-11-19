@@ -29,12 +29,16 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/"; # TODO:
+      device = "/dev/disk/by-uuid/ccf2cb5f-ac3f-43ae-89a4-7301b32be0a2";
       fsType = "xfs";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/"; # TODO:
+      device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
   };
 
