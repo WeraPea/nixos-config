@@ -58,6 +58,10 @@
           name = "alpsps/2-alps-dualpoint-touchpad";
           middle_button_emulation = 1;
         };
+        gestures = {
+          workspace_swipe = true;
+          workspace_swipe_forever = true;
+        };
         general = {
           gaps_in = 0;
           gaps_out = 0;

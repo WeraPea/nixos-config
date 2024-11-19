@@ -8,7 +8,6 @@
 }:
 {
   imports = [
-    ./eww
     ./fish.nix
     ./git.nix
     ./htop.nix

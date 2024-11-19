@@ -27,8 +27,6 @@
   outputs =
     {
       nixpkgs,
-      home-manager,
-      nixvim,
       nur,
       self,
       ...
@@ -51,7 +49,7 @@
       );
     in
     {
-      packages = foreachSystem (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = foreachSystem (system: import ./pkgs pkgsBySystem.${system});
 
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {

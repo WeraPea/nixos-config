@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  config,
+  osConfig,
+  ...
+}:
 {
   programs.nixvim.plugins = {
     web-devicons.enable = true;
@@ -138,7 +143,15 @@
         #   };
         # };
         # clangd.enable = true;
-        # nixd.enable = true;
+        nixd = {
+          enable = true;
+          settings = {
+            formatting.command = [ "nixfmt" ];
+            options = {
+              nixos.expr = "(builtins.getFlake (\"${config.home.homeDirectory}/nixos-config\")).nixosConfigurations.${osConfig.system.name}.options";
+            };
+          };
+        };
         lua_ls.enable = true;
         pyright.enable = true;
         ccls.enable = true;
@@ -178,7 +191,7 @@
   home.packages = with pkgs; [
     clang
     lua-language-server
-    # nixd
+    nixd
     rust-analyzer
     vscode-langservers-extracted
   ];

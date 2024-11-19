@@ -18,7 +18,7 @@
     home.packages =
       with pkgs;
       lib.mkMerge [
-        ([
+        [
           appimage-run
           catimg
           comma
@@ -49,7 +49,7 @@
           xdg-utils
           xdragon
           yt-dlp
-        ])
+        ]
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
           lutris

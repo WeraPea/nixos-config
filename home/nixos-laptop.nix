@@ -14,9 +14,11 @@
     sharedModules = [
       inputs.nixvim.homeManagerModules.nixvim
       {
-        home.username = "wera";
-        home.homeDirectory = "/home/wera";
-        home.packages = with pkgs; [ brightnessctl ];
+        home = {
+          username = "wera";
+          homeDirectory = "/home/wera";
+          packages = with pkgs; [ brightnessctl ];
+        };
       }
     ];
     users.wera = import ./home.nix;

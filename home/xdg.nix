@@ -36,8 +36,10 @@ in
     #   publicShare = "$HOME/other";
     #   templates = "$HOME/other";
     # };
-    mimeApps.enable = true;
-    mimeApps.associations.added = associations;
-    mimeApps.defaultApplications = associations;
+    mimeApps = {
+      enable = true;
+      associations.added = associations;
+      defaultApplications = associations;
+    };
   };
 }
