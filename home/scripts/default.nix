@@ -47,6 +47,7 @@
       imagemagick # screenshot
       inputs.audiorelay.packages.${system}.audio-relay
       libnotify # aria2dl-notify
+      pamixer # micmute
       tesseract # screenshot
     ] [ ]
     ++ lib.forEach (

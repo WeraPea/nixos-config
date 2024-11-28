@@ -25,6 +25,7 @@
     trouble.enable = true;
     undotree.enable = true;
     which-key.enable = true;
+    treesitter-context.enable = true;
     openscad = {
       enable = true;
       keymaps = {

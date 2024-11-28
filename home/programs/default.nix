@@ -7,6 +7,7 @@
 }:
 {
   imports = [
+    ./firefox.nix
     ./fish.nix
     ./git.nix
     ./htop.nix
@@ -16,10 +17,11 @@
     ./mako.nix
     ./mpv.nix
     ./nixvim
-    ./spicetify.nix
-    ./firefox.nix
-    ./waybar.nix
     ./packages.nix
+    ./spicetify.nix
+    ./ssh.nix
+    ./streamlink.nix
+    ./waybar.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -34,6 +36,7 @@
   mpv.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   nixvim.enable = lib.mkDefault true;
   spicetify.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
+  streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   waybar.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
 
   home.shellAliases = {
@@ -57,6 +60,7 @@
     bash.enable = lib.mkDefault true;
     jq.enable = lib.mkDefault true;
     nix-index.enable = lib.mkDefault true;
+    nix-index-database.comma.enable = true;
     command-not-found.enable = lib.mkIf config.programs.nix-index.enable <| false;
     zathura.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
     bat = {

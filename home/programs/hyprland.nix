@@ -18,6 +18,7 @@
       hyprland-autoname-workspaces
       hyprpicker
       hyprshot
+      pamixer
     ];
     wayland.windowManager.hyprland = {
       enable = true;

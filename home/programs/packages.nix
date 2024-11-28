@@ -21,7 +21,6 @@
           appimage-run
           bc
           catimg
-          comma
           ffmpeg
           gdu
           gnumake
@@ -75,8 +74,6 @@
           rofi-wayland # TODO: move to module
           ryujinx
           steam-run
-          streamlink
-          streamlink-twitch-gui-bin
           usbutils
           vesktop
           xdragon

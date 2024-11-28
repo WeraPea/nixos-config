@@ -18,22 +18,18 @@
         noto-fonts-emoji
       ];
     };
-    programs =
+    programs = lib.mkMerge [
       {
         adb.enable = true;
         dconf.enable = lib.mkIf config.graphics.enable true;
+        fuse.userAllowOther = true;
         gnupg.agent = {
           enable = true;
           enableSSHSupport = true;
         };
-        hyprland = lib.mkIf config.graphics.enable {
-          enable = true;
-          package = inputs.hyprland.packages.${pkgs.system}.default;
-          portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
-        };
         mtr.enable = true;
       }
-      // lib.mkIf config.gaming.enable {
+      (lib.mkIf config.gaming.enable {
         corectrl.enable = true;
         corectrl.gpuOverclock.enable = true;
         gamescope.enable = true;
@@ -56,7 +52,8 @@
           remotePlay.openFirewall = true;
           dedicatedServer.openFirewall = true;
         };
-      };
+      })
+    ];
     hardware.xpadneo.enable = lib.mkIf config.gaming.enable true;
   };
 }

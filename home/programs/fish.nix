@@ -130,6 +130,10 @@
         vim = "nvim";
         vm = "mv";
         x = "exit";
+        ssc = {
+          setCursor = "%";
+          expansion = "kitty +kitten ssh -t % fish -i";
+        };
         lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
       };
     };
