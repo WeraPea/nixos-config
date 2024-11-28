@@ -43,6 +43,7 @@
           59200
           59716
           24454 # simple voice chat
+          34197 # factorio
         ]; # for audiorelay (some)
         allowedTCPPortRanges = [
           {

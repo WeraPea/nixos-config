@@ -21,6 +21,12 @@
           pactl = ''${lib.getExe' pulseaudio "pactl"}'';
         })
       );
+      micmute = writeShellScriptBin "micmute" (
+        builtins.readFile (substituteAll {
+          src = ./micmute.sh;
+          pamixer = "${lib.getExe pamixer}";
+        })
+      );
       audiorelay-desktop-item = makeDesktopItem {
         name = "audiorelay auto connect wrapper";
         desktopName = "audiorelay auto connect wrapper";
@@ -47,6 +53,7 @@
       imagemagick # screenshot
       inputs.audiorelay.packages.${system}.audio-relay
       libnotify # aria2dl-notify
+      micmute
       tesseract # screenshot
     ] [ ]
     ++ lib.forEach (
@@ -56,7 +63,6 @@
       ]
       ++ ifElse osConfig.graphics.enable [
         "aria2dl-notify"
-        "micmute"
         "screenshot"
         "search"
       ] [ ]

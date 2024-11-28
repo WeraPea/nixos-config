@@ -26,6 +26,10 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -52,8 +56,9 @@
       );
       commonModules = with inputs; [
         erosanix.nixosModules.protonvpn
-        stylix.nixosModules.stylix
         nur.nixosModules.nur
+        sops-nix.nixosModules.sops
+        stylix.nixosModules.stylix
         { nixpkgs.overlays = [ nur.overlay ]; }
         ./overlays
         ./stylix

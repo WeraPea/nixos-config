@@ -58,7 +58,6 @@
     bash.enable = lib.mkDefault true;
     jq.enable = lib.mkDefault true;
     nix-index.enable = lib.mkDefault true;
-    nix-index-database.comma.enable = lib.mkIf config.programs.nix-index.enable <| lib.mkDefault true;
     command-not-found.enable = lib.mkIf config.programs.nix-index.enable <| false;
     zathura.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
     bat = {
