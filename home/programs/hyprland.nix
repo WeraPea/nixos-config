@@ -77,7 +77,7 @@
             blur = {
               enabled = false;
             };
-            drop_shadow = false;
+            # drop_shadow = false;
           };
           cursor = {
             no_warps = true;
