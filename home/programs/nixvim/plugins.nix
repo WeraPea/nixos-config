@@ -20,7 +20,7 @@
     nix.enable = true;
     notify.enable = true;
     oil.enable = true;
-    rust-tools.enable = true;
+    rustaceanvim.enable = true;
     todo-comments.enable = true;
     trouble.enable = true;
     undotree.enable = true;
@@ -28,9 +28,8 @@
     treesitter-context.enable = true;
     openscad = {
       enable = true;
-      keymaps = {
-        enable = true;
-        cheatsheetToggle = "<C-c>";
+      settings = {
+        cheatsheet-toggle-key = "<C-c>";
       };
     };
     instant = {
@@ -60,9 +59,9 @@
         indent.enable = true;
       };
     };
-    nvim-colorizer = {
+    colorizer = {
       enable = true;
-      userDefaultOptions.names = false;
+      settings.user_default_options.names = false;
     };
     telescope = {
       enable = true;

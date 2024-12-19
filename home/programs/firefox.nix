@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  osConfig,
   ...
 }:
 {
@@ -26,6 +27,43 @@
             ];
           };
       nativeMessagingHosts = [ pkgs.plasma5Packages.plasma-browser-integration ];
+      languagePacks = [
+        "en-US"
+        "pl"
+      ];
+      # profiles.default = {
+      #   name = "Default-Managed";
+      #   extensions = with osConfig.nur.repos.rycee.firefox-addons; [
+      #     add-custom-search-engine
+      #     annotations-restored
+      #     # bypass-paywalls-clean # outdated/broken, update flake inputs
+      #     cookies-txt
+      #     darkreader
+      #     enhanced-github
+      #     enhancer-for-youtube
+      #     flagfox
+      #     istilldontcareaboutcookies
+      #     nyaa-linker
+      #     onetab
+      #     plasma-integration
+      #     sponsorblock
+      #     translate-web-pages
+      #     ublock-origin
+      #     vimium
+      #     violentmonkey
+      #     web-scrobbler
+      #     noscript
+      #   ];
+      #   settings = {
+      #     "browser.download.useDownloadDir" = false;
+      #     "browser.gesture.swipe.left" = ""; # to not go back in history by mistake when using a touchpad
+      #     "browser.gesture.swipe.right" = "";
+      #     "browser.startup.homepage" = "https://duckduckgo.com/";
+      #     "browser.tabs.unloadOnLowMemory" = true;
+      #     "ui.key.menuAccessKey" = 0; # for alt+<X> to work
+      #     "extensions.autoDisableScopes" = 0;
+      #   };
+      # };
     };
   };
 }

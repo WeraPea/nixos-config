@@ -130,6 +130,7 @@
         vim = "nvim";
         vm = "mv";
         x = "exit";
+        rp = "rsync -avh --info=progress2 --no-inc-recursive";
         ssc = {
           setCursor = "%";
           expansion = "kitty +kitten ssh -t % fish -i";

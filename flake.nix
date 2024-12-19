@@ -56,10 +56,10 @@
       );
       commonModules = with inputs; [
         erosanix.nixosModules.protonvpn
-        nur.nixosModules.nur
+        nur.modules.nixos.default
         sops-nix.nixosModules.sops
         stylix.nixosModules.stylix
-        { nixpkgs.overlays = [ nur.overlay ]; }
+        { nixpkgs.overlays = [ nur.overlays.default ]; }
         ./overlays
         ./stylix
         ./system

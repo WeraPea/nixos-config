@@ -40,32 +40,41 @@
       aria2dl
       rename-torrents
     ]
-    ++ ifElse osConfig.graphics.enable [
-      aria2dl-desktop-item
-      audiorelay
-      audiorelay-desktop-item
-      imagemagick # screenshot
-      inputs.audiorelay.packages.${system}.audio-relay
-      libnotify # aria2dl-notify
-      tesseract # screenshot
-    ] [ ]
+    ++
+      ifElse osConfig.graphics.enable
+        [
+          aria2dl-desktop-item
+          audiorelay
+          audiorelay-desktop-item
+          imagemagick # screenshot
+          inputs.audiorelay.packages.${system}.audio-relay
+          libnotify # aria2dl-notify
+          tesseract # screenshot
+        ]
+        [ ]
     ++ lib.forEach (
       [
         "0x0"
         "rebuild"
       ]
-      ++ ifElse osConfig.graphics.enable [
-        "aria2dl-notify"
-        "screenshot"
-        "search"
-      ] [ ]
+      ++
+        ifElse osConfig.graphics.enable
+          [
+            "aria2dl-notify"
+            "screenshot"
+            "search"
+          ]
+          [ ]
     ) (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
     ++
       lib.forEach
-        (ifElse osConfig.graphics.enable [
-          "1337x"
-          "nyaasi"
-        ] [ ])
+        (ifElse osConfig.graphics.enable
+          [
+            "1337x"
+            "nyaasi"
+          ]
+          [ ]
+        )
         (
           x:
           writers.writePython3Bin "${x}" { libraries = [ python3Packages.papis-python-rofi ]; }
