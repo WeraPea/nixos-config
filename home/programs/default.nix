@@ -22,6 +22,8 @@
     ./ssh.nix
     ./streamlink.nix
     ./waybar.nix
+    ./nvimpager.nix
+    ./vr.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

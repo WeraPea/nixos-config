@@ -63,6 +63,7 @@
             "aria2dl-notify"
             "screenshot"
             "search"
+            "vrlink"
           ]
           [ ]
     ) (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))

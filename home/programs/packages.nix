@@ -21,6 +21,8 @@
           appimage-run
           bc
           catimg
+          cloc
+          cmake
           ffmpeg
           gdu
           gnumake
@@ -31,7 +33,6 @@
           lsof
           neofetch
           nh
-          nixfmt-rfc-style
           onefetch
           picocom
           progress
@@ -53,9 +54,9 @@
           prismlauncher
           protontricks
           protonup-qt
+          ryujinx
           winetricks
           wineWowPackages.stagingFull
-          # wineWowPackages.waylandFull
         ])
         (lib.mkIf config.desktopPackages.enable [
           android-tools
@@ -72,7 +73,6 @@
           playerctl
           prusa-slicer
           rofi-wayland # TODO: move to module
-          ryujinx
           steam-run
           usbutils
           vesktop

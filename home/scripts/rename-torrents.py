@@ -4,10 +4,10 @@ import argparse
 
 
 def get_torrent_name(file_path):
-    with open(file_path, 'rb') as f:
+    with open(file_path, "rb") as f:
         torrent_data = bencodepy.decode(f.read())
-        info = torrent_data[b'info']
-        name = info[b'name'].decode('utf-8')
+        info = torrent_data[b"info"]
+        name = info[b"name"].decode("utf-8")
 
         return name
 
@@ -27,7 +27,7 @@ def rename_torrent_file(file_path, verbose=False):
 
 def rename_torrents_in_directory(directory_path, verbose=False):
     torrent_files = [f for f in os.listdir(
-        directory_path) if f.endswith('.torrent')]
+        directory_path) if f.endswith(".torrent")]
 
     for torrent_file in torrent_files:
         file_path = os.path.join(directory_path, torrent_file)
@@ -36,7 +36,8 @@ def rename_torrents_in_directory(directory_path, verbose=False):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="rename .torrent files to <name>-<org-name>.torrent")
+        description="rename .torrent files to <name>-<org-name>.torrent"
+    )
     parser.add_argument("path", help="path to directory or file")
     parser.add_argument("-v", "--verbose",
                         action="store_true", help="verbose mode")
@@ -44,7 +45,7 @@ def main():
 
     if os.path.isdir(args.path):
         rename_torrents_in_directory(args.path)
-    elif os.path.isfile(args.path) and args.path.endswith('.torrent'):
+    elif os.path.isfile(args.path) and args.path.endswith(".torrent"):
         rename_torrent_file(args.path)
     else:
         print(f"Error: {args.path} is not a valid .torrent file or directory")

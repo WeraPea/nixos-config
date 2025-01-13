@@ -9,12 +9,14 @@
     fish.enable = lib.mkEnableOption "enables fish";
   };
   config = lib.mkIf config.fish.enable {
+    programs.nix-your-shell.enable = true;
     programs.fish = {
-      enable = true;
+      enable = true; # TODO: remove nvimpager setup for push
       interactiveShellInit = ''
-        export MANPAGER='${lib.getExe pkgs.nvimpager}'
-          set fish_greeting
-          bind ! __history_previous_command
+        export NVIMPAGER_NVIM="${config.home.sessionVariables.NVIMPAGER_NVIM}"
+        export MANPAGER="${lib.getExe pkgs.nvimpager}"
+        set fish_greeting
+        bind ! __history_previous_command
       '';
       functions = {
         __history_previous_command.body = ''

@@ -12,13 +12,11 @@
     number = true;
     scrolloff = 8;
     shiftwidth = 2;
-    showmode = false;
     sidescrolloff = 8;
     smartcase = true;
     splitbelow = true;
     splitright = true;
     tabstop = 2;
-    termguicolors = true;
     undofile = true;
     updatetime = 300;
     writebackup = false;

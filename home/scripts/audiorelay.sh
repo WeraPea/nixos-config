@@ -1,13 +1,14 @@
-for pid in $(pgrep -x "$(basename "$0" | cut -c 1-15)" | grep -v "^$$\$"); do
-    kill "$pid"
+# shellcheck shell=bash
+pgrep -f "$(basename "$0")" | grep -v "^$$\$" | while read -r pid; do
+  kill "$pid"
 done
 
 sleep 1
 
 cleanup() {
-  kill $(jobs -p) -9 2>/dev/null
-  @pactl@ unload-module $sink
-  @pactl@ unload-module $source
+  kill "$(jobs -p)" -9 2>/dev/null
+  @pactl@ unload-module "$sink"
+  @pactl@ unload-module "$source"
   exit 0
 }
 
@@ -33,8 +34,8 @@ audio-relay &
 sleep 1
 
 AUDIORELAY_WIN=$(@xdotool@ search --name "AudioRelay")
-@xdotool@ windowmove $AUDIORELAY_WIN 0 0
-@xdotool@ windowsize $AUDIORELAY_WIN 1000 1000
+@xdotool@ windowmove "$AUDIORELAY_WIN" 0 0
+@xdotool@ windowsize "$AUDIORELAY_WIN" 1000 1000
 
 @xdotool@ mousemove 100 100 click 1 # player
 while true; do

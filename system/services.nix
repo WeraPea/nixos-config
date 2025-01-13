@@ -9,7 +9,9 @@
     ./dual-function-keys.nix
     ./polkit.nix
     ./sql.nix
+    ./vr.nix
   ];
+
   services = {
     fstrim.enable = true;
     greetd = lib.mkIf config.graphics.enable {

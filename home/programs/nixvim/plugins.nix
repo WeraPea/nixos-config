@@ -2,6 +2,7 @@
   pkgs,
   config,
   osConfig,
+  lib,
   ...
 }:
 {
@@ -48,6 +49,30 @@
         formatters_by_ft = {
           nix = [ "nixfmt" ];
           rust = [ "rustfmt" ];
+          bash = [
+            "shellcheck"
+            "shellharden"
+            "shfmt"
+          ];
+          sh = [
+            "shellcheck"
+            "shellharden"
+            "shfmt"
+          ];
+        };
+        formatters = {
+          nixfmt = {
+            command = lib.getExe pkgs.nixfmt-rfc-style;
+          };
+          shellcheck = {
+            command = lib.getExe pkgs.shellcheck;
+          };
+          shfmt = {
+            command = lib.getExe pkgs.shfmt;
+          };
+          shellharden = {
+            command = lib.getExe pkgs.shellharden;
+          };
         };
       };
     };
@@ -142,7 +167,6 @@
         #     rope.enabled = true;
         #   };
         # };
-        # clangd.enable = true;
         nixd = {
           enable = true;
           settings = {
@@ -155,6 +179,8 @@
         lua_ls.enable = true;
         pyright.enable = true;
         ccls.enable = true;
+        # clangd.enable = true;
+        gopls.enable = true;
       };
     };
     cmp = {

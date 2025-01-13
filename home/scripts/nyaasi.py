@@ -9,7 +9,9 @@ def get_torrent_from_user(torrent):
     torrent = torrent.replace(" ", "+")
     html = os.popen(
         '''curl -s "https://nyaa.si/?f=0&c=0_0&s=seeders&o=desc&q={}"'''
-        .format(torrent)).read()
+        .format(
+            torrent)
+    ).read()
 
     torrents = []
     while True:
@@ -23,7 +25,7 @@ def get_torrent_from_user(torrent):
             '<a href="magnet:?xt=urn:')[-1].split("</a>")[0]
         magnet = magnet.split('">')[0]
         magnet = "magnet:?xt=urn:" + magnet
-        some_data = html[start:end].split('</a>')[-1].split('<td')
+        some_data = html[start:end].split("</a>")[-1].split("<td")
         size = some_data[1].split(">")[1].split("<")[0]
         seeders = some_data[3].split(">")[1].split("<")[0]
         leechers = some_data[4].split(">")[1].split("<")[0]
@@ -38,8 +40,10 @@ def get_torrent_from_user(torrent):
     torrents_formated = []
 
     for torrent in torrents:
-        torrents_formated.append("[{}] [{}] [{}] {}".format(
-            torrent[3], torrent[4], torrent[2], torrent[0]))
+        torrents_formated.append(
+            "[{}] [{}] [{}] {}".format(
+                torrent[3], torrent[4], torrent[2], torrent[0])
+        )
 
     torrent_choice = r.select("Torrents", torrents_formated)
     if torrent_choice == ([], -1):
@@ -53,5 +57,5 @@ torrent = " ".join(sys.argv[1:])
 magnet = get_torrent_from_user(torrent)
 magnet = magnet.replace("&amp;", "&")
 
-os.chdir('@videoPath@')
-os.system('''mpv "{}" --slang=eng --alang=jpn'''.format(magnet))
+os.chdir("@videoPath@")
+os.system("""mpv "{}" --slang=eng --alang=jpn""".format(magnet))

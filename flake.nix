@@ -30,6 +30,8 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs =
@@ -54,6 +56,9 @@
           };
         }
       );
+      treefmtEval = foreachSystem (
+        system: inputs.treefmt-nix.lib.evalModule pkgsBySystem.${system} ./treefmt.nix
+      );
       commonModules = with inputs; [
         erosanix.nixosModules.protonvpn
         nur.modules.nixos.default
@@ -67,6 +72,7 @@
     in
     {
       packages = foreachSystem (system: import ./pkgs pkgsBySystem.${system});
+      formatter = foreachSystem (system: treefmtEval.${system}.config.build.wrapper);
 
       nixosConfigurations = {
         nixos = nixpkgs.lib.nixosSystem {
