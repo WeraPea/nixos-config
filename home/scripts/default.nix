@@ -64,6 +64,7 @@
             "screenshot"
             "search"
             "vrlink"
+            "adbconnect"
           ]
           [ ]
     ) (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))

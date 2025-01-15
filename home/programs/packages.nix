@@ -64,6 +64,7 @@
           flatpak
           helvum
           krita
+          nmap
           ntfs3g
           openjdk17
           openscad
@@ -73,6 +74,7 @@
           playerctl
           prusa-slicer
           rofi-wayland # TODO: move to module
+          scrcpy
           steam-run
           usbutils
           vesktop

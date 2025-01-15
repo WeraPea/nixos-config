@@ -9,6 +9,26 @@
     # inputs.nixpkgs-xr.packages.${pkgs.system}.proton-ge-rtsp-bin
     inputs.nixpkgs-xr.packages.${pkgs.system}.wlx-overlay-s
     pkgs.lighthouse-steamvr
+    (pkgs.writeShellScriptBin "monado-steamvr-switch" ''
+      if [[ ! -L $HOME/.config/openvr/openvrpaths.vrpath ]]; then
+        echo "$HOME/.config/openvr/openvrpaths.vrpath is not a symbolic link"
+        exit 1
+      fi
+      rm $HOME/.config/openvr/openvrpaths.vrpath
+      if [[ "$1" == "monado" ]]; then
+        ln -s $HOME/.config/openvr/openvrpaths.vrpath-monado $HOME/.config/openvr/openvrpaths.vrpath
+      elif [[ "$1" == "steamvr" ]]; then
+        ln -s $HOME/.config/openvr/openvrpaths.vrpath-steamvr $HOME/.config/openvr/openvrpaths.vrpath
+      fi
+    '')
+    (pkgs.writeShellScriptBin "steamvr-open" ''
+      export AMD_VULKAN_ICD=RADV
+      monado-steamvr-switch steamvr
+      steam-run wlx-overlay-s --openvr & # makes steamvr work for some reason
+      sleep 5
+      wlx-overlay-s --openvr --show --replace & # fixes text not working when launching wlx-overlay-s with steam-run
+      vrlink
+    '')
   ];
   xdg.configFile."openxr/1/active_runtime.json".source = "${
     inputs.nixpkgs-xr.packages.${pkgs.system}.monado
