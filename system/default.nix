@@ -26,6 +26,7 @@
         "wheel"
         "adbusers"
         "dialout"
+        "gamemode"
       ];
       isNormalUser = true;
     };

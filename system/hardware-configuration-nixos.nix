@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }:
@@ -27,16 +26,13 @@
     "iommu=soft"
     "pcie_aspm=off"
   ];
-  boot.kernelPatches = [
-    {
-      name = "amdgpu-ignore-ctx-privileges";
-      patch = pkgs.fetchpatch {
-        name = "cap_sys_nice_begone.patch";
-        url = "https://github.com/Frogging-Family/community-patches/raw/master/linux61-tkg/cap_sys_nice_begone.mypatch";
-        hash = "sha256-Y3a0+x2xvHsfLax/uwycdJf3xLxvVfkfDVqjkxNaYEo=";
-      };
-    }
-  ];
+  networking.interfaces.enp10s0.wakeOnLan.enable = true;
+  hardware.amdgpu.amdvlk = {
+    enable = true;
+    support32Bit.enable = true;
+  };
+  hardware.amdgpu.opencl.enable = true;
+  environment.variables.AMD_VULKAN_ICD = "RADV";
 
   fileSystems = {
     "/" = {
@@ -50,6 +46,13 @@
     "/mnt/2tb-mnt".label = "Linux\\x20Data";
     "/mnt/win" = {
       label = "Windows";
+      options = [
+        "rw"
+        "uid=1000"
+      ];
+    };
+    "/mnt/mnt2" = {
+      label = "Windows\\x20Data";
       options = [
         "rw"
         "uid=1000"

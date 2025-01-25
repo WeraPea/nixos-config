@@ -133,6 +133,7 @@
         vm = "mv";
         x = "exit";
         rp = "rsync -avh --info=progress2 --no-inc-recursive";
+        riw = "nix-shell -p efibootmgr --run 'sudo efibootmgr -n 0001'";
         ssc = {
           setCursor = "%";
           expansion = "kitty +kitten ssh -t % fish -i";

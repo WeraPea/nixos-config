@@ -13,7 +13,7 @@
     comment.enable = true;
     crates.enable = true;
     gitsigns.enable = true;
-    illuminate.enable = true;
+    # illuminate.enable = true; # causes a hang in some situations, investigate further?
     lastplace.enable = true;
     lspkind.enable = true;
     lualine.enable = true;

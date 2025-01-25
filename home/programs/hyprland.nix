@@ -32,7 +32,7 @@
           monitor = [
             ",highrr,auto,1"
             "DP-2,highrr,0x0,auto"
-            "HDMI-A-1,highrr,2560x0,auto"
+            "HDMI-A-1,1280x1024@75,2560x0,auto"
           ];
           windowrulev2 = [
             "stayfocused, title:^()$,class:^(steam)$"

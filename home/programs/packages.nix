@@ -60,8 +60,10 @@
         ])
         (lib.mkIf config.desktopPackages.enable [
           android-tools
+          anki
           chatterino2
           flatpak
+          freecad-wayland
           helvum
           krita
           nmap

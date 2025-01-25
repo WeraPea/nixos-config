@@ -9,4 +9,5 @@ pkgs: {
   ruler = pkgs.callPackage ./ruler.nix { };
   status-line = pkgs.callPackage ./status-line.nix { };
   streamlink-ttvlol = pkgs.callPackage ./streamlink-ttvlol.nix { };
+  webtorrent-mpv-hook = pkgs.callPackage ./webtorrent-mpv-hook.nix { };
 }

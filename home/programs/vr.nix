@@ -24,9 +24,10 @@
     (pkgs.writeShellScriptBin "steamvr-open" ''
       export AMD_VULKAN_ICD=RADV
       monado-steamvr-switch steamvr
-      steam-run wlx-overlay-s --openvr & # makes steamvr work for some reason
+      steam steam://rungameid/250820 # steamvr
       sleep 5
-      wlx-overlay-s --openvr --show --replace & # fixes text not working when launching wlx-overlay-s with steam-run
+      wlx-overlay-s --openvr --show --replace &
+      sleep 5
       vrlink
     '')
   ];
