@@ -23,10 +23,13 @@
     "amdgpu.noretry=0"
     "amdgpu.lockup_timeout=1000"
     "amdgpu.gpu_recovery=1"
-    "iommu=soft"
-    "pcie_aspm=off"
+    "iommu=soft" # ?? also nvme ??
+    "pcie_aspm=off" # this both/only for nvme and amd? just nvme ??
+    "nvme_core.default_ps_max_latency_us=0" # kingstone A2000 maybe workaround, 2025-01-30 applied, check journal
+    "pcie_port_pm=off" # ssd kingstone A2000 workaround?
   ];
   networking.interfaces.enp10s0.wakeOnLan.enable = true;
+  hardware.amdgpu.initrd.enable = true;
   hardware.amdgpu.amdvlk = {
     enable = true;
     support32Bit.enable = true;
