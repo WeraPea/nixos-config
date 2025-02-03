@@ -30,9 +30,11 @@
         in
         {
           monitor = [
-            ",highrr,auto,1"
+            ",preferred,auto,1"
             "DP-2,highrr,0x0,auto"
             "HDMI-A-1,1280x1024@75,2560x0,auto"
+            "HDMI-A-2,1920x1080@60,-1920x0,1"
+            "HDMI-A-2,addreserved,0,20,100,100"
           ];
           windowrulev2 = [
             "stayfocused, title:^()$,class:^(steam)$"
@@ -50,6 +52,8 @@
             "6,persistent:true,monitor:HDMI-A-1"
             "7,persistent:true,monitor:HDMI-A-1"
             "8,persistent:true,monitor:HDMI-A-1"
+            "9,persistent:true,monitor:HDMI-A-2"
+            "10,persistent:true,monitor:HDMI-A-2"
           ];
           input = {
             kb_layout = "pl";
@@ -156,18 +160,19 @@
               ",XF86AudioPrev, exec, playerctl -p spotify previous"
               ",XF86AudioNext, exec, playerctl -p spotify next"
 
-              "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-10"
-              "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-10"
+              "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7"
+              "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7"
 
-              "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-10"
-              "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-10"
+              "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7"
+              "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7"
 
-              "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-10"
-              "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-10"
+              "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7"
+              "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7"
 
               "super, e, togglefloating,"
               "super, w, fullscreen, 1"
               "super, f, fullscreen, 0"
+              "super, g, fullscreenstate, 0 3" # fake fullscreen
 
               "super, h, movefocus, l"
               "super, l, movefocus, r"

@@ -61,7 +61,7 @@
         (lib.mkIf config.desktopPackages.enable [
           android-tools
           anki
-          chatterino2
+          chatterino7
           flatpak
           freecad-wayland
           helvum

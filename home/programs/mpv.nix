@@ -67,6 +67,8 @@
         # lang
         alang = "jpn,jp,eng,en,enUS,en-US";
         slang = "eng,en,jp,jap,jpn";
+
+        sub-scale = "0.6";
       };
       scriptOpts = {
         thumbfast = {
