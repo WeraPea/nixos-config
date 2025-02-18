@@ -38,11 +38,41 @@
           };
         };
       };
+      configPackages = [
+        (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-switch-channels.conf" ''
+          context.modules = [
+           { name = libpipewire-module-loopback
+                args = {
+                    node.description = "Analog Output - channel remap"
+                    capture.props = {
+                        media.class = Audio/Sink
+                        node.name = analog_output_channel_remap
+                        audio.position = [FL FR]
+                    }
+                    playback.props = {
+                        audio.position = [ FR FL ]
+                    }
+                }
+            }
+          ]
+        '')
+      ];
     };
     udev.packages = with pkgs; [
       android-udev-rules
       platformio-core.udev
+      (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules" ''
+        # DFU (Internal bootloader for STM32 and AT32 MCUs)
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+      '')
     ];
+    # udev.extraRules = ''
+    #   # DFU (Internal bootloader for STM32 and AT32 MCUs)
+    #   SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0664", GROUP="dialout"
+    #   SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="dialout"
+    # '';
+    upower.enable = true;
     vnstat.enable = true;
     protonvpn = {
       enable = true;

@@ -54,7 +54,9 @@
           prismlauncher
           protontricks
           protonup-qt
+          rpcs3
           ryujinx
+          steamtinkerlaunch
           winetricks
           wineWowPackages.stagingFull
         ])
