@@ -48,6 +48,7 @@
         ]
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
+          ckan
           lutris
           mangohud
           nvtopPackages.amd
