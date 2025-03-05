@@ -53,6 +53,12 @@
       #     violentmonkey
       #     web-scrobbler
       #     noscript
+      #     wayback-machine
+      #     web-archives
+      #     floccus
+      #     forget_me_not
+      #     github-file-icons
+      #     google-container
       #   ];
       #   settings = {
       #     "browser.download.useDownloadDir" = false;

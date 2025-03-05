@@ -34,7 +34,7 @@
             "DP-2,highrr,0x0,auto"
             "HDMI-A-1,1280x1024@75,2560x0,auto"
             "HDMI-A-2,1920x1080@60,-1920x0,1"
-            "HDMI-A-2,addreserved,0,20,100,100"
+            "HDMI-A-2,addreserved,0,25,97,97"
           ];
           windowrulev2 = [
             "stayfocused, title:^()$,class:^(steam)$"

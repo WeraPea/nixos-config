@@ -55,9 +55,9 @@
                     while true; do
                       status=$(${lib.getExe pkgs.playerctl} -p spotify status 2>/dev/null)
                       if [[ "$status" == "Playing" ]]; then
-                        playing=""
-                      else
                         playing=""
+                      else
+                        playing=""
                       fi
                       if [[ "$status" != "" ]]; then
                         echo $playing $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:title) - $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:artist)
@@ -172,7 +172,7 @@
           bar2 = {
             output = [ "HDMI-A-2" ];
             layer = "top";
-            margin-top = 20;
+            margin-top = 25;
             margin-left = 100;
             margin-right = 100;
             height = 20;

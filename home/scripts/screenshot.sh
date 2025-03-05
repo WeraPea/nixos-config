@@ -13,9 +13,10 @@ esac
 sleep 0.1
 if test -f /tmp/hyprshot_screenshot_to_text.png; then
   mogrify -modulate 100,0 -resize 400% /tmp/hyprshot_screenshot_to_text.png
-  tesseract -l "$(printf 'eng\njpn' | rofi -dmenu -l 2)" /tmp/hyprshot_screenshot_to_text.png /tmp/tesseract_screenshot &>/dev/null
+  magick convert /tmp/hyprshot_screenshot_to_text.png -colorspace Gray /tmp/hyprshot_screenshot_to_text_grayscale.png
+  tesseract -l "$(printf 'eng\njpn' | rofi -dmenu -l 2)" /tmp/hyprshot_screenshot_to_text_grayscale.png /tmp/tesseract_screenshot &>/dev/null
   tr '\n' ' ' </tmp/tesseract_screenshot.txt | wl-copy
-  rm /tmp/tesseract_screenshot.txt /tmp/hyprshot_screenshot_to_text.png
+  rm /tmp/tesseract_screenshot.txt /tmp/hyprshot_screenshot_to_text.png /tmp/hyprshot_screenshot_to_text_grayscale.png
   exit
 fi
 
