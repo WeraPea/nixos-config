@@ -68,6 +68,7 @@
         ./overlays
         ./stylix
         ./system
+        ./sops.nix
       ];
     in
     {

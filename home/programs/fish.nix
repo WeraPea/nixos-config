@@ -19,6 +19,12 @@
         bind ! __history_previous_command
       '';
       functions = {
+        fish_user_key_bindings.body = ''
+          bind -M default H beginning-of-line
+          bind -M default L end-of-line
+          fish_default_key_bindings -M insert
+          fish_vi_key_bindings --no-erase insert
+        '';
         __history_previous_command.body = ''
           switch (commandline -t)
           case "!"

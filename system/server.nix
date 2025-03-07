@@ -1,8 +1,20 @@
+{ config, ... }:
 {
+  imports = [
+    ./nextcloud.nix
+    ./postgresql.nix
+    ./nginx.nix
+  ];
   user.hostname = "server";
   sql.enable = true;
   graphics.enable = false;
   system.stateVersion = "24.11";
+  sops.secrets.duckdns_token = { };
+  services.duckdns = {
+    enable = true;
+    domains = [ "werapi" ];
+    tokenFile = config.sops.secrets.duckdns_token.path;
+  };
   # ps2 samba server
   services.samba = {
     enable = true;

@@ -141,6 +141,8 @@
           ];
           bind =
             [
+              "super, space, exec, makoctl dismiss"
+              "super_shift, space, exec, makoctl restore"
               ",Print, exec, screenshot"
               "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
               "super, s, exec, search"

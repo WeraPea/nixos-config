@@ -32,6 +32,7 @@
           lm_sensors
           lsof
           neofetch
+          nextcloud-client
           nh
           onefetch
           picocom
