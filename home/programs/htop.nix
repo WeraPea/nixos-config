@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  outputs,
   ...
 }:
 {
@@ -11,7 +12,7 @@
   config = lib.mkIf config.htop.enable {
     programs.htop = {
       enable = true;
-      package = pkgs.htop-vim;
+      package = outputs.packages.${pkgs.system}.htop-vim;
       settings =
         {
           color_scheme = 5;

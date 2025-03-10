@@ -10,6 +10,7 @@
     mpv.enable = lib.mkEnableOption "enables mpv";
   };
   config = lib.mkIf config.mpv.enable {
+    stylix.targets.mpv.enable = false;
     programs.mpv = {
       enable = true;
       scripts =

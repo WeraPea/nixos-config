@@ -32,10 +32,6 @@
           notification = "${base0C}";
           notification-error = "${base08}";
         };
-        extraCommands = ''
-          # ./spicetify config sidebar_config 1
-          ./spicetify config experimental_features 1 # not working, dropdown menu in which this was in is now different
-        '';
 
         enabledCustomApps = with spicePkgs.apps; [
           betterLibrary

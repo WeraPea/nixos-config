@@ -39,6 +39,7 @@
           progress
           python3
           rsync
+          sops
           tig
           tldr
           wget

@@ -90,6 +90,7 @@
           "pipe-operators"
         ];
         substituters = [
+          "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=10"
           "https://nix-community.cachix.org"
           "https://hyprland.cachix.org"
           "https://cache.nixos.org"
