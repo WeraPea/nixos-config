@@ -50,6 +50,7 @@
         ]
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
+          bs-manager
           ckan
           lutris
           mangohud
@@ -77,7 +78,7 @@
           openscad
           orca-slicer
           outputs.packages.${pkgs.system}.blender
-          pavucontrol
+          pwvucontrol
           playerctl
           prusa-slicer
           rofi-wayland # TODO: move to module

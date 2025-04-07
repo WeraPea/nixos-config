@@ -37,7 +37,7 @@
             wireplumber = {
               format-muted = "muted {volume}%";
               max-volume = 150;
-              on-click-right = lib.getExe pkgs.pavucontrol;
+              on-click-right = lib.getExe pkgs.pwvucontrol;
               on-click = "${lib.getExe pkgs.pamixer} -t";
               # on-click-middle = "pulseaudio-control --node-blacklist audiorelay-virtual-mic-sink,audiorelay_Speaker next-node", # TODO:
             };

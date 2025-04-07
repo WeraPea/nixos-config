@@ -9,5 +9,4 @@ pkgs: {
   ruler = pkgs.callPackage ./ruler.nix { };
   status-line = pkgs.callPackage ./status-line.nix { };
   streamlink-ttvlol = pkgs.callPackage ./streamlink-ttvlol.nix { };
-  htop-vim = pkgs.callPackage ./htop-vim.nix { };
 }
