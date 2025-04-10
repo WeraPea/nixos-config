@@ -14,6 +14,7 @@
     home.sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
     };
+    stylix.targets.firefox.enable = false;
     programs.firefox = {
       enable = true;
       package =

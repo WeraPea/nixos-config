@@ -66,12 +66,11 @@
         SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
         SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
       '')
+      (writeTextDir "lib/udev/rules.d/70-pinenote.rules" ''
+        # For use with OpenTabletDriver to mitigate double cursor
+        SUBSYSTEM=="input", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+      '')
     ];
-    # udev.extraRules = ''
-    #   # DFU (Internal bootloader for STM32 and AT32 MCUs)
-    #   SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0664", GROUP="dialout"
-    #   SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="dialout"
-    # '';
     upower.enable = true;
     vnstat.enable = true;
     protonvpn = {
@@ -102,5 +101,6 @@
     bluetooth.enable = true;
     keyboard.qmk.enable = true;
     xpadneo.enable = true;
+    opentabletdriver.enable = true;
   };
 }

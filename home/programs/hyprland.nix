@@ -122,7 +122,9 @@
             disable_splash_rendering = true;
             vrr = 2;
             animate_mouse_windowdragging = true;
-            disable_autoreload = true; # autoreload is unnecessary on nixos, because the config is readonly anyway
+            disable_autoreload = true;
+            enable_swallow = true;
+            swallow_regex = "kitty";
           };
           env = [
             "NIXOS_OZONE_WL,1"
@@ -175,6 +177,7 @@
               "super, w, fullscreen, 1"
               "super, f, fullscreen, 0"
               "super, g, fullscreenstate, 0 3" # fake fullscreen
+              "super, v, toggleswallow"
 
               "super, h, movefocus, l"
               "super, l, movefocus, r"
