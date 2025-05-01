@@ -3,6 +3,7 @@
   lib,
   config,
   osConfig,
+  inputs,
   outputs,
   ...
 }:
@@ -55,6 +56,7 @@
           lutris
           mangohud
           nvtopPackages.amd
+          inputs.osu-scrobbler.defaultPackage.${pkgs.system}
           prismlauncher
           protontricks
           protonup-qt

@@ -98,6 +98,7 @@
         };
       };
       bindings = {
+        t = "script-binding webtorrent/toggle-info";
         c = "script-binding progressbar/toggle-inactive-bar";
         tab = "script-binding progressbar/request-display";
         MBTN_LEFT = "script-binding progressbar/left-click";

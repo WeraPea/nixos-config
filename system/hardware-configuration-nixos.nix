@@ -47,6 +47,7 @@
       fsType = "vfat";
     };
     "/mnt/2tb-mnt".label = "Linux\\x20Data";
+    "/mnt/mnt3".label = "Linux\\x20Data\\x202";
     "/mnt/win" = {
       label = "Windows";
       options = [

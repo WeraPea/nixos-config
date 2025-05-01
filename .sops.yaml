@@ -1,9 +1,11 @@
 keys:
   - &server age122e9efnu4efm330rwzlj07ywcv0vv6yffuvjq83dxh839txx9u6qwtvsyr
   - &nixos age1yvrhvv6ymd3pvmnsls7c9xtfktwads787tge9sflrampu40uhd0qnpmdae
+  - &nixos-laptop age1kn8y4ddsz90f8rvlv6j8qzpa3ec0dyrzqydaprpckztnukdjl5esgmacae
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *server
       - *nixos
+      - *nixos-laptop

@@ -32,6 +32,7 @@
     };
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
   };
 
   outputs =
