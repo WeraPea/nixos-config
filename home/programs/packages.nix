@@ -36,6 +36,7 @@
           nextcloud-client
           nh
           onefetch
+          outputs.packages.${pkgs.system}.yt-sub-converter
           picocom
           progress
           python3
@@ -53,10 +54,11 @@
           alsa-oss
           bs-manager
           ckan
+          inputs.osu-scrobbler.defaultPackage.${pkgs.system}
           lutris
           mangohud
           nvtopPackages.amd
-          inputs.osu-scrobbler.defaultPackage.${pkgs.system}
+          osu-lazer-bin
           prismlauncher
           protontricks
           protonup-qt
@@ -76,13 +78,14 @@
           krita
           nmap
           ntfs3g
+          obsidian
           openjdk17
           openscad
           orca-slicer
           outputs.packages.${pkgs.system}.blender
-          pwvucontrol
           playerctl
           prusa-slicer
+          pwvucontrol
           rofi-wayland # TODO: move to module
           scrcpy
           steam-run

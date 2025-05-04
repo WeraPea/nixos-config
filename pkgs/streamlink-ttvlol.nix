@@ -23,7 +23,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Streamlink Twitch plugin modified to work with the TTV.LOL API";
     homepage = "https://github.com/2bc4/streamlink-ttvlol/releases";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ WeraPea ];
     mainProgram = "streamlink-ttvlol";
     platforms = lib.platforms.all;
   };

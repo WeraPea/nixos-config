@@ -14,12 +14,13 @@
         if p then yes else no;
       aria2dl = writeShellScriptBin "aria2dl" (builtins.readFile ./aria2dl.sh);
       audiorelay = writeShellScriptBin "audiorelay-wrapper" (
-        builtins.readFile (substituteAll {
-          src = ./audiorelay.sh;
-          xdotool = "${lib.getExe xdotool}";
-          xvfb = "${lib.getExe' xorg.xvfb "Xvfb"}";
-          pactl = ''${lib.getExe' pulseaudio "pactl"}'';
-        })
+        builtins.readFile (
+          replaceVars ./audiorelay.sh {
+            xdotool = "${lib.getExe xdotool}";
+            xvfb = "${lib.getExe' xorg.xvfb "Xvfb"}";
+            pactl = ''${lib.getExe' pulseaudio "pactl"}'';
+          }
+        )
       );
       audiorelay-desktop-item = makeDesktopItem {
         name = "audiorelay auto connect wrapper";
@@ -79,10 +80,10 @@
         )
         (
           x:
-          writers.writePython3Bin "${x}" { libraries = [ python3Packages.papis-python-rofi ]; }
-            (substituteAll {
-              src = ./${x}.py;
+          writers.writePython3Bin "${x}" { libraries = [ python3Packages.papis-python-rofi ]; } (
+            replaceVars ./${x}.py {
               videoPath = "/home/wera/videos";
-            })
+            }
+          )
         );
 }

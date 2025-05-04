@@ -34,6 +34,5 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/torque/mpv-progressbar";
     platforms = platforms.all;
     license = licenses.isc;
-    maintainers = with maintainers; [ WeraPea ];
   };
 }

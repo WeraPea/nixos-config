@@ -46,6 +46,5 @@ stdenvNoCC.mkDerivation {
     homepage = "https://wiki.pine64.org/wiki/PineNote_Press";
     platforms = platforms.all;
     license = licenses.cc0;
-    maintainers = with maintainers; [ WeraPea ];
   };
 }

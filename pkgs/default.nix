@@ -9,4 +9,8 @@ pkgs: {
   ruler = pkgs.callPackage ./ruler.nix { };
   status-line = pkgs.callPackage ./status-line.nix { };
   streamlink-ttvlol = pkgs.callPackage ./streamlink-ttvlol.nix { };
+  yt-sub-converter = pkgs.callPackage ./yt-sub-converter.nix { };
+  mpv-youtube-srv3-subs = pkgs.callPackage ./mpv-youtube-srv3-subs.nix {
+    yt-sub-converter = pkgs.callPackage ./yt-sub-converter.nix { };
+  };
 }

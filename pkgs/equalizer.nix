@@ -30,6 +30,5 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/torque/mpv-image-viewer";
     platforms = platforms.all;
     license = licenses.unlicense;
-    maintainers = with maintainers; [ WeraPea ];
   };
 }

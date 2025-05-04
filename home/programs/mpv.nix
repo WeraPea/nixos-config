@@ -17,17 +17,18 @@
         with pkgs.mpvScripts;
         with outputs.packages.${pkgs.system};
         [
+          detect-image
+          equalizer
+          freeze-window
+          image-positioning
+          minimap
           mpris
+          mpv-youtube-srv3-subs
+          progressbar
+          ruler
+          status-line
           thumbfast
           webtorrent-mpv-hook
-          progressbar
-          detect-image
-          minimap
-          image-positioning
-          status-line
-          ruler
-          freeze-window
-          equalizer
           youtube-upnext
         ];
       defaultProfiles = [ "high-quality" ];
