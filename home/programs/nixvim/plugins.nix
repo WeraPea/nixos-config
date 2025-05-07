@@ -27,6 +27,7 @@
     undotree.enable = true;
     which-key.enable = true;
     treesitter-context.enable = true;
+    markdown-preview.enable = true;
     openscad = {
       enable = true;
       settings = {
