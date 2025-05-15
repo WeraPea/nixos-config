@@ -84,6 +84,7 @@
       gc.automatic = true;
       optimise.automatic = true;
       settings = {
+        trusted-users = [ config.user.username ];
         experimental-features = [
           "nix-command"
           "flakes"

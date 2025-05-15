@@ -17,7 +17,7 @@
         let
           general_settings = {
             "temperature" = {
-              hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5/temp1_input";
+              hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5/temp3_input";
               critical-threshold = 80;
             };
             "hyprland/window" = {
