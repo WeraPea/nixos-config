@@ -1,6 +1,7 @@
 { config, ... }:
 {
   imports = [
+    ./boot.nix
     ./nextcloud.nix
     ./postgresql.nix
     ./nginx.nix

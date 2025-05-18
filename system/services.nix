@@ -100,7 +100,6 @@
   hardware = lib.mkIf config.graphics.enable {
     bluetooth.enable = true;
     keyboard.qmk.enable = true;
-    xpadneo.enable = true;
     opentabletdriver.enable = true;
   };
 }

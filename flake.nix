@@ -33,6 +33,7 @@
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
+    pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
   };
 
   outputs =
@@ -112,9 +113,9 @@
             inherit inputs outputs;
           };
           modules = commonModules ++ [
+            inputs.pinenote-nixos.nixosModules.default
             ./home/pinenote.nix
             ./system/pinenote.nix
-            ./system/hardware-configuration-pinenote.nix
           ];
         };
       };

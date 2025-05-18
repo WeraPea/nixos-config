@@ -1,10 +1,12 @@
 {
+  osConfig,
   config,
   pkgs,
+  lib,
   inputs,
   ...
 }:
-{
+lib.mkIf osConfig.gaming.enable {
   home.packages = [
     # inputs.nixpkgs-xr.packages.${pkgs.system}.proton-ge-rtsp-bin
     inputs.nixpkgs-xr.packages.${pkgs.system}.wlx-overlay-s

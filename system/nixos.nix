@@ -1,4 +1,5 @@
 {
+  imports = [ ./boot.nix ];
   gaming.enable = true;
   user.hostname = "nixos";
   services.ddccontrol.enable = true;

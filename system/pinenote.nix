@@ -1,11 +1,24 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   user.hostname = "pinenote";
-  # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
-  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-  boot.loader.systemd-boot.enable = lib.mkForce false;
-  hardware.opengl.driSupport32Bit = lib.mkForce false;
-  system.stateVersion = "23.11";
+  pinenote.config.enable = true;
+  pinenote.sway-dbus-integration.enable = true;
+  hardware.graphics.enable32Bit = lib.mkForce false; # shouldnt be needed?
+  system.stateVersion = "25.05";
+  fileSystems."/" = {
+    label = "nixos";
+    fsType = "ext4";
+  };
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+
+  services.greetd = {
+    enable = true;
+    settings = rec {
+      initial_session = lib.mkForce {
+        command = "sway";
+        user = config.user.username;
+      };
+      default_session = initial_session;
+    };
+  };
 }

@@ -117,6 +117,7 @@
           };
 
           misc = {
+            enable_anr_dialog = false;
             disable_hyprland_logo = true;
             new_window_takes_over_fullscreen = true;
             disable_splash_rendering = true;

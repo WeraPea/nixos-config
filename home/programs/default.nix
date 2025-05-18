@@ -24,6 +24,7 @@
     ./waybar.nix
     ./nvimpager.nix
     ./vr.nix
+    ./pinenote
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

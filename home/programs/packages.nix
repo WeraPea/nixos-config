@@ -21,6 +21,7 @@
           (_7zz.override { enableUnfree = true; })
           appimage-run
           bc
+          cachix
           catimg
           cloc
           cmake

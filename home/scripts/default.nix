@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  config,
   osConfig,
   ...
 }:
@@ -45,12 +46,17 @@
       ifElse osConfig.graphics.enable
         [
           aria2dl-desktop-item
-          audiorelay
-          audiorelay-desktop-item
           imagemagick # screenshot
-          inputs.audiorelay.packages.${system}.audio-relay
           libnotify # aria2dl-notify
           tesseract # screenshot
+        ]
+        [ ]
+    ++
+      ifElse config.desktopPackages.enable
+        [
+          audiorelay
+          audiorelay-desktop-item
+          inputs.audiorelay.packages.${system}.audio-relay
         ]
         [ ]
     ++ lib.forEach (
@@ -66,6 +72,12 @@
             "search"
             "vrlink"
             "adbconnect"
+          ]
+          [ ]
+      ++
+        ifElse config.desktopPackages.enable
+          [
+            "vrlink"
           ]
           [ ]
     ) (x: writeShellScriptBin "${x}" (builtins.readFile ./${x}.sh))
