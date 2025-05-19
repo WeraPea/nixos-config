@@ -51,6 +51,11 @@
           xdg-utils
           yt-dlp
         ]
+        (lib.mkIf osConfig.graphics.enable [
+          pwvucontrol
+          playerctl
+          xdragon
+        ])
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
           bs-manager
@@ -84,15 +89,12 @@
           openscad
           orca-slicer
           outputs.packages.${pkgs.system}.blender
-          playerctl
           prusa-slicer
-          pwvucontrol
           rofi-wayland # TODO: move to module
           scrcpy
           steam-run
           usbutils
           vesktop
-          xdragon
         ])
       ];
   };

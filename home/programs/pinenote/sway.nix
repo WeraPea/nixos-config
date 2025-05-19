@@ -18,7 +18,7 @@
       config = rec {
         terminal = "kitty";
         output."*".bg = "#FFFFFF solid_color";
-        output."*".scale = "1";
+        output."*".scale = "2";
         input."0:0:cyttsp5".map_to_output = "DPI-1";
         input."11551:149:w9013_2D1F:0095_Stylus".map_to_output = "DPI-1";
         bars = [ ];

@@ -19,7 +19,11 @@
         home.username = "wera";
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.05";
-        home.packages = with pkgs; [ brightnessctl ];
+        home.packages = with pkgs; [
+          brightnessctl
+          squeekboard
+          koreader
+        ];
         mpv.enable = false;
         spicetify.enable = false;
         programs.zathura.enable = false;
