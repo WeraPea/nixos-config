@@ -23,6 +23,7 @@
           brightnessctl
           squeekboard
           koreader
+          xournalpp
         ];
         mpv.enable = false;
         spicetify.enable = false;

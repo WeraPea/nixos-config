@@ -1133,11 +1133,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1747652720,
-        "narHash": "sha256-X5ZJ/GfGLtOzWd9TFNYqlhdbLa7Vet3vLM/srUu7cvc=",
+        "lastModified": 1748031391,
+        "narHash": "sha256-ZjVdt9SDO/EozVyAF2Rq+ubDXQiWJhV0diPtilFBrpk=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "d263aeffcba81563cfa0c00b1a3027de9cce45ed",
+        "rev": "58fdad0f3cf4f3c06044e57fa70e51c9ef904fa5",
         "type": "github"
       },
       "original": {
@@ -1153,11 +1153,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1747652720,
-        "narHash": "sha256-X5ZJ/GfGLtOzWd9TFNYqlhdbLa7Vet3vLM/srUu7cvc=",
+        "lastModified": 1748031391,
+        "narHash": "sha256-ZjVdt9SDO/EozVyAF2Rq+ubDXQiWJhV0diPtilFBrpk=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "d263aeffcba81563cfa0c00b1a3027de9cce45ed",
+        "rev": "58fdad0f3cf4f3c06044e57fa70e51c9ef904fa5",
         "type": "github"
       },
       "original": {

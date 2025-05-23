@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   user.hostname = "pinenote";
   pinenote.config.enable = true;
@@ -11,15 +16,36 @@
     fsType = "ext4";
   };
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+    HandlePowerKeyLongPress=poweroff
+  '';
 
   services.greetd = {
     enable = true;
     settings = rec {
-      initial_session = lib.mkForce {
-        command = "sway";
+      sway_session = lib.mkForce {
+        command = lib.getExe (
+          pkgs.writeShellScriptBin "sway-run" ''
+            # from https://man.sr.ht/~kennylevinsen/greetd/#how-to-set-xdg_session_typewayland
+            # Session
+            export XDG_SESSION_TYPE=wayland
+            export XDG_SESSION_DESKTOP=sway
+            export XDG_CURRENT_DESKTOP=sway
+
+            # Wayland stuff
+            export MOZ_ENABLE_WAYLAND=1
+            export QT_QPA_PLATFORM=wayland
+            export SDL_VIDEODRIVER=wayland
+            export _JAVA_AWT_WM_NONREPARENTING=1
+
+            # exec sway "$@"
+            exec systemd-cat --identifier=sway sway "$@"
+          ''
+        );
         user = config.user.username;
       };
-      default_session = initial_session;
+      default_session = sway_session;
     };
   };
 }

@@ -79,13 +79,13 @@ in
     pinenote-waybar.enable = lib.mkEnableOption "enables pinenote waybar config";
   };
   config = lib.mkIf config.pinenote-waybar.enable {
-    systemd.user.services.waybar = {
-      Service.Environment = "PATH=/etc/profiles/per-user/${config.home.username}/bin/:/run/current-system/sw/bin/";
-    };
+    # systemd.user.services.waybar = {
+    #   Service.Environment = "PATH=/etc/profiles/per-user/${config.home.username}/bin/:/run/current-system/sw/bin/";
+    # };
     stylix.targets.waybar.enable = false;
     programs.waybar = {
       enable = true;
-      systemd.enable = true;
+      # systemd.enable = true;
       settings = {
         mainBar = {
           layer = "top";
