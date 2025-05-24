@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   inputs,
   outputs,
@@ -16,6 +17,7 @@
       inputs.nix-index-database.hmModules.nix-index
       inputs.nixvim.homeManagerModules.nixvim
       {
+        stylix.targets.fish.enable = false;
         home.username = "wera";
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.05";
@@ -25,6 +27,7 @@
           koreader
           xournalpp
         ];
+        services.kdeconnect.enable = lib.mkForce false;
         mpv.enable = false;
         spicetify.enable = false;
         programs.zathura.enable = false;
