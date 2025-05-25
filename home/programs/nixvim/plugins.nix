@@ -20,7 +20,7 @@
     luasnip.enable = true;
     nix.enable = true;
     notify.enable = true;
-    oil.enable = true;
+    oil.enable = true; # file explorer
     rustaceanvim.enable = true;
     todo-comments.enable = true;
     trouble.enable = true;
@@ -28,16 +28,13 @@
     which-key.enable = true;
     treesitter-context.enable = true;
     markdown-preview.enable = true;
+    nvim-surround.enable = true;
+    rainbow-delimiters.enable = true;
+    otter.enable = true; # nested lsp
     openscad = {
       enable = true;
       settings = {
         cheatsheet-toggle-key = "<C-c>";
-      };
-    };
-    instant = {
-      enable = true;
-      settings = {
-        username = "werapi";
       };
     };
     conform-nvim = {
@@ -82,7 +79,9 @@
       folding = true;
       nixvimInjections = true;
       settings = {
+        ensureInstalled = "all";
         indent.enable = true;
+        highlight.enable = true;
       };
     };
     colorizer = {
@@ -188,7 +187,7 @@
       enable = true;
       settings = {
         mapping = {
-          "<C-Space>" = "cmp.mapping.complete()";
+          "<C-Space>" = ''cmp.mapping.complete()'';
           "<C-d>" = "cmp.mapping.scroll_docs(-4)";
           "<C-e>" = "cmp.mapping.close()";
           "<C-f>" = "cmp.mapping.scroll_docs(4)";

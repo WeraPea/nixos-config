@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  outputs,
   ...
 }:
 {
@@ -20,6 +21,21 @@
     HandlePowerKey=suspend
     HandlePowerKeyLongPress=poweroff
   '';
+
+  security.sudo.extraRules = [
+    {
+      groups = [ "wheel" ];
+      commands = [
+        {
+          command = lib.getExe outputs.packages.${pkgs.system}.usb-tablet;
+          options = [
+            "SETENV"
+            "NOPASSWD"
+          ];
+        }
+      ];
+    }
+  ];
 
   services.journald.storage = "volatile";
   # zramSwap.enable = true;

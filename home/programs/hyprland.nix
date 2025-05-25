@@ -204,52 +204,53 @@
             "super, mouse:273, resizewindow"
           ];
         };
-      extraConfig = ''
-        exec-once = waybar
-        bind=super,r,submap,run
-        submap=run
-        bind = super, r, exec, rofi -show drun -show-icons
-        bind = super, r, submap, reset
+      extraConfig = # hyprlang
+        ''
+          exec-once = waybar
+          bind=super,r,submap,run
+          submap=run
+          bind = super, r, exec, rofi -show drun -show-icons
+          bind = super, r, submap, reset
 
-        bind = super, t, exec, kitty
-        bind = super, t, submap, reset
+          bind = super, t, exec, kitty
+          bind = super, t, submap, reset
 
-        bind = super, q, exec, qutebrowser
-        bind = super, q, submap, reset
+          bind = super, q, exec, qutebrowser
+          bind = super, q, submap, reset
 
-        bind = super, f, exec, firefox
-        bind = super, f, submap, reset
+          bind = super, f, exec, firefox
+          bind = super, f, submap, reset
 
-        bind = super, s, exec, spotify
-        bind = super, s, submap, reset
+          bind = super, s, exec, spotify
+          bind = super, s, submap, reset
 
-        bind = ,catchall, submap, reset
-        submap=reset
+          bind = ,catchall, submap, reset
+          submap=reset
 
-        bind = super, x, submap, spotify
-        submap = spotify
-        bind = super, x, exec, playerctl -p spotify play-pause
-        bind = super, x, submap, reset
-        bind = super, space, exec, playerctl -p spotify play-pause
-        bind = super, space, submap, reset
-        bind = super, n, exec, playerctl -p spotify next
-        bind = super, n, submap, reset
-        bind = super, p, exec, playerctl -p spotify previous
-        bind = super, p, submap, reset
-        bind = super, j, exec, playerctl -p spotify volume 0.1-
-        bind = super, j, submap, reset
-        bind = super, k, exec, playerctl -p spotify volume 0.1+
-        bind = super, k, submap, reset
-        bind = ,catchall, submap, reset
-        submap = reset
+          bind = super, x, submap, spotify
+          submap = spotify
+          bind = super, x, exec, playerctl -p spotify play-pause
+          bind = super, x, submap, reset
+          bind = super, space, exec, playerctl -p spotify play-pause
+          bind = super, space, submap, reset
+          bind = super, n, exec, playerctl -p spotify next
+          bind = super, n, submap, reset
+          bind = super, p, exec, playerctl -p spotify previous
+          bind = super, p, submap, reset
+          bind = super, j, exec, playerctl -p spotify volume 0.1-
+          bind = super, j, submap, reset
+          bind = super, k, exec, playerctl -p spotify volume 0.1+
+          bind = super, k, submap, reset
+          bind = ,catchall, submap, reset
+          submap = reset
 
-        bind = super, q, submap, kill
-        submap = kill
-        bind = super, q, killactive,
-        bind = super, q, submap, reset
-        bind = ,catchall, submap, reset
-        submap = reset
-      '';
+          bind = super, q, submap, kill
+          submap = kill
+          bind = super, q, killactive,
+          bind = super, q, submap, reset
+          bind = ,catchall, submap, reset
+          submap = reset
+        '';
     };
   };
 }

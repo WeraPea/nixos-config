@@ -26,6 +26,7 @@
           squeekboard
           koreader
           xournalpp
+          krita
         ];
         services.kdeconnect.enable = lib.mkForce false;
         mpv.enable = false;
