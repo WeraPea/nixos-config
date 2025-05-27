@@ -1,10 +1,6 @@
 {
   inputs = {
     audiorelay.url = "github:niscolas/audiorelay-flake-fork";
-    base16Styles = {
-      url = "github:samme/base16-styles";
-      flake = false;
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +16,7 @@
     };
     stylix.url = "github:danth/stylix";
     nur.url = "github:nix-community/NUR";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+    hyprland.url = "github:hyprwm/Hyprland";
     erosanix.url = "github:emmanuelrosa/erosanix";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -72,11 +68,26 @@
         nur.modules.nixos.default
         sops-nix.nixosModules.sops
         stylix.nixosModules.stylix
+        inputs.home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useUserPackages = true;
+            extraSpecialArgs = {
+              inherit inputs outputs;
+            };
+            sharedModules = [
+              inputs.sops-nix.homeManagerModules.sops
+              inputs.nix-index-database.hmModules.nix-index
+              inputs.nixvim.homeManagerModules.nixvim
+              ({ config, ... }: import ./sops.nix { username = config.home.username; })
+            ];
+          };
+        }
         { nixpkgs.overlays = [ nur.overlays.default ]; }
         ./overlays
         ./stylix
         ./system
-        ./sops.nix
+        ({ config, ... }: import ./sops.nix { username = config.user.username; })
       ];
     in
     {

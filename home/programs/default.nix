@@ -25,6 +25,7 @@
     ./nvimpager.nix
     ./vr.nix
     ./pinenote
+    ./mpd.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -41,6 +42,7 @@
   spicetify.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   waybar.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
+  mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";
@@ -87,9 +89,5 @@
   };
   services = {
     cliphist.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
-    kdeconnect = {
-      enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
-      indicator = true;
-    };
   };
 }

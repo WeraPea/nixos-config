@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   config,
   ...
@@ -12,7 +11,7 @@
     let
       theme = config.lib.stylix.colors {
         templateRepo = config.stylix.inputs.tinted-kitty;
-        target = "default";
+        target = "base16";
       };
     in
     with config.lib.stylix.colors.withHashtag;

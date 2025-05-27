@@ -33,6 +33,7 @@
           libxml2
           lm_sensors
           lsof
+          mkvtoolnix-cli
           neofetch
           nextcloud-client
           nh
@@ -43,6 +44,7 @@
           python3
           rsync
           sops
+          sshfs
           tig
           tldr
           wget
@@ -52,8 +54,10 @@
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [
-          pwvucontrol
           playerctl
+          pwvucontrol
+          tigervnc
+          wayvnc
           xdragon
         ])
         (lib.mkIf osConfig.gaming.enable [

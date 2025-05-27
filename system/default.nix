@@ -46,18 +46,6 @@
           24454 # simple voice chat
           34197 # factorio
         ]; # for audiorelay (some)
-        allowedTCPPortRanges = [
-          {
-            from = 1714;
-            to = 1764;
-          } # kdeconnect
-        ];
-        allowedUDPPortRanges = [
-          {
-            from = 1714;
-            to = 1764;
-          } # kdeconnect
-        ];
       };
       hostName = config.user.hostname;
       networkmanager.enable = true;

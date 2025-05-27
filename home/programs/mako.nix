@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   config,
   ...
@@ -18,27 +17,28 @@
       stylix.targets.mako.enable = false;
       services.mako = {
         enable = true;
-        backgroundColor = base00 + makoOpacity;
-        borderColor = orange;
-        progressColor = "over ${yellow}";
-        textColor = base05;
-        font = "${sansSerif.name} ${toString sizes.popups}";
-        height = 150;
-        width = 300;
-        layer = "overlay";
-        borderSize = 2;
+        settings = {
+          backgroundColor = base00 + makoOpacity;
+          borderColor = orange;
+          progressColor = "over ${yellow}";
+          textColor = base05;
+          font = "${sansSerif.name} ${toString sizes.popups}";
+          height = 150;
+          width = 300;
+          layer = "overlay";
+          borderSize = 2;
 
-        extraConfig = ''
-          [urgency=low]
-          background-color=${base00}${makoOpacity}
-          border-color=${green}
-          text-color=${base05}
-
-          [urgency=high]
-          background-color=${base00}${makoOpacity}
-          border-color=${red}
-          text-color=${base05}
-        '';
+          "urgency=low" = {
+            background-color = "${base00}${makoOpacity}";
+            border-color = green;
+            text-color = base05;
+          };
+          "urgency=high" = {
+            background-color = "${base00}${makoOpacity}";
+            border-color = red;
+            text-color = base05;
+          };
+        };
       };
     };
 }
