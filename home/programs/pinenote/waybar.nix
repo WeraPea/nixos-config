@@ -109,6 +109,7 @@ in
             "sway/mode"
           ];
           modules-right = [
+            "custom/restart_dbus"
             "custom/usb_tablet"
             "custom/ebc_cycle_driver_mode"
             "custom/ebc_refresh"
@@ -450,6 +451,12 @@ in
           "custom/usb_tablet" = {
             format = "󰓶";
             on-click = "sudo ${lib.getExe outputs.packages.${pkgs.system}.usb-tablet}"; # added to sudoers file so no password required
+            inherit min-length;
+            tooltip = false;
+          };
+          "custom/restart_dbus" = {
+            format = "";
+            on-click = "systemctl restart --user sway-dbus-integration.service"; # sometimes it stops working without quitting, so this is a temp fix
             inherit min-length;
             tooltip = false;
           };

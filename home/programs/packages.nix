@@ -54,6 +54,7 @@
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [
+          anki
           playerctl
           pwvucontrol
           tigervnc
@@ -80,7 +81,6 @@
         ])
         (lib.mkIf config.desktopPackages.enable [
           android-tools
-          anki
           chatterino7
           flatpak
           freecad-wayland
