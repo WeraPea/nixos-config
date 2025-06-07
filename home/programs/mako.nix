@@ -18,15 +18,15 @@
       services.mako = {
         enable = true;
         settings = {
-          backgroundColor = base00 + makoOpacity;
-          borderColor = orange;
-          progressColor = "over ${yellow}";
-          textColor = base05;
+          background-color = base00;
+          border-color = orange;
+          progress-color = "over ${yellow}";
+          text-color = base05;
           font = "${sansSerif.name} ${toString sizes.popups}";
           height = 150;
           width = 300;
           layer = "overlay";
-          borderSize = 2;
+          border-size = 2;
 
           "urgency=low" = {
             background-color = "${base00}${makoOpacity}";
@@ -37,6 +37,9 @@
             background-color = "${base00}${makoOpacity}";
             border-color = red;
             text-color = base05;
+          };
+          "mode=dnd" = {
+            invisible = true;
           };
         };
       };

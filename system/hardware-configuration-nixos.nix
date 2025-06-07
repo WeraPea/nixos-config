@@ -24,9 +24,9 @@
     "amdgpu.lockup_timeout=1000"
     "amdgpu.gpu_recovery=1"
     "iommu=soft" # smth amd
-    "pcie_aspm=off" # this both/only for nvme and amd? just nvme ??, nvme wise did not fix it
-    "nvme_core.default_ps_max_latency_us=0" # kingstone A2000 maybe workaround, 2025-01-30 applied, check journal, did not fix it
-    "pcie_port_pm=off" # ssd kingstone A2000 workaround?, did not fix it # updated the firmware to S5Z42109 on 2025-05-25, check journal
+    # "pcie_aspm=off" # this both/only for nvme and amd? just nvme ??, nvme wise did not fix it
+    # "nvme_core.default_ps_max_latency_us=0" # kingstone A2000 maybe workaround, 2025-01-30 applied, check journal, did not fix it
+    # "pcie_port_pm=off" # ssd kingstone A2000 workaround?, did not fix it # updated the firmware to S5Z42109 on 2025-05-25, check journal # did not fix it either
   ];
   networking.interfaces.enp10s0.wakeOnLan.enable = true;
   hardware.amdgpu.initrd.enable = true;

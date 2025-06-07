@@ -17,6 +17,11 @@
       wrapperFeatures.gtk = true;
       config = rec {
         terminal = "kitty";
+        window = {
+          border = 0;
+          titlebar = false;
+        };
+        floating = window;
         output."*".bg = "#FFFFFF solid_color";
         output."*".scale = "2";
         input."0:0:cyttsp5".map_to_output = "DPI-1";
