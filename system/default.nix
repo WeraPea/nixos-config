@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   ...
@@ -7,6 +8,7 @@
   imports = [
     ./programs.nix
     ./services.nix
+    ./hardware.nix
   ];
   options = {
     user.username = lib.mkOption { description = "Sets username"; };
@@ -30,6 +32,11 @@
       ];
       isNormalUser = true;
     };
+    environment.pathsToLink = [
+      "/share/fish"
+      "/share/applications"
+      "/share/xdg-desktop-portal"
+    ];
 
     networking = {
       firewall = {
@@ -66,6 +73,7 @@
       LC_TELEPHONE = "pl_PL.UTF-8";
       LC_TIME = "pl_PL.UTF-8";
     };
+    security.polkit.enable = lib.mkIf config.graphics.enable true;
 
     nixpkgs.config.allowUnfree = true;
     nix = {
@@ -83,16 +91,15 @@
           "https://hyprland.cachix.org"
           "https://cache.nixos.org"
           "https://pinenote-packages.cachix.org"
+          "https://rakuyomi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "pinenote-packages.cachix.org-1:kikxnRWwjP5M1jWa31XlRqEkKFC4y8z+GlEtk2hCrII="
           "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+          "rakuyomi.cachix.org-1:rUqRr5gnBtceig+rg1ZKrj7RsLBrj/7uiq/2qJA3zxU="
         ];
       };
     };
-
-    hardware.graphics.enable = lib.mkDefault true;
-    hardware.graphics.enable32Bit = lib.mkIf config.hardware.graphics.enable <| lib.mkDefault true;
   };
 }

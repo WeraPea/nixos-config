@@ -31,6 +31,12 @@
     nvim-surround.enable = true;
     rainbow-delimiters.enable = true;
     otter.enable = true; # nested lsp
+    git-conflict.enable = true;
+    neogit.enable = true;
+    vim-suda = {
+      enable = true;
+      settings.smart_edit = 1;
+    };
     openscad = {
       enable = true;
       settings = {

@@ -140,13 +140,5 @@
       action = "<ESC><C-w>l";
       options.silent = true;
     }
-    {
-      mode = "c";
-      key = "w!!";
-      action = "w ! sudo tee %";
-      options = {
-        noremap = true;
-      };
-    } # delete this
   ];
 }

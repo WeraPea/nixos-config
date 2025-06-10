@@ -36,6 +36,7 @@
       url = "github:WeraPea/pinenote-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rakuyomi.url = "github:hanatsumi/rakuyomi";
   };
 
   outputs =

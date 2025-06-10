@@ -7,24 +7,15 @@
 {
   imports = [
     ./dual-function-keys.nix
-    ./polkit.nix
     ./sql.nix
     ./vr.nix
   ];
 
   services = {
     fstrim.enable = true;
-    greetd = lib.mkIf config.graphics.enable {
-      enable = true;
-      settings = rec {
-        initial_session = {
-          command = "Hyprland";
-          user = config.user.username;
-        };
-        default_session = initial_session;
-      };
-    };
     openssh.enable = true;
+    upower.enable = true;
+    vnstat.enable = true;
     pipewire = lib.mkIf config.graphics.enable {
       alsa.enable = true;
       alsa.support32Bit = true;
@@ -71,8 +62,6 @@
         SUBSYSTEM=="input", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", ENV{LIBINPUT_IGNORE_DEVICE}="1"
       '')
     ];
-    upower.enable = true;
-    vnstat.enable = true;
     protonvpn = {
       enable = true;
       autostart = false;
@@ -83,23 +72,5 @@
         port = 51820;
       };
     };
-  };
-  xdg.portal = lib.mkIf config.graphics.enable {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      # pkgs.xdg-desktop-portal-kde
-    ];
-    configPackages = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      # pkgs.xdg-desktop-portal-kde
-    ];
-  };
-  hardware = lib.mkIf config.graphics.enable {
-    bluetooth.enable = true;
-    keyboard.qmk.enable = true;
-    opentabletdriver.enable = true;
   };
 }

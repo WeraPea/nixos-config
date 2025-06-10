@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   lib,
   osConfig,
@@ -26,6 +27,8 @@
     ./vr.nix
     ./pinenote
     ./mpd.nix
+    ./fcitx5.nix
+    ./koreader.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -43,6 +46,7 @@
   streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   waybar.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
+  fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";
@@ -87,6 +91,16 @@
       nix-direnv.enable = true;
     };
   };
+  xdg.portal = lib.mkIf osConfig.graphics.enable {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    configPackages = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+  };
+
   services = {
     cliphist.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   };

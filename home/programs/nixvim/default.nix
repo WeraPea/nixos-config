@@ -42,7 +42,9 @@
         }
       ];
       extraConfigLua = ''
-        vim.keymap.set("ca", "W", "w")
+        vim.cmd([[
+          cnoreabbrev <expr> w (getcmdtype() == ':' && getcmdline() =~ '^git$') ? 'W' : 'w'
+        ]])
         vim.diagnostic.config({
           signs = {
             text = {

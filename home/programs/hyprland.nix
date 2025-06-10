@@ -8,24 +8,23 @@
 {
   imports = [
     ./hyprpaper.nix
-    # ./hyprland-autoname-workspaces.nix
   ];
   options = {
     hyprland.enable = lib.mkEnableOption "enables hyprland";
   };
   config = lib.mkIf config.hyprland.enable {
     home.packages = with pkgs; [
-      # hyprland-autoname-workspaces
       hyprpicker
       hyprshot
     ];
+    services.hyprpolkitagent.enable = true;
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      systemd.variables = [ "--all" ];
+      systemd.enable = false; # uwsm
       settings =
         let
           pamixer = lib.getExe pkgs.pamixer;
@@ -148,15 +147,13 @@
             [
               "super, space, exec, makoctl dismiss"
               "super_shift, space, exec, makoctl restore"
-              ",Print, exec, screenshot"
-              "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
-              "super, s, exec, search"
-              "super, c, exec, rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons"
+              ",Print, exec, uwsm app -- screenshot"
+              "shift,Print, exec, uwsm app -- hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
+              "super, s, exec, uwsm app -- search"
+              "super, c, exec, uwsm app -- rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons"
               "super, o, exec, wl-paste -p | wl-copy"
               "super, p, exec, wl-paste | wl-copy -p"
-              "super, m, exec, rofi-mount"
-              "super, u, exec, rofi-umount"
-              "super, d, exec, rofi -show window -show-icons"
+              "super, d, exec, uwsm app -- rofi -show window -show-icons"
 
               ",XF86AudioMute, exec, ${pamixer} -t"
 
@@ -211,16 +208,16 @@
           exec-once = waybar
           bind=super,r,submap,run
           submap=run
-          bind = super, r, exec, rofi -show drun -show-icons
+          bind = super, r, exec, uwsm app -- rofi -show drun -show-icons
           bind = super, r, submap, reset
 
-          bind = super, t, exec, kitty
+          bind = super, t, exec, uwsm app -- kitty
           bind = super, t, submap, reset
 
-          bind = super, f, exec, firefox
+          bind = super, f, exec, uwsm app -- firefox
           bind = super, f, submap, reset
 
-          bind = super, s, exec, spotify
+          bind = super, s, exec, uwsm app -- spotify
           bind = super, s, submap, reset
 
           bind = ,catchall, submap, reset

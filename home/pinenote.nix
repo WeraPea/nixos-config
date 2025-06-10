@@ -14,7 +14,6 @@
         home.packages = with pkgs; [
           brightnessctl
           squeekboard
-          koreader
           xournalpp
         ];
         services.kdeconnect.enable = lib.mkForce false;
@@ -23,6 +22,7 @@
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         pinenote.enable = true;
+        koreader.enable = true;
       }
     ];
     users.wera = import ./home.nix;

@@ -55,6 +55,9 @@
         };
       })
     ];
-    hardware.xpadneo.enable = lib.mkIf config.gaming.enable true;
+    # systemd.user.services.gamemoded = lib.mkIf config.gaming.enable {
+    #   restartTriggers = [ pkgs.gamemode ];
+    #   stopIfChanged = false;
+    # }; # TODO: possibly a fix for password prompts, check if changing polkit fixes it, if not try this
   };
 }

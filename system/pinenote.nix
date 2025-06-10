@@ -65,7 +65,7 @@
   services.greetd = {
     enable = true;
     settings = rec {
-      sway_session = lib.mkForce {
+      sway_session = {
         command = lib.getExe (
           pkgs.writeShellScriptBin "sway-run" ''
             # from https://man.sr.ht/~kennylevinsen/greetd/#how-to-set-xdg_session_typewayland

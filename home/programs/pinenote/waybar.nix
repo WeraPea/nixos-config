@@ -109,10 +109,10 @@ in
             "sway/mode"
           ];
           modules-right = [
-            "custom/restart_dbus"
+            "custom/ebc_refresh"
             "custom/usb_tablet"
             "custom/ebc_cycle_driver_mode"
-            "custom/ebc_refresh"
+            "custom/restart_dbus"
             "custom/blc_down"
             # "backlight/slider#cool"
             "custom/blc_up"
