@@ -51,6 +51,7 @@
           wl-clipboard
           wol
           xdg-utils
+          yazi
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [

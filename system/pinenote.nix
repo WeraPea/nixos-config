@@ -1,14 +1,26 @@
 {
   lib,
   pkgs,
-  config,
   outputs,
+  inputs,
+  config,
   ...
 }:
 {
+  imports = [
+    ./hyprland.nix
+  ];
+  programs.hyprland = {
+    # no aarch64-linux in hyprland cachix :(
+    package = lib.mkForce pkgs.hyprland;
+    portalPackage = lib.mkForce pkgs.xdg-desktop-portal-hyprland;
+  };
   user.hostname = "pinenote";
   pinenote.config.enable = true;
-  pinenote.sway-dbus-integration.enable = true;
+  pinenote.pinenote-service.hyprland.enable = true;
+  pinenote.pinenote-service.package = lib.mkIf (
+    config.buildSystem != "aarch64-linux"
+  ) inputs.pinenote-service.packages.${config.buildSystem}.cross;
   hardware.graphics.enable32Bit = lib.mkForce false; # shouldnt be needed?
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
@@ -59,34 +71,6 @@
       base0D = "#686868";
       base0E = "#747474";
       base0F = "#5e5e5e";
-    };
-  };
-
-  services.greetd = {
-    enable = true;
-    settings = rec {
-      sway_session = {
-        command = lib.getExe (
-          pkgs.writeShellScriptBin "sway-run" ''
-            # from https://man.sr.ht/~kennylevinsen/greetd/#how-to-set-xdg_session_typewayland
-            # Session
-            export XDG_SESSION_TYPE=wayland
-            export XDG_SESSION_DESKTOP=sway
-            export XDG_CURRENT_DESKTOP=sway
-
-            # Wayland stuff
-            export MOZ_ENABLE_WAYLAND=1
-            export QT_QPA_PLATFORM=wayland
-            export SDL_VIDEODRIVER=wayland
-            export _JAVA_AWT_WM_NONREPARENTING=1
-
-            # exec sway "$@"
-            exec systemd-cat --identifier=sway sway "$@"
-          ''
-        );
-        user = config.user.username;
-      };
-      default_session = sway_session;
     };
   };
 }

@@ -49,30 +49,6 @@ let
     '';
     preFixup = ''makeWrapperArgs+=("''${gappsWrapperArgs[@]}") '';
   }) "toggle-onscreen-keyboard";
-  sway-workspace = lib.getExe (
-    pkgs.writeShellScriptBin "sway-workspace" ''
-      set -ef
-
-      ws=$(swaymsg -t get_workspaces | jq '.[] | select((.output == "DPI-1") and .focused) | .num')
-      if [[ $2 == "next" ]]; then
-      	new_ws="$(echo "$ws" | tr 123 231)"
-      	if [[ $1 == "goto" ]]; then
-      		swaymsg workspace "$new_ws"
-      	elif [[ $1 == "move" ]]; then
-      		swaymsg move window to workspace "$new_ws"
-      	fi
-      elif [[ $2 == "prev" ]]; then
-      	new_ws="$(echo "$ws" | tr 123 312)"
-      	if [[ $1 == "goto" ]]; then
-      		swaymsg workspace "$new_ws"
-      	elif [[ $1 == "move" ]]; then
-      		swaymsg move window to workspace "$new_ws"
-      	fi
-      else
-      	exit 1
-      fi
-    ''
-  );
   min-length = 4;
 in
 {
@@ -94,7 +70,7 @@ in
           height = 40;
 
           modules-left = [
-            "custom/smenu"
+            "custom/menu"
             "custom/oskb"
             "custom/mvws_prev"
             "custom/mvws_next"
@@ -105,14 +81,10 @@ in
             # "custom/splitv"
             # "custom/splith"
           ];
-          modules-center = [
-            "sway/mode"
-          ];
           modules-right = [
             "custom/ebc_refresh"
             "custom/usb_tablet"
             "custom/ebc_cycle_driver_mode"
-            "custom/restart_dbus"
             "custom/blc_down"
             # "backlight/slider#cool"
             "custom/blc_up"
@@ -212,77 +184,35 @@ in
           "custom/kill" = {
             format = "";
             interval = "once";
-            on-click = "swaymsg kill";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/winleft" = {
-            format = "";
-            interval = "once";
-            on-click = "swaymsg move left";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/winright" = {
-            format = "";
-            interval = "once";
-            on-click = "swaymsg move right";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/winup" = {
-            format = "";
-            interval = "once";
-            on-click = "swaymsg move up";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/windown" = {
-            format = "";
-            interval = "once";
-            on-click = "swaymsg move down";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/splitv" = {
-            format = "/|";
-            interval = "once";
-            on-click = "swaymsg splitv";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/splith" = {
-            format = "/-";
-            interval = "once";
-            on-click = "swaymsg splith";
+            on-click = "hyprctl dispatch killactive";
             inherit min-length;
             tooltip = false;
           };
           "custom/mvws_prev" = {
             format = "";
             interval = "once";
-            on-click = "${sway-workspace} move prev";
+            on-click = "hyprctl dispatch movetoworkspace -1";
             inherit min-length;
             tooltip = false;
           };
           "custom/gows_prev" = {
             format = "&lt;"; # "<" wont work, markup error
             interval = "once";
-            on-click = "${sway-workspace} goto prev";
+            on-click = "hyprctl dispatch workspace -1";
             inherit min-length;
             tooltip = false;
           };
           "custom/gows_next" = {
             format = ">";
             interval = "once";
-            on-click = "${sway-workspace} goto next";
+            on-click = "hyprctl dispatch workspace +1";
             inherit min-length;
             tooltip = false;
           };
           "custom/mvws_next" = {
             format = "";
             interval = "once";
-            on-click = "${sway-workspace} move next";
+            on-click = "hyprctl dispatch movetoworkspace +1";
             inherit min-length;
             tooltip = false;
           };
@@ -294,46 +224,10 @@ in
             tooltip = false;
           };
 
-          "custom/smenu" = {
+          "custom/menu" = {
             format = "";
             interval = "once";
             on-click = "${pkgs.nwg-launchers}/bin/nwggrid"; # TODO:
-            inherit min-length;
-            tooltip = false;
-          };
-
-          "custom/ws1" = {
-            format = "1";
-            interval = "once";
-            on-click = "swaymsg workspace number 1";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/ws2" = {
-            format = "2";
-            interval = "once";
-            on-click = "swaymsg workspace number 2";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/ws3" = {
-            format = "3";
-            interval = "once";
-            on-click = "swaymsg workspace number 3";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/ws4" = {
-            format = "4";
-            interval = "once";
-            on-click = "swaymsg workspace number 4";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/ws5" = {
-            format = "5";
-            interval = "once";
-            on-click = "swaymsg workspace number 5";
             inherit min-length;
             tooltip = false;
           };
@@ -384,66 +278,42 @@ in
           "custom/ebc_refresh" = {
             format = "";
             interval = "once";
-            on-click = "${lib.getExe' pkgs.dbus "dbus-send"} --type=method_call --dest=org.pinenote.ebc_custom / org.pinenote.ebc_custom.GlobalRefresh";
+            on-click = "${lib.getExe' pkgs.dbus "dbus-send"} --dest=org.pinenote.PineNoteCtl --type=method_call /org/pinenote/PineNoteCtl org.pinenote.Ebc1.GlobalRefresh";
             inherit min-length;
             tooltip = false;
           };
-          "custom/rotate_0" = {
-            format = "R0";
-            interval = "once";
-            on-click = "sway_rotate.sh rotnormal"; # TODO:
-            inherit min-length;
-            tooltip = false;
-          };
+          # "custom/rotate_0" = {
+          #   format = "R0";
+          #   interval = "once";
+          #   on-click = "sway_rotate.sh rotnormal"; # TODO:
+          #   inherit min-length;
+          #   tooltip = false;
+          # };
+          #
+          # "custom/rotate_90" = {
+          #   format = "R90";
+          #   interval = "once";
+          #   on-click = "sway_rotate.sh rotright";
+          #   inherit min-length;
+          #   tooltip = false;
+          # };
+          #
+          # "custom/rotate_180" = {
+          #   format = "R180";
+          #   interval = "once";
+          #   on-click = "sway_rotate.sh rotinvert";
+          #   inherit min-length;
+          #   tooltip = false;
+          # };
+          #
+          # "custom/rotate_270" = {
+          #   format = "R270";
+          #   interval = "once";
+          #   on-click = "sway_rotate.sh rotleft";
+          #   inherit min-length;
+          #   tooltip = false;
+          # };
 
-          "custom/rotate_90" = {
-            format = "R90";
-            interval = "once";
-            on-click = "sway_rotate.sh rotright";
-            inherit min-length;
-            tooltip = false;
-          };
-
-          "custom/rotate_180" = {
-            format = "R180";
-            interval = "once";
-            on-click = "sway_rotate.sh rotinvert";
-            inherit min-length;
-            tooltip = false;
-          };
-
-          "custom/rotate_270" = {
-            format = "R270";
-            interval = "once";
-            on-click = "sway_rotate.sh rotleft";
-            inherit min-length;
-            tooltip = false;
-          };
-
-          "custom/key_pageup" = {
-            format = "";
-            interval = "once";
-            # on-click = "wtype -P page_up";
-            on-click = "swaymsg resize grow width 10px; swaymsg resize grow height 10px";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/key_pagedown" = {
-            format = "";
-            interval = "once";
-            # on-click = "wtype -P page_down";
-            on-click = "swaymsg resize shrink width 10px; swaymsg resize shrink height 10px";
-            inherit min-length;
-            tooltip = false;
-          };
-
-          "custom/battery_watts" = {
-            exec = "battery_watts.sh"; # TODO:
-            format = " {}W";
-            interval = 10;
-            inherit min-length;
-            tooltip = false;
-          };
           tray = {
             icon-size = 21;
             spacing = 10;
@@ -451,12 +321,6 @@ in
           "custom/usb_tablet" = {
             format = "󰓶";
             on-click = "sudo ${lib.getExe outputs.packages.${pkgs.system}.usb-tablet}"; # added to sudoers file so no password required
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/restart_dbus" = {
-            format = "";
-            on-click = "systemctl restart --user sway-dbus-integration.service"; # sometimes it stops working without quitting, so this is a temp fix
             inherit min-length;
             tooltip = false;
           };
@@ -474,7 +338,7 @@ in
           	color: white;
           }
 
-          #custom-smenu,
+          #custom-menu,
           #custom-okb,
           #custom-windown,
           #custom-winright,
@@ -484,7 +348,6 @@ in
           #custom-gows_prev,
           #custom-gows_next,
           #custom-mvws_next,
-          #sway-mode,
           #custom-ebc_refresh,
           #custom-blc_down,
           #custom-blc_up,

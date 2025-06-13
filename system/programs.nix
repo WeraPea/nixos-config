@@ -29,11 +29,7 @@
         mtr.enable = true;
       }
       (lib.mkIf config.gaming.enable {
-        corectrl = {
-          enable = true;
-          gpuOverclock.enable = true;
-          gpuOverclock.ppfeaturemask = "0xffffffff";
-        };
+        corectrl.enable = true;
         gamescope.enable = true;
         gamemode = {
           enable = true;

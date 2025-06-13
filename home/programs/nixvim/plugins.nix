@@ -47,8 +47,8 @@
       enable = true;
       settings = {
         format_on_save = {
-          timeoutMs = 500;
-          lspFallback = true;
+          # timeoutMs = 500;
+          # lspFallback = true;
         };
         formatters_by_ft = {
           nix = [ "nixfmt" ];

@@ -1,60 +1,32 @@
-{
-  inputs,
-  pkgs,
-  lib,
-  config,
-  ...
-}:
+{config, pkgs, lib, ...}:
 {
   options = {
-    hyprland.enable = lib.mkEnableOption "enables hyprland";
+    pinenote-hyprland.enable = lib.mkEnableOption "enables pinenote hyprland config";
   };
-  config = lib.mkIf config.hyprland.enable {
-    home.packages = with pkgs; [
-      hyprpicker
-      hyprshot
-    ];
-    services.hyprpaper = {
-      enable = true;
-      # settings.splash = false;
-    };
+  config = lib.mkIf config.pinenote-hyprland.enable {
+    stylix.targets.hyprpaper.enable = lib.mkForce false;
     services.hyprpolkitagent.enable = true;
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      portalPackage =
-        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       settings =
         let
           pamixer = lib.getExe pkgs.pamixer;
         in
         {
           monitor = [
-            ",preferred,auto,1"
-            "DP-2,highrr,0x0,auto"
-            "HDMI-A-1,1280x1024@75,2560x0,auto"
-            "HDMI-A-2,1920x1080@60,-1920x0,1"
-            "HDMI-A-2,addreserved,0,25,97,97"
+            "DPI-1,highrr,0x0,1" # scalling broken in pinenote-service
           ];
-          windowrulev2 = [
-            "stayfocused, title:^()$,class:^(steam)$"
-            "minsize 1 1, title:^()$,class:^(steam)$"
+          windowrule = [
             "float, title:^(Picture-in-Picture)$"
             "pin, title:^(Picture-in-Picture)$"
             "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures
+            "tag +ebchint:Y4|r:, class:KOReader" # trailing : as hyprland appends "*" to dynamic tags TODO: change this perhaps?
           ];
           workspace = [
-            "1,persistent:true,monitor:DP-2"
-            "2,persistent:true,monitor:DP-2"
-            "3,persistent:true,monitor:DP-2"
-            "4,persistent:true,monitor:DP-2"
-            "5,persistent:true,monitor:DP-2"
-            "6,persistent:true,monitor:HDMI-A-1"
-            "7,persistent:true,monitor:HDMI-A-1"
-            "8,persistent:true,monitor:HDMI-A-1"
-            "9,persistent:true,monitor:HDMI-A-2"
-            "10,persistent:true,monitor:HDMI-A-2"
+            "1,persistent:true,monitor:DPI-1"
+            "2,persistent:true,monitor:DPI-1"
+            "3,persistent:true,monitor:DPI-1"
           ];
           input = {
             kb_layout = "pl";
@@ -63,11 +35,7 @@
 
             follow_mouse = 1;
           };
-          device = {
-            name = "alpsps/2-alps-dualpoint-touchpad";
-            middle_button_emulation = 1;
-          };
-          gestures = {
+          gestures = { # TODO:
             workspace_swipe = true;
             workspace_swipe_forever = true;
           };
@@ -88,29 +56,7 @@
             no_warps = true;
           };
 
-          animations = {
-            # TODO
-            enabled = true;
-
-            bezier = [
-              "myBezier, 0.05, 0.9, 0.1, 1.05"
-              "overshot,0.13,0.99,0.29,1.1"
-            ];
-
-            animation = [
-              "windows,1,4,overshot,slide"
-              "border,1,10,default"
-              "fade,1,10,default"
-              "workspaces,1,8,default,slidevert"
-              "windows, 1, 7, default, popin 80%"
-              "windowsOut, 1, 7, default, popin 80%"
-            ];
-            #windows, 1, 7, myBezier
-            # animation = border, 1, 10, default
-            # animation = borderangle, 1, 8, default
-            # animation = fade, 1, 7, default
-            # animation = workspaces, 1, 6, default
-          };
+          animations.enabled = false;
 
           dwindle = {
             pseudotile = true;
@@ -122,11 +68,6 @@
             disable_hyprland_logo = true;
             new_window_takes_over_fullscreen = true;
             disable_splash_rendering = true;
-            vrr = 2;
-            animate_mouse_windowdragging = true;
-            disable_autoreload = true;
-            enable_swallow = true;
-            swallow_regex = "kitty";
           };
           env = [
             "NIXOS_OZONE_WL,1"
@@ -136,7 +77,7 @@
             "XDG_CURRENT_DESKTOP,Hyprland"
             "XDG_SESSION_DESKTOP,Hyprland"
             "XDG_SESSION_TYPE,wayland"
-          ];
+          ]; # TODO: do i still have to do this manually?
           binde = [
             ",XF86AudioLowerVolume, exec, ${pamixer} -d 1"
             ",XF86AudioRaiseVolume, exec, ${pamixer} -i 1"
@@ -159,19 +100,6 @@
 
               ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
               ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
-
-              ",XF86AudioPlay, exec, mpc toggle"
-              ",XF86AudioPrev, exec, mpc prev"
-              ",XF86AudioNext, exec, mpc next"
-
-              "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7"
-              "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7"
-
-              "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7"
-              "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7"
-
-              "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7"
-              "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7"
 
               "super, e, togglefloating,"
               "super, w, fullscreen, 1"

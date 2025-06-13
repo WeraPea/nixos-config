@@ -37,6 +37,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rakuyomi.url = "github:hanatsumi/rakuyomi";
+    # pinenote-service.url = "git+file:///home/wera/pinenote/pinenote-service";
+    pinenote-service.url = "github:WeraPea/pinenote-service";
   };
 
   outputs =
@@ -85,6 +87,12 @@
           };
         }
         { nixpkgs.overlays = [ nur.overlays.default ]; }
+        (
+          { pkgs, lib, ... }:
+          {
+            options.buildSystem = lib.mkOption { default = pkgs.system; }; # this is a mess and i probably don't need it
+          }
+        )
         ./overlays
         ./stylix
         ./system
@@ -95,7 +103,7 @@
       packages = foreachSystem (system: import ./pkgs pkgsBySystem.${system});
       formatter = foreachSystem (system: treefmtEval.${system}.config.build.wrapper);
 
-      nixosConfigurations = {
+      nixosConfigurations = rec {
         nixos = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
@@ -134,6 +142,11 @@
             inputs.pinenote-nixos.nixosModules.default
             ./home/pinenote.nix
             ./system/pinenote.nix
+          ];
+        };
+        pinenote-from-x86_64 = pinenote.extendModules {
+          modules = [
+            { config.buildSystem = "x86_64-linux"; }
           ];
         };
       };

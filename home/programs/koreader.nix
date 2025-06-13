@@ -1,4 +1,5 @@
 {
+  osConfig,
   config,
   inputs,
   lib,
@@ -13,7 +14,6 @@
     home.packages = [ pkgs.koreader ];
     xdg.configFile."koreader/plugins/rakuyomi.koplugin".source =
       let
-        buildSystem = pkgs.stdenv.buildPlatform.system;
         variant =
           {
             "x86_64-linux" = "desktop";
@@ -21,7 +21,7 @@
           }
           .${pkgs.system} or (throw "Unsupported system: ${pkgs.system}");
       in
-      inputs.rakuyomi.packages.${buildSystem}.rakuyomi.${variant};
+      inputs.rakuyomi.packages.${osConfig.buildSystem}.rakuyomi.${variant};
     xdg.configFile."koreader/rakuyomi/settings.json".text = ''
       {
         "$schema": "https://github.com/hanatsumi/rakuyomi/releases/download/main/settings.schema.json",
