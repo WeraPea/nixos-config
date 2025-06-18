@@ -56,13 +56,9 @@ in
     pinenote-waybar.enable = lib.mkEnableOption "enables pinenote waybar config";
   };
   config = lib.mkIf config.pinenote-waybar.enable {
-    # systemd.user.services.waybar = {
-    #   Service.Environment = "PATH=/etc/profiles/per-user/${config.home.username}/bin/:/run/current-system/sw/bin/";
-    # };
     stylix.targets.waybar.enable = false;
     programs.waybar = {
       enable = true;
-      # systemd.enable = true;
       settings = {
         mainBar = {
           layer = "top";
@@ -82,6 +78,7 @@ in
             # "custom/splith"
           ];
           modules-right = [
+            "custom/rotate"
             "custom/ebc_refresh"
             "custom/usb_tablet"
             "custom/ebc_cycle_driver_mode"
@@ -124,63 +121,6 @@ in
             min-length = 5;
             tooltip = true;
           };
-
-          "clock#time" = {
-            interval = 1;
-            format = "{:%H:%M}";
-            tooltip = false;
-          };
-
-          "clock#date" = {
-            interval = 10;
-            format = "  {:%e %b %Y}";
-            tooltip-format = "{:%e %B %Y}";
-          };
-
-          cpu = {
-            interval = 5;
-            format = "  {usage}%";
-            states = {
-              warning = 70;
-              critical = 90;
-            };
-          };
-
-          memory = {
-            interval = 5;
-            format = "  {}%";
-            states = {
-              warning = 70;
-              critical = 90;
-            };
-          };
-
-          "sway/mode" = {
-            # ???? what is this
-            format = "<span style=\"italic\">  {}</span>";
-            tooltip = false;
-          };
-
-          "sway/window" = {
-            format = "{}";
-            max-length = 120;
-          };
-
-          # temperature = {
-          #   critical-threshold = 80;
-          #   interval = 5;
-          #   format = "{icon}  {temperatureC}°C";
-          #   format-icons = [
-          #     "" # Icon = temperature-empty
-          #     "" # Icon = temperature-quarter
-          #     "" # Icon = temperature-half
-          #     "" # Icon = temperature-three-quarters
-          #     "" # Icon = temperature-full
-          #   ];
-          #   tooltip = true;
-          #   hwmon-path = "/sys/class/hwmon/hwmon3/temp1_input";
-          # };
-
           "custom/kill" = {
             format = "";
             interval = "once";
@@ -282,38 +222,6 @@ in
             inherit min-length;
             tooltip = false;
           };
-          # "custom/rotate_0" = {
-          #   format = "R0";
-          #   interval = "once";
-          #   on-click = "sway_rotate.sh rotnormal"; # TODO:
-          #   inherit min-length;
-          #   tooltip = false;
-          # };
-          #
-          # "custom/rotate_90" = {
-          #   format = "R90";
-          #   interval = "once";
-          #   on-click = "sway_rotate.sh rotright";
-          #   inherit min-length;
-          #   tooltip = false;
-          # };
-          #
-          # "custom/rotate_180" = {
-          #   format = "R180";
-          #   interval = "once";
-          #   on-click = "sway_rotate.sh rotinvert";
-          #   inherit min-length;
-          #   tooltip = false;
-          # };
-          #
-          # "custom/rotate_270" = {
-          #   format = "R270";
-          #   interval = "once";
-          #   on-click = "sway_rotate.sh rotleft";
-          #   inherit min-length;
-          #   tooltip = false;
-          # };
-
           tray = {
             icon-size = 21;
             spacing = 10;
@@ -321,6 +229,12 @@ in
           "custom/usb_tablet" = {
             format = "󰓶";
             on-click = "sudo ${lib.getExe outputs.packages.${pkgs.system}.usb-tablet}"; # added to sudoers file so no password required
+            inherit min-length;
+            tooltip = false;
+          };
+          "custom/rotate" = {
+            format = "󰚪";
+            on-click = "${lib.getExe (pkgs.callPackage ./rotate.nix { })} switch"; # TODO: add a Menu for more rotations
             inherit min-length;
             tooltip = false;
           };
@@ -336,6 +250,10 @@ in
           window#waybar {
           	background: black;
           	color: white;
+          }
+
+          window#waybar {
+              font-size: 30px;
           }
 
           #custom-menu,

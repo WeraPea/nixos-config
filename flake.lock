@@ -1376,11 +1376,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1749844701,
-        "narHash": "sha256-jEN3fAhvn5W7utwUa89zyUJjgUy2iWhL19tyLL2Qxb8=",
+        "lastModified": 1750197464,
+        "narHash": "sha256-Lq8UxQ4BVd1ySUyL9t/zdkKH4Q3RKFjTwxmYFuLjh7o=",
         "owner": "WeraPea",
         "repo": "pinenote-service",
-        "rev": "071df409b5c5c230c628ca44fa0f27557f911e22",
+        "rev": "5ca927e2ca987902d07d9a1e53ba5c2d78d5a26a",
         "type": "github"
       },
       "original": {

@@ -5,6 +5,7 @@
   };
   config = lib.mkIf config.pinenote-hyprland.enable {
     stylix.targets.hyprpaper.enable = lib.mkForce false;
+    services.hyprpaper.enable = lib.mkForce false;
     services.hyprpolkitagent.enable = true;
     wayland.windowManager.hyprland = {
       enable = true;
@@ -15,7 +16,7 @@
         in
         {
           monitor = [
-            "DPI-1,highrr,0x0,1" # scalling broken in pinenote-service
+            "DPI-1,highrr,0x0,1"
           ];
           windowrule = [
             "float, title:^(Picture-in-Picture)$"

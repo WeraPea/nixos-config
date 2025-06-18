@@ -45,11 +45,13 @@
     };
     conform-nvim = {
       enable = true;
+      luaConfig.post = ''
+        vim.keymap.set('n', '<leader>fm', function()
+          require('conform').format({ lsp_fallback = true })
+        end, { desc = 'Format with conform' })
+      '';
       settings = {
-        format_on_save = {
-          # timeoutMs = 500;
-          # lspFallback = true;
-        };
+        format_on_save = { };
         formatters_by_ft = {
           nix = [ "nixfmt" ];
           rust = [ "rustfmt" ];

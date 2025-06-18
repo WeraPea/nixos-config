@@ -16,7 +16,17 @@
       settings =
         let
           general_settings = {
-            "temperature" = {
+            mpd = let mpc = lib.getExe pkgs.mpc; in {
+              format = "{artist} - {title}";
+              on-click = "${mpc} toggle";
+              on-click-right = lib.getExe pkgs.cantata;
+              on-scroll-up = "${mpc} vol +1";
+              on-scroll-down = "${mpc} vol -1";
+              artist-len = 30;
+              title-len = 40;
+              tooltip = false;
+            };
+            temperature = {
               hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5/temp3_input";
               critical-threshold = 80;
             };
@@ -33,6 +43,7 @@
             clock = {
               tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
               format-alt = "{:%Y-%m-%d}";
+              calendar.format.today = "<span background='red' foreground='white'><b>{}</b></span>";
             };
             wireplumber = {
               format-muted = "muted {volume}%";
@@ -40,36 +51,6 @@
               on-click-right = lib.getExe pkgs.pwvucontrol;
               on-click = "${lib.getExe pkgs.pamixer} -t";
               # on-click-middle = "pulseaudio-control --node-blacklist audiorelay-virtual-mic-sink,audiorelay_Speaker next-node", # TODO:
-            };
-            "custom/spotify" = {
-              format = "{}";
-              # return-type = "json";
-              max-length = 40;
-              on-click = "${lib.getExe pkgs.playerctl} -p spotify play-pause";
-              escape = true;
-              on-scroll-up = "playerctl -p spotify volume 0.01+";
-              on-scroll-down = "playerctl -p spotify volume 0.01-";
-              exec =
-                let
-                  spotify-status = pkgs.writeShellScriptBin "spotify-status" ''
-                    while true; do
-                      status=$(${lib.getExe pkgs.playerctl} -p spotify status 2>/dev/null)
-                      if [[ "$status" == "Playing" ]]; then
-                        playing=""
-                      else
-                        playing=""
-                      fi
-                      if [[ "$status" != "" ]]; then
-                        echo $playing $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:title) - $(${lib.getExe pkgs.playerctl} -p spotify metadata xesam:artist)
-                      else
-                        echo
-                        sleep 5
-                      fi
-                      sleep 0.5 # bit overly expensive on cpu for what it does
-                    done
-                  '';
-                in
-                lib.getExe spotify-status;
             };
             "custom/prusa" = {
               format = "{}";
@@ -163,7 +144,7 @@
             modules-right = [
               "temperature"
               "custom/prusa"
-              "custom/spotify"
+              "mpd"
               "wireplumber"
               "clock"
               "tray"
@@ -184,7 +165,7 @@
             modules-right = [
               "temperature"
               "custom/prusa"
-              "custom/spotify"
+              "mpd"
               "wireplumber"
               "clock"
               "tray"
@@ -202,17 +183,12 @@
 
           window#waybar {
               font-size: 14px;
-              /* background-color: #121212; */
               background-color: transparent;
               color: #d0d0d0;
               transition-property: background-color;
               transition-duration: .5s;
           }
 
-          window#waybar.steam {
-              background-color: #171D25;
-              border: none;
-          }
           #workspaces button {
               color: #d0d0d0;
           }
@@ -234,11 +210,7 @@
               color: #2a5c45;
           }
 
-          #custom-spotify {
-              color: #1ED760;
-          }
-
-          #custom-spotify.Paused {
+          #mpd.paused {
               color: #505050;
           }
 

@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [
     ./sway.nix
@@ -30,5 +35,8 @@
         color: #000000;
       }
     ''; # TODO: find alternative to nwggrid
+    home.packages = [
+      (pkgs.callPackage ./rotate.nix { })
+    ];
   };
 }
