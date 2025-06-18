@@ -56,19 +56,21 @@
     after = [ "graphical-session.target" ];
     serviceConfig = {
       Type = "simple";
-      ExecStart = (pkgs.writers.writePython3 "dummy-mouse" {libraries = [pkgs.python3Packages.evdev];} ''
-        from evdev import UInput, ecodes as e
-        import time
+      ExecStart = (
+        pkgs.writers.writePython3 "dummy-mouse" { libraries = [ pkgs.python3Packages.evdev ]; } ''
+          from evdev import UInput, ecodes as e
+          import time
 
-        capabilities = {
-            e.EV_KEY: [e.BTN_LEFT, e.BTN_RIGHT],
-            e.EV_REL: [e.REL_X, e.REL_Y],
-        }
+          capabilities = {
+              e.EV_KEY: [e.BTN_LEFT, e.BTN_RIGHT],
+              e.EV_REL: [e.REL_X, e.REL_Y],
+          }
 
-        with UInput(capabilities, name="dummy-mouse", version=0x3) as ui:
-            while True:
-                time.sleep(1)
-      '');
+          with UInput(capabilities, name="dummy-mouse", version=0x3) as ui:
+              while True:
+                  time.sleep(1)
+        ''
+      );
       Restart = "on-failure";
       RestartSec = 1;
       TimeoutStopSec = 10;

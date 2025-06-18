@@ -1,4 +1,9 @@
-{config, pkgs, lib, ...}:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
   options = {
     pinenote-hyprland.enable = lib.mkEnableOption "enables pinenote hyprland config";
@@ -36,7 +41,8 @@
 
             follow_mouse = 1;
           };
-          gestures = { # TODO:
+          gestures = {
+            # TODO:
             workspace_swipe = true;
             workspace_swipe_forever = true;
           };

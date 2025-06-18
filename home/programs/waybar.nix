@@ -16,16 +16,20 @@
       settings =
         let
           general_settings = {
-            mpd = let mpc = lib.getExe pkgs.mpc; in {
-              format = "{artist} - {title}";
-              on-click = "${mpc} toggle";
-              on-click-right = lib.getExe pkgs.cantata;
-              on-scroll-up = "${mpc} vol +1";
-              on-scroll-down = "${mpc} vol -1";
-              artist-len = 30;
-              title-len = 40;
-              tooltip = false;
-            };
+            mpd =
+              let
+                mpc = lib.getExe pkgs.mpc;
+              in
+              {
+                format = "{artist} - {title}";
+                on-click = "${mpc} toggle";
+                on-click-right = lib.getExe pkgs.cantata;
+                on-scroll-up = "${mpc} vol +1";
+                on-scroll-down = "${mpc} vol -1";
+                artist-len = 30;
+                title-len = 40;
+                tooltip = false;
+              };
             temperature = {
               hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5/temp3_input";
               critical-threshold = 80;
