@@ -39,8 +39,6 @@
             "HDMI-A-2,addreserved,0,25,97,97"
           ];
           windowrulev2 = [
-            "stayfocused, title:^()$,class:^(steam)$"
-            "minsize 1 1, title:^()$,class:^(steam)$"
             "float, title:^(Picture-in-Picture)$"
             "pin, title:^(Picture-in-Picture)$"
             "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures

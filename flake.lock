@@ -1160,11 +1160,11 @@
     },
     "nixpkgs_9": {
       "locked": {
-        "lastModified": 1747179050,
-        "narHash": "sha256-qhFMmDkeJX9KJwr5H32f1r7Prs7XbQWtO0h3V0a0rFY=",
+        "lastModified": 1750741721,
+        "narHash": "sha256-Z0djmTa1YmnGMfE9jEe05oO4zggjDmxOGKwt844bUhE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "adaa24fbf46737f3f1b5497bf64bae750f82942e",
+        "rev": "4b1164c3215f018c4442463a27689d973cffd750",
         "type": "github"
       },
       "original": {
@@ -1292,11 +1292,11 @@
         "pinenote-service": "pinenote-service"
       },
       "locked": {
-        "lastModified": 1749847569,
-        "narHash": "sha256-GvpLFnAHd3iB3CnHsj0EiDUAOntwiLPJp9tVvzJVzxY=",
+        "lastModified": 1750984075,
+        "narHash": "sha256-rNB0ilt2a7XEhaqCQOLlHi3RcpIUX1M7SO3HnBK2t2M=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "e1af5ae7b84a9a2e9cd99dcfd669b441dbdb1b67",
+        "rev": "e5d60d2d8407b80c15464b3d4810d7448972f9ae",
         "type": "github"
       },
       "original": {
@@ -1313,11 +1313,11 @@
         "pinenote-service": "pinenote-service_2"
       },
       "locked": {
-        "lastModified": 1749847569,
-        "narHash": "sha256-GvpLFnAHd3iB3CnHsj0EiDUAOntwiLPJp9tVvzJVzxY=",
+        "lastModified": 1750984075,
+        "narHash": "sha256-rNB0ilt2a7XEhaqCQOLlHi3RcpIUX1M7SO3HnBK2t2M=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "e1af5ae7b84a9a2e9cd99dcfd669b441dbdb1b67",
+        "rev": "e5d60d2d8407b80c15464b3d4810d7448972f9ae",
         "type": "github"
       },
       "original": {
@@ -1335,10 +1335,10 @@
       },
       "locked": {
         "lastModified": 1749844701,
-        "narHash": "sha256-jEN3fAhvn5W7utwUa89zyUJjgUy2iWhL19tyLL2Qxb8=",
+        "narHash": "sha256-9JLIQYux4OikVUHhqvjeYE9PP9WkDgAXjU7IOmAm7EA=",
         "owner": "WeraPea",
         "repo": "pinenote-service",
-        "rev": "071df409b5c5c230c628ca44fa0f27557f911e22",
+        "rev": "49cb7fcdf226884f6800bf34c5ff8988ca951f51",
         "type": "github"
       },
       "original": {
@@ -1356,10 +1356,10 @@
       },
       "locked": {
         "lastModified": 1749844701,
-        "narHash": "sha256-jEN3fAhvn5W7utwUa89zyUJjgUy2iWhL19tyLL2Qxb8=",
+        "narHash": "sha256-9JLIQYux4OikVUHhqvjeYE9PP9WkDgAXjU7IOmAm7EA=",
         "owner": "WeraPea",
         "repo": "pinenote-service",
-        "rev": "071df409b5c5c230c628ca44fa0f27557f911e22",
+        "rev": "49cb7fcdf226884f6800bf34c5ff8988ca951f51",
         "type": "github"
       },
       "original": {
@@ -1420,11 +1420,11 @@
         "rust-overlay": "rust-overlay_4"
       },
       "locked": {
-        "lastModified": 1749271957,
-        "narHash": "sha256-ATo1QjgQIzAaeUVMu9L6ybPmEDlrpoVAuFqfaYrR3UQ=",
+        "lastModified": 1750607444,
+        "narHash": "sha256-joxaARHKPNBRKob9Axc4h223Zyyn3S9uqFvbcfuqw8Y=",
         "owner": "hanatsumi",
         "repo": "rakuyomi",
-        "rev": "138a477794bccf1ec3ca7311233841735474ec37",
+        "rev": "8aaf4a0fd20425cc9746478243d8844282c884af",
         "type": "github"
       },
       "original": {
