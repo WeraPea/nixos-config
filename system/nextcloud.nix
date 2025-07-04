@@ -5,8 +5,8 @@
   };
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud30;
-    hostName = "nextcloud.werapi.duckdns.org";
+    package = pkgs.nextcloud31;
+    hostName = "server.home";
     https = true;
     config = {
       adminpassFile = config.sops.secrets.nextcloud_root_pass.path;

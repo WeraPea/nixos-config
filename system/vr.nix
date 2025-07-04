@@ -10,11 +10,12 @@ lib.mkIf config.gaming.enable {
     STEAMVR_LH_ENABLE = "1";
     XRT_COMPOSITOR_COMPUTE = "1";
     WMR_HANDTRACKING = "0"; # TODO:
-    AMD_VULKAN_ICD = "RADV";
+    # AMD_VULKAN_ICD = "RADV";
   };
   services.monado = {
     package = inputs.nixpkgs-xr.packages.${pkgs.system}.monado;
     enable = true;
     defaultRuntime = true;
+    highPriority = true;
   };
 }

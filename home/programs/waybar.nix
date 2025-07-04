@@ -28,7 +28,7 @@
                 on-scroll-down = "${mpc} vol -1";
                 artist-len = 30;
                 title-len = 40;
-                tooltip = false;
+                tooltip-format = "{artistRaw} - {titleRaw}"; # requires a patch
               };
             temperature = {
               hwmon-path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon5/temp3_input";

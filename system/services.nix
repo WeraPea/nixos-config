@@ -9,6 +9,7 @@
     ./dual-function-keys.nix
     ./sql.nix
     ./vr.nix
+    ./roc.nix # TODO: move all of pipewire to a module
   ];
 
   services = {

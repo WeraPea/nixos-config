@@ -11,6 +11,7 @@
   config = lib.mkIf config.mpd.enable {
     services.mpd = {
       enable = true;
+      network.listenAddress = "any";
       musicDirectory = "/home/wera/music/Downloads/";
       extraConfig = ''
         audio_output {

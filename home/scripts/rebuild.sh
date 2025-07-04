@@ -4,7 +4,7 @@ set -e
 
 pushd ~/nixos-config/
 nix fmt
-sudo nixos-rebuild switch --flake .
+nh os switch .
 while [ "$current" = "" ]; do
   current=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system | grep current | awk '{print $1}')
 done

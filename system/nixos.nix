@@ -3,6 +3,11 @@
     ./boot.nix
     ./hyprland.nix
   ];
+  roc = {
+    enable = true;
+    sink = true;
+    source-ip = "nixos-laptop.home";
+  };
   gaming.enable = true;
   user.hostname = "nixos";
   services.ddccontrol.enable = true;

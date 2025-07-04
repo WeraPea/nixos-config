@@ -178,6 +178,8 @@
 
         PGUP = "add chapter 1";
         PGDWN = "add chapter -1";
+
+        C = "af toggle dynaudnorm=f=75:g=15";
       };
       extraInput = ''
         # 1 change-list script-opts append image_positioning-drag_to_pan_margin=200

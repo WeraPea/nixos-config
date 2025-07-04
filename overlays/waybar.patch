@@ -1,0 +1,25 @@
+diff --git a/src/modules/mpd/mpd.cpp b/src/modules/mpd/mpd.cpp
+index 192e6c1a..ba2aef24 100644
+--- a/src/modules/mpd/mpd.cpp
++++ b/src/modules/mpd/mpd.cpp
+@@ -169,10 +169,12 @@ void waybar::modules::MPD::setLabel() {
+   std::string repeatIcon = getOptionIcon("repeat", repeatActivated);
+   bool singleActivated = mpd_status_get_single(status_.get());
+   std::string singleIcon = getOptionIcon("single", singleActivated);
++  Glib::ustring artistRaw = artist; // clone/copy it
+   if (config_["artist-len"].isInt()) artist = artist.substr(0, config_["artist-len"].asInt());
+   if (config_["album-artist-len"].isInt())
+     album_artist = album_artist.substr(0, config_["album-artist-len"].asInt());
+   if (config_["album-len"].isInt()) album = album.substr(0, config_["album-len"].asInt());
++  Glib::ustring titleRaw = title;
+   if (config_["title-len"].isInt()) title = title.substr(0, config_["title-len"].asInt());
+ 
+   try {
+@@ -208,6 +210,7 @@ void waybar::modules::MPD::setLabel() {
+                       fmt::arg("totalTime", totalTime), fmt::arg("songPosition", song_pos),
+                       fmt::arg("queueLength", queue_length), fmt::arg("stateIcon", stateIcon),
+                       fmt::arg("consumeIcon", consumeIcon), fmt::arg("randomIcon", randomIcon),
++                      fmt::arg("titleRaw", titleRaw.raw()), fmt::arg("artistRaw", artistRaw.raw()),
+                       fmt::arg("repeatIcon", repeatIcon), fmt::arg("singleIcon", singleIcon));
+       label_.set_tooltip_text(tooltip_text);
+     } catch (fmt::format_error const& e) {

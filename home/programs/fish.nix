@@ -136,8 +136,8 @@
         dc = "cd";
         lc = "clear";
         ls = "ll";
-        ns = "sudo nixos-rebuild switch --flake ~/nixos-config";
-        nt = "sudo nixos-rebuild test --flake ~/nixos-config";
+        ns = "nh os switch ~/nixos-config";
+        nt = "nh os test ~/nixos-config";
         sl = "ll";
         vim = "nvim";
         vm = "mv";
