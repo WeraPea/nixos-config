@@ -16,8 +16,9 @@
       fcitx5 = {
         addons = with pkgs; [
           fcitx5-gtk
-          fcitx5-mozc
+          fcitx5-mozc-ut
         ];
+        waylandFrontend = true;
         settings.inputMethod = {
           "Groups/0" = {
             Name = "Default";

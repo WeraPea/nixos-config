@@ -1,6 +1,9 @@
 { username }:
 {
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-  sops.age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+  sops = {
+    defaultSopsFormat = "yaml";
+    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+    defaultSopsFile = "/etc/sops/secrets.yaml";
+    validateSopsFiles = false;
+  };
 }

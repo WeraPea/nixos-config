@@ -51,9 +51,9 @@
         };
       })
     ];
-    # systemd.user.services.gamemoded = lib.mkIf config.gaming.enable {
-    #   restartTriggers = [ pkgs.gamemode ];
-    #   stopIfChanged = false;
-    # }; # TODO: possibly a fix for password prompts, check if changing polkit fixes it, if not try this
+    systemd.user.services.gamemoded = lib.mkIf config.gaming.enable {
+      restartTriggers = [ pkgs.gamemode ];
+      stopIfChanged = false;
+    }; # fix for authentication prompts appearing after update
   };
 }

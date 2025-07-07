@@ -35,8 +35,10 @@
           lsof
           mkvtoolnix-cli
           neofetch
+          newsboat
           nextcloud-client
           nh
+          nix-output-monitor
           onefetch
           outputs.packages.${pkgs.system}.yt-sub-converter
           picocom
