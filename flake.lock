@@ -197,6 +197,26 @@
         "type": "github"
       }
     },
+    "fcitx-virtualkeyboard-adapter": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1751994004,
+        "narHash": "sha256-UvJXtMkL1dZETv0KQaMChcMrXVjG9SfXzFrEXUIOD9U=",
+        "owner": "WeraPea",
+        "repo": "fcitx-virtualkeyboard-adapter",
+        "rev": "e64a6468e93368e36ff7ceab722103dcd7408d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "WeraPea",
+        "repo": "fcitx-virtualkeyboard-adapter",
+        "type": "github"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -1479,6 +1499,7 @@
       "inputs": {
         "audiorelay": "audiorelay",
         "erosanix": "erosanix",
+        "fcitx-virtualkeyboard-adapter": "fcitx-virtualkeyboard-adapter",
         "home-manager": "home-manager",
         "hyprgrass": "hyprgrass",
         "hyprland": "hyprland",

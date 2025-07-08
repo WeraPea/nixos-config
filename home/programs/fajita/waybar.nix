@@ -8,42 +8,7 @@
   ...
 }:
 let
-  toggle-onscreen-keyboard = lib.getExe' (pkgs.python3Packages.buildPythonApplication {
-    pname = "toggle-onscreen-keyboard";
-    version = "1.0";
-    format = "other";
-
-    src = pkgs.writeTextFile {
-      name = "toggle-onscreen-keyboard";
-      text = ''
-        #!/usr/bin/env python3
-        from pydbus import SessionBus
-        import os
-        import time
-
-        bus = SessionBus()
-
-        try:
-            okb = bus.get("sm.puri.OSK0")
-        except Exception:
-            os.system("${lib.getExe' pkgs.coreutils "nohup"} ${lib.getExe' pkgs.squeekboard "squeekboard"} &")
-            time.sleep(1)
-            okb = bus.get("sm.puri.OSK0")
-
-        okb.SetVisible(not okb.Visible)
-      '';
-    };
-    dontUnpack = true;
-    nativeBuildInputs = [ pkgs.wrapGAppsHook3 ];
-    propagatedBuildInputs = [ pkgs.python3Packages.pydbus ];
-    dontWrapGApps = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      install -m755 $src $out/bin/toggle-onscreen-keyboard
-    '';
-    preFixup = ''makeWrapperArgs+=("''${gappsWrapperArgs[@]}") '';
-  }) "toggle-onscreen-keyboard";
-  min-length = 4;
+  min-length = 2;
 in
 {
   options = {
@@ -61,7 +26,7 @@ in
 
           modules-left = [
             "custom/menu"
-            "custom/oskb"
+            # "custom/oskb"
           ];
           modules-right = [
             "custom/bl_down"
@@ -100,13 +65,6 @@ in
             inherit min-length;
             tooltip = false;
           };
-          "custom/oskb" = {
-            format = "";
-            interval = "once";
-            on-click = toggle-onscreen-keyboard;
-            inherit min-length;
-            tooltip = false;
-          };
 
           "custom/menu" = {
             format = "";
@@ -141,6 +99,7 @@ in
           tray = {
             icon-size = 21;
             spacing = 10;
+            inherit min-length;
           };
         };
       };

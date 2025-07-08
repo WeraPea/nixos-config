@@ -18,8 +18,8 @@
     nur.url = "github:nix-community/NUR";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprgrass = {
-       url = "github:horriblename/hyprgrass";
-       inputs.hyprland.follows = "hyprland";
+      url = "github:horriblename/hyprgrass";
+      inputs.hyprland.follows = "hyprland";
     };
     erosanix.url = "github:emmanuelrosa/erosanix";
     nix-index-database = {
@@ -48,6 +48,10 @@
     mobile-nixos = {
       url = "github:WeraPea/mobile-nixos/mc/611";
       flake = false;
+    };
+    fcitx-virtualkeyboard-adapter = {
+      url = "github:WeraPea/fcitx-virtualkeyboard-adapter";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

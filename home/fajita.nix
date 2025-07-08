@@ -13,7 +13,18 @@
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.11";
         home.packages = with pkgs; [
+          megapixels
+          chatty
         ];
+        i18n.inputMethod.fcitx5 = {
+          addons = [
+            inputs.fcitx-virtualkeyboard-adapter.packages.${pkgs.system}.virtualkeyboard-adapter
+          ];
+          settings.addons = {
+            virtualkeyboardadapter.globalSection.ActivateCmd = ''"pkill -SIGUSR2 wvkbd"'';
+            virtualkeyboardadapter.globalSection.DeactivateCmd = ''"pkill -SIGUSR1 wvkbd"'';
+          };
+        };
         mpv.enable = false;
         spicetify.enable = false;
         programs.zathura.enable = false;
