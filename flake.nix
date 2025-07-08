@@ -17,6 +17,10 @@
     stylix.url = "github:danth/stylix";
     nur.url = "github:nix-community/NUR";
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprgrass = {
+       url = "github:horriblename/hyprgrass";
+       inputs.hyprland.follows = "hyprland";
+    };
     erosanix.url = "github:emmanuelrosa/erosanix";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -37,6 +41,14 @@
     };
     rakuyomi.url = "github:hanatsumi/rakuyomi";
     pinenote-service.url = "github:WeraPea/pinenote-service";
+    # mobile-nixos = {
+    #   url = "github:mobile-nixos/mobile-nixos/pull/789/head";
+    #   flake = false;
+    # };
+    mobile-nixos = {
+      url = "github:WeraPea/mobile-nixos/mc/611";
+      flake = false;
+    };
   };
 
   outputs =
@@ -145,6 +157,17 @@
         pinenote-from-x86_64 = pinenote.extendModules {
           modules = [
             { config.buildSystem = "x86_64-linux"; }
+          ];
+        };
+        fajita = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = commonModules ++ [
+            (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-fajita"; })
+            ./home/fajita.nix
+            ./system/fajita.nix
           ];
         };
       };

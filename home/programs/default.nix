@@ -29,6 +29,7 @@
     ./mpd.nix
     ./fcitx5.nix
     ./koreader.nix
+    ./fajita
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

@@ -80,6 +80,7 @@
       gc.automatic = true;
       optimise.automatic = true;
       settings = {
+        trusted-users = [ "@wheel" "root" ];
         experimental-features = [
           "nix-command"
           "flakes"

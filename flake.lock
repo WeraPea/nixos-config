@@ -647,6 +647,31 @@
         "type": "github"
       }
     },
+    "hyprgrass": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ],
+        "nixpkgs": [
+          "hyprgrass",
+          "hyprland",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1751187805,
+        "narHash": "sha256-TkwRseEzkoWp8CZX6w2qt8pcDUf9G8+p1L69NFTJeVs=",
+        "owner": "horriblename",
+        "repo": "hyprgrass",
+        "rev": "fe26304a7c1db2835964b2b473e1d91fd5963a61",
+        "type": "github"
+      },
+      "original": {
+        "owner": "horriblename",
+        "repo": "hyprgrass",
+        "type": "github"
+      }
+    },
     "hyprland": {
       "inputs": {
         "aquamarine": "aquamarine",
@@ -873,6 +898,23 @@
         "owner": "NuschtOS",
         "ref": "v0.0.8",
         "repo": "ixx",
+        "type": "github"
+      }
+    },
+    "mobile-nixos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751908296,
+        "narHash": "sha256-RHBZp8w4lBH/pu+R9iLfTvgvy8E8xosokmfO3xcSNHA=",
+        "owner": "WeraPea",
+        "repo": "mobile-nixos",
+        "rev": "a713f5369ef8f648bb4902e13ba72c1101dbac0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "WeraPea",
+        "ref": "mc/611",
+        "repo": "mobile-nixos",
         "type": "github"
       }
     },
@@ -1438,7 +1480,9 @@
         "audiorelay": "audiorelay",
         "erosanix": "erosanix",
         "home-manager": "home-manager",
+        "hyprgrass": "hyprgrass",
         "hyprland": "hyprland",
+        "mobile-nixos": "mobile-nixos",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-xr": "nixpkgs-xr",
