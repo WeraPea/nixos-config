@@ -106,17 +106,21 @@ in
       style = # css
         ''
           #workspaces {
-          	padding: 0 0px;
-          	margin: 0 0px;
+            padding: 0 0px;
+            margin: 0 0px;
           }
 
           window#waybar {
-          	background: black;
-          	color: #d0d0d0;
+            background: black;
+            color: #d0d0d0;
+            font-size: 30px;
           }
 
-          window#waybar {
-              font-size: 30px;
+          #custom-menu {
+            margin-left: 20px;
+          }
+          #custom-kill {
+            margin-right: 20px;
           }
 
           #custom-menu,
@@ -132,7 +136,7 @@ in
           #idle_inhibitor,
           #battery,
           #custom-kill {
-          	/* color: #ffffff; */
+            /* color: #ffffff; */
           }
         '';
     };

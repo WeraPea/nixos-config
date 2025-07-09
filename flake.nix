@@ -41,12 +41,8 @@
     };
     rakuyomi.url = "github:hanatsumi/rakuyomi";
     pinenote-service.url = "github:WeraPea/pinenote-service";
-    # mobile-nixos = {
-    #   url = "github:mobile-nixos/mobile-nixos/pull/789/head";
-    #   flake = false;
-    # };
     mobile-nixos = {
-      url = "github:WeraPea/mobile-nixos/mc/611";
+      url = "github:WeraPea/mobile-nixos";
       flake = false;
     };
     fcitx-virtualkeyboard-adapter = {

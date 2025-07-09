@@ -924,16 +924,15 @@
     "mobile-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1751908296,
-        "narHash": "sha256-RHBZp8w4lBH/pu+R9iLfTvgvy8E8xosokmfO3xcSNHA=",
+        "lastModified": 1752030626,
+        "narHash": "sha256-F12HYqR38tcyNruAV5YqEOhj/Zq1SFTDEzSyuHtAafI=",
         "owner": "WeraPea",
         "repo": "mobile-nixos",
-        "rev": "a713f5369ef8f648bb4902e13ba72c1101dbac0f",
+        "rev": "6f06e5288fe0aa5411a91841a15d002f70030351",
         "type": "github"
       },
       "original": {
         "owner": "WeraPea",
-        "ref": "mc/611",
         "repo": "mobile-nixos",
         "type": "github"
       }

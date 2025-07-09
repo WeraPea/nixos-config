@@ -26,7 +26,7 @@
         in
         {
           monitor = [
-            "DSI-1,1080x2340@60,0x0,2"
+            "DSI-1,1080x2340@60,0x0,1.5"
           ];
           windowrule = [
             "float, title:^(Picture-in-Picture)$"

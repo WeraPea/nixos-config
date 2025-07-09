@@ -15,6 +15,7 @@
         home.packages = with pkgs; [
           megapixels
           chatty
+          waydroid-helper
         ];
         i18n.inputMethod.fcitx5 = {
           addons = [
