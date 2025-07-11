@@ -21,6 +21,10 @@
       url = "github:horriblename/hyprgrass";
       inputs.hyprland.follows = "hyprland";
     };
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
     erosanix.url = "github:emmanuelrosa/erosanix";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -47,6 +51,10 @@
     };
     fcitx-virtualkeyboard-adapter = {
       url = "github:WeraPea/fcitx-virtualkeyboard-adapter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

@@ -74,6 +74,7 @@
       LC_TIME = "pl_PL.UTF-8";
     };
     security.polkit.enable = lib.mkIf config.graphics.enable true;
+    security.rtkit.enable = true;
 
     nixpkgs.config.allowUnfree = true;
     nix = {

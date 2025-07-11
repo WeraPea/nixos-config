@@ -184,6 +184,13 @@
             };
           };
         };
+        qmlls = {
+          enable = true;
+          cmd = [
+            "qmlls"
+            "-E"
+          ];
+        };
         lua_ls.enable = true;
         pyright.enable = true;
         ccls.enable = true;
@@ -222,11 +229,4 @@
       };
     };
   };
-  home.packages = with pkgs; [
-    clang
-    lua-language-server
-    nixd
-    rust-analyzer
-    vscode-langservers-extracted
-  ];
 }

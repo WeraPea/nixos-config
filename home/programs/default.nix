@@ -30,6 +30,7 @@
     ./fcitx5.nix
     ./koreader.nix
     ./fajita
+    ./quickshell
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

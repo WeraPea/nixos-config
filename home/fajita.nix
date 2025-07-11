@@ -31,6 +31,7 @@
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         fajita.enable = true;
+        quickshell.enable = true;
         # koreader.enable = true;
       }
     ];

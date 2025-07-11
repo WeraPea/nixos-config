@@ -33,6 +33,9 @@
             "pin, title:^(Picture-in-Picture)$"
             "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures
           ];
+          layerrule = [
+            "abovelock true,wvkbd"
+          ];
           workspace = [
             # "1,persistent:true,monitor:DPI-1"
             # "2,persistent:true,monitor:DPI-1"

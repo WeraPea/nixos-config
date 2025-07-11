@@ -43,7 +43,7 @@
       ];
       extraConfigLua = ''
         vim.cmd([[
-          cnoreabbrev <expr> w (getcmdtype() == ':' && getcmdline() =~ '^git$') ? 'W' : 'w'
+          cnoreabbrev <expr> W (getcmdtype() == ':' && getcmdline() =~ '^W$') ? 'w' : 'W'
         ]])
         vim.diagnostic.config({
           signs = {

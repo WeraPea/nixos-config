@@ -21,7 +21,7 @@
   pinenote.pinenote-service.package = lib.mkIf (
     config.buildSystem != "aarch64-linux"
   ) inputs.pinenote-service.packages.${config.buildSystem}.cross;
-  hardware.graphics.enable32Bit = lib.mkForce false; # shouldnt be needed?
+  hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
   fileSystems."/" = {

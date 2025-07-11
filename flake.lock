@@ -721,6 +721,36 @@
         "type": "github"
       }
     },
+    "hyprland-plugins": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ],
+        "nixpkgs": [
+          "hyprland-plugins",
+          "hyprland",
+          "nixpkgs"
+        ],
+        "systems": [
+          "hyprland-plugins",
+          "hyprland",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1751897873,
+        "narHash": "sha256-fKH/BsPtVSZ5PQr3xsdetZBOo02sZ5ZSpn4bmXZ5ryY=",
+        "owner": "hyprwm",
+        "repo": "hyprland-plugins",
+        "rev": "34f94ab7381860d42850fa41e91af497d4eb26dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprland-plugins",
+        "type": "github"
+      }
+    },
     "hyprland-protocols": {
       "inputs": {
         "nixpkgs": [
@@ -1473,6 +1503,26 @@
         "type": "github"
       }
     },
+    "quickshell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1752007746,
+        "narHash": "sha256-iFgYM6lYfEJrCHaqvXjr+tbrUQHxptXomi+nMKe7SJk=",
+        "ref": "refs/heads/master",
+        "rev": "3d594e16dd3850973336c70014a948dc97837d39",
+        "revCount": 608,
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      }
+    },
     "rakuyomi": {
       "inputs": {
         "crane": "crane_4",
@@ -1502,6 +1552,7 @@
         "home-manager": "home-manager",
         "hyprgrass": "hyprgrass",
         "hyprland": "hyprland",
+        "hyprland-plugins": "hyprland-plugins",
         "mobile-nixos": "mobile-nixos",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
@@ -1512,6 +1563,7 @@
         "pinenote-nixos": "pinenote-nixos",
         "pinenote-nixos-follows": "pinenote-nixos-follows",
         "pinenote-service": "pinenote-service_3",
+        "quickshell": "quickshell",
         "rakuyomi": "rakuyomi",
         "sops-nix": "sops-nix",
         "spicetify-nix": "spicetify-nix",

@@ -25,6 +25,7 @@
           catimg
           cloc
           cmake
+          fastfetch
           ffmpeg
           gdu
           gnumake
@@ -34,7 +35,6 @@
           lm_sensors
           lsof
           mkvtoolnix-cli
-          neofetch
           newsboat
           nextcloud-client
           nh

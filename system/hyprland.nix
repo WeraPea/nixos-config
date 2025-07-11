@@ -21,4 +21,5 @@
       default_session = initial_session;
     };
   };
+  security.pam.services.hyprlock = { };
 }
