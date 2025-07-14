@@ -12,11 +12,10 @@
   config = lib.mkIf config.quickshell.enable {
     programs.quickshell = {
       enable = true;
+      activeConfig = "default";
+      configs.default = ./shell;
+      systemd.enable = true;
       package = inputs.quickshell.packages.${pkgs.system}.default;
-    };
-    xdg.configFile."quickshell/default" = {
-      source = ./shell;
-      recursive = true;
     };
   };
 }

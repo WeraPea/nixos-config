@@ -6,8 +6,8 @@
     base16Scheme = ./molokai.yaml;
     fonts = {
       monospace = {
-        package = pkgs.nerd-fonts.jetbrains-mono;
-        name = "JetBrainsMono NFM";
+        package = pkgs.udev-gothic-nf;
+        name = "UDEV Gothic 35NFLG";
       };
       sizes = {
         applications = 14;
