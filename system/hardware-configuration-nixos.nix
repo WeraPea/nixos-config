@@ -38,16 +38,36 @@
   environment.variables.AMD_VULKAN_ICD = "RADV";
 
   fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/8cf4f902-7e83-4c3d-86af-5424e65e4103";
-      fsType = "xfs";
-    };
     "/boot" = {
-      device = "/dev/disk/by-uuid/80D8-0B06";
+      device = "/dev/disk/by-uuid/383C-A45C";
       fsType = "vfat";
     };
+    "/" = {
+      device = "/dev/disk/by-uuid/14a0ea77-23dc-46aa-9565-a520bb458c5d";
+      fsType = "btrfs";
+      options = [
+        "subvol=root"
+        "compress=zstd"
+      ];
+    };
+    "/home" = {
+      device = "/dev/disk/by-uuid/14a0ea77-23dc-46aa-9565-a520bb458c5d";
+      fsType = "btrfs";
+      options = [
+        "subvol=home"
+        "compress=zstd"
+      ];
+    };
+    "/nix" = {
+      device = "/dev/disk/by-uuid/14a0ea77-23dc-46aa-9565-a520bb458c5d";
+      fsType = "btrfs";
+      options = [
+        "subvol=nix"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
     "/mnt/2tb-mnt".label = "Linux\\x20Data";
-    "/mnt/mnt3".label = "Linux\\x20Data\\x202";
     "/mnt/win" = {
       label = "Windows";
       options = [
