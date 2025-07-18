@@ -30,25 +30,7 @@
           pamixer = lib.getExe pkgs.pamixer;
         in
         {
-          monitor =
-            let
-              resX = 1920;
-              resY = 1080;
-              offsetTop = 24;
-              offsetBottom = 25;
-              offsetLeft = 97;
-              offsetRight = 97; # "half" a pixel is still visible when set to 96
-              resX2 = resX - offsetLeft - offsetRight;
-              resY2 = resY - offsetTop - offsetBottom;
-            in
-            [
-              ",preferred,auto,1"
-              "DP-2,highrr,0x0,auto"
-              "HDMI-A-1,1280x1024@75,2560x0,auto"
-              "HDMI-A-2,${toString resX}x${toString resY}@60,0x-3000,1"
-              "HDMI-A-2,addreserved,${toString offsetTop},${toString offsetBottom},${toString offsetLeft},${toString offsetRight}"
-              "SAMSUNG_OVERSCAN_WORKAROUND,${toString resX2}x${toString resY2}@60,-${toString resX2}x0,1"
-            ];
+          monitor = [ ",preferred,auto,1" ];
           windowrulev2 = [
             "float, title:^(Picture-in-Picture)$"
             "pin, title:^(Picture-in-Picture)$"
@@ -217,7 +199,6 @@
         };
       extraConfig = # hyprlang
         ''
-          exec-once = hyprctl output create headless SAMSUNG_OVERSCAN_WORKAROUND && ${lib.getExe' pkgs.wl-mirror "wl-present"} mirror SAMSUNG_OVERSCAN_WORKAROUND
           bind=super,r,submap,run
           submap=run
           bind = super, r, exec, rofi -show drun -show-icons
