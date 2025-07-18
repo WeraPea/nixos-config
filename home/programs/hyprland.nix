@@ -35,20 +35,6 @@
             "float, title:^(Picture-in-Picture)$"
             "pin, title:^(Picture-in-Picture)$"
             "suppressevent maximize,class:^(mpv)" # fixes mpv switching maximization on/off when switching videos/pictures
-            "monitor HDMI-A-2,title:Wayland Output Mirror"
-          ];
-          workspace = [
-            "1,persistent:true,monitor:DP-2"
-            "2,persistent:true,monitor:DP-2"
-            "3,persistent:true,monitor:DP-2"
-            "4,persistent:true,monitor:DP-2"
-            "5,persistent:true,monitor:DP-2"
-            "6,persistent:true,monitor:HDMI-A-1"
-            "7,persistent:true,monitor:HDMI-A-1"
-            "8,persistent:true,monitor:HDMI-A-1"
-            "9,persistent:true,monitor:SAMSUNG_OVERSCAN_WORKAROUND"
-            "10,persistent:true,monitor:SAMSUNG_OVERSCAN_WORKAROUND"
-            "99,persistent:true,monitor:HDMI-A-2"
           ];
           input = {
             kb_layout = "pl";
@@ -56,10 +42,6 @@
             repeat_delay = 300;
 
             follow_mouse = 1;
-          };
-          device = {
-            name = "alpsps/2-alps-dualpoint-touchpad";
-            middle_button_emulation = 1;
           };
           gestures = {
             workspace_swipe = true;
