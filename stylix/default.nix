@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ outputs, pkgs, ... }:
 {
   stylix = {
     enable = true;
@@ -6,8 +6,8 @@
     base16Scheme = ./molokai.yaml;
     fonts = {
       monospace = {
-        package = pkgs.udev-gothic-nf;
-        name = "UDEV Gothic 35NFLG";
+        package = outputs.packages.${pkgs.system}.udev-gothic-hs-nf;
+        name = "UDEV Gothic 35HSDZNFLG";
       };
       sizes = {
         applications = 14;

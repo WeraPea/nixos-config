@@ -14,4 +14,5 @@ pkgs: {
     yt-sub-converter = pkgs.callPackage ./yt-sub-converter.nix { };
   };
   usb-tablet = pkgs.callPackage ./usb-tablet.nix { };
+  udev-gothic-hs-nf = pkgs.callPackage ./udev-gothic-hs-nf.nix { };
 }
