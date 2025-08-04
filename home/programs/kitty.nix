@@ -49,6 +49,7 @@
           tab_bar_min_tabs = 1;
           tab_bar_style = "powerline";
           tab_title_template = "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{index}:{title[:15]}";
+          clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
         };
         font = {
           inherit (config.stylix.fonts.monospace) package name;

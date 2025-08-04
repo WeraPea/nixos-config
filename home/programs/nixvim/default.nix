@@ -42,6 +42,7 @@
         }
       ];
       extraConfigLua = ''
+        vim.g.clipboard = 'osc52'
         vim.cmd([[
           cnoreabbrev <expr> W (getcmdtype() == ':' && getcmdline() =~ '^W$') ? 'w' : 'W'
         ]])
