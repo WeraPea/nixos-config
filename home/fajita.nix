@@ -33,6 +33,9 @@
           animations.animation = [
             "workspaces,1,8,default,slide" # determinates the slide direction of the gestures
           ];
+          gestures = {
+            workspace_swipe_cancel_ratio = 0.25;
+          };
           exec-once = [ "waybar" ];
         };
         wvkbd.enable = true;

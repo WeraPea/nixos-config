@@ -40,10 +40,17 @@
             "2,persistent:true,monitor:DPI-1"
             "3,persistent:true,monitor:DPI-1"
           ];
-          # animations.animation = [
-          #   "workspaces,1,8,default,slide" # determinates the slide direction of the gestures
-          # ];
           animations.enabled = lib.mkForce false;
+          animations.animation = [
+            "workspaces,0,1,default,slide" # determinates the slide direction of the gestures
+          ];
+          gestures = {
+            workspace_swipe_cancel_ratio = 0.05;
+          };
+          plugin.touch_gestures = { # TODO: find a way to disable animations for this
+            sensitivity = lib.mkForce 8.0;
+            edge_margin = lib.mkForce 80;
+          };
           exec-once = [ "waybar" ];
         };
         wvkbd.enable = true; # TODO: fix keyboard appearing in koreader (wrapper script that checks focussed window and applies a blacklist)

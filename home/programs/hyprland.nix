@@ -57,7 +57,7 @@
           plugin.touch_gestures = lib.mkIf config.hyprland.touch.enable {
             # The default sensitivity is probably too low on tablet screens,
             # I recommend turning it up to 4.0
-            sensitivity = 0.8;
+            sensitivity = 2.0;
 
             # must be >= 3
             workspace_swipe_fingers = 3;
@@ -77,7 +77,7 @@
             resize_on_border_long_press = true;
 
             # in pixels, the distance from the edge that is considered an edge
-            edge_margin = 10;
+            edge_margin = 40;
 
             # emulates touchpad swipes when swiping in a direction that does not trigger workspace swipe.
             # ONLY triggers when finger count is equal to workspace_swipe_fingers
