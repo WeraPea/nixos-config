@@ -107,36 +107,18 @@
           cursor = {
             no_warps = true;
           };
-
           animations = {
-            # TODO
             enabled = true;
-
-            bezier = [
-              "myBezier, 0.05, 0.9, 0.1, 1.05"
-              "overshot,0.13,0.99,0.29,1.1"
-            ];
-
             animation = [
-              "windows,1,4,overshot,slide"
-              "border,1,10,default"
-              "fade,1,10,default"
-              "workspaces,1,8,default,slidevert"
-              "windows, 1, 7, default, popin 80%"
-              "windowsOut, 1, 7, default, popin 80%"
+              "fade,0"
+              "workspaces,1,1,default,slide"
+              "windows,1,4,default,popin 80%"
             ];
-            #windows, 1, 7, myBezier
-            # animation = border, 1, 10, default
-            # animation = borderangle, 1, 8, default
-            # animation = fade, 1, 7, default
-            # animation = workspaces, 1, 6, default
           };
-
           dwindle = {
             pseudotile = true;
             preserve_split = true;
           };
-
           misc = {
             enable_anr_dialog = false;
             disable_hyprland_logo = true;
