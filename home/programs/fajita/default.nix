@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ./hyprland.nix
     ./waybar.nix
   ];
   options = {
@@ -14,7 +13,6 @@
   };
   config = lib.mkIf config.fajita.enable {
     fajita.waybar.enable = true;
-    fajita.hyprland.enable = true;
     xdg.configFile."nwg-launchers/nwggrid/grid.conf".text = ''
       {
         "categories": { },

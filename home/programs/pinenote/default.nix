@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ./hyprland.nix
     ./waybar.nix
     ./switch-boot-partition.nix
   ];
@@ -15,7 +14,6 @@
   };
   config = lib.mkIf config.pinenote.enable {
     pinenote-waybar.enable = true;
-    pinenote-hyprland.enable = true;
     xdg.configFile."nwg-launchers/nwggrid/grid.conf".text = ''
       {
         "categories": { },

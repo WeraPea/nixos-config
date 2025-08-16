@@ -22,8 +22,31 @@
         spicetify.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
-        pinenote.enable = true;
+        pinenote.enable = true; # TODO: remove this, along with the fajita.enable
         koreader.enable = true;
+        hyprland.enable = true;
+        hyprland.touch.enable = true;
+        stylix.targets.hyprpaper.enable = lib.mkForce false;
+        services.hyprpaper.enable = lib.mkForce false;
+        wayland.windowManager.hyprland.settings = {
+          monitor = [
+            "DPI-1,highrr,0x0,1"
+          ];
+          windowrule = [
+            "tag +ebchint:Y4|r:, class:KOReader" # trailing : as hyprland appends "*" to dynamic tags TODO: change this perhaps?
+          ];
+          workspace = [
+            "1,persistent:true,monitor:DPI-1"
+            "2,persistent:true,monitor:DPI-1"
+            "3,persistent:true,monitor:DPI-1"
+          ];
+          # animations.animation = [
+          #   "workspaces,1,8,default,slide" # determinates the slide direction of the gestures
+          # ];
+          animations.enabled = lib.mkForce false;
+          exec-once = [ "waybar" ];
+        };
+        wvkbd.enable = true; # TODO: fix keyboard appearing in koreader (wrapper script that checks focussed window and applies a blacklist)
       }
     ];
     users.wera = import ./home.nix;

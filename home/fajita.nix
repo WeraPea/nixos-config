@@ -13,25 +13,30 @@
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.11";
         home.packages = with pkgs; [
-          megapixels
           chatty
-          waydroid-helper
         ];
-        i18n.inputMethod.fcitx5 = {
-          addons = [
-            inputs.fcitx-virtualkeyboard-adapter.packages.${pkgs.system}.virtualkeyboard-adapter
-          ];
-          settings.addons = {
-            virtualkeyboardadapter.globalSection.ActivateCmd = ''"pkill -SIGUSR2 wvkbd"'';
-            virtualkeyboardadapter.globalSection.DeactivateCmd = ''"pkill -SIGUSR1 wvkbd"'';
-          };
-        };
         mpv.enable = false;
         spicetify.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         fajita.enable = true;
         quickshell.enable = true;
+        programs.quickshell.systemd.enable = lib.mkForce false; # for testing mobile configuration
+        hyprland.enable = true;
+        hyprland.touch.enable = true;
+        stylix.targets.hyprpaper.enable = lib.mkForce false;
+        services.hyprpaper.enable = lib.mkForce false;
+        wayland.windowManager.hyprland.settings = {
+          monitor = [
+            "DSI-1,1080x2340@60,0x0,1.5"
+          ];
+          animations.animation = [
+            "workspaces,1,8,default,slide" # determinates the slide direction of the gestures
+          ];
+          exec-once = [ "waybar" ];
+        };
+        wvkbd.enable = true;
+
         # koreader.enable = true;
       }
     ];

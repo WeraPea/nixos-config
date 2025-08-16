@@ -8,6 +8,7 @@
 {
   options = {
     hyprland.enable = lib.mkEnableOption "enables hyprland";
+    hyprland.touch.enable = lib.mkEnableOption "enables touchscreen options for hyprland";
   };
   config = lib.mkIf config.hyprland.enable {
     home.packages = with pkgs; [
@@ -25,6 +26,9 @@
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       systemd.variables = [ "--all" ];
+      plugins = lib.mkIf config.hyprland.touch.enable [
+        inputs.hyprgrass.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
       settings =
         let
           pamixer = lib.getExe pkgs.pamixer;
@@ -46,6 +50,46 @@
           gestures = {
             workspace_swipe = true;
             workspace_swipe_forever = true;
+          };
+          layerrule = lib.mkIf (config.hyprland.touch.enable && config.wvkbd.enable) [
+            "abovelock true,wvkbd"
+          ];
+          plugin.touch_gestures = lib.mkIf config.hyprland.touch.enable {
+            # The default sensitivity is probably too low on tablet screens,
+            # I recommend turning it up to 4.0
+            sensitivity = 0.8;
+
+            # must be >= 3
+            workspace_swipe_fingers = 3;
+
+            # switching workspaces by swiping from an edge, this is separate from workspace_swipe_fingers
+            # and can be used at the same time
+            # possible values: l, r, u, or d
+            # to disable it set it to anything else
+            workspace_swipe_edge = "d";
+
+            # in milliseconds
+            long_press_delay = 400;
+
+            # resize windows by long-pressing on window borders and gaps.
+            # If general:resize_on_border is enabled, general:extend_border_grab_area is used for floating
+            # windows
+            resize_on_border_long_press = true;
+
+            # in pixels, the distance from the edge that is considered an edge
+            edge_margin = 10;
+
+            # emulates touchpad swipes when swiping in a direction that does not trigger workspace swipe.
+            # ONLY triggers when finger count is equal to workspace_swipe_fingers
+            #
+            # might be removed in the future in favor of event hooks
+            emulate_touchpad_swipe = false;
+
+            experimental = {
+              # send proper cancel events to windows instead of hacky touch_up events,
+              # NOT recommended as it crashed a few times, once it's stabilized I'll make it the default
+              send_cancel = 0;
+            };
           };
           general = {
             gaps_in = 0;

@@ -17,19 +17,6 @@
   system.stateVersion = "25.11";
   hardware.graphics.enable32Bit = lib.mkForce false;
   networking.networkmanager.wifi.macAddress = "stable";
-  systemd.user.services.wvkbd = {
-    description = "wvkbd";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = pkgs.writeShellScript "wvkbd-hidden" "${lib.getExe pkgs.wvkbd} --hidden";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
   programs.calls.enable = true;
   hardware.sensor.iio.enable = true;
   virtualisation.waydroid.enable = true;
@@ -40,7 +27,7 @@
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';
-  users.users.wera.extraGroups = [ "feedbackd" ]; # TODO: ????
+  users.users.wera.extraGroups = [ "feedbackd" "plugdev" "audio" ]; # TODO: ????
 
   zramSwap.enable = true;
 }
