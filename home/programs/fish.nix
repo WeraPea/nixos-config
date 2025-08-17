@@ -138,6 +138,14 @@
         ls = "ll";
         ns = "nh os switch ~/nixos-config";
         nt = "nh os test ~/nixos-config";
+        nts = "rsync -ar --delete ~/nixos-config/ server:~/nixos-config-temp && ssh -t server nh os test ~/nixos-config-temp"; # --target-host + --build-host seems to be slower
+        nss = "rsync -ar --delete ~/nixos-config/ server:~/nixos-config-temp && ssh -t server nh os switch ~/nixos-config-temp";
+        ntl = "rsync -ar --delete ~/nixos-config/ nixos-laptop:~/nixos-config-temp && ssh -t nixos-laptop nh os test ~/nixos-config-temp";
+        nsl = "rsync -ar --delete ~/nixos-config/ nixos-laptop:~/nixos-config-temp && ssh -t nixos-laptop nh os switch ~/nixos-config-temp";
+        ntf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os test ~/nixos-config-temp";
+        nsf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os switch ~/nixos-config-temp";
+        ntp = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os test -H pinenote ~/nixos-config-temp --target-host root@pinenote"; # TODO: remove root@ when https://github.com/nix-community/nh/issues/312 gets resolved (as well as fajita key from pinenote root user authorized keys)
+        nsp = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os switch -H pinenote ~/nixos-config-temp --target-host root@pinenote";
         sl = "ll";
         vim = "nvim";
         vm = "mv";
