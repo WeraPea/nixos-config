@@ -18,9 +18,11 @@
   user.hostname = "pinenote";
   pinenote.config.enable = true;
   pinenote.pinenote-service.hyprland.enable = true;
-  pinenote.pinenote-service.package = lib.mkIf (
-    config.buildSystem != "aarch64-linux"
-  ) inputs.pinenote-service.packages.${config.buildSystem}.cross;
+  pinenote.pinenote-service.package =
+    if config.buildSystem != "aarch64-linux" then
+      inputs.pinenote-service.packages.${config.buildSystem}.cross
+    else
+      inputs.pinenote-service.packages.${pkgs.system}.default;
   hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
