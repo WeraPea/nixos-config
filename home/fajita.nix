@@ -40,7 +40,7 @@
         };
         wvkbd.enable = true;
 
-        # koreader.enable = true;
+        koreader.enable = true;
       }
     ];
     users.wera = import ./home.nix;

@@ -5,9 +5,27 @@
   config,
   ...
 }:
+let
+  wvkbd-filter-activate = pkgs.writeShellScript "wvkbd-filter-activate" ''
+    if [ "$1" = "activate" ]; then
+      grep -Fxq "$(hyprctl -j activewindow | jq -r '.class')" ~/.config/wvkbd/blacklist && exit
+      pkill -SIGUSR2 wvkbd
+    elif [ "$1" = "deactivate" ]; then
+      pkill -SIGUSR1 wvkbd
+    else
+      echo "Usage: $0 [activate|deactivate]"
+      exit 1
+    fi
+  '';
+in
 {
   options = {
-    wvkbd.enable = lib.mkEnableOption "enables wvkbd";
+    wvkbd.enable = lib.mkEnableOption "Enables wvkbd";
+    wvkbd.blacklist = lib.mkOption {
+      description = "List of Hyprland client classes for which the virtual keyboard will not automatically show. Not used during deactivation.";
+      type = lib.types.listOf lib.types.str;
+      default = [ "KOReader" ];
+    };
   };
   config = lib.mkIf config.wvkbd.enable {
     i18n.inputMethod = {
@@ -18,11 +36,12 @@
           inputs.fcitx-virtualkeyboard-adapter.packages.${pkgs.system}.virtualkeyboard-adapter
         ];
         settings.addons = {
-          virtualkeyboardadapter.globalSection.ActivateCmd = ''"pkill -SIGUSR2 wvkbd"'';
-          virtualkeyboardadapter.globalSection.DeactivateCmd = ''"pkill -SIGUSR1 wvkbd"'';
+          virtualkeyboardadapter.globalSection.ActivateCmd = ''"${wvkbd-filter-activate} activate"'';
+          virtualkeyboardadapter.globalSection.DeactivateCmd = ''"${wvkbd-filter-activate} deactivate"'';
         };
       };
     };
+    xdg.configFile."wvkbd/blacklist".text = lib.concatStringsSep "\n" config.wvkbd.blacklist;
     systemd.user.services.wvkbd = {
       Unit = {
         Description = "wvkbd";

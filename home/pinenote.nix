@@ -53,7 +53,7 @@
           };
           exec-once = [ "waybar" ];
         };
-        wvkbd.enable = true; # TODO: fix keyboard appearing in koreader (wrapper script that checks focussed window and applies a blacklist)
+        wvkbd.enable = true;
       }
     ];
     users.wera = import ./home.nix;
