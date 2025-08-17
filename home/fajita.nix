@@ -37,6 +37,9 @@
             workspace_swipe_cancel_ratio = 0.25;
           };
           exec-once = [ "waybar" ];
+          bind = [
+            ",XF86PowerOff, dpms, toggle"
+          ];
         };
         wvkbd.enable = true;
 
