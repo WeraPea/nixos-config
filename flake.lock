@@ -1364,11 +1364,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1749557004,
-        "narHash": "sha256-teQ+cRmb3NbAOSUTHdwF19gx8W6HHMCM8STVCLC3yUU=",
+        "lastModified": 1755974057,
+        "narHash": "sha256-mFkxinUuFtHcsqXpjDZlG5pQahVNM/S0hl1CRgUlL5Y=",
         "owner": "WeraPea",
         "repo": "osu-scrobbler",
-        "rev": "1c50143f85154e94cfb8ecc2f77112681e8c93ff",
+        "rev": "c108431e880c213cb485d620e89b656f75939764",
         "type": "github"
       },
       "original": {
