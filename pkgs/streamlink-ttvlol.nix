@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "streamlink-ttvlol";
-  version = "6.8.2-20240705";
+  version = "7.5.0-20250709";
 
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "streamlink-ttvlol";
     rev = version;
-    hash = "sha256-d+gSUE+6PfyiE9NlawHk66SS5A3kW9W2Dqy8epUkJKk=";
+    hash = "sha256-SXTu5qDlUNP158w4/Sq7CU7plpSka7uiUCgyDLw8ICM=";
   };
 
   installPhase = ''
