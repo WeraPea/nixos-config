@@ -2,10 +2,10 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 lib.mkIf config.gaming.enable {
+  nixpkgs.xr.enable = true;
   systemd.user.services.monado.environment = {
     STEAMVR_LH_ENABLE = "1";
     XRT_COMPOSITOR_COMPUTE = "1";
@@ -13,7 +13,7 @@ lib.mkIf config.gaming.enable {
     # AMD_VULKAN_ICD = "RADV";
   };
   services.monado = {
-    package = inputs.nixpkgs-xr.packages.${pkgs.system}.monado;
+    package = pkgs.monado;
     enable = true;
     defaultRuntime = true;
     highPriority = true;

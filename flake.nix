@@ -93,6 +93,7 @@
         {
           home-manager = {
             useUserPackages = true;
+            useGlobalPkgs = true;
             extraSpecialArgs = {
               inherit inputs outputs;
             };
@@ -127,6 +128,7 @@
             inherit inputs outputs;
           };
           modules = commonModules ++ [
+            inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
             ./home/nixos.nix
             ./system/nixos.nix
             ./system/hardware-configuration-nixos.nix

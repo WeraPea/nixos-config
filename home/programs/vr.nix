@@ -3,13 +3,12 @@
   config,
   pkgs,
   lib,
-  inputs,
   ...
 }:
 lib.mkIf osConfig.gaming.enable {
   home.packages = [
-    inputs.nixpkgs-xr.packages.${pkgs.system}.wlx-overlay-s
-    inputs.nixpkgs-xr.packages.${pkgs.system}.wayvr-dashboard
+    pkgs.wlx-overlay-s
+    pkgs.wayvr-dashboard
     pkgs.lighthouse-steamvr
     (pkgs.writeShellScriptBin "monado-steamvr-switch" ''
       if [[ ! -L $HOME/.config/openvr/openvrpaths.vrpath ]]; then
@@ -33,9 +32,8 @@ lib.mkIf osConfig.gaming.enable {
       vrlink
     '')
   ];
-  xdg.configFile."openxr/1/active_runtime.json".source = "${
-    inputs.nixpkgs-xr.packages.${pkgs.system}.monado
-  }/share/openxr/1/openxr_monado.json";
+  xdg.configFile."openxr/1/active_runtime.json".source =
+    "${pkgs.monado}/share/openxr/1/openxr_monado.json";
   xdg.configFile."openvr/openvrpaths.vrpath-monado".text = ''
     {
       "config" :
@@ -50,7 +48,7 @@ lib.mkIf osConfig.gaming.enable {
       ],
       "runtime" :
       [
-        "${inputs.nixpkgs-xr.packages.${pkgs.system}.opencomposite-vendored}/lib/opencomposite"
+        "${pkgs.opencomposite-vendored}/lib/opencomposite"
       ],
       "version" : 1
     }
