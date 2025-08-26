@@ -98,8 +98,8 @@
             };
             sharedModules = [
               inputs.sops-nix.homeManagerModules.sops
-              inputs.nix-index-database.hmModules.nix-index
-              inputs.nixvim.homeManagerModules.nixvim
+              inputs.nix-index-database.homeModules.nix-index
+              inputs.nixvim.homeModules.nixvim
               ({ config, ... }: import ./sops.nix { username = config.home.username; })
             ];
           };

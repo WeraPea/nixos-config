@@ -76,7 +76,7 @@
           protontricks
           protonup-qt
           rpcs3
-          ryujinx
+          ryubing
           steamtinkerlaunch
           winetricks
           wineWowPackages.stagingFull

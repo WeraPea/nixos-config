@@ -27,7 +27,6 @@
               })
             ];
           };
-      nativeMessagingHosts = [ pkgs.plasma5Packages.plasma-browser-integration ];
       languagePacks = [
         "en-US"
         "pl"

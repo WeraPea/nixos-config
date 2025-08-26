@@ -27,7 +27,11 @@
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';
-  users.users.wera.extraGroups = [ "feedbackd" "plugdev" "audio" ]; # TODO: ????
+  users.users.wera.extraGroups = [
+    "feedbackd"
+    "plugdev"
+    "audio"
+  ]; # TODO: ????
 
   zramSwap.enable = true;
 }

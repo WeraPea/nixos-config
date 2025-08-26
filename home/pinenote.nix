@@ -47,7 +47,8 @@
           gestures = {
             workspace_swipe_cancel_ratio = 0.05;
           };
-          plugin.touch_gestures = { # TODO: find a way to disable animations for this
+          plugin.touch_gestures = {
+            # TODO: find a way to disable animations for this
             sensitivity = lib.mkForce 8.0;
             edge_margin = lib.mkForce 80;
           };

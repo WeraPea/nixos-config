@@ -57,7 +57,7 @@
               "SAMSUNG_OVERSCAN_WORKAROUND,${toString resX2}x${toString resY2}@60,-${toString resX2}x${toString <| 1440 - resY2},1"
             ];
           windowrulev2 = [
-            "monitor HDMI-A-2,title:Wayland Output Mirror"
+            "monitor HDMI-A-2,class:at.yrlf.wl_mirror"
           ];
           workspace = [
             "1,persistent:true,monitor:DP-2"

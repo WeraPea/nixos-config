@@ -145,61 +145,60 @@
             "shift,XF86AudioLowerVolume, exec, ${pamixer} -d 1 --allow-boost"
             "shift,XF86AudioRaiseVolume, exec, ${pamixer} -i 1 --allow-boost"
           ];
-          bind =
-            [
-              "super, space, exec, makoctl dismiss"
-              "super_shift, space, exec, makoctl restore"
-              ",Print, exec, screenshot"
-              "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
-              "super, s, exec, search"
-              "super, c, exec, rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons"
-              "super, o, exec, wl-paste -p | wl-copy"
-              "super, p, exec, wl-paste | wl-copy -p"
-              "super, d, exec, rofi -show window -show-icons"
+          bind = [
+            "super, space, exec, makoctl dismiss"
+            "super_shift, space, exec, makoctl restore"
+            ",Print, exec, screenshot"
+            "shift,Print, exec, hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png"
+            "super, s, exec, search"
+            "super, c, exec, rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons"
+            "super, o, exec, wl-paste -p | wl-copy"
+            "super, p, exec, wl-paste | wl-copy -p"
+            "super, d, exec, rofi -show window -show-icons"
 
-              ",XF86AudioMute, exec, ${pamixer} -t"
+            ",XF86AudioMute, exec, ${pamixer} -t"
 
-              ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
-              ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
+            ",XF86MonBrightnessUp, exec, brightnessctl set 10%+"
+            ",XF86MonBrightnessDown, exec, brightnessctl set 10%-"
 
-              ",XF86AudioPlay, exec, mpc toggle"
-              ",XF86AudioPrev, exec, mpc prev"
-              ",XF86AudioNext, exec, mpc next"
+            ",XF86AudioPlay, exec, mpc toggle"
+            ",XF86AudioPrev, exec, mpc prev"
+            ",XF86AudioNext, exec, mpc next"
 
-              "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7"
-              "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7"
+            "super, F10, exec, ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7"
+            "super, F9, exec, ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7"
 
-              "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7"
-              "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7"
+            "super, F11, exec, ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7"
+            "super, F12, exec, ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7"
 
-              "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7"
-              "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7"
+            "super_shift, F11, exec, ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7"
+            "super_shift, F12, exec, ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7"
 
-              "super, e, togglefloating,"
-              "super, w, fullscreen, 1"
-              "super, f, fullscreen, 0"
-              "super, g, fullscreenstate, 0 3" # fake fullscreen
-              "super, v, toggleswallow"
+            "super, e, togglefloating,"
+            "super, w, fullscreen, 1"
+            "super, f, fullscreen, 0"
+            "super, g, fullscreenstate, 0 3" # fake fullscreen
+            "super, v, toggleswallow"
 
-              "super, h, movefocus, l"
-              "super, l, movefocus, r"
-              "super, k, movefocus, u"
-              "super, j, movefocus, d"
-            ]
-            ++ (builtins.concatLists (
-              builtins.genList (
-                x:
-                let
-                  ws = builtins.toString (x + 1);
-                in
-                [
-                  "super, ${ws}, workspace, ${ws}"
-                  "super shift, ${ws}, movetoworkspace, ${ws}"
-                  "super, f${ws}, workspace, ${toString (x + 6)}"
-                  "super shift, f${ws}, movetoworkspace, ${toString (x + 6)}"
-                ]
-              ) 5
-            ));
+            "super, h, movefocus, l"
+            "super, l, movefocus, r"
+            "super, k, movefocus, u"
+            "super, j, movefocus, d"
+          ]
+          ++ (builtins.concatLists (
+            builtins.genList (
+              x:
+              let
+                ws = builtins.toString (x + 1);
+              in
+              [
+                "super, ${ws}, workspace, ${ws}"
+                "super shift, ${ws}, movetoworkspace, ${ws}"
+                "super, f${ws}, workspace, ${toString (x + 6)}"
+                "super shift, f${ws}, movetoworkspace, ${toString (x + 6)}"
+              ]
+            ) 5
+          ));
           bindm = [
             "super, mouse:272, movewindow"
             "super, mouse:273, resizewindow"
