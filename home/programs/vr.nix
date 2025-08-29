@@ -27,7 +27,7 @@ lib.mkIf osConfig.gaming.enable {
       monado-steamvr-switch steamvr
       steam steam://rungameid/250820 # steamvr
       sleep 5
-      wlx-overlay-s --openvr --show --replace &
+      steam-run wlx-overlay-s --openvr --show --replace & # text doesn't show up (looks for font files in /usr/ (fhs env?)), without steam-run doesn't start at all?
       sleep 5
       vrlink
     '')
@@ -48,10 +48,12 @@ lib.mkIf osConfig.gaming.enable {
       ],
       "runtime" :
       [
-        "${pkgs.opencomposite-vendored}/lib/opencomposite"
+        "${pkgs.xrizer}/lib/xrizer"
       ],
       "version" : 1
     }
   '';
+  # "${pkgs.opencomposite}/lib/opencomposite"
+  # "${outputs.packages.${pkgs.system}.xrizer-experimental2}/lib/xrizer"
   # env PRESSURE_VESSEL_FILESYSTEMS_RW=$XDG_RUNTIME_DIR/monado_comp_ipc %command%
 }
