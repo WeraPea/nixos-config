@@ -31,6 +31,18 @@ lib.mkIf osConfig.gaming.enable {
       sleep 5
       vrlink
     '')
+    (pkgs.writeShellScriptBin "steamvr-quick-calibrate" ''
+      LD_LIBRARY_PATH=$HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64:${pkgs.sdl2-compat}/lib \
+        steam-run $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcmd --pollposes &
+      poll_pid=$!
+      sleep 5
+
+      LD_LIBRARY_PATH=$HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64 \
+        steam-run $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcmd --resetroomsetup
+
+      kill $poll_pid
+      wait $poll_pid 2>/dev/null || true
+    '')
   ];
   xdg.configFile."openxr/1/active_runtime.json".source =
     "${pkgs.monado}/share/openxr/1/openxr_monado.json";
