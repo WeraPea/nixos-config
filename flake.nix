@@ -90,6 +90,7 @@
         sops-nix.nixosModules.sops
         stylix.nixosModules.stylix
         inputs.home-manager.nixosModules.home-manager
+        inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
         {
           home-manager = {
             useUserPackages = true;
@@ -128,7 +129,6 @@
             inherit inputs outputs;
           };
           modules = commonModules ++ [
-            inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
             ./home/nixos.nix
             ./system/nixos.nix
             ./system/hardware-configuration-nixos.nix

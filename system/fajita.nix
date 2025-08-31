@@ -24,9 +24,9 @@
     "olm-3.2.16"
   ];
 
-  services.logind.extraConfig = ''
-    HandlePowerKey=ignore
-  '';
+  services.logind.settings.Login = {
+    HandlePowerKey = "ignore";
+  };
   users.users.wera.extraGroups = [
     "feedbackd"
     "plugdev"
