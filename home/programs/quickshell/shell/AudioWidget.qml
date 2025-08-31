@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Widgets
+import Quickshell.Hyprland
 import "./config"
 
 Item {
@@ -14,13 +15,17 @@ Item {
         text: `${icon} ${volume}%`
     }
     WrapperMouseArea {
-        acceptedButtons: Qt.LeftButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         anchors.fill: parent
         anchors.topMargin: -((30 - volumeText.implicitHeight) / 2)
         anchors.bottomMargin: -((30 - volumeText.implicitHeight) / 2)
 
-        onPressed: {
-            Audio.sink.audio.muted = !Audio.sink.audio.muted;
+        onPressed: function (mouse) {
+            if (mouse.button == Qt.LeftButton) {
+                Audio.sink.audio.muted = !Audio.sink.audio.muted;
+            } else if (mouse.button == Qt.RightButton) {
+                Hyprland.dispatch("exec pwvucontrol");
+            }
         }
         onWheel: event => {
             if (event.angleDelta.y > 0) {
