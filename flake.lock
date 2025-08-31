@@ -1297,11 +1297,11 @@
         "pinenote-service": "pinenote-service"
       },
       "locked": {
-        "lastModified": 1755982154,
-        "narHash": "sha256-IUw0fUuo12796AgLkrvmWAX5rTW6W5rkU/DCILhfthk=",
+        "lastModified": 1756668097,
+        "narHash": "sha256-V4D0OWpAdGcbB4zMu1yx02DHtRS/A5bbr1nfXWA9qLI=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "de04bc2e360f59b1617017f2d89fc9ac576ca2c1",
+        "rev": "4a01153f235e0fb9661491c994e3167fb2f5736a",
         "type": "github"
       },
       "original": {
@@ -1318,11 +1318,11 @@
         "pinenote-service": "pinenote-service_2"
       },
       "locked": {
-        "lastModified": 1755982154,
-        "narHash": "sha256-IUw0fUuo12796AgLkrvmWAX5rTW6W5rkU/DCILhfthk=",
+        "lastModified": 1756668097,
+        "narHash": "sha256-V4D0OWpAdGcbB4zMu1yx02DHtRS/A5bbr1nfXWA9qLI=",
         "owner": "WeraPea",
         "repo": "pinenote-nixos",
-        "rev": "de04bc2e360f59b1617017f2d89fc9ac576ca2c1",
+        "rev": "4a01153f235e0fb9661491c994e3167fb2f5736a",
         "type": "github"
       },
       "original": {
