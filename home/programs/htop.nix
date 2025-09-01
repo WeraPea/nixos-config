@@ -49,7 +49,7 @@
       // (
         with config.lib.htop;
         rightMeters [
-          (bar "rightCPUs2")
+          (bar "RightCPUs2")
           (text "Tasks")
           (text "Systemd")
           (text "SystemdUser")
