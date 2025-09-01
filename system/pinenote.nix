@@ -25,6 +25,11 @@
       inputs.pinenote-service.packages.${pkgs.system}.default;
   hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
+  boot.kernelPackages = lib.mkIf (config.buildSystem == "aarch64-linux") (
+    lib.mkForce (
+      pkgs.linuxPackagesFor (pkgs.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" { })
+    )
+  ); # TODO: update pinenote-nixos flake to not require cross-compilation from x86_64
   system.stateVersion = "25.05";
   fileSystems."/" = {
     label = "nixos";
