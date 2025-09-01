@@ -49,6 +49,24 @@
           ]
         '')
       ];
+      wireplumber.configPackages = [
+        (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-mpv-fix.conf" ''
+          stream.rules = [
+            {
+              matches = [
+                {
+                  application.name = "mpv"
+                }
+              ]
+              actions = {
+                update-props = {
+                  state.restore-props = false
+                }
+              }
+            }
+          ]
+        '') # taken from https://howthefu.cc/posts/04/index.html
+      ];
     };
     udev.packages = with pkgs; [
       android-udev-rules
