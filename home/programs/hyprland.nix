@@ -139,6 +139,9 @@
             "XDG_SESSION_DESKTOP,Hyprland"
             "XDG_SESSION_TYPE,wayland"
           ];
+          binds = {
+            scroll_event_delay = 0;
+          };
           binde = [
             ",XF86AudioLowerVolume, exec, ${pamixer} -d 1"
             ",XF86AudioRaiseVolume, exec, ${pamixer} -i 1"
@@ -184,6 +187,10 @@
             "super, l, movefocus, r"
             "super, k, movefocus, u"
             "super, j, movefocus, d"
+
+            "super, mouse_down, exec, hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '.float * 1.333')"
+            "super, mouse_up, exec, hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.75) | if . < 1 then 1 else . end')"
+            "super, mouse:274, exec, hyprctl -q keyword cursor:zoom_factor 1"
           ]
           ++ (builtins.concatLists (
             builtins.genList (
