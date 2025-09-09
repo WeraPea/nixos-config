@@ -47,10 +47,6 @@
 
             follow_mouse = 1;
           };
-          gestures = {
-            workspace_swipe = true;
-            workspace_swipe_forever = true;
-          };
           layerrule = lib.mkIf (config.hyprland.touch.enable && config.wvkbd.enable) [
             "abovelock true,wvkbd"
           ];
