@@ -21,6 +21,13 @@ stdenvNoCC.mkDerivation rec {
     pkgs.python3Packages.fonttools
     pkgs.python3Packages.ttfautohint-py
   ];
+
+  # ttfautohint: unrecognized option '--epoch'
+  postPatch = ''
+    substituteInPlace fonttools_script.py \
+      --replace-fail 'print("exec hinting", options_)' 'options_.pop("epoch", None)'
+  '';
+
   buildPhase = ''
     runHook preBuild
     common_flags="--hidden-zenkaku-space --nerd-font"
