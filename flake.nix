@@ -50,7 +50,7 @@
       flake = false;
     };
     fcitx-virtualkeyboard-adapter = {
-      url = "github:WeraPea/fcitx-virtualkeyboard-adapter";
+      url = "github:horriblename/fcitx-virtualkeyboard-adapter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     quickshell = {
@@ -106,7 +106,12 @@
             ];
           };
         }
-        { nixpkgs.overlays = [ nur.overlays.default ]; }
+        {
+          nixpkgs.overlays = [
+            inputs.fcitx-virtualkeyboard-adapter.overlays.default
+            nur.overlays.default
+          ];
+        }
         (
           { pkgs, lib, ... }:
           {

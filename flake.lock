@@ -204,15 +204,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1756690096,
-        "narHash": "sha256-Fe+eg+76K0Dsyep8y1snbL9wypnDfYzN8xG7i4AFiW4=",
-        "owner": "WeraPea",
+        "lastModified": 1756838284,
+        "narHash": "sha256-OyyBv5xNqptDORt4CpoKY5w129op/yLkIPWB/scDmVA=",
+        "owner": "horriblename",
         "repo": "fcitx-virtualkeyboard-adapter",
-        "rev": "73955d4a667f33f26cd991ffd6a89f5138d89f2d",
+        "rev": "ca8f8758bcb03e624a3c414d4555a0aed43c6959",
         "type": "github"
       },
       "original": {
-        "owner": "WeraPea",
+        "owner": "horriblename",
         "repo": "fcitx-virtualkeyboard-adapter",
         "type": "github"
       }

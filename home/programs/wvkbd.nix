@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   config,
   ...
 }:
@@ -33,7 +32,7 @@ in
       type = "fcitx5";
       fcitx5 = {
         addons = [
-          inputs.fcitx-virtualkeyboard-adapter.packages.${pkgs.system}.virtualkeyboard-adapter
+          pkgs.virtualkeyboard-adapter
         ];
         settings.addons = {
           virtualkeyboardadapter.globalSection.ActivateCmd = ''"${wvkbd-filter-activate} activate"'';
