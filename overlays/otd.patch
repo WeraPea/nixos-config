@@ -1,21 +1,23 @@
-diff --git a/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json b/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json
+diff --git a/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json b/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json
 new file mode 100644
-index 00000000..2ac1707d
+index 00000000..8664bf90
 --- /dev/null
-+++ b/OpenTabletDriver.Configurations/Configurations/Pine64/Pinenote.json
-@@ -0,0 +1,23 @@
++++ b/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json
+@@ -0,0 +1,25 @@
 +{
-+  "Name": "Pine64 Pinenote",
++  "Name": "Pine64 PineNote",
 +  "Specifications": {
 +    "Digitizer": {
-+      "Width": 208,
-+      "Height": 157,
++      "Width": 209.66,
++      "Height": 157.25,
 +      "MaxX": 20966,
 +      "MaxY": 15725
 +    },
 +    "Pen": {
 +      "MaxPressure": 4095,
-+      "ButtonCount": 2
++      "Buttons": {
++        "ButtonCount": 3
++      }
 +    }
 +  },
 +  "DigitizerIdentifiers": [
@@ -23,44 +25,91 @@ index 00000000..2ac1707d
 +      "VendorID": 7531,
 +      "ProductID": 260,
 +      "InputReportLength": 15,
-+      "ReportParser": "OpenTabletDriver.Configurations.Parsers.Pine64.PinenoteReportParser"
++      "ReportParser": "OpenTabletDriver.Configurations.Parsers.Pine64.PineNoteReportParser"
 +    }
 +  ]
 +}
-diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs
+diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs
 new file mode 100644
-index 00000000..695faa9c
+index 00000000..79311097
 --- /dev/null
-+++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteReportParser.cs
-@@ -0,0 +1,12 @@
++++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs
+@@ -0,0 +1,30 @@
++using System.Numerics;
 +using OpenTabletDriver.Plugin.Tablet;
 +
 +namespace OpenTabletDriver.Configurations.Parsers.Pine64
 +{
-+    public class PinenoteReportParser : IReportParser<IDeviceReport>
++    public struct PineNoteButtonReport : ITabletReport
 +    {
++        public PineNoteButtonReport(byte[] report, ref Vector2 lastPosition, ref uint lastPressure, ref bool[] lastPenButtons)
++        {
++            Raw = report;
++
++            Position = lastPosition;
++            Pressure = lastPressure;
++
++            PenButtons = new bool[]
++            {
++                report[1].IsBitSet(0),
++                report[1].IsBitSet(1),
++                report[1].IsBitSet(2),
++            };
++
++            lastPenButtons = PenButtons;
++        }
++
++        public byte[] Raw { set; get; }
++        public Vector2 Position { set; get; }
++        public uint Pressure { set; get; }
++        public bool[] PenButtons { set; get; }
++    }
++}
+diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs
+new file mode 100644
+index 00000000..0519f417
+--- /dev/null
++++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs
+@@ -0,0 +1,24 @@
++using OpenTabletDriver.Plugin.Tablet;
++using System.Numerics;
++
++namespace OpenTabletDriver.Configurations.Parsers.Pine64
++{
++    public class PineNoteReportParser : IReportParser<IDeviceReport>
++    {
++        private Vector2 _lastPosition;
++        private uint _lastPressure;
++        private bool[] _lastPenButtons = new bool[3];
++
 +        public IDeviceReport Parse(byte[] report)
 +        {
-+            return new PinenoteTabletReport(report);
++            switch(report[0]) {
++                case 2:
++                    return new PineNoteTabletReport(report, ref _lastPosition, ref _lastPressure, ref _lastPenButtons);
++                case 1:
++                    return new PineNoteButtonReport(report, ref _lastPosition, ref _lastPressure, ref _lastPenButtons);
++                default:
++                    return null;
++            }
 +        }
 +    }
 +}
-diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs
+diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs
 new file mode 100644
-index 00000000..10e83314
+index 00000000..af5460e8
 --- /dev/null
-+++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PinenoteTabletParser.cs
-@@ -0,0 +1,51 @@
++++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs
+@@ -0,0 +1,45 @@
 +using System.Numerics;
 +using System.Runtime.CompilerServices;
-+using OpenTabletDriver.Plugin; // Log
 +using OpenTabletDriver.Plugin.Tablet;
 +
 +namespace OpenTabletDriver.Configurations.Parsers.Pine64
 +{
-+    public struct PinenoteTabletReport : ITabletReport, IProximityReport, ITiltReport
++    public struct PineNoteTabletReport : ITabletReport, IProximityReport, ITiltReport
 +    {
-+        public PinenoteTabletReport(byte[] report)
++        public PineNoteTabletReport(byte[] report, ref Vector2 lastPosition, ref uint lastPressure, ref bool[] lastPenButtons)
 +        {
 +            Raw = report;
 +
@@ -80,16 +129,14 @@ index 00000000..10e83314
 +            NearProximity = report[1].IsBitSet(5);
 +
 +            Pressure = Unsafe.ReadUnaligned<ushort>(ref report[6]);
-+            // HoverDistance = report[1].IsBitSet(0) ? 0 : (uint)(byte)(-report[13]); // from (-128..0)
 +            HoverDistance = report[1].IsBitSet(0) ? 0 : (uint)report[8];
 +
-+            PenButtons = new bool[] // TODO
-+            {
-+                // report[1].IsBitSet(0),
-+                false,
-+                false
-+            };
++            PenButtons = lastPenButtons; // Use the last known button state (button state for passive pens not implemented)
++
++            lastPosition = Position;
++            lastPressure = Pressure;
 +        }
++
 +        public byte[] Raw { set; get; }
 +        public Vector2 Position { set; get; }
 +        public Vector2 Tilt { set; get; }
@@ -99,6 +146,3 @@ index 00000000..10e83314
 +        public uint HoverDistance { set; get; }
 +    }
 +}
-+// # ReportID: 2 / Tip Switch: 0 | Barrel Switch: 0 | Eraser: 0 | Invert: 0 | Secondary Barrel Switch: 0 | In Range: 0 | # | X:  14418 | Y:   8702 | Tip Pressure:      0 | 0xff000004:   89 | X Tilt:   1600 | Y Tilt:   -200 | Z:    -89
-+// E: 000473.912333 15 02 00 52 38 fe 21 00 00 59 40 06 38 ff a7 ff
-+//                     ?  Ss Y     X     P        XT    YT    Z     ??
