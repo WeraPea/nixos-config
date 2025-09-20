@@ -1,9 +1,9 @@
 diff --git a/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json b/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json
 new file mode 100644
-index 00000000..8664bf90
+index 00000000..44b53132
 --- /dev/null
 +++ b/OpenTabletDriver.Configurations/Configurations/Pine64/PineNote.json
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,28 @@
 +{
 +  "Name": "Pine64 PineNote",
 +  "Specifications": {
@@ -27,11 +27,14 @@ index 00000000..8664bf90
 +      "InputReportLength": 15,
 +      "ReportParser": "OpenTabletDriver.Configurations.Parsers.Pine64.PineNoteReportParser"
 +    }
-+  ]
++  ],
++  "Attributes": {
++    "libinputoverride": "1"
++  }
 +}
 diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs
 new file mode 100644
-index 00000000..79311097
+index 00000000..ee27912c
 --- /dev/null
 +++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteButtonReport.cs
 @@ -0,0 +1,30 @@
@@ -67,7 +70,7 @@ index 00000000..79311097
 +}
 diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs
 new file mode 100644
-index 00000000..0519f417
+index 00000000..65cf71ac
 --- /dev/null
 +++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteReportParser.cs
 @@ -0,0 +1,24 @@
@@ -97,7 +100,7 @@ index 00000000..0519f417
 +}
 diff --git a/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs
 new file mode 100644
-index 00000000..af5460e8
+index 00000000..8abed8a3
 --- /dev/null
 +++ b/OpenTabletDriver.Configurations/Parsers/Pine64/PineNoteTabletReport.cs
 @@ -0,0 +1,45 @@

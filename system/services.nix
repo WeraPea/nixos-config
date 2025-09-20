@@ -76,10 +76,6 @@
         SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
         SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
       '')
-      (writeTextDir "lib/udev/rules.d/70-pinenote.rules" ''
-        # For use with OpenTabletDriver to mitigate double cursor
-        SUBSYSTEM=="input", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0104", ENV{LIBINPUT_IGNORE_DEVICE}="1"
-      '')
     ];
     protonvpn = {
       enable = true;
