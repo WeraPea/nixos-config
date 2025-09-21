@@ -45,6 +45,10 @@
     };
     rakuyomi.url = "github:hanatsumi/rakuyomi";
     pinenote-service.url = "github:WeraPea/pinenote-service";
+    pinenote-usb-tablet = {
+      url = "github:WeraPea/pinenote-usb-tablet";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     mobile-nixos = {
       url = "github:mobile-nixos/mobile-nixos";
       flake = false;
@@ -71,11 +75,16 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
+      overlays = with inputs; [
+        fcitx-virtualkeyboard-adapter.overlays.default
+        pinenote-usb-tablet.overlays.default
+        nur.overlays.default
+      ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
         system:
         import inputs.nixpkgs {
-          inherit system;
+          inherit system overlays;
           config = {
             allowUnfree = true;
           };
@@ -89,8 +98,8 @@
         nur.modules.nixos.default
         sops-nix.nixosModules.sops
         stylix.nixosModules.stylix
-        inputs.home-manager.nixosModules.home-manager
-        inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
+        home-manager.nixosModules.home-manager
+        nixpkgs-xr.nixosModules.nixpkgs-xr
         {
           home-manager = {
             useUserPackages = true;
@@ -99,19 +108,14 @@
               inherit inputs outputs;
             };
             sharedModules = [
-              inputs.sops-nix.homeManagerModules.sops
-              inputs.nix-index-database.homeModules.nix-index
-              inputs.nixvim.homeModules.nixvim
+              sops-nix.homeManagerModules.sops
+              nix-index-database.homeModules.nix-index
+              nixvim.homeModules.nixvim
               ({ config, ... }: import ./sops.nix { username = config.home.username; })
             ];
           };
         }
-        {
-          nixpkgs.overlays = [
-            inputs.fcitx-virtualkeyboard-adapter.overlays.default
-            nur.overlays.default
-          ];
-        }
+        { nixpkgs.overlays = overlays; }
         (
           { pkgs, lib, ... }:
           {
