@@ -3,8 +3,8 @@ final: prev: {
     src = final.fetchFromGitHub {
       owner = "WeraPea";
       repo = "OpenTabletDriver";
-      rev = "863b78041e25efcb7b4bde69175f4e03ee02a642";
-      hash = "sha256-GB0Dzvw80W1Jo03J4x3gkPimD58cnUlTCOqh8u1kKu4=";
+      rev = "7635b073f6da3e2bb976765f93fab40f10b4483d";
+      hash = "sha256-rnrYrkzCtjhvFemMT3n0lBz/BE5upc7KU7xASKxVH3I=";
     };
   });
 }

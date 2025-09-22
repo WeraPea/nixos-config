@@ -1406,11 +1406,11 @@
         "systems": "systems_9"
       },
       "locked": {
-        "lastModified": 1758403804,
-        "narHash": "sha256-tI7LRzNfxfR0pTMk0ceGXYnVPxnykd0uYKCzUYrdLR8=",
+        "lastModified": 1758498069,
+        "narHash": "sha256-HD4cEoqEwZJR9Ck6E5eOu1a/38dIg075EoRC8EwcwOM=",
         "owner": "WeraPea",
         "repo": "pinenote-usb-tablet",
-        "rev": "e75f3116f98d988eb1bea0d6cdee9f10736b1880",
+        "rev": "8eabf4ee56118deb87f8de94a332dfe12b832b16",
         "type": "github"
       },
       "original": {
