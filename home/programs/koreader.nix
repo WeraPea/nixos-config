@@ -29,6 +29,11 @@
           "source_lists": [
             "https://raw.githubusercontent.com/Skittyblock/aidoku-community-sources/refs/heads/gh-pages/index.min.json"
           ],
+          "source_settings": {
+            "en.mangakatana": {
+              "imageServer": "3"
+            }
+          },
           "languages": ["en"]
         }
       '';
