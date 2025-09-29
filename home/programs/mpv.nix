@@ -56,9 +56,6 @@
         deband-range = "16";
         deband-grain = "4";
 
-        # hdr ???
-        target-colorspace-hint = "yes";
-
         # sdr
         tone-mapping = "bt.2446a";
 
