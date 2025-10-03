@@ -68,6 +68,7 @@
           bs-manager
           ckan
           inputs.osu-scrobbler.defaultPackage.${pkgs.system}
+          # kaon # broken?
           lutris
           mangohud
           nvtopPackages.amd
@@ -97,7 +98,7 @@
           orca-slicer
           outputs.packages.${pkgs.system}.blender
           prusa-slicer
-          rofi-wayland # TODO: move to module
+          rofi
           scrcpy
           steam-run
           usbutils

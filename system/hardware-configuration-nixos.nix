@@ -27,12 +27,7 @@
   ];
   networking.interfaces.enp10s0.wakeOnLan.enable = true;
   hardware.amdgpu.initrd.enable = true;
-  hardware.amdgpu.amdvlk = {
-    enable = true;
-    support32Bit.enable = true;
-  };
   hardware.amdgpu.opencl.enable = true;
-  environment.variables.AMD_VULKAN_ICD = "RADV";
 
   fileSystems = {
     "/boot" = {

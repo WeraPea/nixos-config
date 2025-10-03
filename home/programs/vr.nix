@@ -23,7 +23,6 @@ lib.mkIf osConfig.gaming.enable {
       fi
     '')
     (pkgs.writeShellScriptBin "steamvr-open" ''
-      export AMD_VULKAN_ICD=RADV
       monado-steamvr-switch steamvr
       steam steam://rungameid/250820 # steamvr
       sleep 5

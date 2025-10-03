@@ -15,5 +15,5 @@ pkgs: {
   };
   usb-tablet = pkgs.callPackage ./usb-tablet.nix { };
   udev-gothic-hs-nf = pkgs.callPackage ./udev-gothic-hs-nf.nix { };
-  xrizer-experimental2 = pkgs.callPackage ./xrizer-experimental2.nix {};
+  xrizer-experimental2 = pkgs.callPackage ./xrizer-experimental2.nix { };
 }
