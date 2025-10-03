@@ -48,6 +48,17 @@
           enable = true;
           remotePlay.openFirewall = true;
           dedicatedServer.openFirewall = true;
+          protontricks.enable = true;
+          extraPackages = with pkgs; [
+            # for steamtinkerlaunch
+            unzip
+            xdotool
+            xprop
+            xrandr
+            xwininfo
+            xxd
+            yad
+          ];
         };
       })
     ];

@@ -74,13 +74,12 @@
           nvtopPackages.amd
           osu-lazer-bin
           prismlauncher
-          protontricks
           protonup-qt
           rpcs3
           ryubing
           steamtinkerlaunch
           winetricks
-          wineWowPackages.stagingFull
+          wineWowPackages.stable
         ])
         (lib.mkIf config.desktopPackages.enable [
           android-tools

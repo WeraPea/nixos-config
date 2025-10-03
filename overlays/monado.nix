@@ -1,14 +1,14 @@
 final: prev: {
-  monado = prev.monado.overrideAttrs (old: {
+  monado-custom = prev.monado.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ [
       (prev.lib.cmakeBool "XRT_HAVE_OPENCV" false)
     ];
-    src = prev.fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "monado";
+    src = final.fetchFromGitHub {
+      owner = "ToasterUwU";
       repo = "monado";
-      rev = "e57d5411f53ab72e715b4ce91d26ff96c80ac711"; # https://gitlab.freedesktop.org/monado/monado/-/merge_requests/2425?diff_id=5029493
-      hash = "sha256-lXLSE1WwyoN2dU5OrhMKho+xreJZjAnnOUhSA3lRVOs=";
+      rev = "8f85280c406ce2e23939c58bc925cf939f36e1e8";
+      hash = "sha256-ZeSmnAZ2gDiLTdlVAKQeS3cc6fcRBcSjYZf/M6eI8j4=";
     };
+    patches = [];
   });
 }

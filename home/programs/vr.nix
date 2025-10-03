@@ -44,7 +44,7 @@ lib.mkIf osConfig.gaming.enable {
     '')
   ];
   xdg.configFile."openxr/1/active_runtime.json".source =
-    "${pkgs.monado}/share/openxr/1/openxr_monado.json";
+    "${pkgs.monado-custom}/share/openxr/1/openxr_monado.json";
   xdg.configFile."openvr/openvrpaths.vrpath-monado".text = ''
     {
       "config" :
@@ -65,6 +65,6 @@ lib.mkIf osConfig.gaming.enable {
     }
   '';
   # "${pkgs.opencomposite}/lib/opencomposite"
-  # "${outputs.packages.${pkgs.system}.xrizer-experimental2}/lib/xrizer"
+  # "${pkgs.xrixer-custom}/lib/xrizer"
   # env PRESSURE_VESSEL_FILESYSTEMS_RW=$XDG_RUNTIME_DIR/monado_comp_ipc %command%
 }
