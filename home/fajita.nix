@@ -13,7 +13,7 @@
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.11";
         home.packages = with pkgs; [
-          chatty
+          # chatty
         ];
         mpv.enable = false;
         spicetify.enable = false;
