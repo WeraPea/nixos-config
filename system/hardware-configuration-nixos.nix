@@ -20,10 +20,10 @@
   boot.extraModulePackages = [ ];
   boot.kernelParams = [
     # amdgpu fixing black screen thingy
-    "amdgpu.noretry=0"
-    "amdgpu.lockup_timeout=1000"
-    "amdgpu.gpu_recovery=1"
-    "iommu=soft" # smth amd
+    # "amdgpu.noretry=0"
+    # "amdgpu.lockup_timeout=1000"
+    # "amdgpu.gpu_recovery=1"
+    # "iommu=soft" # smth amd
   ];
   networking.interfaces.enp10s0.wakeOnLan.enable = true;
   hardware.amdgpu.initrd.enable = true;
