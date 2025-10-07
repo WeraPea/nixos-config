@@ -37,7 +37,11 @@
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
-    pinenote-nixos.url = "github:WeraPea/pinenote-nixos"; # not changing nixpkgs so that kernel derivation from cachix can be used
+    pinenote-nixos = {
+      # not changing nixpkgs so that kernel derivation from cachix can be used
+      url = "github:WeraPea/pinenote-nixos";
+      inputs.pinenote-service.follows = "pinenote-service";
+    };
     pinenote-nixos-follows = {
       # for python version to be the same
       url = "github:WeraPea/pinenote-nixos";

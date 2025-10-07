@@ -32,7 +32,7 @@
   };
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   services.logind.settings.Login = {
-    HandleLidSwitch = "suspend";
+    HandlePowerKey = "suspend";
     HandlePowerKeyLongPress = "poweroff";
   };
 

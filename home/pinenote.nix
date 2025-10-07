@@ -33,7 +33,7 @@
             "DPI-1,highrr,0x0,1"
           ];
           windowrule = [
-            "tag +ebchint:Y4|r:, class:KOReader" # trailing : as hyprland appends "*" to dynamic tags TODO: change this perhaps?
+            "tag +ebchintY4|r, class:KOReader" # trailing : as hyprland appends "*" to dynamic tags TODO: change this perhaps?
           ];
           workspace = [
             "1,persistent:true,monitor:DPI-1"
