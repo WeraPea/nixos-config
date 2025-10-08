@@ -15,7 +15,8 @@
       interactiveShellInit = # fish
         ''
           export NVIMPAGER_NVIM="${config.home.sessionVariables.NVIMPAGER_NVIM}"
-          export MANPAGER="${lib.getExe pkgs.nvimpager}"
+          export PAGER="${lib.getExe pkgs.nvimpager}"
+          export SYSTEMD_PAGERSECURE="true";
           set fish_greeting
           bind ! __history_previous_command
         '';

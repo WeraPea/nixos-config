@@ -60,6 +60,5 @@
       )).extend
         config.lib.stylix.nixvim.config
     );
-    MANPAGER = lib.getExe pkgs.nvimpager;
   };
 }
