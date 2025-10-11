@@ -6,23 +6,37 @@
   config,
   ...
 }:
+let
+  pkgsCross = import inputs.pinenote-nixos.inputs.nixpkgs {
+    # nixpkgs from pinenote-nixos to not rebuild the kernel when not needed
+    system = "x86_64-linux";
+    crossSystem = {
+      config = "aarch64-unknown-linux-gnu";
+    };
+  };
+  pkgsX86_64 = import inputs.nixpkgs {
+    system = "x86_64-linux";
+  };
+in
 {
   imports = [
     ./hyprland.nix
   ];
-  programs.hyprland = {
-    # no aarch64-linux in hyprland cachix :(
-    package = lib.mkForce pkgs.hyprland;
-    portalPackage = lib.mkForce pkgs.xdg-desktop-portal-hyprland;
-  };
   user.hostname = "pinenote";
   pinenote.config.enable = true;
   pinenote.pinenote-service.hyprland.enable = true;
   pinenote.pinenote-service.package =
-    if config.buildSystem != "aarch64-linux" then
+    if config.buildSystem == "x86_64-linux" then
       inputs.pinenote-service.packages.${config.buildSystem}.cross
     else
       inputs.pinenote-service.packages.${pkgs.system}.default;
+  boot.kernelPackages = lib.mkIf (config.buildSystem == "x86_64-linux") (
+    lib.mkForce (
+      pkgsCross.linuxPackagesFor (
+        pkgsCross.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" { }
+      )
+    )
+  );
   hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
@@ -82,6 +96,12 @@
   services.journald.storage = "volatile";
   # zramSwap.enable = true;
   stylix = lib.mkForce {
+    fonts.monospace.package =
+      if (config.buildSystem == "x86_64-linux") then
+        pkgsX86_64.callPackage ../pkgs/udev-gothic-hs-nf.nix { }
+      else
+        outputs.packages.${pkgs.system}.udev-gothic-hs-nf; # wish i didn't have to duplicate this from ../stylix/default.nix
+
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/grayscale-light.yaml";
     base16Scheme = {
       scheme = "eink-light";
