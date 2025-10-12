@@ -37,6 +37,15 @@ in
       )
     )
   );
+  boot.kernelPatches = [
+    {
+      name = "enable swap"; # required for zswap to be enabled
+      patch = null;
+      structuredExtraConfig = with lib.kernel; {
+        SWAP = yes;
+      };
+    }
+  ];
   hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
@@ -94,7 +103,7 @@ in
   }; # workaround: hyprland does not recognize stylus touch as clicks without it
 
   services.journald.storage = "volatile";
-  # zramSwap.enable = true;
+  zramSwap.enable = true;
   stylix = lib.mkForce {
     fonts.monospace.package =
       if (config.buildSystem == "x86_64-linux") then

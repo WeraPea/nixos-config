@@ -145,8 +145,8 @@
         nsl = "rsync -ar --delete ~/nixos-config/ nixos-laptop:~/nixos-config-temp && ssh -t nixos-laptop nh os switch ~/nixos-config-temp -k";
         ntf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os test ~/nixos-config-temp -k";
         nsf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os switch ~/nixos-config-temp -k";
-        ntp = "nh os test -H pinenote-from-x86_64 ~/nixos-config --target-host root@pinenote -k -o ~/nh-os-pinenote-(date -Is)"; # TODO: remove root@ when https://github.com/nix-community/nh/issues/312 gets resolved
-        nsp = "nh os switch -H pinenote-from-x86_64 ~/nixos-config --target-host root@pinenote -k -o ~/nh-os-pinenote-(date -Is)";
+        ntp = "nh os test -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote -k -o ~/nh-os-pinenote-(date -Is)";
+        nsp = "nh os switch -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote -k -o ~/nh-os-pinenote-(date -Is)";
         sl = "ll";
         vim = "nvim";
         vm = "mv";
