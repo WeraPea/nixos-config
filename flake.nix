@@ -83,6 +83,7 @@
         fcitx-virtualkeyboard-adapter.overlays.default
         pinenote-usb-tablet.overlays.default
         nur.overlays.default
+        (final: prev: { osu-scrobbler = inputs.osu-scrobbler.defaultPackage.${final.system}; })
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (

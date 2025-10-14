@@ -67,12 +67,13 @@
           alsa-oss
           bs-manager
           ckan
-          inputs.osu-scrobbler.defaultPackage.${pkgs.system}
           # kaon # broken?
           lutris
           mangohud
           nvtopPackages.amd
           osu-lazer-bin
+          osu-scrobbler
+          outputs.packages.${pkgs.system}.launch-osu
           prismlauncher
           protonup-qt
           rpcs3

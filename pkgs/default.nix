@@ -15,4 +15,5 @@ pkgs: {
   };
   usb-tablet = pkgs.callPackage ./usb-tablet.nix { };
   udev-gothic-hs-nf = pkgs.callPackage ./udev-gothic-hs-nf.nix { };
+  launch-osu = pkgs.callPackage ./launch-osu.nix { };
 }
