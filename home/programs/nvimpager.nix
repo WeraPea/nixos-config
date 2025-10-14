@@ -58,7 +58,7 @@
         // (import ./nixvim/options.nix).programs.nixvim
         // (import ./nixvim/keymaps.nix).programs.nixvim
       )).extend
-        config.lib.stylix.nixvim.config
+        config.stylix.targets.nixvim.exportedModule
     );
   };
 }
