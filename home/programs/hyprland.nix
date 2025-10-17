@@ -210,17 +210,26 @@
         ''
           bind=super,r,submap,run
           submap=run
-          bind = super, r, exec, rofi -show drun -show-icons
-          bind = super, r, submap, reset
+          bind = super, a, exec, anki
+          bind = super, a, submap, reset
 
-          bind = super, t, exec, kitty
-          bind = super, t, submap, reset
+          bind = super, c, exec, chatterino
+          bind = super, c, submap, reset
 
           bind = super, f, exec, firefox
           bind = super, f, submap, reset
 
-          bind = super, s, exec, spotify
+          bind = super, r, exec, rofi -show drun -show-icons
+          bind = super, r, submap, reset
+
+          bind = super, s, exec, steam
           bind = super, s, submap, reset
+
+          bind = super, t, exec, kitty
+          bind = super, t, submap, reset
+
+          bind = super, v, exec, vesktop
+          bind = super, v, submap, reset
 
           bind = ,catchall, submap, reset
           submap=reset
