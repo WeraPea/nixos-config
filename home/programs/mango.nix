@@ -183,7 +183,7 @@
           bind=SUPER,a,setkeymode,default
 
           bind=SUPER,c,spawn,chatterino
-          bind=SUPER,c,setkeymode,reset
+          bind=SUPER,c,setkeymode,default
 
           bind=SUPER,f,spawn,firefox
           bind=SUPER,f,setkeymode,default
