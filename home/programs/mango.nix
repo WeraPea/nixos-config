@@ -11,7 +11,13 @@
   config = lib.mkIf config.hyprland.enable {
     wayland.windowManager.mango = {
       enable = true;
-      settings = # hyprlang
+      settings =
+        let
+          double_mmsg = pkgs.writeShellScript "double_mmsg" ''
+            mmsg -d $1,$2 && mmsg -d $3,$4
+          '';
+        in
+        # hyprlang
         ''
           monitorrule=DP-2,0.5,1,tile,0,1,1824,0,2560,1440,144,0,0,0,0
           monitorrule=HDMI-A-1,0.5,1,tile,0,1,4384,0,1280,1024,75,0,0,0,0
@@ -40,7 +46,7 @@
           drag_tile_to_tile=1
           enable_floating_snap=0
           snap_distance=30
-          cursor_hide_timeout=0
+          cursor_hide_timeout=5
 
           tagrule=id:1,layout_name:tile
           tagrule=id:2,layout_name:tile
@@ -52,25 +58,37 @@
           tagrule=id:8,layout_name:tile
           tagrule=id:9,layout_name:tile
 
-          bind=SUPER,1,comboview,1
-          bind=SUPER,2,comboview,2
-          bind=SUPER,3,comboview,3
-          bind=SUPER,4,comboview,4
-          bind=SUPER,5,comboview,5
-          bind=SUPER,6,comboview,6
-          bind=SUPER,7,comboview,7
-          bind=SUPER,8,comboview,8
-          bind=SUPER,9,comboview,9
+          bind=SUPER,1,spawn,${double_mmsg} focusmon DP-2 comboview 1
+          bind=SUPER,2,spawn,${double_mmsg} focusmon DP-2 comboview 2
+          bind=SUPER,3,spawn,${double_mmsg} focusmon DP-2 comboview 3
+          bind=SUPER,4,spawn,${double_mmsg} focusmon DP-2 comboview 4
+          bind=SUPER,5,spawn,${double_mmsg} focusmon DP-2 comboview 5
+          bind=SUPER,6,spawn,${double_mmsg} focusmon DP-2 comboview 6
+          bind=SUPER,7,spawn,${double_mmsg} focusmon DP-2 comboview 7
+          bind=SUPER,8,spawn,${double_mmsg} focusmon DP-2 comboview 8
+          bind=SUPER,9,spawn,${double_mmsg} focusmon DP-2 comboview 9
 
-          bind=SUPER+SHIFT,1,tag,1
-          bind=SUPER+SHIFT,2,tag,2
-          bind=SUPER+SHIFT,3,tag,3
-          bind=SUPER+SHIFT,4,tag,4
-          bind=SUPER+SHIFT,5,tag,5
-          bind=SUPER+SHIFT,6,tag,6
-          bind=SUPER+SHIFT,7,tag,7
-          bind=SUPER+SHIFT,8,tag,8
-          bind=SUPER+SHIFT,9,tag,9
+          bind=SUPER,F1,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 1
+          bind=SUPER,F2,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 2
+          bind=SUPER,F3,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 3
+          bind=SUPER,F4,spawn,${double_mmsg} focusmon HDMI-A-2 comboview 1
+          bind=SUPER,F5,spawn,${double_mmsg} focusmon HDMI-A-2 comboview 2
+
+          bind=SUPER+SHIFT,1,spawn,${double_mmsg} tagmon DP-2 tag 1
+          bind=SUPER+SHIFT,2,spawn,${double_mmsg} tagmon DP-2 tag 2
+          bind=SUPER+SHIFT,3,spawn,${double_mmsg} tagmon DP-2 tag 3
+          bind=SUPER+SHIFT,4,spawn,${double_mmsg} tagmon DP-2 tag 4
+          bind=SUPER+SHIFT,5,spawn,${double_mmsg} tagmon DP-2 tag 5
+          bind=SUPER+SHIFT,6,spawn,${double_mmsg} tagmon DP-2 tag 6
+          bind=SUPER+SHIFT,7,spawn,${double_mmsg} tagmon DP-2 tag 7
+          bind=SUPER+SHIFT,8,spawn,${double_mmsg} tagmon DP-2 tag 8
+          bind=SUPER+SHIFT,9,spawn,${double_mmsg} tagmon DP-2 tag 9
+
+          bind=SUPER+SHIFT,F1,spawn,${double_mmsg} tagmon HDMI-A-1 tag 1
+          bind=SUPER+SHIFT,F2,spawn,${double_mmsg} tagmon HDMI-A-1 tag 2
+          bind=SUPER+SHIFT,F3,spawn,${double_mmsg} tagmon HDMI-A-1 tag 3
+          bind=SUPER+SHIFT,F4,spawn,${double_mmsg} tagmon HDMI-A-2 tag 1
+          bind=SUPER+SHIFT,F5,spawn,${double_mmsg} tagmon HDMI-A-2 tag 2
 
           bind=SUPER,j,focusstack,next
           bind=SUPER,k,focusstack,prev
@@ -82,7 +100,9 @@
           # bind=SUPER,h,setmfact,-0.05
           # bind=SUPER,l,setmfact,+0.05
           bind=SUPER,Return,zoom
-          # bind=SUPER,code:60,focusmon,right # . # crashes mango
+          # bind=SUPER,code:59,focusmon,left
+          # bind=SUPER+SHIFT,code:59,tagmon,left,0
+          # bind=SUPER,code:60,focusmon,right
           # bind=SUPER+SHIFT,code:60,tagmon,right,0
 
           # Unfortunately stack based exchange is still being worked on.
