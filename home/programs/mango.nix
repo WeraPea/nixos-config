@@ -8,15 +8,13 @@
   options = {
     mango.enable = lib.mkEnableOption "enables mango";
   };
-  config = lib.mkIf config.hyprland.enable {
+  config = lib.mkIf config.mango.enable {
+    services.hyprpaper = {
+      enable = true;
+    };
     wayland.windowManager.mango = {
       enable = true;
       settings =
-        let
-          double_mmsg = pkgs.writeShellScript "double_mmsg" ''
-            mmsg -d $1,$2 && mmsg -d $3,$4
-          '';
-        in
         # hyprlang
         ''
           monitorrule=DP-2,0.5,1,tile,0,1,1824,0,2560,1440,144,0,0,0,0
@@ -39,6 +37,7 @@
           xkb_rules_layout=pl
 
           new_is_master=0
+          default_mfact=0.5
           enable_hotarea=0
           warpcursor=0
           sloppyfocus=1
@@ -58,37 +57,49 @@
           tagrule=id:8,layout_name:tile
           tagrule=id:9,layout_name:tile
 
-          bind=SUPER,1,spawn,${double_mmsg} focusmon DP-2 comboview 1
-          bind=SUPER,2,spawn,${double_mmsg} focusmon DP-2 comboview 2
-          bind=SUPER,3,spawn,${double_mmsg} focusmon DP-2 comboview 3
-          bind=SUPER,4,spawn,${double_mmsg} focusmon DP-2 comboview 4
-          bind=SUPER,5,spawn,${double_mmsg} focusmon DP-2 comboview 5
-          bind=SUPER,6,spawn,${double_mmsg} focusmon DP-2 comboview 6
-          bind=SUPER,7,spawn,${double_mmsg} focusmon DP-2 comboview 7
-          bind=SUPER,8,spawn,${double_mmsg} focusmon DP-2 comboview 8
-          bind=SUPER,9,spawn,${double_mmsg} focusmon DP-2 comboview 9
+          bind=SUPER,1,focusmon,DP-2
+          bind=SUPER,1,comboview,1
+          bind=SUPER,2,focusmon,DP-2
+          bind=SUPER,2,comboview,2
+          bind=SUPER,3,focusmon,DP-2
+          bind=SUPER,3,comboview,3
+          bind=SUPER,4,focusmon,DP-2
+          bind=SUPER,4,comboview,4
+          bind=SUPER,5,focusmon,DP-2
+          bind=SUPER,5,comboview,5
 
-          bind=SUPER,F1,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 1
-          bind=SUPER,F2,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 2
-          bind=SUPER,F3,spawn,${double_mmsg} focusmon HDMI-A-1 comboview 3
-          bind=SUPER,F4,spawn,${double_mmsg} focusmon HDMI-A-2 comboview 1
-          bind=SUPER,F5,spawn,${double_mmsg} focusmon HDMI-A-2 comboview 2
+          bind=SUPER,F1,focusmon,HDMI-A-1
+          bind=SUPER,F1,comboview,1
+          bind=SUPER,F2,focusmon,HDMI-A-1
+          bind=SUPER,F2,comboview,2
+          bind=SUPER,F3,focusmon,HDMI-A-1
+          bind=SUPER,F3,comboview,3
+          bind=SUPER,F4,focusmon,HDMI-A-2
+          bind=SUPER,F4,comboview,1
+          bind=SUPER,F5,focusmon,HDMI-A-2
+          bind=SUPER,F5,comboview,2
 
-          bind=SUPER+SHIFT,1,spawn,${double_mmsg} tagmon DP-2 tag 1
-          bind=SUPER+SHIFT,2,spawn,${double_mmsg} tagmon DP-2 tag 2
-          bind=SUPER+SHIFT,3,spawn,${double_mmsg} tagmon DP-2 tag 3
-          bind=SUPER+SHIFT,4,spawn,${double_mmsg} tagmon DP-2 tag 4
-          bind=SUPER+SHIFT,5,spawn,${double_mmsg} tagmon DP-2 tag 5
-          bind=SUPER+SHIFT,6,spawn,${double_mmsg} tagmon DP-2 tag 6
-          bind=SUPER+SHIFT,7,spawn,${double_mmsg} tagmon DP-2 tag 7
-          bind=SUPER+SHIFT,8,spawn,${double_mmsg} tagmon DP-2 tag 8
-          bind=SUPER+SHIFT,9,spawn,${double_mmsg} tagmon DP-2 tag 9
+          bind=SUPER+SHIFT,1,tagmon,DP-2
+          bind=SUPER+SHIFT,1,tag,1
+          bind=SUPER+SHIFT,2,tagmon,DP-2
+          bind=SUPER+SHIFT,2,tag,2
+          bind=SUPER+SHIFT,3,tagmon,DP-2
+          bind=SUPER+SHIFT,3,tag,3
+          bind=SUPER+SHIFT,4,tagmon,DP-2
+          bind=SUPER+SHIFT,4,tag,4
+          bind=SUPER+SHIFT,5,tagmon,DP-2
+          bind=SUPER+SHIFT,5,tag,5
 
-          bind=SUPER+SHIFT,F1,spawn,${double_mmsg} tagmon HDMI-A-1 tag 1
-          bind=SUPER+SHIFT,F2,spawn,${double_mmsg} tagmon HDMI-A-1 tag 2
-          bind=SUPER+SHIFT,F3,spawn,${double_mmsg} tagmon HDMI-A-1 tag 3
-          bind=SUPER+SHIFT,F4,spawn,${double_mmsg} tagmon HDMI-A-2 tag 1
-          bind=SUPER+SHIFT,F5,spawn,${double_mmsg} tagmon HDMI-A-2 tag 2
+          bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
+          bind=SUPER+SHIFT,F1,tag,1
+          bind=SUPER+SHIFT,F2,tagmon,HDMI-A-1
+          bind=SUPER+SHIFT,F2,tag,2
+          bind=SUPER+SHIFT,F3,tagmon,HDMI-A-1
+          bind=SUPER+SHIFT,F3,tag,3
+          bind=SUPER+SHIFT,F4,tagmon,HDMI-A-2
+          bind=SUPER+SHIFT,F4,tag,1
+          bind=SUPER+SHIFT,F5,tagmon,HDMI-A-2
+          bind=SUPER+SHIFT,F5,tag,2
 
           bind=SUPER,j,focusstack,next
           bind=SUPER,k,focusstack,prev
@@ -114,12 +125,15 @@
 
           # Layouts
           bind=SUPER,t,setlayout,tile
+          bind=SUPER+CTRL,t,setlayout,right_tile
+          bind=SUPER,g,setlayout,vertical_grid
+          bind=SUPER+CTRL,g,setlayout,grid
+          bind=SUPER,v,setlayout,vertical_tile
+          bind=SUPER,w,setlayout,monocle
+
           bind=SUPER,e,togglefloating
           bind=SUPER,f,togglefullscreen
-          bind=SUPER,g,togglefakefullscreen
-          bind=SUPER,w,setlayout,monocle
-          bind=SUPER,v,setlayout,vertical_grid
-          bind=SUPER+SHIFT,v,setlayout,scroller
+          bind=SUPER+CTRL,f,togglefakefullscreen
 
           bind=NONE,XF86AudioLowerVolume,spawn,${pkgs.pamixer} -d 1
           bind=NONE,XF86AudioRaiseVolume,spawn,${pkgs.pamixer} -i 1

@@ -40,7 +40,6 @@
   fish.enable = lib.mkDefault true;
   git.enable = lib.mkDefault true;
   htop.enable = lib.mkDefault true;
-  hyprland.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   kitty.enable = lib.mkDefault true;
   lf.enable = lib.mkDefault true;
   mako.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

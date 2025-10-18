@@ -5,7 +5,7 @@ import "./config"
 
 Scope {
     Variants {
-        model: Quickshell.screens.filter(s => s.name != "HDMI-A-2")
+        model: Quickshell.screens
 
         PanelWindow {
             id: bar
