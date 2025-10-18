@@ -142,7 +142,7 @@
 
           bind=SUPER,space,spawn,makoctl dismiss
           bind=SUPER+CTRL,space,spawn,makoctl restore
-          # bind=NONE,Print,spawn,screenshot # TODO:
+          bind=NONE,Print,spawn,screenshot
           # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
           bind=SUPER,o,spawn_shell,wl-paste -p | wl-copy
           bind=SUPER,p,spawn_shell,wl-paste | wl-copy -p

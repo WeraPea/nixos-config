@@ -1,3 +1,4 @@
+# TODO: fix this mess
 {
   pkgs,
   lib,
@@ -45,8 +46,10 @@
       ifElse osConfig.graphics.enable
         [
           aria2dl-desktop-item
+          grim # screenshot
           imagemagick # screenshot
           libnotify # aria2dl-notify
+          slurp # screenshot
           tesseract # screenshot
         ]
         [ ]
