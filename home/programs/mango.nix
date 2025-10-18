@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 {
   options = {
     mango.enable = lib.mkEnableOption "enables mango";
@@ -8,9 +13,9 @@
       enable = true;
       settings = # hyprlang
         ''
-          monitorrule=DP-2,0.5,1,tile,0,1,0,0,2560,1440,144,0,0,0,0
-          monitorrule=HDMI-A-1,0.5,1,tile,0,1,2560,0,1280,1024,75,0,0,0,0
-          monitorrule=HDMI-A-2,0.5,1,tile,0,1,-1824,500,1920,1080,60,25,25,96,96
+          monitorrule=DP-2,0.5,1,tile,0,1,1824,0,2560,1440,144,0,0,0,0
+          monitorrule=HDMI-A-1,0.5,1,tile,0,1,4384,0,1280,1024,75,0,0,0,0
+          monitorrule=HDMI-A-2,0.5,1,tile,0,1,0,385,1920,1080,60,25,25,96,96
 
           animations=0
           gappih=0
@@ -23,11 +28,10 @@
           focuscolor=0x${config.lib.stylix.colors.blue}ff
           rootcolor=0x${config.lib.stylix.colors.base00}ff
 
-          repeat_rate=100;
-          repeat_delay=300;
-          # xkb_rules_layout=pl;
+          repeat_rate=100
+          repeat_delay=300
+          xkb_rules_layout=pl
 
-          # Turn off silly defaults
           new_is_master=0
           enable_hotarea=0
           warpcursor=0
@@ -78,27 +82,24 @@
           # bind=SUPER,h,setmfact,-0.05
           # bind=SUPER,l,setmfact,+0.05
           bind=SUPER,Return,zoom
-          bind=SUPER,code:60,focusmon,right # .
-          bind=SUPER+SHIFT,code:60,tagmon,right,0
+          # bind=SUPER,code:60,focusmon,right # . # crashes mango
+          # bind=SUPER+SHIFT,code:60,tagmon,right,0
 
           # Unfortunately stack based exchange is still being worked on.
           # take these lesser directional based ones.
-          bind=SUPER+SHIFT,k,exchange_client,up
-          bind=SUPER+SHIFT,j,exchange_client,down
-          bind=SUPER+SHIFT,h,exchange_client,left
-          bind=SUPER+SHIFT,l,exchange_client,right
+          bind=SUPER+CTRL,k,exchange_client,up
+          bind=SUPER+CTRL,j,exchange_client,down
+          bind=SUPER+CTRL,h,exchange_client,left
+          bind=SUPER+CTRL,l,exchange_client,right
 
           # Layouts
           bind=SUPER,t,setlayout,tile
-          bind=SUPER,f,togglefloating
+          bind=SUPER,e,togglefloating
+          bind=SUPER,f,togglefullscreen
+          bind=SUPER,g,togglefakefullscreen
           bind=SUPER,w,setlayout,monocle
           bind=SUPER,v,setlayout,vertical_grid
           bind=SUPER+SHIFT,v,setlayout,scroller
-
-          # bind=SUPER,e, togglefloating # TODO:
-          # bind=SUPER,f, fullscreen, 0
-          # bind=SUPER,g, fullscreenstate, 0 3 # fake fullscreen
-          # bind=SUPER,v, toggleswallow
 
           bind=NONE,XF86AudioLowerVolume,spawn,${pkgs.pamixer} -d 1
           bind=NONE,XF86AudioRaiseVolume,spawn,${pkgs.pamixer} -i 1
@@ -106,7 +107,7 @@
           bind=SHIFT,XF86AudioRaiseVolume,spawn,${pkgs.pamixer} -i 1 --allow-boost
 
           bind=SUPER,space,spawn,makoctl dismiss
-          bind=SUPER+SHIFT,space,spawn,makoctl restore
+          bind=SUPER+CTRL,space,spawn,makoctl restore
           # bind=NONE,Print,spawn,screenshot # TODO:
           # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
           bind=SUPER,o,spawn_shell,wl-paste -p | wl-copy
@@ -139,7 +140,7 @@
           # bind=SUPER,mouse:274,spawn,hyprctl -q keyword cursor:zoom_factor 1
 
           keymode=common
-          bind=SUPER+SHIFT,r,reload_config
+          bind=SUPER+CTRL,r,reload_config
           keymode=default
 
           bind=SUPER,r,setkeymode,run
