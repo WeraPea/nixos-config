@@ -876,7 +876,9 @@
     "mango": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "mmsg": "mmsg",
+        "mmsg": [
+          "mmsg"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -901,16 +903,15 @@
       "inputs": {
         "flake-parts": "flake-parts_2",
         "nixpkgs": [
-          "mango",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1758702011,
-        "narHash": "sha256-bUDn7H0Kt0Z4pjgki8B6jP1HMAklN0Fh+7zwW3JTw4I=",
+        "lastModified": 1760764574,
+        "narHash": "sha256-elXIFyYcUCix5M69aEuj/7XO3J0wyxm8HZIg5doiyJU=",
         "owner": "DreamMaoMao",
         "repo": "mmsg",
-        "rev": "55b64e3728c3a95673ff73ccd9c3865db86f4fec",
+        "rev": "efd832f1f7fcf3e9a237c1eb7d6c0e8326dc2760",
         "type": "github"
       },
       "original": {
@@ -1537,6 +1538,7 @@
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "mango": "mango",
+        "mmsg": "mmsg",
         "mobile-nixos": "mobile-nixos",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
