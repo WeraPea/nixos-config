@@ -86,7 +86,7 @@ writeShellApplication {
     echo type " s" | dotoolc
     echo type "precision" | dotoolc
     sleep 1.5
-    echo mouseto 0.4727 0.83 | dotoolc
+    echo mouseto 0.4727 0.4727 | dotoolc
     echo click left | dotoolc
     sleep 0.2
     echo click left | dotoolc
