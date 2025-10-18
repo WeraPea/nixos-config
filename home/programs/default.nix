@@ -32,6 +32,7 @@
     ./fajita
     ./quickshell
     ./wvkbd.nix
+    ./mango.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

@@ -65,6 +65,10 @@
       url = "git+https://git.outfoxxed.me/quickshell/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mango = {
+      url = "github:WeraPea/mangowc/overscan";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -100,11 +104,12 @@
       );
       commonModules = with inputs; [
         erosanix.nixosModules.protonvpn
+        home-manager.nixosModules.home-manager
+        mango.nixosModules.mango
+        nixpkgs-xr.nixosModules.nixpkgs-xr
         nur.modules.nixos.default
         sops-nix.nixosModules.sops
         stylix.nixosModules.stylix
-        home-manager.nixosModules.home-manager
-        nixpkgs-xr.nixosModules.nixpkgs-xr
         {
           home-manager = {
             useUserPackages = true;
@@ -113,9 +118,10 @@
               inherit inputs outputs;
             };
             sharedModules = [
-              sops-nix.homeManagerModules.sops
+              mango.hmModules.mango
               nix-index-database.homeModules.nix-index
               nixvim.homeModules.nixvim
+              sops-nix.homeManagerModules.sops
               ({ config, ... }: import ./sops.nix { username = config.home.username; })
             ];
           };

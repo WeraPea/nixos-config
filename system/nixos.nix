@@ -1,7 +1,7 @@
 {
   imports = [
     ./boot.nix
-    ./hyprland.nix
+    ./mango.nix
   ];
   roc = {
     enable = true;
