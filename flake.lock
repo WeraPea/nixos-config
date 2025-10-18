@@ -284,24 +284,6 @@
     },
     "flake-parts_2": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib_2"
-      },
-      "locked": {
-        "lastModified": 1741352980,
-        "narHash": "sha256-+u2UunDA4Cl5Fci3m7S643HzKmIDAe+fiXrLqYsR2fs=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "f4330d22f1c5d2ba72d3d22df5597d123fdb60a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
-    "flake-parts_3": {
-      "inputs": {
         "nixpkgs-lib": [
           "nixvim",
           "nixpkgs"
@@ -321,7 +303,7 @@
         "type": "github"
       }
     },
-    "flake-parts_4": {
+    "flake-parts_3": {
       "inputs": {
         "nixpkgs-lib": [
           "nur",
@@ -342,7 +324,7 @@
         "type": "github"
       }
     },
-    "flake-parts_5": {
+    "flake-parts_4": {
       "inputs": {
         "nixpkgs-lib": [
           "stylix",
@@ -876,47 +858,23 @@
     "mango": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "mmsg": [
-          "mmsg"
-        ],
         "nixpkgs": [
           "nixpkgs"
         ],
         "scenefx": "scenefx"
       },
       "locked": {
-        "lastModified": 1760757360,
-        "narHash": "sha256-IHTFppEteex0rRxYQOHnPfOP8D2ZsJ/s6z0JXgFNB/s=",
+        "lastModified": 1760775149,
+        "narHash": "sha256-dMt3dKS+pLblt2fAB0CWkIA9nn9m2NtA82s98QQGqck=",
         "owner": "WeraPea",
         "repo": "mangowc",
-        "rev": "750fa21978cfe8842d192340a7ecbb16e579d985",
+        "rev": "795dff8ba6387f3cad0cc877d46692655ec9dcaa",
         "type": "github"
       },
       "original": {
         "owner": "WeraPea",
         "ref": "overscan",
         "repo": "mangowc",
-        "type": "github"
-      }
-    },
-    "mmsg": {
-      "inputs": {
-        "flake-parts": "flake-parts_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1760764574,
-        "narHash": "sha256-elXIFyYcUCix5M69aEuj/7XO3J0wyxm8HZIg5doiyJU=",
-        "owner": "DreamMaoMao",
-        "repo": "mmsg",
-        "rev": "efd832f1f7fcf3e9a237c1eb7d6c0e8326dc2760",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DreamMaoMao",
-        "repo": "mmsg",
         "type": "github"
       }
     },
@@ -998,21 +956,6 @@
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
         "rev": "656a64127e9d791a334452c6b6606d17539476e2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixpkgs-lib_2": {
-      "locked": {
-        "lastModified": 1740877520,
-        "narHash": "sha256-oiwv/ZK/2FhGxrCkQkB83i7GnWXPPLzoqFHpDD3uYpk=",
-        "owner": "nix-community",
-        "repo": "nixpkgs.lib",
-        "rev": "147dee35aab2193b174e4c0868bd80ead5ce755c",
         "type": "github"
       },
       "original": {
@@ -1251,7 +1194,7 @@
     },
     "nixvim": {
       "inputs": {
-        "flake-parts": "flake-parts_3",
+        "flake-parts": "flake-parts_2",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -1274,7 +1217,7 @@
     },
     "nur": {
       "inputs": {
-        "flake-parts": "flake-parts_4",
+        "flake-parts": "flake-parts_3",
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
@@ -1538,7 +1481,6 @@
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "mango": "mango",
-        "mmsg": "mmsg",
         "mobile-nixos": "mobile-nixos",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
@@ -1691,7 +1633,7 @@
         "base16-helix": "base16-helix",
         "base16-vim": "base16-vim",
         "firefox-gnome-theme": "firefox-gnome-theme",
-        "flake-parts": "flake-parts_5",
+        "flake-parts": "flake-parts_4",
         "gnome-shell": "gnome-shell",
         "nixpkgs": "nixpkgs_13",
         "nur": "nur_2",

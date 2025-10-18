@@ -68,11 +68,6 @@
     mango = {
       url = "github:WeraPea/mangowc/overscan";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.mmsg.follows = "mmsg";
-    };
-    mmsg = {
-      url = "github:DreamMaoMao/mmsg";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
