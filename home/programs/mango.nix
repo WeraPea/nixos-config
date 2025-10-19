@@ -143,10 +143,10 @@
           bind=SUPER,f,togglefullscreen
           bind=SUPER+CTRL,f,togglefakefullscreen
 
-          bind=NONE,XF86AudioLowerVolume,spawn,${pkgs.pamixer} -d 1
-          bind=NONE,XF86AudioRaiseVolume,spawn,${pkgs.pamixer} -i 1
-          bind=SHIFT,XF86AudioLowerVolume,spawn,${pkgs.pamixer} -d 1 --allow-boost
-          bind=SHIFT,XF86AudioRaiseVolume,spawn,${pkgs.pamixer} -i 1 --allow-boost
+          bind=NONE,XF86AudioLowerVolume,spawn,${lib.getExe pkgs.pamixer} -d 1
+          bind=NONE,XF86AudioRaiseVolume,spawn,${lib.getExe pkgs.pamixer} -i 1
+          bind=SHIFT,XF86AudioLowerVolume,spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost
+          bind=SHIFT,XF86AudioRaiseVolume,spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost
 
           bind=SUPER,space,spawn,makoctl dismiss
           bind=SUPER+CTRL,space,spawn,makoctl restore
@@ -168,7 +168,7 @@
           bind=SUPER+SHIFT,F11,spawn,ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7
           bind=SUPER+SHIFT,F12,spawn,ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7
 
-          bind=NONE,XF86AudioMute,spawn,${pkgs.pamixer} -t
+          bind=NONE,XF86AudioMute,spawn,${lib.getExe pkgs.pamixer} -t
 
           bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl set 10%+
           bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl set 10%-
