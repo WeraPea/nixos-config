@@ -18,7 +18,6 @@
       in
       {
         enable = lib.mkDefault true;
-        systemd.enable = true;
         settings =
           let
             general_settings = {
@@ -143,7 +142,7 @@
           {
             mainbar = {
               layer = "top";
-              height = 20;
+              height = 30;
               spacing = 4;
               modules-left = [
                 "dwl/tags"
@@ -170,7 +169,7 @@
               margin-top: -1;
               border: none;
               border-radius: 0;
-              font-size: 14px;
+              font-size: 16px;
             }
             window#waybar {
               background-color: transparent;
@@ -180,7 +179,7 @@
             }
             #tags button {
               color: ${white};
-              padding: 1px;
+              padding: 2px;
             }
             #tags button.occupied {
               color: ${cyan};

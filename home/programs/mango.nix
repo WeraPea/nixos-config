@@ -247,6 +247,7 @@
           systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
           systemctl --user stop pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-wlr
           systemctl --user start wireplumber xdg-desktop-portal
+          waybar &
         '';
     };
   };
