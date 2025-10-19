@@ -40,6 +40,7 @@
                    node.name = "roc-sink"
                   }
                 }
+                flags = [ nofail ]
               }
             ]
           '')
@@ -65,6 +66,7 @@
                    node.name = "roc-source"
                   }
                 }
+                flags = [ nofail ]
               }
             ]
           '')
