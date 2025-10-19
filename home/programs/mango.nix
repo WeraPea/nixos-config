@@ -12,6 +12,14 @@
     services.hyprpaper = {
       enable = true;
     };
+    xdg.portal = {
+      extraPortals = [
+        pkgs.xdg-desktop-portal-wlr
+      ];
+      configPackages = [
+        config.wayland.windowManager.mango.package
+      ];
+    };
     wayland.windowManager.mango = {
       enable = true;
       settings =
@@ -236,8 +244,15 @@
         '';
       autostart_sh = # sh
         ''
-          ${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr &
-          systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots && systemctl --user restart xdg-desktop-portal &
+          systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
+          sleep 1
+          systemctl --user stop pipewire wireplumber xdg-desktop-portal xdg-desktop-portal-wlr
+          sleep 1
+          systemctl --user start wireplumber
+          systemctl --user start xdg-desktop-portal
+
+          # ${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr &
+          # systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots && systemctl --user restart xdg-desktop-portal &
 
           # systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots;
           # systemctl --user import-environment WAYLAND_DISPLAY;
