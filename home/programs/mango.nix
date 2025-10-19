@@ -236,7 +236,12 @@
         '';
       autostart_sh = # sh
         ''
+          ${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr &
+          systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots && systemctl --user restart xdg-desktop-portal &
 
+          # systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots;
+          # systemctl --user import-environment WAYLAND_DISPLAY;
+          # systemctl --user start xdg-desktop-portal-wlr.service
         '';
     };
   };
