@@ -96,7 +96,7 @@
           openjdk17
           openscad
           orca-slicer
-          outputs.packages.${pkgs.system}.blender
+          # outputs.packages.${pkgs.system}.blender
           prusa-slicer
           rofi
           scrcpy
