@@ -7,6 +7,11 @@
 {
   options = {
     mango.enable = lib.mkEnableOption "enables mango";
+    mango.extraConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+    };
+    mango.mainDisplay = lib.mkOption { };
   };
   config = lib.mkIf config.mango.enable {
     services.hyprpaper = {
@@ -23,12 +28,8 @@
     wayland.windowManager.mango = {
       enable = true;
       settings =
-        # hyprlang
-        ''
-          monitorrule=DP-2,0.5,1,tile,0,1,1824,0,2560,1440,144,0,0,0,0
-          monitorrule=HDMI-A-1,0.5,1,tile,0,1,4384,0,1280,1024,75,0,0,0,0
-          monitorrule=HDMI-A-2,0.5,1,tile,0,1,0,385,1920,1080,60,25,25,96,96
-
+        "" # hyprlang
+        + ''
           animations=0
           gappih=0
           gappiv=0
@@ -65,15 +66,15 @@
           tagrule=id:8,layout_name:tile
           tagrule=id:9,layout_name:tile
 
-          bind=SUPER,1,focusmon,DP-2
+          bind=SUPER,1,focusmon,${config.mango.mainDisplay}
           bind=SUPER,1,comboview,1
-          bind=SUPER,2,focusmon,DP-2
+          bind=SUPER,2,focusmon,${config.mango.mainDisplay}
           bind=SUPER,2,comboview,2
-          bind=SUPER,3,focusmon,DP-2
+          bind=SUPER,3,focusmon,${config.mango.mainDisplay}
           bind=SUPER,3,comboview,3
-          bind=SUPER,4,focusmon,DP-2
+          bind=SUPER,4,focusmon,${config.mango.mainDisplay}
           bind=SUPER,4,comboview,4
-          bind=SUPER,5,focusmon,DP-2
+          bind=SUPER,5,focusmon,${config.mango.mainDisplay}
           bind=SUPER,5,comboview,5
 
           bind=SUPER,F1,focusmon,HDMI-A-1
@@ -87,15 +88,15 @@
           bind=SUPER,F5,focusmon,HDMI-A-2
           bind=SUPER,F5,comboview,2
 
-          bind=SUPER+SHIFT,1,tagmon,DP-2
+          bind=SUPER+SHIFT,1,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,1,tag,1
-          bind=SUPER+SHIFT,2,tagmon,DP-2
+          bind=SUPER+SHIFT,2,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,2,tag,2
-          bind=SUPER+SHIFT,3,tagmon,DP-2
+          bind=SUPER+SHIFT,3,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,3,tag,3
-          bind=SUPER+SHIFT,4,tagmon,DP-2
+          bind=SUPER+SHIFT,4,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,4,tag,4
-          bind=SUPER+SHIFT,5,tagmon,DP-2
+          bind=SUPER+SHIFT,5,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,5,tag,5
 
           bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
@@ -241,7 +242,8 @@
           mousebind=SUPER,btn_right,moveresize,curresize
           mousebind=NONE,btn_left,toggleoverview,-1
           mousebind=NONE,btn_right,killclient,0
-        '';
+        ''
+        + config.mango.extraConfig;
       autostart_sh = # sh
         ''
           systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots

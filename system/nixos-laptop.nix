@@ -2,7 +2,7 @@
   imports = [
     ./boot.nix
     ./jack-detection.nix
-    ./hyprland.nix
+    ./mango.nix
   ];
   user.hostname = "nixos-laptop";
   system.stateVersion = "23.11";
