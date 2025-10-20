@@ -1,13 +1,11 @@
 {
   writeShellApplication,
-  dotool,
   osu-scrobbler,
   ...
 }:
 writeShellApplication {
   name = "launch-osu";
   runtimeInputs = [
-    dotool
     osu-scrobbler
   ];
   text = ''
@@ -73,28 +71,5 @@ writeShellApplication {
     else
       osu! &
     fi
-
-    sleep 5
-    mmsg -g | grep "$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)" | grep "fullscreen 0" && mmsg -d togglefullscreen
-    # navigates to settings->mouse->high precision input, double clicks it (fixes tablet input stopping to work if game changes fullscreen state), and then straight to solo beatmap selection, delay timing may be a bit tight
-    dotoold &
-    dotoolpid=$!
-    sleep 0.1
-    echo keydelay 100 | dotoolc
-    echo type " s" | dotoolc
-    echo type "precision" | dotoolc
-    sleep 1.5
-    echo mouseto 0.4727 0.4727 | dotoolc
-    echo mouseto 0.4728 0.4728 | dotoolc
-    echo click left | dotoolc
-    sleep 0.2
-    echo click left | dotoolc
-    sleep 0.2
-    echo key esc | dotoolc
-    echo key esc | dotoolc
-    echo type "  " | dotoolc
-    sleep 1
-    kill "$dotoolpid"
-    wait
   '';
 }
