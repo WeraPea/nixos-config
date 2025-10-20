@@ -77,17 +77,6 @@
           bind=SUPER,5,focusmon,${config.mango.mainDisplay}
           bind=SUPER,5,comboview,5
 
-          bind=SUPER,F1,focusmon,HDMI-A-1
-          bind=SUPER,F1,comboview,1
-          bind=SUPER,F2,focusmon,HDMI-A-1
-          bind=SUPER,F2,comboview,2
-          bind=SUPER,F3,focusmon,HDMI-A-1
-          bind=SUPER,F3,comboview,3
-          bind=SUPER,F4,focusmon,HDMI-A-2
-          bind=SUPER,F4,comboview,1
-          bind=SUPER,F5,focusmon,HDMI-A-2
-          bind=SUPER,F5,comboview,2
-
           bind=SUPER+SHIFT,1,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,1,tag,1
           bind=SUPER+SHIFT,2,tagmon,${config.mango.mainDisplay}
@@ -98,17 +87,6 @@
           bind=SUPER+SHIFT,4,tag,4
           bind=SUPER+SHIFT,5,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,5,tag,5
-
-          bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
-          bind=SUPER+SHIFT,F1,tag,1
-          bind=SUPER+SHIFT,F2,tagmon,HDMI-A-1
-          bind=SUPER+SHIFT,F2,tag,2
-          bind=SUPER+SHIFT,F3,tagmon,HDMI-A-1
-          bind=SUPER+SHIFT,F3,tag,3
-          bind=SUPER+SHIFT,F4,tagmon,HDMI-A-2
-          bind=SUPER+SHIFT,F4,tag,1
-          bind=SUPER+SHIFT,F5,tagmon,HDMI-A-2
-          bind=SUPER+SHIFT,F5,tag,2
 
           bind=SUPER,j,focusstack,next
           bind=SUPER,k,focusstack,prev
