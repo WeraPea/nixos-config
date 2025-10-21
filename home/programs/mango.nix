@@ -55,6 +55,7 @@
           enable_floating_snap=0
           snap_distance=30
           cursor_hide_timeout=5
+          focus_on_activate=0
 
           tagrule=id:1,layout_name:tile
           tagrule=id:2,layout_name:tile
