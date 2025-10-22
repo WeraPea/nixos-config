@@ -28,6 +28,7 @@
     wayland.windowManager.mango = {
       enable = true;
       settings =
+        with config.lib.stylix.colors;
         "" # hyprlang
         + ''
           animations=0
@@ -36,10 +37,12 @@
           gappoh=0
           gappov=0
           borderpx=1
-          no_border_when_single=1
+          no_border_when_single=0
 
-          focuscolor=0x${config.lib.stylix.colors.blue}ff
-          rootcolor=0x${config.lib.stylix.colors.base00}ff
+          rootcolor=0x${base00}ff
+          bordercolor=0x${base02}ff
+          focuscolor=0x${cyan}ff
+          urgentcolor=0x${red}ff
 
           repeat_rate=100
           repeat_delay=300
@@ -52,8 +55,6 @@
           sloppyfocus=1
           axis_bind_apply_timeout=100
           drag_tile_to_tile=1
-          enable_floating_snap=0
-          snap_distance=30
           cursor_hide_timeout=5
           focus_on_activate=0
           focus_cross_monitor=1
