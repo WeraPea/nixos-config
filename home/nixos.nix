@@ -17,11 +17,31 @@
         waybar.enable = true;
         mango = {
           enable = true;
-          extraConfig = # hyprlang
+          extraConfig =
+            with rec {
+              DP_2_x = HDMI_A_2_x + HDMI_A_2_width - HDMI_A_2_overscan_right + 1;
+              DP_2_y = 0;
+              DP_2_width = 2560;
+              DP_2_height = 1440;
+
+              HDMI_A_1_x = DP_2_x + DP_2_width;
+              HDMI_A_1_y = DP_2_y;
+              HDMI_A_1_width = 1280;
+              HDMI_A_1_height = 1024;
+
+              HDMI_A_2_x = 0;
+              HDMI_A_2_y = DP_2_y + DP_2_height - HDMI_A_2_height + HDMI_A_2_overscan_top;
+              HDMI_A_2_width = 1920;
+              HDMI_A_2_height = 1080;
+              HDMI_A_2_overscan_top = 25;
+              HDMI_A_2_overscan_bottom = 25;
+              HDMI_A_2_overscan_left = 97;
+              HDMI_A_2_overscan_right = 97;
+            }; # hyprlang
             ''
-              monitorrule=DP-2,0.5,1,tile,0,1,1824,0,2560,1440,144,0,0,0,0
-              monitorrule=HDMI-A-1,0.5,1,tile,0,1,4384,0,1280,1024,75,0,0,0,0
-              monitorrule=HDMI-A-2,0.5,1,tile,0,1,0,385,1920,1080,60,25,25,96,96
+              monitorrule=DP-2,0.5,1,tile,0,1,${toString DP_2_x},${toString DP_2_y},${toString DP_2_width},${toString DP_2_height},144,0,0,0,0
+              monitorrule=HDMI-A-1,0.5,1,tile,0,1,${toString HDMI_A_1_x},${toString HDMI_A_1_y},${toString HDMI_A_1_width},${toString HDMI_A_1_height},75,0,0,0,0
+              monitorrule=HDMI-A-2,0.5,1,tile,0,1,${toString HDMI_A_2_x},${toString HDMI_A_2_y},${toString HDMI_A_2_width},${toString HDMI_A_2_height},60,${toString HDMI_A_2_overscan_top},${toString HDMI_A_2_overscan_bottom},${toString HDMI_A_2_overscan_left},${toString HDMI_A_2_overscan_right}
 
               bind=SUPER,F1,focusmon,HDMI-A-1
               bind=SUPER,F1,comboview,1
