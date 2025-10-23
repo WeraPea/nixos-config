@@ -42,7 +42,7 @@ WrapperMouseArea {
         flags: Qt.ToolTip | Qt.FramelessWindowHint
         width: tooltipText.width + 12
         height: tooltipText.height + 8
-        x: hover.point.scenePosition.x + (mouseArea.Window.window ? mouseArea.Window.window.x : 0)
+        x: hover.point.scenePosition.x + (mouseArea.Window.window ? mouseArea.Window.window.x : 0) - width
         y: hover.point.scenePosition.y + (mouseArea.Window.window ? mouseArea.Window.window.y : 0) + 20
         color: "transparent"
 
