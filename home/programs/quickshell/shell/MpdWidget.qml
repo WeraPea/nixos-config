@@ -1,6 +1,7 @@
 import Quickshell.Widgets
 import Quickshell.Hyprland
 import QtQuick
+import QtQuick.Layouts
 import "./config"
 
 WrapperMouseArea {
@@ -16,7 +17,7 @@ WrapperMouseArea {
             return str.slice(0, limit) + "…";
         }
 
-        text: `${truncate(Mpd.artist, (mouseArea.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (mouseArea.screen == "DP-2" ? 90 : (mouseArea.screen == "HDMI-A-1" ? 30 : 40)))}` // TODO: make this info .config/
+        text: `${truncate(Mpd.artist, (mouseArea.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (mouseArea.screen == "DP-2" ? 90 : (mouseArea.screen == "HDMI-A-1" ? 20 : 40)))}` // TODO: make this info .config/
     }
     onPressed: function (mouse) {
         if (mouse.button == Qt.LeftButton) {

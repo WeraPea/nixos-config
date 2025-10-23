@@ -35,6 +35,7 @@ Scope {
                     }
                     MangoClientWidget {
                         screen: bar.modelData.name
+                        Layout.fillWidth: true
                     }
                 }
                 RowLayout {

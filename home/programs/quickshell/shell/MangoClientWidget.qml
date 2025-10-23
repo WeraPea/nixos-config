@@ -7,4 +7,6 @@ TextObject {
 
     text: `${monitor.title}`
     color: Colors.foreground
+    elide: Text.ElideRight
+    wrapMode: Text.NoWrap
 }
