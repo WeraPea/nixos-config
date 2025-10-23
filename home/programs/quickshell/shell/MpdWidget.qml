@@ -16,13 +16,13 @@ WrapperMouseArea {
             return str.slice(0, limit) + "…";
         }
 
-        text: `${truncate(Mpd.artist, (mouseArea.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (mouseArea.screen == "DP-2" ? 90 : (mouseArea.screen == "HDMI-A-1" ? 30 : 40)))}`
+        text: `${truncate(Mpd.artist, (mouseArea.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (mouseArea.screen == "DP-2" ? 90 : (mouseArea.screen == "HDMI-A-1" ? 30 : 40)))}` // TODO: make this info .config/
     }
     onPressed: function (mouse) {
         if (mouse.button == Qt.LeftButton) {
             Mpd.toggle();
         } else if (mouse.button == Qt.RightButton) {
-            Hyprland.dispatch("exec cantata");
+            Mango.dispatch("spawn,cantata");
         }
     }
     onWheel: event => {

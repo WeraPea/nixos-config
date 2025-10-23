@@ -47,7 +47,6 @@
   nixvim.enable = lib.mkDefault true;
   spicetify.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
-  waybar.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
 

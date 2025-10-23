@@ -14,7 +14,7 @@
           homeDirectory = "/home/wera";
           stateVersion = "23.11";
         };
-        waybar.enable = true;
+        # waybar.enable = true;
         mango = {
           enable = true;
           extraConfig =
@@ -67,6 +67,7 @@
             '';
           mainDisplay = "DP-2";
         };
+        quickshell.enable = true;
       }
     ];
     users.wera = import ./home.nix;

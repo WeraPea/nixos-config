@@ -228,7 +228,8 @@
       autostart_sh = # sh
         ''
           systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
-          waybar &
+          systemctl --user import-environment PATH # FIXME: tempfix for quickshell not having mpc
+          systemctl --user restart quickshell
         '';
     };
   };

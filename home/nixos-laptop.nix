@@ -22,6 +22,7 @@
             '';
           mainDisplay = "eDP-1";
         };
+        quickshell.enable = true;
       }
     ];
     users.wera = import ./home.nix;

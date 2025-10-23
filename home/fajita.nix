@@ -42,6 +42,7 @@
           ];
         };
         wvkbd.enable = true;
+        waybar.enable = true;
 
         koreader.enable = true;
       }

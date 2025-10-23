@@ -24,7 +24,7 @@ Item {
             if (mouse.button == Qt.LeftButton) {
                 Audio.sink.audio.muted = !Audio.sink.audio.muted;
             } else if (mouse.button == Qt.RightButton) {
-                Hyprland.dispatch("exec pwvucontrol");
+                Mango.dispatch("spawn,pwvucontrol");
             }
         }
         onWheel: event => {

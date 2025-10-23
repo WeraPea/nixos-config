@@ -27,13 +27,15 @@ Scope {
                 RowLayout {
                     Layout.alignment: Qt.AlignLeft
                     spacing: 5
-                    Workspaces {
+                    MangoTagsWidget {
                         screen: bar.modelData.name
                     }
-                    // TODO: active window
-                    // TextObject {
-                    //   color: Colors.foreground
-                    // }
+                    MangoLayoutWidget {
+                        screen: bar.modelData.name
+                    }
+                    MangoClientWidget {
+                        screen: bar.modelData.name
+                    }
                 }
                 RowLayout {
                     Layout.alignment: Qt.AlignRight
