@@ -49,10 +49,21 @@
               bind=SUPER,F2,comboview,2
               bind=SUPER,F3,focusmon,HDMI-A-1
               bind=SUPER,F3,comboview,3
-              bind=SUPER,F4,focusmon,HDMI-A-2
-              bind=SUPER,F4,comboview,1
-              bind=SUPER,F5,focusmon,HDMI-A-2
-              bind=SUPER,F5,comboview,2
+              bind=SUPER,F4,focusmon,HDMI-A-1
+              bind=SUPER,F4,comboview,4
+              bind=SUPER,F5,focusmon,HDMI-A-1
+              bind=SUPER,F5,comboview,5
+
+              bind=SUPER,6,focusmon,HDMI-A-2
+              bind=SUPER,6,comboview,1
+              bind=SUPER,7,focusmon,HDMI-A-2
+              bind=SUPER,7,comboview,2
+              bind=SUPER,8,focusmon,HDMI-A-2
+              bind=SUPER,8,comboview,3
+              bind=SUPER,9,focusmon,HDMI-A-2
+              bind=SUPER,9,comboview,4
+              bind=SUPER,0,focusmon,HDMI-A-2
+              bind=SUPER,0,comboview,5
 
               bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
               bind=SUPER+SHIFT,F1,tag,1
@@ -60,10 +71,21 @@
               bind=SUPER+SHIFT,F2,tag,2
               bind=SUPER+SHIFT,F3,tagmon,HDMI-A-1
               bind=SUPER+SHIFT,F3,tag,3
-              bind=SUPER+SHIFT,F4,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,F4,tag,1
-              bind=SUPER+SHIFT,F5,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,F5,tag,2
+              bind=SUPER+SHIFT,F4,tagmon,HDMI-A-1
+              bind=SUPER+SHIFT,F4,tag,4
+              bind=SUPER+SHIFT,F5,tagmon,HDMI-A-1
+              bind=SUPER+SHIFT,F5,tag,5
+
+              bind=SUPER+SHIFT,6,tagmon,HDMI-A-2
+              bind=SUPER+SHIFT,6,tag,1
+              bind=SUPER+SHIFT,7,tagmon,HDMI-A-2
+              bind=SUPER+SHIFT,7,tag,2
+              bind=SUPER+SHIFT,8,tagmon,HDMI-A-2
+              bind=SUPER+SHIFT,8,tag,3
+              bind=SUPER+SHIFT,9,tagmon,HDMI-A-2
+              bind=SUPER+SHIFT,9,tag,4
+              bind=SUPER+SHIFT,0,tagmon,HDMI-A-2
+              bind=SUPER+SHIFT,0,tag,5
             '';
           mainDisplay = "DP-2";
         };
