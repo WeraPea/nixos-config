@@ -29,7 +29,7 @@ RowLayout {
                 anchors.centerIn: parent
 
                 text: workspace.modelData.index
-                color: modelData.clients != 0 ? Colors.accent : Colors.foreground
+                color: modelData.urgent ? Colors.base08 : modelData.clients != 0 ? Colors.accent : Colors.foreground
             }
 
             MouseArea {

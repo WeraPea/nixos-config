@@ -44,7 +44,7 @@ Singleton {
         // DP-2 kb_layout pl
         // DP-2 keymode default
         // DP-2 clients 5
-        // DP-2 tags 25 8 0 // ignore
+        // DP-2 tags 25 8 0
         // DP-2 tags 000011001 000001000 000000000 // ignore
         stdout: SplitParser {
             onRead: line => {
@@ -84,6 +84,34 @@ Singleton {
                         tag.visible = visible;
                         tag.clients = clients;
                         tag.selected = selected;
+                    }
+                    break;
+                case "tags":
+                    // DP-2 tags 25 8 0
+                    if (values.length === 3 && values[0].length < 9) {
+                        const occ = parseInt(values[0]);
+                        const seltags = parseInt(values[1]);
+                        const urg = parseInt(values[2]);
+
+                        for (let i = 0; i < 9; i++) {
+                            const tagIndex = i + 1;
+                            const mask = 1 << i;
+
+                            let tag = root.tagMaps[name][tagIndex];
+                            if (!tag) {
+                                tag = tagComp.createObject(monitor, {
+                                    index: tagIndex,
+                                    visible: (seltags & mask) !== 0,
+                                    clients: 0,
+                                    selected: false,
+                                    urgent: (urg & mask) !== 0
+                                });
+                                monitor.tags.push(tag);
+                                root.tagMaps[name][tagIndex] = tag;
+                            } else {
+                                tag.urgent = (urg & mask) !== 0; // only urgency is needed from
+                            }
+                        }
                     }
                     break;
                 case "selmon":
