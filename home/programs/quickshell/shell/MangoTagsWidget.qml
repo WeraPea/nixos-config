@@ -8,7 +8,7 @@ RowLayout {
     property var monitor: Mango.monitors.find(m => m.name == screen)
     Repeater {
         id: workspaces
-        model: monitor.tags
+        model: monitor.tags.filter(t => t.index <= 5)
 
         Rectangle {
             id: workspace
