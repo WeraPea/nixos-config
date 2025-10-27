@@ -11,7 +11,6 @@
       type = lib.types.lines;
       default = "";
     };
-    mango.mainDisplay = lib.mkOption { };
   };
   config = lib.mkIf config.mango.enable {
     services.hyprpaper = {
@@ -69,27 +68,25 @@
           tagrule=id:8,layout_name:tile
           tagrule=id:9,layout_name:tile
 
-          bind=SUPER,1,focusmon,${config.mango.mainDisplay}
           bind=SUPER,1,comboview,1
-          bind=SUPER,2,focusmon,${config.mango.mainDisplay}
           bind=SUPER,2,comboview,2
-          bind=SUPER,3,focusmon,${config.mango.mainDisplay}
           bind=SUPER,3,comboview,3
-          bind=SUPER,4,focusmon,${config.mango.mainDisplay}
           bind=SUPER,4,comboview,4
-          bind=SUPER,5,focusmon,${config.mango.mainDisplay}
           bind=SUPER,5,comboview,5
+          bind=SUPER,6,comboview,6
+          bind=SUPER,7,comboview,7
+          bind=SUPER,8,comboview,8
+          bind=SUPER,9,comboview,9
 
-          bind=SUPER+SHIFT,1,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,1,tag,1
-          bind=SUPER+SHIFT,2,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,2,tag,2
-          bind=SUPER+SHIFT,3,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,3,tag,3
-          bind=SUPER+SHIFT,4,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,4,tag,4
-          bind=SUPER+SHIFT,5,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,5,tag,5
+          bind=SUPER+SHIFT,6,tag,6
+          bind=SUPER+SHIFT,7,tag,7
+          bind=SUPER+SHIFT,8,tag,8
+          bind=SUPER+SHIFT,9,tag,9
 
           bind=SUPER,j,focusstack,next
           bind=SUPER,k,focusstack,prev

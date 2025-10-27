@@ -19,8 +19,10 @@
           extraConfig = # hyprlang
             ''
               monitorrule=eDP-1,0.5,1,tile,0,1,0,0,1920,1080,60,0,0,0,0
+
+              bind=SUPER,F1,focusmon,eDP-1
+              bind=SUPER+SHIFT,F1,tagmon,eDP-1
             '';
-          mainDisplay = "eDP-1";
         };
         quickshell.enable = true;
       }
