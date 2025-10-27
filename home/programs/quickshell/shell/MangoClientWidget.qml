@@ -6,7 +6,7 @@ TextObject {
     property var monitor: Mango.monitors.find(m => m.name == screen)
 
     text: `${monitor.title}`
-    color: Colors.foreground
+    color: monitor.selmon ? Colors.foreground : Colors.foregroundSecondary
     elide: Text.ElideRight
     wrapMode: Text.NoWrap
 }

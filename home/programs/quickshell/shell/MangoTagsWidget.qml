@@ -5,9 +5,10 @@ import "./config"
 RowLayout {
     spacing: -1 // TODO: this feels wrong for a fix to a tiny gap where you can't click any workspace
     required property string screen
+    property var monitor: Mango.monitors.find(m => m.name == screen)
     Repeater {
         id: workspaces
-        model: Mango.monitors.find(m => m.name == screen).tags
+        model: monitor.tags
 
         Rectangle {
             id: workspace
@@ -18,9 +19,9 @@ RowLayout {
             width: workspaceText.width + 20
             height: 30
 
-            border.color: modelData.visible ? Colors.accent : "transparent"
-            border.width: 2
-            radius: 2
+            border.color: modelData.visible ? (monitor.selmon & modelData.selected ? Colors.accent : Colors.foregroundSecondary) : "transparent"
+            border.width: 1
+            radius: 0
 
             TextObject {
                 id: workspaceText
