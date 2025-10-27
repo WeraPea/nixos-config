@@ -98,6 +98,7 @@
           orca-slicer
           # outputs.packages.${pkgs.system}.blender
           prusa-slicer
+          qmk
           rofi
           scrcpy
           steam-run
