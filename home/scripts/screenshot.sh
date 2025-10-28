@@ -9,7 +9,7 @@ case "$(printf 'selected area\nselected window\nfull screen\ncurrent monitor\nse
 "current monitor")
   sleep 0.2
   output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-  grim -o $output /tmp/hyprshot_screenshot.png
+  grim -o "$output" /tmp/hyprshot_screenshot.png
   ;;
 # "selected monitor")
 #   sleep 0.2
@@ -18,6 +18,8 @@ case "$(printf 'selected area\nselected window\nfull screen\ncurrent monitor\nse
 "selected area to text") slurp | grim -g - /tmp/grim_screenshow_to_text.png ;;
 *) exit ;;
 esac
+
+file /tmp/grim_screenshot.png && cat /tmp/grim_screenshot.png | wl-copy
 
 sleep 0.1
 if test -f /tmp/grim_screenshow_to_text.png; then
