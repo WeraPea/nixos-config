@@ -13,7 +13,7 @@ writeShellApplication {
     if [[ "$1" = "hack-build" ]]; then
       new_tag_name="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
       new_version="''${new_tag_name%-lazer}"
-      if [[ "$2" != "" ]]; then
+      if [[ "''${2:-}" != "" ]]; then
         hash=$2
       else
         prefetch_output=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://github.com/ppy/osu/releases/download/$new_tag_name/osu.AppImage")
