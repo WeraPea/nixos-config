@@ -33,6 +33,7 @@
     ./quickshell
     ./wvkbd.nix
     ./mango.nix
+    ./nix-search-tv.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -49,6 +50,7 @@
   streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
+  nix-search-tv.enable = lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";
