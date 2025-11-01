@@ -14,7 +14,6 @@
     ./htop.nix
     ./hyprland.nix
     ./kitty.nix
-    ./lf.nix
     ./mako.nix
     ./mpv.nix
     ./nixvim
@@ -42,7 +41,6 @@
   git.enable = lib.mkDefault true;
   htop.enable = lib.mkDefault true;
   kitty.enable = lib.mkDefault true;
-  lf.enable = lib.mkDefault true;
   mako.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   mpv.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   nixvim.enable = lib.mkDefault true;
