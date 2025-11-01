@@ -119,7 +119,43 @@
           bind=SUPER,g,setlayout,vertical_grid
           bind=SUPER+CTRL,g,setlayout,grid
           bind=SUPER,v,setlayout,vertical_tile
-          bind=SUPER,w,setlayout,monocle
+          bind=SUPER,w,spawn,${pkgs.writeShellScript "mango-toggle-monocle" ''
+            selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
+            tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && $NF == 1 { print $3 }')
+            lfile="/tmp/mango-last-layout-pre-monocle-per-monitor"
+            declare -A l_to_layout=(
+              [S]="scroller"
+              [T]="tile"
+              [G]="grid"
+              [M]="monocle"
+              [K]="deck"
+              [CT]="center_tile"
+              [RT]="right_tile"
+              [VS]="vertical_scroller"
+              [VT]="vertical_tile"
+              [VG]="vertical_grid"
+              [VK]="vertical_deck"
+            )
+
+            cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
+            cur_layout="''${l_to_layout[$cur_layout]}"
+
+            if [[ "$cur_layout" == "monocle" ]]; then
+              last_layout=$(grep -e "$selmon $tag" "$lfile" | cut -d' ' -f3)
+              if [[ "$last_layout" == "" ]]; then
+                last_layout="tile";
+              fi
+              mmsg -d setlayout,"$last_layout"
+            else
+              [[ -f "$lfile" ]] || : > "$lfile"
+              if grep -q "^$selmon $tag" "$lfile"; then
+                sed -i "s/^$selmon $tag .*/$selmon $tag $cur_layout/" "$lfile"
+              else
+                echo "$selmon $tag $cur_layout" >> "$lfile"
+              fi
+              mmsg -d setlayout,monocle
+            fi;
+          ''}
 
           bind=SUPER,e,togglefloating
           bind=SUPER,f,togglefullscreen
