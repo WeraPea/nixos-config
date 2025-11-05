@@ -9,7 +9,7 @@ case "$(printf 'selected area\nselected window\nfull screen\ncurrent monitor\nse
 "current monitor")
   sleep 0.2
   output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-  grim -o "$output" /tmp/hyprshot_screenshot.png
+  grim -o "$output" /tmp/grim_screenshot.png
   ;;
 # "selected monitor")
 #   sleep 0.2
