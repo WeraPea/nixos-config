@@ -31,6 +31,7 @@
           webtorrent-mpv-hook
           youtube-upnext
           anacreon-mpv-script
+          mpv-websocket-script
         ];
       defaultProfiles = [ "high-quality" ];
       config = {
@@ -69,6 +70,8 @@
         slang = "eng,en,jp,jap,jpn";
 
         sub-scale = "0.6";
+
+        input-ipc-server = "/tmp/mpv-socket";
       };
       scriptOpts = {
         thumbfast = {

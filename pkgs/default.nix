@@ -16,5 +16,10 @@ pkgs: {
   usb-tablet = pkgs.callPackage ./usb-tablet.nix { };
   udev-gothic-hs-nf = pkgs.callPackage ./udev-gothic-hs-nf.nix { };
   launch-osu = pkgs.callPackage ./launch-osu.nix { };
-  anacreon-mpv-script = pkgs.callPackage ./anacreon-mpv-script.nix { inherit (pkgs.mpvScripts) buildLua; };
+  anacreon-mpv-script = pkgs.callPackage ./anacreon-mpv-script.nix {
+    inherit (pkgs.mpvScripts) buildLua;
+  };
+  mpv-websocket-script = pkgs.callPackage ./mpv-websocket-script.nix {
+    inherit (pkgs.mpvScripts) buildLua;
+  };
 }

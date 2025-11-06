@@ -69,6 +69,10 @@
       url = "github:WeraPea/mangowc/overscan";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mpv-websocket = {
+      url = "github:kuroahna/mpv_websocket";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -87,7 +91,10 @@
         fcitx-virtualkeyboard-adapter.overlays.default
         pinenote-usb-tablet.overlays.default
         nur.overlays.default
-        (final: prev: { osu-scrobbler = inputs.osu-scrobbler.defaultPackage.${final.system}; })
+        (final: prev: {
+          osu-scrobbler = osu-scrobbler.defaultPackage.${final.system};
+          mpv-websocket = mpv-websocket.packages.${final.system}.default;
+        })
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
