@@ -30,6 +30,7 @@
           thumbfast
           webtorrent-mpv-hook
           youtube-upnext
+          anacreon-mpv-script
         ];
       defaultProfiles = [ "high-quality" ];
       config = {
@@ -88,6 +89,40 @@
         };
         status_line = {
           enabled = "no";
+        };
+        animecards = {
+          FRONT_FIELD = "Expression";
+          SENTENCE_FIELD = "SentenceFurigana";
+          IMAGE_FIELD = "Picture";
+          SENTENCE_AUDIO_FIELD = "SentenceAudio";
+
+          ENABLE_SUBS_TO_CLIP = "no";
+          ASK_TO_OVERWRITE = "yes";
+          OVERWRITE_LIMIT = 8;
+          HIGHLIGHT_WORD = "no";
+
+          AUDIO_CLIP_PADDING = 0.75;
+          AUDIO_CLIP_FADE = 0.2;
+          AUDIO_MONO = "yes";
+          USE_MPV_VOLUME = "no";
+
+          AUTOPLAY_AUDIO = "no";
+          IMAGE_FORMAT = "png";
+
+          # Resize image to this height (in pixels).
+          # Preserves aspect ratio. (0 = keep original resolution)
+          IMAGE_HEIGHT = 480;
+
+          WRITE_MISCINFO = "yes";
+          MISCINFO_FIELD = "MiscInfo";
+
+          # Pattern for the Misc Info content:
+          #   %f   = filename (without extension)
+          #   %F   = filename (with extension)
+          #   %t   = timestamp (HH:MM:SS)
+          #   %T   = timestamp with milliseconds (HH:MM:SS:MLS)
+          #   <br> = Next line tag
+          MISCINFO_PATTERN = "%f (%t)";
         };
       };
       profiles = {
