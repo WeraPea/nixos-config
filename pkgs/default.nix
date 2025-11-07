@@ -22,4 +22,5 @@ pkgs: {
   mpv-websocket-script = pkgs.callPackage ./mpv-websocket-script.nix {
     inherit (pkgs.mpvScripts) buildLua;
   };
+  anki-koplugin = pkgs.callPackage ./anki-koplugin.nix {};
 }
