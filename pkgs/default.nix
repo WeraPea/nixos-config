@@ -24,4 +24,7 @@ pkgs: {
   };
   anki-koplugin = pkgs.callPackage ./anki-koplugin.nix { };
   manga-ocr = pkgs.callPackage ./manga-ocr.nix { };
+  manga-ocr-from-file = pkgs.callPackage ./manga-ocr-from-file.nix {
+    manga-ocr = pkgs.callPackage ./manga-ocr.nix { };
+  };
 }
