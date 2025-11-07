@@ -55,7 +55,6 @@
           exec-once = [ "waybar" ];
         };
         wvkbd.enable = true;
-        waybar.enable = true;
       }
     ];
     users.wera = import ./home.nix;
