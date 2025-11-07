@@ -5,6 +5,7 @@
   inputs,
   config,
   osConfig,
+  outputs,
   ...
 }:
 {
@@ -51,6 +52,7 @@
           libnotify # aria2dl-notify
           slurp # screenshot
           tesseract # screenshot
+          outputs.packages.${system}.manga-ocr-from-file # screenshot
         ]
         [ ]
     ++
