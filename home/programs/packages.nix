@@ -27,6 +27,7 @@
           cmake
           fastfetch
           ffmpeg
+          file
           gdu
           gnumake
           imagemagick
