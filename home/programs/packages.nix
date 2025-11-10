@@ -58,6 +58,12 @@
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [
+          (outputs.packages.${pkgs.system}.sony-headphones-client.overrideAttrs (old: {
+            nativeBuildInputs = old.nativeBuildInputs ++ [ makeWrapper ];
+            postInstall = ''
+              wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${config.home.homeDirectory}/.config/sony-headphones-client.toml
+            ''; # have to touch it first - otherwise it assumes it is incorrect and uses default path
+          }))
           playerctl
           pwvucontrol
           tigervnc
