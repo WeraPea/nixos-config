@@ -176,6 +176,7 @@
           bind=SUPER,s,spawn,search
           bind=SUPER,c,spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons
           bind=SUPER,d,spawn,rofi -show window -show-icons
+          bind=SUPER,b,spawn,${lib.getExe pkgs.rofi-bluetooth}
 
           bind=SUPER,F10,spawn,ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7
           bind=SUPER,F9,spawn,ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7
