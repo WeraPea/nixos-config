@@ -44,6 +44,9 @@ Scope {
                     MpdWidget {
                         screen: bar.modelData.name
                     }
+                    BatteryWidget {
+                        model: "WH-1000XM6"
+                    }
                     AudioWidget {}
                     TextObject {
                         // TODO: calendar on hover
