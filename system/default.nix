@@ -39,21 +39,17 @@
     ];
 
     networking = {
-      firewall = {
-        # TODO:
-        allowedTCPPorts = [
-          9500
-          25565
-          24454 # simple voice chat
-        ];
-        allowedUDPPorts = [
-          59100
-          59200
-          59716
-          24454 # simple voice chat
-          34197 # factorio
-        ]; # for audiorelay (some)
-      };
+      # firewall = {
+      #   allowedTCPPorts = [
+      #     # 9500 ???
+      #     25565 # minecraft
+      #     24454 # simple voice chat
+      #   ];
+      #   allowedUDPPorts = [
+      #     24454 # simple voice chat
+      #     34197 # factorio
+      #   ];
+      # };
       hostName = config.user.hostname;
       networkmanager.enable = true;
     };
