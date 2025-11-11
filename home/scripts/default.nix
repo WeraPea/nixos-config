@@ -16,19 +16,6 @@
         p: yes: no:
         if p then yes else no;
       aria2dl = writeShellScriptBin "aria2dl" (builtins.readFile ./aria2dl.sh);
-      audiorelay-wrapper = runCommand "audiorelay-wrapper" { } ''
-        mkdir -p $out/bin
-        substitute ${./audiorelay.sh} $out/bin/audiorelay-wrapper \
-          --replace '@xdotool@' '${lib.getExe xdotool}' \
-          --replace '@xvfb@' '${lib.getExe' xorg.xvfb "Xvfb"}' \
-          --replace '@pactl@' '${lib.getExe' pulseaudio "pactl"}'
-        chmod +x $out/bin/audiorelay-wrapper
-      '';
-      audiorelay-desktop-item = makeDesktopItem {
-        name = "audiorelay auto connect wrapper";
-        desktopName = "audiorelay auto connect wrapper";
-        exec = "${lib.getExe' audiorelay-wrapper "audiorelay-wrapper"}";
-      };
       aria2dl-desktop-item = makeDesktopItem {
         name = "aria2dl magnet handler";
         desktopName = "aria2dl magnet handler";
@@ -53,14 +40,6 @@
           slurp # screenshot
           tesseract # screenshot
           outputs.packages.${system}.manga-ocr-from-file # screenshot
-        ]
-        [ ]
-    ++
-      ifElse config.desktopPackages.enable
-        [
-          audiorelay-wrapper
-          audiorelay-desktop-item
-          inputs.audiorelay.packages.${system}.audio-relay
         ]
         [ ]
     ++ lib.forEach (
