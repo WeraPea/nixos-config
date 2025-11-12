@@ -24,13 +24,13 @@ file /tmp/grim_screenshot.png && cat /tmp/grim_screenshot.png | wl-copy
 sleep 0.1
 if test -f /tmp/grim_screenshow_to_text.png; then
   lang=$(printf 'eng\njpn' | rofi -dmenu -l 2)
-  if [[ "$lang" == "eng" ]]; then
+  if [[ $lang == "eng" ]]; then
     mogrify -modulate 100,0 -resize 400% /tmp/grim_screenshow_to_text.png
     magick convert /tmp/grim_screenshow_to_text.png -colorspace Gray /tmp/grim_screenshot_to_text_grayscale.png
     tesseract -l eng /tmp/grim_screenshot_to_text_grayscale.png /tmp/tesseract_screenshot &>/dev/null
     tr '\n' ' ' </tmp/tesseract_screenshot.txt | wl-copy
     rm /tmp/tesseract_screenshot.txt /tmp/grim_screenshot_to_text_grayscale.png
-  elif [[ "$lang" == "jpn" ]]; then
+  elif [[ $lang == "jpn" ]]; then
     manga-ocr-from-file /tmp/grim_screenshow_to_text.png | wl-copy
   fi
   rm /tmp/grim_screenshow_to_text.png

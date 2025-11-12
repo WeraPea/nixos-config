@@ -72,7 +72,6 @@
       ];
     };
     udev.packages = with pkgs; [
-      android-udev-rules
       platformio-core.udev
       (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules" ''
         # DFU (Internal bootloader for STM32 and AT32 MCUs)

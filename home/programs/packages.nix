@@ -41,7 +41,7 @@
           nh
           nix-output-monitor
           onefetch
-          outputs.packages.${pkgs.system}.yt-sub-converter
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.yt-sub-converter
           picocom
           progress
           python3
@@ -58,7 +58,7 @@
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [
-          (outputs.packages.${pkgs.system}.sony-headphones-client.overrideAttrs (old: {
+          (outputs.packages.${pkgs.stdenv.hostPlatform.system}.sony-headphones-client.overrideAttrs (old: {
             nativeBuildInputs = old.nativeBuildInputs ++ [ makeWrapper ];
             postInstall = ''
               wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${config.home.homeDirectory}/.config/sony-headphones-client.toml
@@ -68,7 +68,7 @@
           pwvucontrol
           tigervnc
           wayvnc
-          xdragon
+          dragon-drop
         ])
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
@@ -80,7 +80,7 @@
           nvtopPackages.amd
           osu-lazer-bin
           osu-scrobbler
-          outputs.packages.${pkgs.system}.launch-osu
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.launch-osu
           prismlauncher
           protonup-qt
           rpcs3
@@ -103,7 +103,7 @@
           openjdk17
           openscad
           orca-slicer
-          # outputs.packages.${pkgs.system}.blender
+          # outputs.packages.${pkgs.stdenv.hostPlatform.system}.blender
           prusa-slicer
           qmk
           rofi

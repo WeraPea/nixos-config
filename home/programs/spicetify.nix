@@ -13,7 +13,7 @@
   };
   config =
     let
-      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
     in
     lib.mkIf config.spicetify.enable {
       stylix.targets.spicetify.enable = false;

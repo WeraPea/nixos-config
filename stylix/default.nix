@@ -6,7 +6,7 @@
     base16Scheme = ./molokai.yaml;
     fonts = {
       monospace = {
-        package = outputs.packages.${pkgs.system}.udev-gothic-hs-nf;
+        package = outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf;
         name = "UDEV Gothic 35HSDZNFLG";
       };
       sizes = {

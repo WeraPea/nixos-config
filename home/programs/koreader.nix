@@ -20,11 +20,12 @@
             "x86_64-linux" = "desktop";
             "aarch64-linux" = "aarch64";
           }
-          .${pkgs.system} or (throw "Unsupported system: ${pkgs.system}");
+          .${pkgs.stdenv.hostPlatform.system}
+            or (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
       in
       inputs.rakuyomi.packages.${osConfig.buildSystem}.rakuyomi.${variant};
     xdg.configFile."koreader/plugins/anki.koplugin".source = (
-      outputs.packages.${pkgs.system}.anki-koplugin.override {
+      outputs.packages.${pkgs.stdenv.hostPlatform.system}.anki-koplugin.override {
         profiles = {
           default = (
             pkgs.writeText "default.lua" # lua

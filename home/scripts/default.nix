@@ -39,7 +39,7 @@
           libnotify # aria2dl-notify
           slurp # screenshot
           tesseract # screenshot
-          outputs.packages.${system}.manga-ocr-from-file # screenshot
+          outputs.packages.${stdenv.hostPlatform.system}.manga-ocr-from-file # screenshot
         ]
         [ ]
     ++ lib.forEach (

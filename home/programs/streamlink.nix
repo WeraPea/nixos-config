@@ -16,7 +16,7 @@
     ];
     xdg.dataFile.streamlink-ttvlol = {
       target = "streamlink/plugins/twitch.py";
-      source = outputs.packages.${pkgs.system}.streamlink-ttvlol;
+      source = outputs.packages.${pkgs.stdenv.hostPlatform.system}.streamlink-ttvlol;
     };
     xdg.configFile.streamlink = {
       target = "streamlink/config";

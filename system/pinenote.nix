@@ -29,7 +29,7 @@ in
     if config.buildSystem == "x86_64-linux" then
       inputs.pinenote-service.packages.${config.buildSystem}.cross
     else
-      inputs.pinenote-service.packages.${pkgs.system}.default;
+      inputs.pinenote-service.packages.${pkgs.stdenv.hostPlatform.system}.default;
   boot.kernelPackages = lib.mkIf (config.buildSystem == "x86_64-linux") (
     lib.mkForce (
       pkgsCross.linuxPackagesFor (
@@ -64,7 +64,7 @@ in
       groups = [ "wheel" ];
       commands = [
         {
-          command = lib.getExe outputs.packages.${pkgs.system}.usb-tablet;
+          command = lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet;
           options = [
             "SETENV"
             "NOPASSWD"
@@ -109,7 +109,7 @@ in
       if (config.buildSystem == "x86_64-linux") then
         pkgsX86_64.callPackage ../pkgs/udev-gothic-hs-nf.nix { }
       else
-        outputs.packages.${pkgs.system}.udev-gothic-hs-nf; # wish i didn't have to duplicate this from ../stylix/default.nix
+        outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf; # wish i didn't have to duplicate this from ../stylix/default.nix
 
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/grayscale-light.yaml";
     base16Scheme = {

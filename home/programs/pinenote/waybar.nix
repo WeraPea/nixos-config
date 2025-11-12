@@ -10,7 +10,9 @@
 let
   cycle-driver-mode = lib.getExe (
     pkgs.writers.writePython3Bin "cycle_driver_mode" {
-      libraries = [ inputs.pinenote-nixos-follows.packages.${pkgs.system}.rockchip-ebc-custom-ioctl ];
+      libraries = [
+        inputs.pinenote-nixos-follows.packages.${pkgs.stdenv.hostPlatform.system}.rockchip-ebc-custom-ioctl
+      ];
       doCheck = false;
     } "import rockchip_ebc_custom_ioctl as reci; reci.cycle_driver_mode()"
   );
@@ -228,7 +230,7 @@ in
           };
           "custom/usb_tablet" = {
             format = "󰓶";
-            on-click = "sudo ${lib.getExe outputs.packages.${pkgs.system}.usb-tablet}"; # added to sudoers file so no password required
+            on-click = "sudo ${lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet}"; # added to sudoers file so no password required
             inherit min-length;
             tooltip = false;
           };

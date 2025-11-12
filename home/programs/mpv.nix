@@ -15,7 +15,7 @@
       enable = true;
       scripts =
         with pkgs.mpvScripts;
-        with outputs.packages.${pkgs.system};
+        with outputs.packages.${pkgs.stdenv.hostPlatform.system};
         [
           detect-image
           equalizer

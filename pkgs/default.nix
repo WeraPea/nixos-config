@@ -19,8 +19,10 @@ pkgs: {
   anacreon-mpv-script = pkgs.callPackage ./anacreon-mpv-script.nix {
     inherit (pkgs.mpvScripts) buildLua;
   };
+  mpv-websocket = pkgs.callPackage ./mpv-websocket.nix { };
   mpv-websocket-script = pkgs.callPackage ./mpv-websocket-script.nix {
     inherit (pkgs.mpvScripts) buildLua;
+    mpv-websocket = pkgs.callPackage ./mpv-websocket.nix { };
   };
   anki-koplugin = pkgs.callPackage ./anki-koplugin.nix { };
   manga-ocr = pkgs.callPackage ./manga-ocr.nix { };
