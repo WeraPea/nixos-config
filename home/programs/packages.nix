@@ -45,6 +45,8 @@
           picocom
           progress
           python3
+          ripgrep
+          ripgrep-all
           rsync
           sops
           sshfs
