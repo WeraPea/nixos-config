@@ -18,6 +18,7 @@
         ".direnv/"
         "result"
         "result-*"
+        "compile_commands.json"
       ];
       settings = {
         user.name = "werapi";
