@@ -59,6 +59,8 @@
           focus_on_activate=0
           focus_cross_monitor=1
 
+          windowrule=title:Chatterino - Overlay,isoverlay:1
+
           tagrule=id:1,layout_name:tile
           tagrule=id:2,layout_name:tile
           tagrule=id:3,layout_name:tile
