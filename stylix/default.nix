@@ -1,4 +1,9 @@
-{ outputs, pkgs, ... }:
+{
+  config,
+  outputs,
+  pkgs,
+  ...
+}:
 {
   stylix = {
     enable = true;
@@ -9,11 +14,13 @@
         package = outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf;
         name = "UDEV Gothic 35HSDZNFLG";
       };
+      serif = config.stylix.fonts.monospace;
+      sansSerif = config.stylix.fonts.monospace;
       sizes = {
-        applications = 14;
+        applications = 12;
         desktop = 12;
         popups = 12;
-        terminal = 13;
+        terminal = 10;
       };
     };
     cursor = {

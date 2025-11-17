@@ -11,7 +11,7 @@
   config = lib.mkIf config.fish.enable {
     programs.nix-your-shell.enable = true;
     programs.fish = {
-      enable = true; # TODO: remove nvimpager setup for push
+      enable = true;
       interactiveShellInit = # fish
         ''
           export NVIMPAGER_NVIM="${config.home.sessionVariables.NVIMPAGER_NVIM}"
@@ -66,7 +66,7 @@
                 set -g __fish_git_prompt_char_stagedstate ""
             end
             if not set -q __fish_git_prompt_char_dirtystate
-                set -g __fish_git_prompt_char_dirtystate ""
+                set -g __fish_git_prompt_char_dirtystate "󰐕"
             end
             if not set -q __fish_git_prompt_char_untrackedfiles
                 set -g __fish_git_prompt_char_untrackedfiles "…"
