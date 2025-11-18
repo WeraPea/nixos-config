@@ -14,8 +14,6 @@
         package = outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf;
         name = "UDEV Gothic 35HSDZNFLG";
       };
-      serif = config.stylix.fonts.monospace;
-      sansSerif = config.stylix.fonts.monospace;
       sizes = {
         applications = 12;
         desktop = 12;
