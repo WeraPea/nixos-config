@@ -53,6 +53,7 @@ Scope {
                         color: Colors.foreground
                         text: Time.time
                     }
+                    TrayWidget {}
                 }
             }
         }
