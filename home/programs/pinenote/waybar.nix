@@ -30,7 +30,7 @@ in
         mainBar = {
           layer = "top";
           position = "top";
-          height = 40;
+          height = 30;
 
           modules-left = [
             "custom/menu"
@@ -38,10 +38,6 @@ in
             "custom/mvws_next"
             "custom/gows_prev"
             "custom/gows_next"
-            # "custom/windown"
-            # "custom/winright"
-            # "custom/splitv"
-            # "custom/splith"
           ];
           modules-right = [
             "custom/rotate"
@@ -49,12 +45,9 @@ in
             "custom/usb_tablet"
             "custom/ebc_cycle_driver_mode"
             "custom/blc_down"
-            # "backlight/slider#cool"
             "custom/blc_up"
             "custom/blw_down"
-            # "backlight/slider#warm"
             "custom/blw_up"
-            # "idle_inhibitor"
             "battery"
             "tray"
             # "clock#time"
@@ -203,68 +196,10 @@ in
       };
       style = # css
         ''
-          #workspaces {
-          	padding: 0 0px;
-          	margin: 0 0px;
-          }
-
           window#waybar {
           	background: black;
           	color: white;
-          }
-
-          window#waybar {
-              font-size: 30px;
-          }
-
-          #custom-menu,
-          #custom-okb,
-          #custom-windown,
-          #custom-winright,
-          #custom-splitv,
-          #custom-splith,
-          #custom-mvws_prev,
-          #custom-gows_prev,
-          #custom-gows_next,
-          #custom-mvws_next,
-          #custom-ebc_refresh,
-          #custom-blc_down,
-          #custom-blc_up,
-          #custom-blw_down,
-          #custom-blw_up,
-          #backlight-slider,
-          #idle_inhibitor,
-          #battery,
-          #custom-kill {
-          	color: #ffffff;
-          }
-
-          #backlight-slider slider {
-              min-height: 0px;
-              min-width: 0px;
-              opacity: 0;
-              background-size: 20px;
-              border: none;
-              box-shadow: none;
-          }
-
-          #backlight-slider.cool slider {
-          }
-
-          #backlight-slider.warm slider {
-          }
-
-          #backlight-slider trough {
-             min-height: 10px;
-             min-width: 120px;
-             border-radius: 5px;
-             background-color: dimgrey;
-          }
-
-          #backlight-slider highlight {
-             min-width: 10px;
-             border-radius: 5px;
-             background-color: white;
+            font-size: 20px;
           }
         '';
     };
