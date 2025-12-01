@@ -37,9 +37,8 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
     pinenote-nixos = {
-      # not changing nixpkgs so that kernel derivation from cachix can be used
+      # not changing nixpkgs so that kernel derivation isn't rebuild on each nixpkgs update
       url = "github:WeraPea/pinenote-nixos";
-      inputs.pinenote-service.follows = "pinenote-service";
     };
     pinenote-nixos-follows = {
       # for python version to be the same
@@ -47,7 +46,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rakuyomi.url = "github:hanatsumi/rakuyomi";
-    pinenote-service.url = "github:WeraPea/pinenote-service";
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +63,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mango = {
-      url = "github:WeraPea/mangowc/overscan";
+      url = "github:WeraPea/mangowc/combined";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

@@ -17,14 +17,7 @@
     services.hyprpaper = {
       enable = true;
     };
-    xdg.portal = {
-      extraPortals = [
-        pkgs.xdg-desktop-portal-wlr
-      ];
-      configPackages = [
-        config.wayland.windowManager.mango.package
-      ];
-    };
+    xdg.portal.enable = lib.mkForce false; # let nixos manage this, not home manager
     wayland.windowManager.mango = {
       enable = true;
       settings =
@@ -264,12 +257,29 @@
           mousebind=NONE,btn_right,killclient,0
         ''
         + config.mango.extraConfig;
-      autostart_sh = # sh
-        ''
+      autostart_sh =
+        ""
+        # sh
+        + ''
           systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
-          systemctl --user import-environment PATH # FIXME: tempfix for quickshell not having mpc
-          systemctl --user restart quickshell
-        '';
+          systemctl --user import-environment PATH
+        ''
+        + (
+          if config.programs.quickshell.enable then # sh
+            ''
+              systemctl --user restart quickshell
+            ''
+          else
+            ""
+        )
+        + (
+          if config.programs.waybar.enable then # sh
+            ''
+              waybar &
+            ''
+          else
+            ""
+        );
     };
   };
 }

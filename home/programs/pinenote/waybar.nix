@@ -14,43 +14,8 @@ let
         inputs.pinenote-nixos-follows.packages.${pkgs.stdenv.hostPlatform.system}.rockchip-ebc-custom-ioctl
       ];
       doCheck = false;
-    } "import rockchip_ebc_custom_ioctl as reci; reci.cycle_driver_mode()"
+    } "import rockchip_ebc_custom_ioctl as reci; reci.cycle_driver_mode()" # TODO: move to using pinenote-service
   );
-  toggle-onscreen-keyboard = lib.getExe' (pkgs.python3Packages.buildPythonApplication {
-    pname = "toggle-onscreen-keyboard";
-    version = "1.0";
-    format = "other";
-
-    src = pkgs.writeTextFile {
-      name = "toggle-onscreen-keyboard";
-      text = ''
-        #!/usr/bin/env python3
-        from pydbus import SessionBus
-        import os
-        import time
-
-        bus = SessionBus()
-
-        try:
-            okb = bus.get("sm.puri.OSK0")
-        except Exception:
-            os.system("${lib.getExe' pkgs.coreutils "nohup"} ${lib.getExe' pkgs.squeekboard "squeekboard"} &")
-            time.sleep(1)
-            okb = bus.get("sm.puri.OSK0")
-
-        okb.SetVisible(not okb.Visible)
-      '';
-    };
-    dontUnpack = true;
-    nativeBuildInputs = [ pkgs.wrapGAppsHook3 ];
-    propagatedBuildInputs = [ pkgs.python3Packages.pydbus ];
-    dontWrapGApps = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      install -m755 $src $out/bin/toggle-onscreen-keyboard
-    '';
-    preFixup = ''makeWrapperArgs+=("''${gappsWrapperArgs[@]}") '';
-  }) "toggle-onscreen-keyboard";
   min-length = 4;
 in
 {
@@ -69,7 +34,6 @@ in
 
           modules-left = [
             "custom/menu"
-            "custom/oskb"
             "custom/mvws_prev"
             "custom/mvws_next"
             "custom/gows_prev"
@@ -126,42 +90,35 @@ in
           "custom/kill" = {
             format = "";
             interval = "once";
-            on-click = "hyprctl dispatch killactive";
+            on-click = "mmsg -d killclient";
             inherit min-length;
             tooltip = false;
           };
           "custom/mvws_prev" = {
             format = "";
             interval = "once";
-            on-click = "hyprctl dispatch movetoworkspace -1";
+            on-click = "mmsg -d tagtoleft";
             inherit min-length;
             tooltip = false;
           };
           "custom/gows_prev" = {
             format = "&lt;"; # "<" wont work, markup error
             interval = "once";
-            on-click = "hyprctl dispatch workspace -1";
+            on-click = "mmsg -d viewtoleft";
             inherit min-length;
             tooltip = false;
           };
           "custom/gows_next" = {
             format = ">";
             interval = "once";
-            on-click = "hyprctl dispatch workspace +1";
+            on-click = "mmsg -d viewtoright";
             inherit min-length;
             tooltip = false;
           };
           "custom/mvws_next" = {
             format = "";
             interval = "once";
-            on-click = "hyprctl dispatch movetoworkspace +1";
-            inherit min-length;
-            tooltip = false;
-          };
-          "custom/oskb" = {
-            format = "";
-            interval = "once";
-            on-click = toggle-onscreen-keyboard;
+            on-click = "mmsg -d tagtoright";
             inherit min-length;
             tooltip = false;
           };
@@ -230,7 +187,9 @@ in
           };
           "custom/usb_tablet" = {
             format = "󰓶";
-            on-click = "sudo ${lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet}"; # added to sudoers file so no password required
+            on-click = "setsid sudo ${
+              lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet
+            }"; # added to sudoers file so no password required
             inherit min-length;
             tooltip = false;
           };

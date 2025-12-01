@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 pkgs.writeShellScriptBin "rotate-screen" ''
   set -euo pipefail
 
@@ -9,18 +9,36 @@ pkgs.writeShellScriptBin "rotate-screen" ''
 
   [[ $# -ne 1 ]] && usage
 
+  order=(normal 90 180 270)
+
+  current=$(${lib.getExe pkgs.wlr-randr} --json | jq -r '.[] | select(.name=="DPI-1") | .transform')
+
+  transform=-1
+  for i in "''${!order[@]}"; do
+    if [[ "''${order[$i]}" == "$current" ]]; then
+      transform=$i
+      break
+    fi
+  done
+
+  if [[ $transform -lt 0 ]]; then
+    echo "unsupported transform: $current" >&2
+    exit 2
+  fi
+
   case "$1" in
     cw)
-      transform=$(hyprctl monitors -j | jq '.[] | select(.name == "DPI-1") | .transform')
       transform=$(( (transform + 1) % 4 ))
       ;;
     ccw)
-      transform=$(hyprctl monitors -j | jq '.[] | select(.name == "DPI-1") | .transform')
       transform=$(( (transform + 3) % 4 ))
       ;;
     switch)
-      transform=$(hyprctl monitors -j | jq '.[] | select(.name == "DPI-1") | .transform')
-      transform=$(( (transform + 1) % 2 ))
+      if [[ "$current" == "normal" ]]; then
+        transform=1
+      else
+        transform=0
+      fi
       ;;
     0|1|2|3)
       transform=$1
@@ -29,14 +47,6 @@ pkgs.writeShellScriptBin "rotate-screen" ''
       usage
       ;;
   esac
-
-  hyprctl keyword input:touchdevice:transform "$(( (transform + 2) % 4 ))"
-  hyprctl keyword input:tablet:transform "$transform"
-  hyprctl keyword monitor "DPI-1,highrr,0x0,1,transform,$transform"
-
-  sleep 1 # koreader crashes without the wait
-
-  hyprctl output create headless workaround
-  hyprctl output remove workaround
-  dbus-send --dest=org.pinenote.PineNoteCtl --type=method_call /org/pinenote/PineNoteCtl org.pinenote.Ebc1.GlobalRefresh
+  mmsg -d setoption,monitorrule,DPI-1,0.5,1,tile,$transform,1.5,0,0,1872,1404,84.996002,0,0,0,0
+  mmsg -d setoption,tablet_rotation,$transform
 ''
