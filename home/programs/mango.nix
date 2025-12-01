@@ -255,6 +255,8 @@
           mousebind=SUPER,btn_right,moveresize,curresize
           mousebind=NONE,btn_left,toggleoverview,-1
           mousebind=NONE,btn_right,killclient,0
+
+          env=DISPLAY,:11
         ''
         + config.mango.extraConfig;
       autostart_sh =
@@ -263,6 +265,8 @@
         + ''
           systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
           systemctl --user import-environment PATH
+
+          ${lib.getExe pkgs.xwayland-satellite} :11 &
         ''
         + (
           if config.programs.quickshell.enable then # sh
