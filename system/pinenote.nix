@@ -70,15 +70,18 @@ in
 
   services.journald.storage = "volatile";
   zramSwap.enable = true;
-  stylix = lib.mkForce {
-    fonts.monospace.package =
+  stylix = {
+    fonts.monospace.package = lib.mkForce (
       if (config.buildSystem == "x86_64-linux") then
         pkgsX86_64.callPackage ../pkgs/udev-gothic-hs-nf.nix { }
       else
-        outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf;
+        outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf
+    );
+
+    cursor.name = lib.mkForce "Bibata-Modern-Ice";
 
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/grayscale-light.yaml";
-    base16Scheme = {
+    base16Scheme = lib.mkForce {
       scheme = "eink-light";
       base00 = "#ffffff";
       base01 = "#e3e3e3";
