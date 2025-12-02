@@ -99,6 +99,7 @@
           freecad-wayland
           helvum
           krita
+          mecab # for anki plugin
           nmap
           ntfs3g
           obsidian
