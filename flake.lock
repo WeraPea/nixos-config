@@ -811,11 +811,11 @@
         "scenefx": "scenefx"
       },
       "locked": {
-        "lastModified": 1764602205,
-        "narHash": "sha256-XsmuivOqNR6b/DqdoB2QhBhlIH3Fy/HvqEpWZELYxYo=",
+        "lastModified": 1764619307,
+        "narHash": "sha256-k++vdwFzhLRjiQl21RgpOqN7bdUYgp+dTe3tE4kK2bM=",
         "owner": "WeraPea",
         "repo": "mangowc",
-        "rev": "c016f6611cff8c851ffcd2b768732a4df2235cc9",
+        "rev": "7c542991058edc0d0c7cfee86ecc68b6e8b89758",
         "type": "github"
       },
       "original": {
