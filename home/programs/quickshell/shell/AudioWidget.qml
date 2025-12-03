@@ -6,9 +6,14 @@ import "./config"
 Item {
     implicitWidth: volumeText.implicitWidth
     implicitHeight: volumeText.implicitHeight
+    FontMetrics {
+        id: fm
+        font: volumeText.font
+    }
     TextObject {
         id: volumeText
         anchors.centerIn: parent
+        height: fm.height
         property int volume: Number(Audio.sink?.audio.volume * 100).toFixed(1)
         property string icon: Audio.sink == null ? "?" : (Audio.sink.audio.muted ? "󰖁" : "󰕾")
         color: Audio.sink.audio.muted ? Colors.foregroundSecondary : Colors.foreground
