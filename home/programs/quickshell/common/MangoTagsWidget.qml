@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import "./config"
+import "config"
 
 RowLayout {
     spacing: -1 // TODO: this feels wrong for a fix to a tiny gap where you can't click any workspace

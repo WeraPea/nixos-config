@@ -15,6 +15,17 @@ RowLayout {
             color: "transparent"
             implicitWidth: trayIcon.width
             implicitHeight: trayIcon.height
+
+            function menuOpenClose() {
+                if (!menuOpener.anchor.window) {
+                    menuOpener.anchor.window = toprect.QsWindow.window;
+                }
+                if (menuOpener.visible) {
+                    menuOpener.close();
+                } else {
+                    menuOpener.open();
+                }
+            }
             MouseArea {
                 cursorShape: Qt.PointingHandCursor
                 propagateComposedEvents: true
@@ -31,16 +42,10 @@ RowLayout {
                     if (mouse.button == Qt.LeftButton) {
                         toprect.modelData.activate();
                     } else if (mouse.button == Qt.RightButton) {
-                        if (!menuOpener.anchor.window) {
-                            menuOpener.anchor.window = toprect.QsWindow.window;
-                        }
-                        if (menuOpener.visible) {
-                            menuOpener.close();
-                        } else {
-                            menuOpener.open();
-                        }
+                        toprect.menuOpenClose();
                     }
                 }
+                onPressAndHold: toprect.menuOpenClose()
             }
             QsMenuAnchor {
                 id: menuOpener

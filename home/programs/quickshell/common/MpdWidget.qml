@@ -2,7 +2,7 @@ import Quickshell.Widgets
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
-import "./config"
+import "config"
 
 WrapperMouseArea {
     id: mouseArea

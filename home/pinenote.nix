@@ -5,6 +5,15 @@
   config,
   ...
 }:
+let
+  pkgsCross = import inputs.nixpkgs {
+    system = "x86_64-linux";
+    crossSystem = {
+      config = "aarch64-unknown-linux-gnu";
+    };
+    overlays = [ inputs.quickshell.overlays.default ];
+  };
+in
 {
   home-manager = {
     sharedModules = [
@@ -22,6 +31,7 @@
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         pinenote.enable = true; # TODO: remove this, along with the fajita.enable
+        pinenote-waybar.enable = lib.mkForce false;
         koreader.enable = true;
         services.hyprpaper.enable = lib.mkForce false;
         wvkbd.enable = true;
@@ -34,8 +44,31 @@
               monitorrule=DPI-1,0.5,1,tile,0,1.5,0,0,1872,1404,84.996002,0,0,0,0
             '';
         };
-        # quickshell.enable = true;
+        quickshell.enable = true;
+        programs.quickshell.activeConfig = "pinenote";
+        programs.quickshell.package =
+          if (config.buildSystem == "x86_64-linux") then
+            pkgsCross.quickshell.override {
+              inherit (pkgs)
+                qt6
+                breakpad
+                jemalloc
+                cli11
+                wayland
+                wayland-protocols
+                wayland-scanner
+                xorg
+                libdrm
+                pipewire
+                pam
+                polkit
+                glib
+                ;
+            }
+          else
+            inputs.quickshell.programs.quickshell;
       }
+
     ];
     users.wera = import ./home.nix;
   };

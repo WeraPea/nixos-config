@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell.Widgets
 import Quickshell.Hyprland
-import "./config"
+import "config"
 
 Item {
     implicitWidth: volumeText.implicitWidth

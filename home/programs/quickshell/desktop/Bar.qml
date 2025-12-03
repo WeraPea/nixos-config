@@ -1,7 +1,6 @@
 import Quickshell
-import Quickshell.Hyprland
 import QtQuick.Layouts
-import "./config"
+import "common"
 
 Scope {
     Variants {
@@ -45,13 +44,13 @@ Scope {
                         screen: bar.modelData.name
                     }
                     BatteryWidget {
-                        model: "WH-1000XM6"
+                        query: function (d) {
+                            return d.model == "WH-1000XM6";
+                        }
                     }
                     AudioWidget {}
-                    TextObject {
-                        // TODO: calendar on hover
-                        color: Colors.foreground
-                        text: Time.time
+                    TimeWidget {
+                        format: "ddd MMM d hh:mm"
                     }
                     TrayWidget {}
                 }
