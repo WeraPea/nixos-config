@@ -20,5 +20,7 @@
     undofile = true;
     updatetime = 300;
     writebackup = false;
+    exrc = true;
+    secure = true;
   };
 }
