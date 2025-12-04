@@ -50,7 +50,7 @@ Scope {
                     }
                     CommandWidget {
                         text: "󰓶"
-                        command: ["setsid", "sudo", "usb-tablet"]
+                        command: ["sudo", "usb-tablet"]
                     }
                     // TODO:
                     CommandWidget {
