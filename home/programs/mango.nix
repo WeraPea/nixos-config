@@ -120,7 +120,7 @@
           bind=SUPER,v,setlayout,vertical_tile
           bind=SUPER,w,spawn,${pkgs.writeShellScript "mango-toggle-monocle" ''
             selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-            tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && $NF == 1 { print $3 }')
+            tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && $4 == 1 { print $3 }')
             lfile="/tmp/mango-last-layout-pre-monocle-per-monitor"
             declare -A l_to_layout=(
               [S]="scroller"
