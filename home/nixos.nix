@@ -44,26 +44,26 @@
               monitorrule=HDMI-A-2,0.5,1,tile,0,1,${toString HDMI_A_2_x},${toString HDMI_A_2_y},${toString HDMI_A_2_width},${toString HDMI_A_2_height},60,${toString HDMI_A_2_overscan_top},${toString HDMI_A_2_overscan_bottom},${toString HDMI_A_2_overscan_left},${toString HDMI_A_2_overscan_right}
 
               bind=SUPER,F1,focusmon,HDMI-A-1
-              bind=SUPER,F1,comboview,1
+              bind=SUPER,F1,view,1
               bind=SUPER,F2,focusmon,HDMI-A-1
-              bind=SUPER,F2,comboview,2
+              bind=SUPER,F2,view,2
               bind=SUPER,F3,focusmon,HDMI-A-1
-              bind=SUPER,F3,comboview,3
+              bind=SUPER,F3,view,3
               bind=SUPER,F4,focusmon,HDMI-A-1
-              bind=SUPER,F4,comboview,4
+              bind=SUPER,F4,view,4
               bind=SUPER,F5,focusmon,HDMI-A-1
-              bind=SUPER,F5,comboview,5
+              bind=SUPER,F5,view,5
 
               bind=SUPER,6,focusmon,HDMI-A-2
-              bind=SUPER,6,comboview,1
+              bind=SUPER,6,view,1
               bind=SUPER,7,focusmon,HDMI-A-2
-              bind=SUPER,7,comboview,2
+              bind=SUPER,7,view,2
               bind=SUPER,8,focusmon,HDMI-A-2
-              bind=SUPER,8,comboview,3
+              bind=SUPER,8,view,3
               bind=SUPER,9,focusmon,HDMI-A-2
-              bind=SUPER,9,comboview,4
+              bind=SUPER,9,view,4
               bind=SUPER,0,focusmon,HDMI-A-2
-              bind=SUPER,0,comboview,5
+              bind=SUPER,0,view,5
 
               bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
               bind=SUPER+SHIFT,F1,tag,1

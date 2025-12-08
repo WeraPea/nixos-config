@@ -24,7 +24,16 @@
         with config.lib.stylix.colors;
         "" # hyprlang
         + ''
-          animations=0
+          animations=1
+          animation_fade_in=0
+          animation_fade_out=0
+          animation_type_close=slide
+          animation_duration_move=300
+          animation_duration_open=200
+          animation_duration_tag=250
+          animation_duration_close=250
+          animation_duration_focus=250
+
           gappih=0
           gappiv=0
           gappoh=0
@@ -51,29 +60,24 @@
           cursor_hide_timeout=5
           focus_on_activate=0
           focus_cross_monitor=1
+          view_current_to_back=0
+
+          scroller_structs=0
+          scroller_default_proportion=1
+          scroller_proportion_preset=0.5,1.0
 
           windowrule=title:Chatterino - Overlay,isoverlay:1
 
-          tagrule=id:1,layout_name:tile
-          tagrule=id:2,layout_name:tile
-          tagrule=id:3,layout_name:tile
-          tagrule=id:4,layout_name:tile
-          tagrule=id:5,layout_name:tile
-          tagrule=id:6,layout_name:tile
-          tagrule=id:7,layout_name:tile
-          tagrule=id:8,layout_name:tile
-          tagrule=id:9,layout_name:tile
-
           bind=SUPER,1,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,1,comboview,1
+          bind=SUPER,1,view,1
           bind=SUPER,2,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,2,comboview,2
+          bind=SUPER,2,view,2
           bind=SUPER,3,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,3,comboview,3
+          bind=SUPER,3,view,3
           bind=SUPER,4,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,4,comboview,4
+          bind=SUPER,4,view,4
           bind=SUPER,5,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,5,comboview,5
+          bind=SUPER,5,view,5
 
           bind=SUPER+SHIFT,1,tagmon,${config.mango.mainDisplay}
           bind=SUPER+SHIFT,1,tag,1
@@ -151,6 +155,9 @@
               mmsg -d setlayout,monocle
             fi;
           ''}
+          bind=SUPER,N,setlayout,scroller
+          bind=SUPER,M,switch_proportion_preset
+          bind=SUPER,N,setlayout,scroller
 
           bind=SUPER,e,togglefloating
           bind=SUPER,f,togglefullscreen
