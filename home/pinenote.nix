@@ -42,7 +42,11 @@ in
           extraConfig = # hyprlang
             ''
               monitorrule=DPI-1,0.5,1,tile,0,1.5,0,0,1872,1404,84.996002,0,0,0,0
+
               animations=0
+
+              env=DISPLAY,:11
+              exec-once=${lib.getExe pkgs.xwayland-satellite} :11
             '';
         };
         quickshell.enable = true;

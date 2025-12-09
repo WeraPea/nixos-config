@@ -264,13 +264,9 @@
           mousebind=NONE,btn_left,toggleoverview,-1
           mousebind=NONE,btn_right,killclient,0
 
-          env=DISPLAY,:11
-
           exec-once=${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots XDG_SESSION_TYPE NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH
           exec-once=systemctl --user reset-failed
           exec-once=systemctl --user start mango-session.target
-
-          exec-once=${lib.getExe pkgs.xwayland-satellite} :11
         ''
         + (
           if config.programs.quickshell.enable then # hyprlang
