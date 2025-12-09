@@ -20,6 +20,7 @@
     xdg.portal.enable = lib.mkForce false; # let nixos manage this, not home manager
     wayland.windowManager.mango = {
       enable = true;
+      systemd.enable = false;
       settings =
         with config.lib.stylix.colors;
         "" # hyprlang
@@ -264,33 +265,42 @@
           mousebind=NONE,btn_right,killclient,0
 
           env=DISPLAY,:11
-        ''
-        + config.mango.extraConfig;
-      autostart_sh =
-        ""
-        # sh
-        + ''
-          systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
-          systemctl --user import-environment PATH
 
-          ${lib.getExe pkgs.xwayland-satellite} :11 &
+          exec-once=${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots XDG_SESSION_TYPE NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH
+          exec-once=systemctl --user reset-failed
+          exec-once=systemctl --user start mango-session.target
+
+          exec-once=${lib.getExe pkgs.xwayland-satellite} :11
         ''
         + (
-          if config.programs.quickshell.enable then # sh
+          if config.programs.quickshell.enable then # hyprlang
             ''
-              systemctl --user restart quickshell
+              exec-once=systemctl --user restart quickshell
             ''
           else
             ""
         )
         + (
-          if config.programs.waybar.enable then # sh
+          if config.programs.waybar.enable then # hyprlang
             ''
-              waybar &
+              exec-once=waybar
             ''
           else
             ""
-        );
+        )
+        + config.mango.extraConfig;
+    };
+
+    systemd.user.targets.mango-session = {
+      Unit = {
+        Description = "mango compositor session";
+        Documentation = [ "man:systemd.special(7)" ];
+        BindsTo = [ "graphical-session.target" ];
+        Wants = [
+          "graphical-session-pre.target"
+        ];
+        After = [ "graphical-session-pre.target" ];
+      };
     };
   };
 }
