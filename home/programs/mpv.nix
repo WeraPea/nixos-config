@@ -23,7 +23,6 @@
           image-positioning
           minimap
           mpris
-          mpv-youtube-srv3-subs
           progressbar
           ruler
           status-line

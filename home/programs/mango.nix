@@ -17,7 +17,6 @@
     services.hyprpaper = {
       enable = true;
     };
-    xdg.portal.enable = lib.mkForce false; # let nixos manage this, not home manager
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;

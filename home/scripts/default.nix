@@ -45,7 +45,6 @@
     ++ lib.forEach (
       [
         "0x0"
-        "rebuild"
       ]
       ++
         ifElse osConfig.graphics.enable
@@ -54,7 +53,6 @@
             "screenshot"
             "search"
             "vrlink"
-            "adbconnect"
           ]
           [ ]
       ++
@@ -68,7 +66,6 @@
       lib.forEach
         (ifElse osConfig.graphics.enable
           [
-            "1337x"
             "nyaasi"
           ]
           [ ]

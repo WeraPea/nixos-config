@@ -17,8 +17,8 @@ let
     "application/x-extension-xht" = browser;
 
     "audio/*" = [ "mpv.desktop" ];
-    "video/*" = [ "mpv.dekstop" ];
-    "image/*" = [ "qimgv.desktop" ];
+    "video/*" = [ "mpv.desktop" ];
+    "image/*" = [ "mpv.desktop" ];
     "application/json" = browser;
     "application/pdf" = [ "org.pwmt.zathura.desktop.desktop" ];
   };

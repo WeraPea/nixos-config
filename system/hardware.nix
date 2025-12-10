@@ -11,7 +11,9 @@ lib.mkIf config.graphics.enable {
     opentabletdriver.enable = true;
     xpadneo.enable = lib.mkIf config.gaming.enable true;
     graphics.enable = true;
-    graphics.enable32Bit = lib.mkDefault true;
+    graphics.enable32Bit = lib.mkIf (pkgs.stdenv.hostPlatform.system == "x86_64-linux") (
+      lib.mkDefault true
+    );
   };
   systemd.services.bluetooth-resume-cleanup = {
     description = "Restart bluetooth after resume to remove stale devices from UPower";

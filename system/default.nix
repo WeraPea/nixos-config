@@ -18,7 +18,6 @@
   config = {
     graphics.enable = lib.mkDefault true;
     gaming.enable = lib.mkDefault false;
-    sql.enable = lib.mkDefault false;
     user.username = lib.mkDefault "wera";
 
     users.users.${config.user.username} = {
@@ -39,17 +38,6 @@
     ];
 
     networking = {
-      # firewall = {
-      #   allowedTCPPorts = [
-      #     # 9500 ???
-      #     25565 # minecraft
-      #     24454 # simple voice chat
-      #   ];
-      #   allowedUDPPorts = [
-      #     24454 # simple voice chat
-      #     34197 # factorio
-      #   ];
-      # };
       hostName = config.user.hostname;
       networkmanager.enable = true;
     };
@@ -90,16 +78,10 @@
         ];
         substituters = [
           "https://nix-community.cachix.org"
-          "https://hyprland.cachix.org"
           "https://cache.nixos.org"
-          "https://pinenote-packages.cachix.org"
-          "https://rakuyomi.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "pinenote-packages.cachix.org-1:kikxnRWwjP5M1jWa31XlRqEkKFC4y8z+GlEtk2hCrII="
-          "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-          "rakuyomi.cachix.org-1:rUqRr5gnBtceig+rg1ZKrj7RsLBrj/7uiq/2qJA3zxU="
         ];
       };
     };

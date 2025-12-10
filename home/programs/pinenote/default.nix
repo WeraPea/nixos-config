@@ -6,14 +6,12 @@
 }:
 {
   imports = [
-    ./waybar.nix
     ./switch-boot-partition.nix
   ];
   options = {
     pinenote.enable = lib.mkEnableOption "enables pinenote config";
   };
   config = lib.mkIf config.pinenote.enable {
-    pinenote-waybar.enable = true;
     xdg.configFile."nwg-launchers/nwggrid/grid.conf".text = ''
       {
         "categories": { },

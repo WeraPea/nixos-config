@@ -24,20 +24,16 @@
           cachix
           catimg
           cloc
-          cmake
           fastfetch
           ffmpeg
           file
           gdu
-          gnumake
           imagemagick
           jq
-          libxml2
           lm_sensors
           lsof
           mkvtoolnix-cli
           newsboat
-          nextcloud-client
           nh
           nix-output-monitor
           onefetch
@@ -50,7 +46,6 @@
           rsync
           sops
           sshfs
-          tig
           tldr
           wget
           wl-clipboard
@@ -66,11 +61,13 @@
               wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${config.home.homeDirectory}/.config/sony-headphones-client.toml
             ''; # have to touch it first - otherwise it assumes it is incorrect and uses default path
           }))
+          dragon-drop
           playerctl
           pwvucontrol
           tigervnc
           wayvnc
-          dragon-drop
+          wev
+          wlr-randr
         ])
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
@@ -102,7 +99,6 @@
           mecab # for anki plugin
           nmap
           ntfs3g
-          obsidian
           openjdk17
           openscad
           orca-slicer

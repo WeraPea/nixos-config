@@ -30,8 +30,7 @@ in
         spicetify.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
-        pinenote.enable = true; # TODO: remove this, along with the fajita.enable
-        pinenote-waybar.enable = lib.mkForce false;
+        pinenote.enable = true; # TODO: remove this
         koreader.enable = true;
         services.hyprpaper.enable = lib.mkForce false;
         wvkbd.enable = true;

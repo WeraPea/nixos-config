@@ -11,7 +11,6 @@
         identitiesOnly = true;
       };
       "*" = {
-        # from: programs.ssh.enableDefaultConfig
         forwardAgent = false;
         addKeysToAgent = "no";
         compression = false;

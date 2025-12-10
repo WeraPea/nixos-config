@@ -9,13 +9,12 @@
   imports = [
     # Minimize the build to produce a smaller closure
     "${modulesPath}/profiles/minimal.nix"
-    ./hyprland.nix
+    # ./hyprland.nix
   ];
   mobile.hardware.ram = 1024 * 10;
   user.hostname = "fajita";
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.11";
-  hardware.graphics.enable32Bit = lib.mkForce false;
   networking.networkmanager.wifi.macAddress = "stable";
   programs.calls.enable = true;
   hardware.sensor.iio.enable = true;

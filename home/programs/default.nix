@@ -12,23 +12,19 @@
     ./fish.nix
     ./git.nix
     ./htop.nix
-    ./hyprland.nix
     ./kitty.nix
     ./mako.nix
     ./mpv.nix
     ./nixvim
     ./packages.nix
-    ./spicetify.nix
     ./ssh.nix
     ./streamlink.nix
-    ./waybar.nix
     ./nvimpager.nix
     ./vr.nix
     ./pinenote
     ./mpd.nix
     ./fcitx5.nix
     ./koreader.nix
-    ./fajita
     ./quickshell
     ./wvkbd.nix
     ./mango.nix
@@ -44,7 +40,6 @@
   mako.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   mpv.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   nixvim.enable = lib.mkDefault true;
-  spicetify.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   streamlink.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -92,15 +87,6 @@
       enable = true;
       nix-direnv.enable = true;
     };
-  };
-  xdg.portal = lib.mkIf osConfig.graphics.enable {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-    configPackages = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
   };
 
   services = {

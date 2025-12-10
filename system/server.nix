@@ -2,11 +2,8 @@
 {
   imports = [
     ./boot.nix
-    ./nextcloud.nix
-    ./postgresql.nix
   ];
   user.hostname = "server";
-  sql.enable = true;
   graphics.enable = false;
   system.stateVersion = "24.11";
   # ps2 samba server

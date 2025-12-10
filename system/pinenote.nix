@@ -40,7 +40,6 @@ in
       };
     }
   ];
-  hardware.graphics.enable32Bit = lib.mkForce false;
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
   fileSystems."/" = {

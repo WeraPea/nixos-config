@@ -3,11 +3,6 @@
     ./boot.nix
     ./mango.nix
   ];
-  roc = {
-    enable = true;
-    sink = true;
-    source-ip = "nixos-laptop";
-  };
   gaming.enable = true;
   user.hostname = "nixos";
   services.ddccontrol.enable = true;

@@ -6,7 +6,6 @@
 {
   home-manager = {
     sharedModules = [
-      inputs.hyprland.homeManagerModules.default
       {
         home = {
           username = "wera";
