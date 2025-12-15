@@ -94,7 +94,7 @@
         };
         animecards = {
           FRONT_FIELD = "Expression";
-          SENTENCE_FIELD = "SentenceFurigana";
+          SENTENCE_FIELD = "";
           IMAGE_FIELD = "Picture";
           SENTENCE_AUDIO_FIELD = "SentenceAudio";
 
