@@ -37,10 +37,14 @@
                     capture.props = {
                         media.class = Audio/Sink
                         node.name = analog_output_channel_remap
-                        audio.position = [FL FR]
+                        audio.position = [ FL FR ]
+                        priority.driver = 2000
+                        priority.session = 2000
                     }
                     playback.props = {
+                        node.name = analog_output_channel_remap_playback
                         audio.position = [ FR FL ]
+                        target.object = "alsa_output.pci-0000_18_00.6.analog-stereo"
                     }
                 }
             }
@@ -64,6 +68,44 @@
             }
           ]
         '') # taken from https://howthefu.cc/posts/04/index.html
+        (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/52-linking-settings.conf" ''
+          wireplumber.settings = {
+            linking.follow-default-target = false
+          }
+        '')
+        (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/53-device-priorities.conf" ''
+          monitor.bluez.rules = [
+            {
+              matches = [
+                {
+                  api.bluez5.address = "58:18:62:39:A0:E2"
+                }
+              ]
+              actions = {
+                update-props = {
+                  priority.driver = 3000
+                  priority.session = 3000
+                }
+              }
+            }
+          ]
+
+          monitor.alsa.rules = [
+            {
+              matches = [
+                {
+                  node.name = "alsa_output.pci-0000_18_00.6.analog-stereo"
+                }
+              ]
+              actions = {
+                update-props = {
+                  priority.driver = 1000
+                  priority.session = 1000
+                }
+              }
+            }
+          ]
+        '')
       ];
     };
     udev.packages = with pkgs; [
