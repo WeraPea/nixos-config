@@ -27,7 +27,6 @@ in
           xournalpp
         ];
         mpv.enable = false;
-        spicetify.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         pinenote.enable = true; # TODO: remove this

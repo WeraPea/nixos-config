@@ -16,7 +16,6 @@
           # chatty
         ];
         mpv.enable = false;
-        spicetify.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         # quickshell.enable = true;
