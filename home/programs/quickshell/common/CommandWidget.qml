@@ -21,7 +21,7 @@ Item {
     MouseArea {
         cursorShape: Qt.PointingHandCursor
         anchors.fill: parent
-        onPressed: commandProc.running = true
+        onClicked: commandProc.running = true
     }
 
     Process {

@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Wayland
 import QtQuick.Layouts
 import "common"
 
@@ -52,22 +53,15 @@ Scope {
                         text: "󰓶"
                         command: ["sudo", "usb-tablet"]
                     }
-                    // TODO:
-                    CommandWidget {
-                        text: ""
-                        command: ["brightnessctl", "--device=backlight_cool", "set", "10%-"]
+                    BrightnessWidget {
+                        device: "backlight_cool"
+                        icon: ""
+                        max_brightness: 220
                     }
-                    CommandWidget {
-                        text: ""
-                        command: ["brightnessctl", "--device=backlight_cool", "set", "10%+"]
-                    }
-                    CommandWidget {
-                        text: ""
-                        command: ["brightnessctl", "--device=backlight_warm", "set", "10%-"]
-                    }
-                    CommandWidget {
-                        text: ""
-                        command: ["brightnessctl", "--device=backlight_warm", "set", "10%+"]
+                    BrightnessWidget {
+                        device: "backlight_warm"
+                        icon: ""
+                        max_brightness: 190
                     }
                     BatteryWidget {
                         query: function (d) {

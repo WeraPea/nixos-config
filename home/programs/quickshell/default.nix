@@ -24,8 +24,9 @@ let
         lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet
       } \
       --replace-fail dbus-send ${lib.getExe' pkgs.dbus "dbus-send"} \
-      --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl} \
       --replace-fail nwggrid ${lib.getExe' pkgs.nwg-launchers "nwggrid"};
+    substituteInPlace $out/BrightnessWidget.qml \
+      --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
   '';
 in
 {
