@@ -112,7 +112,6 @@
         "<leader>C" = "command_history";
         "<leader>q" = "quickfix";
         # "<leader>r" = "registers";
-        "<leader>v" = "vim_options";
         "<leader>x" = "spell_suggest";
         "<leader>lr" = "lsp_references";
         "<leader>ls" = "lsp_document_symbols";
@@ -122,18 +121,39 @@
         "<leader>b" = "buffers";
         # "<C-p>" = "git_files";
       };
-      settings.pickers.buffers = {
-        show_all_buffers = "true";
-        theme = "dropdown";
-        mappings = {
-          i = {
-            "<c-d>" = "delete_buffer";
-            "<c-k>" = "move_selection_previous";
-            "<c-j>" = "move_selection_next";
-          };
-          n = {
-            "dd" = "delete_buffer";
-            "x" = "delete_buffer";
+      settings.pickers = {
+        find_files = {
+          no_ignore = true;
+          hidden = true;
+          follow = true;
+        };
+        live_grep = {
+          additional_args = [
+            "--hidden"
+            "--no-ignore"
+            "--follow"
+          ];
+        };
+        grep_string = {
+          additional_args = [
+            "--hidden"
+            "--no-ignore"
+            "--follow"
+          ];
+        };
+        buffers = {
+          show_all_buffers = "true";
+          theme = "dropdown";
+          mappings = {
+            i = {
+              "<c-d>" = "delete_buffer";
+              "<c-k>" = "move_selection_previous";
+              "<c-j>" = "move_selection_next";
+            };
+            n = {
+              "dd" = "delete_buffer";
+              "x" = "delete_buffer";
+            };
           };
         };
       };
