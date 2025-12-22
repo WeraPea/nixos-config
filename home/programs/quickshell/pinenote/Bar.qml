@@ -27,10 +27,7 @@ Scope {
                 RowLayout {
                     Layout.alignment: Qt.AlignLeft
                     spacing: 5
-                    CommandWidget {
-                        text: ""
-                        command: ["mmsg", "-d", "spawn,nwggrid"] // TODO: replace this
-                    }
+                    ApplicationMenuWidget {}
                     MangoTagsWidget {
                         screen: bar.modelData.name
                     }
