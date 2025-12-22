@@ -195,6 +195,7 @@
           bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl set 10%-
 
           bind=NONE,XF86AudioPlay,spawn,mpc toggle
+          bind=NONE,XF86AudioPause,spawn,mpc pause
           bind=NONE,XF86AudioPrev,spawn,mpc prev
           bind=NONE,XF86AudioNext,spawn,mpc next
 
