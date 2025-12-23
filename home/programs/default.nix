@@ -29,6 +29,7 @@
     ./wvkbd.nix
     ./mango.nix
     ./nix-search-tv.nix
+    ./beets.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

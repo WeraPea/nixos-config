@@ -88,6 +88,7 @@
           mainDisplay = "DP-2";
         };
         quickshell.enable = true;
+        beets.enable = true;
       }
     ];
     users.wera = import ./home.nix;

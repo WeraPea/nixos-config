@@ -12,7 +12,8 @@
     services.mpd = {
       enable = true;
       network.listenAddress = "any";
-      musicDirectory = "/home/wera/music/Downloads/";
+      musicDirectory = "/mnt/mnt3/music/";
+      playlistDirectory = "/mnt/mnt3/music/playlists/";
       extraConfig = ''
         audio_output {
           type "pipewire"
