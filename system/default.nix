@@ -60,7 +60,9 @@
     security.polkit.enable = lib.mkIf config.graphics.enable true;
     security.rtkit.enable = true;
 
-    systemd.coredump.enable = false;
+    systemd.coredump.extraConfig = ''
+      Storage=none
+    '';
 
     nixpkgs.config.allowUnfree = true;
     nix = {
