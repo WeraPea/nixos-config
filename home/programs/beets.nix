@@ -1,4 +1,6 @@
 {
+  pkgs,
+  outputs,
   lib,
   config,
   ...
@@ -10,6 +12,18 @@
   config = lib.mkIf config.beets.enable {
     programs.beets = {
       enable = true;
+      package = (
+        pkgs.python3.pkgs.beets.override {
+          pluginOverrides = {
+            vocadb = {
+              enable = true;
+              propagatedBuildInputs = [
+                outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb
+              ];
+            };
+          };
+        }
+      );
       settings = {
         directory = "/mnt/mnt3/music/beets";
         plugins = [
@@ -22,6 +36,8 @@
           "musicbrainz"
           "smartplaylist"
           "edit"
+          "vocadb"
+          "utaitedb"
         ];
         musicbrainz = {
           genres = true;
@@ -35,6 +51,14 @@
               query = "";
             }
           ];
+        };
+        match.preffered = {
+          countries = [ "JP" ];
+          media = [
+            "Digital Media|File"
+            "CD"
+          ];
+          original_year = true;
         };
       };
     };

@@ -26,4 +26,5 @@ pkgs: {
     manga-ocr = pkgs.callPackage ./manga-ocr.nix { };
   };
   sony-headphones-client = pkgs.callPackage ./sony-headphones-client.nix { };
+  beets-vocadb = pkgs.callPackage ./beets-vocadb.nix { };
 }
