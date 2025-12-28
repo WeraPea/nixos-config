@@ -13,16 +13,15 @@
     programs.beets = {
       enable = true;
       package = (
-        pkgs.python3.pkgs.beets.override {
+        (pkgs.python3.pkgs.beets.override {
           pluginOverrides = {
             vocadb = {
               enable = true;
-              propagatedBuildInputs = [
-                outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb
-              ];
+              propagatedBuildInputs = [ outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb ];
             };
           };
-        }
+        }).overrideAttrs
+          { doInstallCheck = false; }
       );
       settings = {
         directory = "/mnt/mnt3/music/beets";

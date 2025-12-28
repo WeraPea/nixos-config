@@ -15,6 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-uGKIw3w5kGdQ3jzogOz3mWhmo6myIaocateZXPMVjcA=";
   };
 
+  preBuild = ''
+    substituteInPlace beetsplug/vocadb/mapper.py \
+      --replace-fail "# track_id=track_id," "track_id=track_id,";
+  '';
+
   build-system = [
     python3.pkgs.poetry-core
   ];
