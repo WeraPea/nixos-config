@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-uGKIw3w5kGdQ3jzogOz3mWhmo6myIaocateZXPMVjcA=";
   };
 
+  patches = [ ./beets-vocadb-purl.patch ];
+
   preBuild = ''
     substituteInPlace beetsplug/vocadb/mapper.py \
       --replace-fail "# track_id=track_id," "track_id=track_id,";
@@ -34,12 +36,14 @@ python3.pkgs.buildPythonApplication rec {
     beets
     httpx.optional-dependencies.http2
     msgspec
+    mutagen
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     httpx.optional-dependencies.http2
     msgspec
     typing-extensions
+    mutagen
   ];
 
   meta = {
