@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation rec {
     pkgs.python3Packages.ttfautohint-py
   ];
 
+  patches = [ ./udev-gothic-fontforge-20251009-workaround.patch ];
+
   # ttfautohint: unrecognized option '--epoch'
   postPatch = ''
     substituteInPlace fonttools_script.py \

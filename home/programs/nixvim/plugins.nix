@@ -84,7 +84,7 @@
     };
     treesitter = {
       enable = true;
-      folding = true;
+      folding.enable = true;
       nixvimInjections = true;
       settings = {
         ensureInstalled = "all";

@@ -1,0 +1,16 @@
+diff --git a/fontforge_script.py b/fontforge_script.py
+index 526a544..d8ba728 100644
+--- a/fontforge_script.py
++++ b/fontforge_script.py
+@@ -193,6 +193,11 @@ def generate_font(jp_style, eng_style, merged_style):
+     if options.get("nerd-font"):
+         add_nerd_font_glyphs(jp_font, eng_font)
+ 
++    jp_font_path = f"{BUILD_FONTS_DIR}/tmp_{uuid.uuid4()}.fd"
++    jp_font.save(jp_font_path)
++    jp_font = fontforge.open(jp_font_path)
++    os.remove(jp_font_path)
++
+     # オプション毎の修飾子を追加する
+     variant = WIDTH_35_STR if options.get("35") else ""
+     variant += HIDDEN_ZENKAKU_SPACE_STR if options.get("hidden-zenkaku-space") else ""
