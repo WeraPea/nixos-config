@@ -12,16 +12,24 @@
   config = lib.mkIf config.beets.enable {
     programs.beets = {
       enable = true;
-      package = (
-        (pkgs.python3.pkgs.beets.override {
-          pluginOverrides = {
-            vocadb = {
-              enable = true;
-              propagatedBuildInputs = [ outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb ];
-            };
-          };
-        }).overrideAttrs
-          { doInstallCheck = false; }
+      # package = (
+      #   (pkgs.python3.pkgs.beets.override {
+      #     pluginOverrides = {
+      #       vocadb = {
+      #         enable = true;
+      #         propagatedBuildInputs = [ outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb ];
+      #       };
+      #     };
+      #   }).overrideAttrs
+      #     { doInstallCheck = false; }
+      # );
+      package = ( # workaround: for whatever reason the above decided to ignore the plugin override after an update
+        pkgs.python3.pkgs.beets.overrideAttrs (old: {
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [
+            outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb
+          ];
+          doInstallCheck = false;
+        })
       );
       settings = {
         directory = "/mnt/mnt3/music/beets";
