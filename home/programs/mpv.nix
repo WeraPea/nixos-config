@@ -31,7 +31,7 @@
           progressbar
           thumbfast
           webtorrent-mpv-hook
-          youtube-upnext
+          sponsorblock
         ];
       defaultProfiles = [ "high-quality" ];
       config = {
@@ -215,6 +215,9 @@
         PGDWN = "add chapter -1";
 
         C = "af toggle dynaudnorm=f=75:g=15";
+
+        g = "ignore";
+        G = "add sub-scale 0.1"; # mpv default that sponsorblock overrides
       };
       extraInput = ''
         # 1 change-list script-opts append image_positioning-drag_to_pan_margin=200
