@@ -172,8 +172,6 @@
           bind=SUPER+CTRL,space,spawn,makoctl restore
           bind=NONE,Print,spawn,screenshot
           # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
-          bind=SUPER,o,spawn_shell,wl-paste -p | wl-copy
-          bind=SUPER,p,spawn_shell,wl-paste | wl-copy -p
 
           bind=SUPER,s,spawn,search
           bind=SUPER,c,spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons
@@ -207,6 +205,58 @@
           bind=SUPER+CTRL,r,reload_config
           keymode=default
 
+          bind=SUPER,o,setkeymode,clipboard
+          keymode=clipboard
+          bind=SUPER,p,spawn_shell,wl-paste | wl-copy -p
+          bind=SUPER,p,setkeymode,default
+
+          bind=SUPER,o,spawn_shell,wl-paste | wl-copy -p
+          bind=SUPER,o,setkeymode,default
+
+          bind=SUPER,s,spawn_shell,firefox "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER,s,setkeymode,default
+          bind=SUPER+CTRL,s,spawn_shell,firefox --new-window "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER+CTRL,s,setkeymode,default
+
+          bind=SUPER,j,spawn_shell,firefox "jisho.org/search/$(wl-paste)"
+          bind=SUPER,j,setkeymode,default
+          bind=SUPER+CTRL,j,spawn_shell,firefox --new-window "jisho.org/search/$(wl-paste)"
+          bind=SUPER+CTRL,j,setkeymode,default
+
+          bind=SUPER,h,spawn_shell,firefox "$(wl-paste)"
+          bind=SUPER,h,setkeymode,default
+          bind=SUPER+CTRL,h,spawn_shell,firefox --new-window "$(wl-paste)"
+          bind=SUPER+CTRL,h,setkeymode,default
+
+          bind=NONE,Escape,setkeymode,default
+          keymode=default
+
+          bind=SUPER,p,setkeymode,primary
+          keymode=primary
+          bind=SUPER,o,spawn_shell,wl-paste -p | wl-copy
+          bind=SUPER,o,setkeymode,default
+
+          bind=SUPER,p,spawn_shell,wl-paste -p | wl-copy
+          bind=SUPER,p,setkeymode,default
+
+          bind=SUPER,s,spawn_shell,firefox "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER,s,setkeymode,default
+          bind=SUPER+CTRL,s,spawn_shell,firefox --new-window "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER+CTRL,s,setkeymode,default
+
+          bind=SUPER,j,spawn_shell,firefox "jisho.org/search/$(wl-paste -p)"
+          bind=SUPER,j,setkeymode,default
+          bind=SUPER+CTRL,j,spawn_shell,firefox --new-window "jisho.org/search/$(wl-paste -p)"
+          bind=SUPER+CTRL,j,setkeymode,default
+
+          bind=SUPER,h,spawn_shell,firefox "$(wl-paste -p)"
+          bind=SUPER,h,setkeymode,default
+          bind=SUPER+CTRL,h,spawn_shell,firefox --new-window "$(wl-paste -p)"
+          bind=SUPER+CTRL,h,setkeymode,default
+
+          bind=NONE,Escape,setkeymode,default
+          keymode=default
+
           bind=SUPER,r,setkeymode,run
           keymode=run
           bind=SUPER,a,spawn,anki
@@ -237,16 +287,24 @@
           keymode=mpd
           bind=SUPER,x,spawn,mpc toggle
           bind=SUPER,x,setkeymode,default
+
           bind=SUPER,space,spawn,mpc toggle
           bind=SUPER,space,setkeymode,default
+
           bind=SUPER,n,spawn,mpc next
           bind=SUPER,n,setkeymode,default
+
           bind=SUPER,p,spawn,mpc prev
           bind=SUPER,p,setkeymode,default
+
           bind=SUPER,j,spawn,mpc volume -5
           bind=SUPER,j,setkeymode,default
+
           bind=SUPER,k,spawn,mpc volume +5
           bind=SUPER,k,setkeymode,default
+
+          bind=SUPER,f,spawn_shell,firefox --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"
+          bind=SUPER,f,setkeymode,default
           bind=NONE,Escape,setkeymode,default
           keymode=default
 
