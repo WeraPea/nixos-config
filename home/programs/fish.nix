@@ -158,6 +158,7 @@
           expansion = "kitty +kitten ssh -t % fish -i";
         };
         lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
+        ng = "nvim +:Neogit";
       };
     };
   };
