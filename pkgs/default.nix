@@ -23,4 +23,7 @@ pkgs: {
   mpv-http-mitmytproxy = pkgs.callPackage ./mpv-http-mitmytproxy.nix {
     inherit (pkgs.mpvScripts) buildLua;
   };
+  mpv-youtube-srv3-subs = pkgs.callPackage ./mpv-youtube-srv3-subs.nix {
+    yt-sub-converter = pkgs.callPackage ./yt-sub-converter.nix { };
+  };
 }

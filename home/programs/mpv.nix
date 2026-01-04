@@ -31,6 +31,7 @@
           thumbfast
           webtorrent-mpv-hook
           sponsorblock
+          mpv-youtube-srv3-subs
         ];
       defaultProfiles = [ "high-quality" ];
       config = {
