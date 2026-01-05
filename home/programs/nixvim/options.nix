@@ -22,5 +22,6 @@
     writebackup = false;
     exrc = true;
     secure = true;
+    foldlevel = 99;
   };
 }
