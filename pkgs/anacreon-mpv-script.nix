@@ -1,6 +1,6 @@
 {
   lib,
-  buildLua,
+  mpvScripts,
   fetchFromGitHub,
   wl-clipboard,
   xclip,
@@ -9,7 +9,7 @@
 let
   version = "1.0.1";
 in
-buildLua {
+mpvScripts.buildLua {
   pname = "anacreon-mpv-script";
   inherit version;
   scriptPath = "./animecards";

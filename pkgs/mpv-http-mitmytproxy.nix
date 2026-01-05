@@ -1,11 +1,11 @@
 {
   lib,
-  buildLua,
+  mpvScripts,
   fetchFromGitHub,
   mitmproxy,
 }:
 
-buildLua {
+mpvScripts.buildLua {
   pname = "mpv-http-mitmytproxy";
   version = "unstable-2025-08-10";
 

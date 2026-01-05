@@ -1,10 +1,10 @@
 {
   lib,
-  buildLua,
+  mpvScripts,
   mpv-websocket,
   writeTextDir,
 }:
-buildLua {
+mpvScripts.buildLua {
   pname = "mpv-websocket-script";
   version = "0.4.3"; # surely i won't forget to change this when flake input updates…
 
