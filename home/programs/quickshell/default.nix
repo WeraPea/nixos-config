@@ -19,7 +19,9 @@ let
     mkdir -p $out
     cp -r ${./pinenote}/* $out
     substituteInPlace $out/Bar.qml \
-      --replace-fail rotate-screen ${lib.getExe (pkgs.callPackage ./../pinenote/rotate.nix { })} \
+      --replace-fail rotate-screen ${
+        lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.rotate
+      } \
       --replace-fail usb-tablet ${
         lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet
       } \

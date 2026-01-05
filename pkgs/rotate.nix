@@ -1,5 +1,9 @@
-{ lib, pkgs, ... }:
-pkgs.writeShellScriptBin "rotate-screen" ''
+{
+  lib,
+  writeShellScriptBin,
+  wlr-randr,
+}:
+writeShellScriptBin "rotate-screen" ''
   set -euo pipefail
 
   usage() {
@@ -11,7 +15,7 @@ pkgs.writeShellScriptBin "rotate-screen" ''
 
   order=(normal 90 180 270)
 
-  current=$(${lib.getExe pkgs.wlr-randr} --json | jq -r '.[] | select(.name=="DPI-1") | .transform')
+  current=$(${lib.getExe wlr-randr} --json | jq -r '.[] | select(.name=="DPI-1") | .transform')
 
   transform=-1
   for i in "''${!order[@]}"; do

@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   config,
+  outputs,
   ...
 }:
 let
@@ -22,14 +23,18 @@ in
         home.username = "wera";
         home.homeDirectory = "/home/wera";
         home.stateVersion = "25.05";
-        home.packages = with pkgs; [
-          brightnessctl
-          xournalpp
-        ];
+        home.packages =
+          with pkgs;
+          with outputs.packages.${pkgs.stdenv.hostPlatform.system};
+          [
+            brightnessctl
+            rotate
+            switch-boot-partition
+            xournalpp
+          ];
         mpv.enable = false;
         programs.zathura.enable = false;
         desktopPackages.enable = false;
-        pinenote.enable = true; # TODO: remove this
         koreader.enable = true;
         services.hyprpaper.enable = lib.mkForce false;
         wvkbd.enable = true;

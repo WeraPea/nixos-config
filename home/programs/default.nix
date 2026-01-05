@@ -21,7 +21,6 @@
     ./streamlink.nix
     ./nvimpager.nix
     ./vr.nix
-    ./pinenote
     ./mpd.nix
     ./fcitx5.nix
     ./koreader.nix

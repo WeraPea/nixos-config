@@ -37,6 +37,7 @@
           nh
           nix-output-monitor
           onefetch
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.rename-torrents
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.yt-sub-converter
           picocom
           progress
@@ -62,6 +63,11 @@
             ''; # have to touch it first - otherwise it assumes it is incorrect and uses default path
           }))
           dragon-drop
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}._0x0
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.search
           playerctl
           pwvucontrol
           tigervnc
