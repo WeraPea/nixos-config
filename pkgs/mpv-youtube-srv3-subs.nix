@@ -1,13 +1,12 @@
 {
-  pkgs,
   lib,
-  stdenvNoCC,
   yt-sub-converter,
+  mpvScripts,
 }:
 let
-  version = "2025.05.05";
+  version = "2026.01.05";
   script =
-    builtins.toFile "mpv-youtube-srv3-subs.lua" # lua
+    builtins.toFile "youtube-srv3-subs.lua" # lua
       ''
         local options = require 'mp.options'
         local utils = require 'mp.utils'
@@ -17,6 +16,12 @@ let
           cookies_from_browser = "",
         }
         options.read_options(o, "mpv-youtube-srv3-subs")
+
+        local function safe_rm(path)
+          if path and path:match("^/tmp/") then
+            os.execute("rm -rf " .. path)
+          end
+        end
 
         mp.register_event("start-file", function()
             local path = mp.get_property("path")
@@ -53,8 +58,13 @@ let
 
             utils.subprocess({args = ytdlp_cmd})
 
+            if utils.file_info(srv3_path) == nil then
+              safe_rm(tmpdir)
+              return
+            end
+
             local convert_cmd = {
-                "@yt-sub-converter@",
+                "YTSubConverter",
                 srv3_path
             }
             local convert_res = utils.subprocess({args = convert_cmd})
@@ -67,12 +77,6 @@ let
             mp.commandv("sub-add", sub_ass_path)
         end)
 
-        local function safe_rm(path)
-          if path and path:match("^/tmp/") then
-            os.execute("rm -rf " .. path)
-          end
-        end
-
         mp.register_event("end-file", function()
           safe_rm(tmpdir)
         end)
@@ -83,20 +87,27 @@ let
       '';
 
 in
-stdenvNoCC.mkDerivation {
+mpvScripts.buildLua {
   pname = "mpv-youtube-srv3-subs";
   inherit version;
 
-  src = pkgs.replaceVars script {
-    yt-sub-converter = lib.getExe yt-sub-converter;
-  };
-  dontUnpack = true;
+  src = script;
+  unpackPhase = ''
+    runHook preUnpack
 
-  installPhase = ''
-    install -Dm644 $src $out/share/mpv/scripts/mpv-youtube-srv3-subs.lua
+    mkdir -p source
+    cp $src source/youtube-srv3-subs.lua
+    cd source
+
+    runHook postUnpack
   '';
 
-  passthru.scriptName = "mpv-youtube-srv3-subs.lua";
+  postPatch = ''
+    ls -al
+    pwd
+    substituteInPlace youtube-srv3-subs.lua \
+      --replace-fail "YTSubConverter" "${lib.getExe yt-sub-converter}"
+  '';
 
   meta = with lib; {
     description = "Convert youtube srv3 subs to vtt on the fly.";
