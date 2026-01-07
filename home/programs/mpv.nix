@@ -229,6 +229,8 @@
         R = "{image-viewer} script-message rotate-video -90";
         "ctrl+r" = "{image-viewer} no-osd set video-rotate 0";
 
+        "ctrl+i" =
+          "{image-viewer} disable-section image-viewer; script-message status-line-disable; set loop-file no; set video-zoom 0; no-osd set panscan 0; no-osd set video-pan-x 0; no-osd set video-pan-y 0; no-osd set video-align-x 0; no-osd set video-align-y 0"; # needed as some files get incorrectly detected as images
       };
       extraInput = ''
         MBTN_RIGHT {image-viewer} script-binding pan-follows-cursor
