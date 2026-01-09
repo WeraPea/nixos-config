@@ -24,7 +24,7 @@ mpvScripts.buildLua {
   postPatch = ''
     substituteInPlace animecards/clipboard.lua \
       --replace-fail 'wl-copy' "${lib.getExe' wl-clipboard "wl-copy"}" \
-      --replace-fail 'wl-paste' "${lib.getExe' wl-clipboard "wl-paste"}" \
+      --replace-fail "'wl-paste'" "'${lib.getExe' wl-clipboard "wl-paste"}', '-p'" \
       --replace-fail 'xclip' "${lib.getExe xclip}"
     substituteInPlace animecards/anki.lua \
       --replace-fail 'curl' "${lib.getExe curl}"

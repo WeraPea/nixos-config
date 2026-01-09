@@ -220,6 +220,8 @@
         g = "ignore";
         G = "add sub-scale 0.1"; # mpv default that sponsorblock overrides
 
+        MBTN_MID = "script-binding update-anki-card";
+
         "-" = "cycle-values scale nearest ewa_lanczossharp";
 
         e = "{image-viewer} script-message equalizer-toggle";
