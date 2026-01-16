@@ -62,6 +62,14 @@ Scope {
                     }
                     BatteryWidget {
                         query: function (d) {
+                            return d.nativePath == "ws8100_pen";
+                        }
+                        icon: "   "
+                        icon_charging: "   "
+                        // icon_charging: "󱐋   "
+                    }
+                    BatteryWidget {
+                        query: function (d) {
                             return d.nativePath == "rk817-battery";
                         }
                     }

@@ -47,6 +47,7 @@ Scope {
                         query: function (d) {
                             return d.model == "WH-1000XM6";
                         }
+                        prefix: "󰂱"
                     }
                     AudioWidget {}
                     TimeWidget {
