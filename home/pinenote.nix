@@ -36,7 +36,7 @@ in
         programs.zathura.enable = false;
         desktopPackages.enable = false;
         koreader.enable = true;
-        services.hyprpaper.enable = lib.mkForce false;
+        services.wpaperd.enable = lib.mkForce false;
         wvkbd.enable = true;
 
         mango = {

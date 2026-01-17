@@ -14,9 +14,7 @@
     mango.mainDisplay = lib.mkOption { };
   };
   config = lib.mkIf config.mango.enable {
-    services.hyprpaper = {
-      enable = true;
-    };
+    services.wpaperd.enable = true;
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
