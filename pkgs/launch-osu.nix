@@ -10,6 +10,7 @@ writeShellApplication {
   ];
   text = ''
     kitty -e osu-scrobbler &
+    export SDL_VIDEODRIVER=x11
     if [[ "$1" = "hack-build" ]]; then
       new_tag_name="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
       new_version="''${new_tag_name%-lazer}"
