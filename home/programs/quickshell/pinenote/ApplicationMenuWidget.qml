@@ -39,7 +39,6 @@ Item {
             id: jsonAdapter
             property var usage: ({})
         }
-        onAdapterChanged: writeAdapter()
         onLoadFailed: err => err === FileViewError.FileNotFound && writeAdapter()
         function getUsageCount(desktopId) {
             return jsonAdapter.usage[desktopId] ?? 0;
@@ -47,6 +46,7 @@ Item {
 
         function incrementUsage(desktopId) {
             jsonAdapter.usage[desktopId] = (jsonAdapter.usage[desktopId] || 0) + 1;
+            writeAdapter();
         }
     }
 
