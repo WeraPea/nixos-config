@@ -14,7 +14,7 @@
     mango.mainDisplay = lib.mkOption { };
   };
   config = lib.mkIf config.mango.enable {
-    services.wpaperd.enable = true;
+    services.swww.enable = true;
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
@@ -346,6 +346,14 @@
           if config.programs.waybar.enable then # hyprlang
             ''
               exec-once=waybar
+            ''
+          else
+            ""
+        )
+        + (
+          if config.services.swww.enable then # hyprlang
+            ''
+              exec-once=swww img ${../../stylix/wallpaper.png}
             ''
           else
             ""
