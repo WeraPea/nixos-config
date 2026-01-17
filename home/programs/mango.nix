@@ -321,7 +321,6 @@
           mousebind=NONE,btn_right,killclient,0
 
           env=QT_QPA_PLATFORM,wayland
-          env=QT_WAYLAND_DISABLE_WINDOWDECORATION,1
           env=MOZ_ENABLE_WAYLAND,1
           env=NIXOS_OZONE_WL,1
           env=ELECTRON_OZONE_PLATFORM_HINT,wayland
