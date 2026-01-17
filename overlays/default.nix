@@ -5,6 +5,5 @@
     (import ./xrizer.nix)
     (import ./opencomposite.nix)
     (import ./bs-manager.nix)
-    (import ./webtorrent-mpv-hook.nix)
   ];
 }
