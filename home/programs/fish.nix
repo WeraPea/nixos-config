@@ -146,7 +146,7 @@
         ntf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os test ~/nixos-config-temp -k";
         nsf = "rsync -ar --delete ~/nixos-config/ fajita:~/nixos-config-temp && ssh -t fajita nh os switch ~/nixos-config-temp -k";
         ntp = "nh os test -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote -k -o ~/nh-os-pinenote-(date -Is)";
-        nsp = "nh os switch -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote -k -o ~/nh-os-pinenote-(date -Is)";
+        nsp = "nh os switch -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote -k -o ~/nh-os-pinenote-(date -Is)-switch";
         sl = "ll";
         vim = "nvim";
         vm = "mv";

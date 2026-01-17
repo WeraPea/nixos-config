@@ -10,8 +10,7 @@ lib.mkIf osConfig.gaming.enable {
   home.packages = [
     outputs.packages.${pkgs.stdenv.hostPlatform.system}.vrlink
     pkgs.lighthouse-steamvr
-    pkgs.wayvr-dashboard
-    pkgs.wlx-overlay-s
+    pkgs.wayvr
     (pkgs.writeShellScriptBin "monado-steamvr-switch" ''
       if [[ ! -L $HOME/.config/openvr/openvrpaths.vrpath ]]; then
         echo "$HOME/.config/openvr/openvrpaths.vrpath is not a symbolic link"

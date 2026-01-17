@@ -74,7 +74,7 @@ in
                 ;
             }
           else
-            inputs.quickshell.programs.quickshell;
+            inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
       }
 
     ];

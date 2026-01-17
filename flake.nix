@@ -9,7 +9,7 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:danth/stylix";
+    stylix.url = "github:nix-community/stylix";
     nur.url = "github:nix-community/NUR";
     erosanix.url = "github:emmanuelrosa/erosanix";
     nix-index-database = {
@@ -23,15 +23,7 @@
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
-    pinenote-nixos = {
-      # not changing nixpkgs so that kernel derivation isn't rebuild on each nixpkgs update
-      url = "github:WeraPea/pinenote-nixos";
-    };
-    pinenote-nixos-follows = {
-      # for python version to be the same
-      url = "github:WeraPea/pinenote-nixos";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
     rakuyomi.url = "github:hanatsumi/rakuyomi";
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
