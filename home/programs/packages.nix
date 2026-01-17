@@ -99,7 +99,7 @@
           anki
           chatterino7
           flatpak
-          freecad-wayland
+          # freecad-wayland
           helvum
           krita
           mecab # for anki plugin
