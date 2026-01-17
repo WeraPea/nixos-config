@@ -24,7 +24,6 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
     pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
-    rakuyomi.url = "github:hanatsumi/rakuyomi";
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
       inputs.nixpkgs.follows = "nixpkgs";

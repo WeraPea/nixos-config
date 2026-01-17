@@ -17,6 +17,7 @@ rec {
   mpv-youtube-srv3-subs = callPackage ./mpv-youtube-srv3-subs.nix { inherit yt-sub-converter; };
   nyaasi = callPackage ./nyaasi.nix { };
   progressbar = callPackage ./progressbar.nix { };
+  rakuyomi = callPackage ./rakuyomi.nix { };
   rename-torrents = callPackage ./rename-torrents.nix { };
   rotate = callPackage ./rotate.nix { };
   screenshot = callPackage ./screenshot.nix { inherit manga-ocr-from-file; };

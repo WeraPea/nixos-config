@@ -1,7 +1,5 @@
 {
-  osConfig,
   config,
-  inputs,
   outputs,
   lib,
   pkgs,
@@ -14,16 +12,7 @@
   config = lib.mkIf config.koreader.enable {
     home.packages = [ pkgs.koreader ];
     xdg.configFile."koreader/plugins/rakuyomi.koplugin".source =
-      let
-        variant =
-          {
-            "x86_64-linux" = "desktop";
-            "aarch64-linux" = "aarch64";
-          }
-          .${pkgs.stdenv.hostPlatform.system}
-            or (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
-      in
-      inputs.rakuyomi.packages.${osConfig.buildSystem}.rakuyomi.${variant};
+      outputs.packages.${pkgs.stdenv.hostPlatform.system}.rakuyomi;
     xdg.configFile."koreader/plugins/anki.koplugin".source = (
       outputs.packages.${pkgs.stdenv.hostPlatform.system}.anki-koplugin.override {
         profiles = {
@@ -85,9 +74,10 @@
     xdg.configFile."koreader/rakuyomi/settings.json".text = # json
       ''
         {
-          "$schema": "https://github.com/hanatsumi/rakuyomi/releases/download/main/settings.schema.json",
+          "$schema": "https://github.com/tachibana-shin/rakuyomi/releases/latest/download/settings.schema.json",
           "source_lists": [
-            "https://raw.githubusercontent.com/Skittyblock/aidoku-community-sources/refs/heads/gh-pages/index.min.json"
+            "https://raw.githubusercontent.com/tachibana-shin/aidoku-community-sources/gh-pages/index.min.json",
+            "https://aidoku-community.github.io/sources/index.min.json"
           ],
           "source_settings": {
             "en.mangakatana": {
