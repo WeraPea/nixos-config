@@ -322,6 +322,16 @@
           mousebind=NONE,btn_left,toggleoverview,-1
           mousebind=NONE,btn_right,killclient,0
 
+          env=QT_QPA_PLATFORM,wayland
+          env=QT_WAYLAND_DISABLE_WINDOWDECORATION,1
+          env=MOZ_ENABLE_WAYLAND,1
+          env=NIXOS_OZONE_WL,1
+          env=ELECTRON_OZONE_PLATFORM_HINT,wayland
+          env=OZONE_PLATFORM,wayland
+          env=GDK_BACKEND,wayland
+          env=WINDOW_MANAGER,mango
+          env=SDL_VIDEODRIVER,wayland
+
           exec-once=${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots XDG_SESSION_TYPE NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH
           exec-once=systemctl --user reset-failed
           exec-once=systemctl --user start mango-session.target
