@@ -79,25 +79,24 @@ in
 
     cursor.name = lib.mkForce "Bibata-Modern-Ice";
 
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/grayscale-light.yaml";
     base16Scheme = lib.mkForce {
       scheme = "eink-light";
       base00 = "#ffffff";
-      base01 = "#e3e3e3";
-      base02 = "#b9b9b9";
-      base03 = "#ababab";
-      base04 = "#525252";
-      base05 = "#464646";
-      base06 = "#252525";
+      base01 = "#eeeeee";
+      base02 = "#dddddd";
+      base03 = "#bbbbbb";
+      base04 = "#444444";
+      base05 = "#222222";
+      base06 = "#111111";
       base07 = "#000000";
-      base08 = "#7c7c7c";
-      base09 = "#999999";
-      base0A = "#a0a0a0";
-      base0B = "#8e8e8e";
-      base0C = "#868686";
-      base0D = "#686868";
-      base0E = "#747474";
-      base0F = "#5e5e5e";
+      base08 = "#777777";
+      base09 = "#cccccc";
+      base0A = "#aaaaaa";
+      base0B = "#999999";
+      base0C = "#888888";
+      base0D = "#333333";
+      base0E = "#666666";
+      base0F = "#555555";
     };
   };
 }
