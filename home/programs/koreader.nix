@@ -102,5 +102,12 @@
           os.execute("sh -c \"sleep 0.1; dbus-send --type=method_call --dest=org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1.GlobalRefresh\" &") -- TODO: currently it refreshes normaly once, and then does the full refresh, would be nice to remove the normal refresh
         end
       '';
+    xdg.configFile."koreader/settings/event_map.lua".text = # lua
+      ''
+        return {
+          [1073742106] = "RPgFwd",
+          [1073742107] = "RPgBack",
+        }
+      '';
   };
 }
