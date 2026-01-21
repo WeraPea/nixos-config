@@ -2,6 +2,7 @@
 {
   imports = [
     ./boot.nix
+    ./karakeep.nix
   ];
   user.hostname = "server";
   graphics.enable = false;
