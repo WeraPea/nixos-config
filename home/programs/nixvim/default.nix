@@ -45,6 +45,7 @@
         vim.g.clipboard = 'osc52'
         vim.cmd([[
           cnoreabbrev <expr> W (getcmdtype() == ':' && getcmdline() =~ '^W$') ? 'w' : 'W'
+          cnoreabbrev <expr> Wq (getcmdtype() == ':' && getcmdline() =~ '^Wq$') ? 'wq' : 'Wq'
         ]])
         vim.diagnostic.config({
           signs = {
