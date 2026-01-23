@@ -22,7 +22,6 @@
     };
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    osu-scrobbler.url = "github:WeraPea/osu-scrobbler";
     pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
@@ -62,9 +61,6 @@
         fcitx-virtualkeyboard-adapter.overlays.default
         pinenote-usb-tablet.overlays.default
         nur.overlays.default
-        (final: prev: {
-          osu-scrobbler = osu-scrobbler.defaultPackage.${final.stdenv.hostPlatform.system};
-        })
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (

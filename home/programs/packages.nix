@@ -84,8 +84,8 @@
           mangohud
           nvtopPackages.amd
           osu-lazer-bin
-          osu-scrobbler
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.launch-osu
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.osu-scrobbler
           prismlauncher
           protonup-qt
           rpcs3

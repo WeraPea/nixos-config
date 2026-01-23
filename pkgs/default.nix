@@ -8,7 +8,7 @@ rec {
   anki-koplugin = callPackage ./anki-koplugin.nix { };
   aria2dl = callPackage ./aria2dl.nix { };
   beets-vocadb = callPackage ./beets-vocadb.nix { };
-  launch-osu = callPackage ./launch-osu.nix { };
+  launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
   manga-ocr = callPackage ./manga-ocr.nix { };
   manga-ocr-from-file = callPackage ./manga-ocr-from-file.nix { inherit manga-ocr; };
   mpv-http-mitmytproxy = callPackage ./mpv-http-mitmytproxy.nix { };
@@ -16,6 +16,7 @@ rec {
   mpv-websocket-script = callPackage ./mpv-websocket-script.nix { inherit mpv-websocket; };
   mpv-youtube-srv3-subs = callPackage ./mpv-youtube-srv3-subs.nix { inherit yt-sub-converter; };
   nyaasi = callPackage ./nyaasi.nix { };
+  osu-scrobbler = callPackage ./osu-scrobbler.nix { };
   progressbar = callPackage ./progressbar.nix { };
   rakuyomi = callPackage ./rakuyomi.nix { };
   rename-torrents = callPackage ./rename-torrents.nix { };

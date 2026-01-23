@@ -9,6 +9,7 @@ writeShellApplication {
     osu-scrobbler
   ];
   text = ''
+    export OSU_SCROBBLER_CONFIG_PATH=$HOME/.config/osu-scrobbler/config.toml
     kitty -e osu-scrobbler &
     export SDL_VIDEODRIVER=x11
     if [[ "$1" = "hack-build" ]]; then
