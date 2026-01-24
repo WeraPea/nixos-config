@@ -2,7 +2,6 @@
 {
   imports = [
     ./boot.nix
-    ./karakeep.nix
     ./vaultwarden.nix
     ./caddy.nix
   ];
