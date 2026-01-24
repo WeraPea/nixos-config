@@ -3,6 +3,7 @@
   imports = [
     ./boot.nix
     ./karakeep.nix
+    ./caddy.nix
   ];
   user.hostname = "server";
   graphics.enable = false;
