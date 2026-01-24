@@ -1,14 +1,17 @@
 { config, ... }:
+let
+  domain = "kara.${config.networking.domain}";
+in
 {
-  networking.firewall.allowedTCPPorts = [ 3000 ];
   services.karakeep = {
     enable = true;
     browser.enable = true;
     meilisearch.enable = true;
     environmentFile = config.sops.templates."karakeep-secrets.env".path;
     extraEnvironment = {
-      API_URL = "http://127.0.0.1:3000";
-      KARAKEEP_SERVER_ADDR = "http://127.0.0.1:3000";
+      PORT = "3000";
+      API_URL = "https://${domain}";
+      KARAKEEP_SERVER_ADDR = "https://${domain}";
       MEILI_ADDR = "http://${config.services.meilisearch.listenAddress}:${toString config.services.meilisearch.listenPort}";
       DISABLE_SIGNUPS = "true";
     };
@@ -32,4 +35,7 @@
       '';
     };
   };
+  services.caddy.virtualHosts."${domain}".extraConfig = ''
+    reverse_proxy :${config.services.karakeep.extraEnvironment.PORT}
+  '';
 }
