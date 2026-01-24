@@ -3,9 +3,11 @@
   imports = [
     ./boot.nix
     ./karakeep.nix
+    ./vaultwarden.nix
     ./caddy.nix
   ];
   user.hostname = "server";
+  networking.domain = "werapi.duckdns.org";
   graphics.enable = false;
   system.stateVersion = "24.11";
   # ps2 samba server
