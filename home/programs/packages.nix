@@ -65,6 +65,7 @@
           dragon-drop
           outputs.packages.${pkgs.stdenv.hostPlatform.system}._0x0
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.browserexport
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.search

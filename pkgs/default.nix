@@ -8,6 +8,8 @@ rec {
   anki-koplugin = callPackage ./anki-koplugin.nix { };
   aria2dl = callPackage ./aria2dl.nix { };
   beets-vocadb = callPackage ./beets-vocadb.nix { };
+  browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
+  kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
   manga-ocr = callPackage ./manga-ocr.nix { };
   manga-ocr-from-file = callPackage ./manga-ocr-from-file.nix { inherit manga-ocr; };
@@ -24,6 +26,7 @@ rec {
   screenshot = callPackage ./screenshot.nix { inherit manga-ocr-from-file; };
   search = callPackage ./search.nix { inherit nyaasi; };
   sony-headphones-client = callPackage ./sony-headphones-client.nix { };
+  sqlite-backup = pkgs.python3.pkgs.callPackage ./sqlite-backup.nix { };
   streamlink-ttvlol = callPackage ./streamlink-ttvlol.nix { };
   switch-boot-partition = callPackage ./switch-boot-partition.nix { };
   udev-gothic-hs-nf = callPackage ./udev-gothic-hs-nf.nix { };
