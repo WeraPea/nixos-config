@@ -4,6 +4,7 @@
     ./boot.nix
     ./vaultwarden.nix
     ./caddy.nix
+    ./linkwarden.nix
   ];
   user.hostname = "server";
   networking.domain = "werapi.duckdns.org";
