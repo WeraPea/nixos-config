@@ -36,10 +36,131 @@
         url = "https://gist.githubusercontent.com/wrldspawn/9e76f2b4600d2a84a460735d6c037dfa/raw/enforceTransparent.sys.mjs";
         sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
       };
+    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/toggleToolbar.sys.mjs".text = # js
+      ''
+        // ==UserScript==
+        // @name            Toggle Toolbar
+        // @author          werapi
+        // @version         1
+        // @description
+        // @onlyonce
+        // ==/UserScript==
+        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+
+        Windows.onCreated(async (win) => {
+          const { parent } = win;
+          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+
+          await Windows.waitWindowLoading(parent);
+
+          const doc = parent.document;
+          const toolbox = doc.getElementById("navigator-toolbox");
+
+          const menuitem = doc.createXULElement("menuitem");
+          menuitem.id = "context-toggle-toolbar";
+          menuitem.setAttribute("label", "Toggle Toolbar");
+          menuitem.setAttribute("accesskey", "T");
+
+          menuitem.addEventListener("command", () => {
+            if (toolbox) {
+              const isHidden = toolbox.style.display === "none";
+              if (isHidden) {
+                toolbox.style.display = "";
+                toolbox.style.visibility = "";
+              } else {
+                toolbox.style.display = "none";
+                toolbox.style.visibility = "collapse";
+              }
+            }
+          });
+
+          const contentAreaContextMenu = doc.getElementById("contentAreaContextMenu");
+          if (contentAreaContextMenu) {
+            const separator = doc.createXULElement("menuseparator");
+            separator.id = "context-toggle-toolbar-separator";
+            contentAreaContextMenu.appendChild(separator);
+            contentAreaContextMenu.appendChild(menuitem);
+          }
+
+          const key = doc.createXULElement("key");
+          key.id = "key-toggle-toolbar";
+          key.setAttribute("modifiers", "alt");
+          key.setAttribute("key", "T");
+          key.addEventListener("command", () => {
+            menuitem.click();
+          });
+
+          const keyset = doc.getElementById("mainKeyset");
+          if (keyset) {
+            keyset.appendChild(key);
+          }
+        });
+      '';
+    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/transparentBrowserByUrl.sys.mjs".text = # js
+      ''
+        // ==UserScript==
+        // @name            Transparent Browser By URL
+        // @author          werapi
+        // @version         1
+        // @description     Make #browser transparent for matching URLs
+        // @onlyonce
+        // ==/UserScript==
+        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+
+        Windows.onCreated(async (win) => {
+          const { parent } = win;
+          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+
+          await Windows.waitWindowLoading(parent);
+
+          const doc = parent.document;
+          const browserEl = doc.getElementById("browser");
+          const toolboxEl = doc.getElementById("navigator-toolbox");
+
+          const transparentUrls = [
+            /^https:\/\/renji-xd\.github\.io\/texthooker-ui/,
+          ];
+
+          function shouldBeTransparent(url) {
+            if (!url) return false;
+            return transparentUrls.some(pattern => pattern.test(url));
+          }
+
+          function updateBrowserBackground(url) {
+            if (!browserEl || !toolboxEl) return;
+
+            if (shouldBeTransparent(url)) {
+              browserEl.setAttribute("transparent-url", "true");
+              toolboxEl.setAttribute("transparent-url", "true");
+            } else {
+              browserEl.removeAttribute("transparent-url");
+              toolboxEl.removeAttribute("transparent-url");
+            }
+          }
+
+          if (parent.gBrowser.selectedBrowser) {
+            updateBrowserBackground(parent.gBrowser.selectedBrowser.currentURI?.spec);
+          }
+
+          parent.gBrowser.tabContainer.addEventListener("TabSelect", () => {
+            const url = parent.gBrowser.selectedBrowser?.currentURI?.spec;
+            updateBrowserBackground(url);
+          });
+
+          const TransparencyListener = {
+            onLocationChange(browser, webProgress, request, uri, flags) {
+              // Only update if this is the selected browser and it's the top-level frame
+              if (browser === parent.gBrowser.selectedBrowser && webProgress.isTopLevel) {
+                updateBrowserBackground(uri?.spec);
+              }
+            }
+          };
+          parent.gBrowser.addTabsProgressListener(TransparencyListener);
+        });
+      '';
 
     programs.firefox = {
       enable = true;
-      # package = pkgs.glide-browser;
       package = pkgs.glide-browser.override {
         extraPrefsFiles = [
           (builtins.fetchurl {
@@ -166,7 +287,6 @@
             linkwarden
             lovely-forks
             multiselect-for-youtube
-            new-window-without-toolbar
             nixpkgs-pr-tracker
             nyaa-linker
             onetab
@@ -432,6 +552,9 @@
               #browser {
                 background-color: #12121290 !important;
               }
+              #browser[transparent-url], #navigator-toolbox[transparent-url] {
+                background-color: #0000 !important;
+              }
             }
           '';
         userContent = # css
@@ -462,6 +585,18 @@
               .list-preview .media-preview-card .content,
               .hover-data {
                 background-color: #121212f0 !important;
+              }
+            }
+            @-moz-document regexp("https://renji-xd.github.io/texthooker-ui/") {
+              :root, body, .bg-base-100 {
+                background-color: #0000 !important;
+              }
+              * {
+                text-shadow:
+                  0 0 2px rgba(0, 0, 0, 0.9),
+                  0 0 4px rgba(0, 0, 0, 0.9),
+                  0 0 6px rgba(0, 0, 0, 0.9),
+                  1px 1px 2px rgba(0, 0, 0, 1) !important;
               }
             }
           '';
