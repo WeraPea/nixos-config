@@ -18,18 +18,38 @@
     # stylix.targets.firefox.enable = false;
     stylix.targets.firefox.profileNames = [ "glide" ];
     stylix.targets.firefox.colorTheme.enable = true;
+    home.file."${config.programs.firefox.configPath}/glide/chrome/utils".source =
+      let
+        src = pkgs.fetchFromGitHub {
+          owner = "MrOtherGuy";
+          repo = "fx-autoconfig";
+          rev = "d76528e93d0c61bef9ca9a4af1e58e545e9099c1";
+          hash = "sha256-W0MO8waK+1ZKg94uvuE42RJxxvI9dWabkMzziP8U2i0=";
+        };
+      in
+      (pkgs.runCommand "fx-autoconfig-utils" { } ''
+        mkdir -p "$out"
+        cp ${src}/profile/chrome/utils/* "$out/"
+      '');
+    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/enforceTransparent.sys.mjs".source =
+      builtins.fetchurl {
+        url = "https://gist.githubusercontent.com/wrldspawn/9e76f2b4600d2a84a460735d6c037dfa/raw/enforceTransparent.sys.mjs";
+        sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
+      };
+
     programs.firefox = {
       enable = true;
-      package = pkgs.glide-browser;
-      # package = pkgs.glide-browser.override {
-      #   extraPrefsFiles = [
-      #     (builtins.fetchurl {
-      #       url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
-      #       sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
-      #     })
-      #   ];
-      # };
+      # package = pkgs.glide-browser;
+      package = pkgs.glide-browser.override {
+        extraPrefsFiles = [
+          (builtins.fetchurl {
+            url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
+            sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
+          })
+        ];
+      };
       # configPath = "${config.xdg.configHome}/glide/glide";
+      release = "148.0b4";
       languagePacks = [
         "en-US"
         "pl"
@@ -327,7 +347,7 @@
             };
           };
         };
-        # TODO: make the bellow be customizable from nix options
+        # TODO: make the below be customizable from nix options
         userChrome = # css
           ''
             @-moz-document url(chrome://browser/content/browser.xul), url(chrome://browser/content/browser.xhtml) {
@@ -355,8 +375,12 @@
                 border-bottom: 0px !important;
               }
 
-              #urlbar {
+              #urlbar:not([breakout-extend]) .urlbar-background {
                 background-color: #0000 !important;
+                border: none !important;
+              }
+              #urlbar[breakout-extend] {
+                background-color: #121212d0 !important;
               }
 
               .urlbar-background {
@@ -374,15 +398,17 @@
               }
 
               :root {
-                  --tab-selected-bgcolor: #0000 !important;
-                  --browser-page-background: #0000 !important;
-                  --content-view-background: #0000 !important;
-                  --tabpanel-background-color: #0000 !important;
-                  background: transparent;
+                --tab-selected-bgcolor: #0000 !important;
+                --browser-page-background: #0000 !important;
+                --content-view-background: #0000 !important;
+                --tabpanel-background-color: #0000 !important;
+                background: transparent;
 
-                  --in-content-page-background: #0000 !important;
-                  --in-content-box-background: #0000 !important;
-                  --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
+                --in-content-page-background: #0000 !important;
+                --in-content-box-background: #0000 !important;
+                --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
+                --toolbarbutton-border-radius: 0 !important;
+                --arrowpanel-border-radius: 0 !important;
               }
 
               #tabpanels {
@@ -405,11 +431,16 @@
 
               #browser {
                 background-color: #12121290 !important;
-              } /* broken as of 148 beta but there is a fix using fx-autoconfig */
+              }
             }
           '';
         userContent = # css
           ''
+            :root {
+              --in-content-page-background: #0000 !important;
+              --in-content-box-background: #0000 !important;
+              --newtab-background-color: #0000 !important;
+            }
             @-moz-document regexp("https://duckduckgo\\.com/.*") {
               html, body, .body--home, .site-wrapper, .region__body, .badge-link, .module--carousel__image-wrapper, .result__image, .vertical--map__sidebar, .vertical--map__sidebar__header, .page-chrome_newtab, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded .metabar:not(.is-stuck), .header-wrap {
                 --theme-bg-home-custom: #0000 !important;
