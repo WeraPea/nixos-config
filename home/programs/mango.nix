@@ -211,19 +211,19 @@
           bind=SUPER,o,spawn_shell,wl-paste | wl-copy -p
           bind=SUPER,o,setkeymode,default
 
-          bind=SUPER,s,spawn_shell,firefox "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER,s,spawn_shell,glide "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
           bind=SUPER,s,setkeymode,default
-          bind=SUPER+CTRL,s,spawn_shell,firefox --new-window "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER+CTRL,s,spawn_shell,glide --new-window "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
           bind=SUPER+CTRL,s,setkeymode,default
 
-          bind=SUPER,j,spawn_shell,firefox "jisho.org/search/$(wl-paste)"
+          bind=SUPER,j,spawn_shell,glide "jisho.org/search/$(wl-paste)"
           bind=SUPER,j,setkeymode,default
-          bind=SUPER+CTRL,j,spawn_shell,firefox --new-window "jisho.org/search/$(wl-paste)"
+          bind=SUPER+CTRL,j,spawn_shell,glide --new-window "jisho.org/search/$(wl-paste)"
           bind=SUPER+CTRL,j,setkeymode,default
 
-          bind=SUPER,h,spawn_shell,firefox "$(wl-paste)"
+          bind=SUPER,h,spawn_shell,glide "$(wl-paste)"
           bind=SUPER,h,setkeymode,default
-          bind=SUPER+CTRL,h,spawn_shell,firefox --new-window "$(wl-paste)"
+          bind=SUPER+CTRL,h,spawn_shell,glide --new-window "$(wl-paste)"
           bind=SUPER+CTRL,h,setkeymode,default
 
           bind=NONE,Escape,setkeymode,default
@@ -237,19 +237,19 @@
           bind=SUPER,p,spawn_shell,wl-paste -p | wl-copy
           bind=SUPER,p,setkeymode,default
 
-          bind=SUPER,s,spawn_shell,firefox "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER,s,spawn_shell,glide "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
           bind=SUPER,s,setkeymode,default
-          bind=SUPER+CTRL,s,spawn_shell,firefox --new-window "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
+          bind=SUPER+CTRL,s,spawn_shell,glide --new-window "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
           bind=SUPER+CTRL,s,setkeymode,default
 
-          bind=SUPER,j,spawn_shell,firefox "jisho.org/search/$(wl-paste -p)"
+          bind=SUPER,j,spawn_shell,glide "jisho.org/search/$(wl-paste -p)"
           bind=SUPER,j,setkeymode,default
-          bind=SUPER+CTRL,j,spawn_shell,firefox --new-window "jisho.org/search/$(wl-paste -p)"
+          bind=SUPER+CTRL,j,spawn_shell,glide --new-window "jisho.org/search/$(wl-paste -p)"
           bind=SUPER+CTRL,j,setkeymode,default
 
-          bind=SUPER,h,spawn_shell,firefox "$(wl-paste -p)"
+          bind=SUPER,h,spawn_shell,glide "$(wl-paste -p)"
           bind=SUPER,h,setkeymode,default
-          bind=SUPER+CTRL,h,spawn_shell,firefox --new-window "$(wl-paste -p)"
+          bind=SUPER+CTRL,h,spawn_shell,glide --new-window "$(wl-paste -p)"
           bind=SUPER+CTRL,h,setkeymode,default
 
           bind=NONE,Escape,setkeymode,default
@@ -263,7 +263,7 @@
           bind=SUPER,c,spawn,chatterino
           bind=SUPER,c,setkeymode,default
 
-          bind=SUPER,f,spawn,firefox
+          bind=SUPER,f,spawn,glide
           bind=SUPER,f,setkeymode,default
 
           bind=SUPER,r,spawn,rofi -show drun -show-icons
@@ -301,7 +301,7 @@
           bind=SUPER,k,spawn,mpc volume +5
           bind=SUPER,k,setkeymode,default
 
-          bind=SUPER,f,spawn_shell,firefox --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"
+          bind=SUPER,f,spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"
           bind=SUPER,f,setkeymode,default
           bind=NONE,Escape,setkeymode,default
           keymode=default

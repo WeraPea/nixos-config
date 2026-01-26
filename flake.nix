@@ -43,6 +43,10 @@
       url = "github:WeraPea/mangowc/combined";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    glide = {
+      url = "github:glide-browser/glide.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -59,6 +63,7 @@
       ];
       overlays = with inputs; [
         fcitx-virtualkeyboard-adapter.overlays.default
+        glide.overlays.default
         pinenote-usb-tablet.overlays.default
         nur.overlays.default
       ];

@@ -1,6 +1,6 @@
 { lib, osConfig, ... }:
 let
-  browser = [ "firefox.desktop" ];
+  browser = [ "glide.desktop" ];
   mpv = [ "mpv.desktop" ];
 
   associations = {

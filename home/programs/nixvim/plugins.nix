@@ -210,6 +210,7 @@
         ccls.enable = true;
         # clangd.enable = true;
         gopls.enable = true;
+        ts_ls.enable = true;
       };
     };
     cmp = {

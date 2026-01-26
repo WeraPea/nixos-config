@@ -271,6 +271,26 @@
         "type": "github"
       }
     },
+    "glide": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1768858368,
+        "narHash": "sha256-EqqShMa+LXRymE8Vc3or5lHU2ftYTSEgixYtqwRpr0M=",
+        "owner": "glide-browser",
+        "repo": "glide.nix",
+        "rev": "93646ce641920fa1ed4917cc9dbfa56f15e90a06",
+        "type": "github"
+      },
+      "original": {
+        "owner": "glide-browser",
+        "repo": "glide.nix",
+        "type": "github"
+      }
+    },
     "gnome-shell": {
       "flake": false,
       "locked": {
@@ -678,6 +698,7 @@
       "inputs": {
         "erosanix": "erosanix",
         "fcitx-virtualkeyboard-adapter": "fcitx-virtualkeyboard-adapter",
+        "glide": "glide",
         "home-manager": "home-manager",
         "mango": "mango",
         "mobile-nixos": "mobile-nixos",
