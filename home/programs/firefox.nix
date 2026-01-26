@@ -471,50 +471,42 @@
         userChrome = # css
           ''
             @-moz-document url(chrome://browser/content/browser.xul), url(chrome://browser/content/browser.xhtml) {
-              #navigator-toolbox {
-                background-color: #12121290 !important;
-                border-bottom: 0px !important;
-              }
-
-              #main-window {
+              #browser,
+              #main-window,
+              #nav-bar,
+              #PersonalToolbar,
+              #tabbrowser-tabpanels,
+              #tabpanels,
+              #TabsToolbar,
+              .urlbar-background,
+              .tabbrowser-arrowscrollbox {
                 background: transparent !important;
-              }
-
-              .tabbrowser-arrowscrollbox,
-              #TabsToolbar {
-                background-color: #0000 !important;
-              }
-
-              #PersonalToolbar {
-                background-color: #0000 !important;
+                background-color: transparent !important;
               }
 
               #nav-bar {
-                background-color: #0000 !important;
                 border-top: 0px !important;
                 border-bottom: 0px !important;
               }
-
-              #urlbar:not([breakout-extend]) .urlbar-background {
-                background-color: #0000 !important;
-                border: none !important;
+              #navigator-toolbox {
+                border-bottom: 0px !important;
               }
-              #urlbar[breakout-extend] {
-                background-color: #121212d0 !important;
-              }
-
-              .urlbar-background {
-                background-color: #0000 !important;
-              }
-
               #tabbrowser-tabs {
                 border-inline: 0px !important;
               }
 
-              #main-window,
-              #tabbrowser-tabpanels {
-                background: transparent !important;
-                background-color: transparent !important;
+              #urlbar:not([breakout-extend]) .urlbar-background {
+                border: none !important;
+              }
+              #urlbar[breakout-extend] .urlbar-background {
+                background-color: #121212d0 !important;
+              }
+
+              #browser, #navigator-toolbox {
+                background-color: #12121290 !important;
+              }
+              #browser[transparent-url], #navigator-toolbox[transparent-url] {
+                background-color: #0000 !important;
               }
 
               :root {
@@ -529,31 +521,6 @@
                 --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
                 --toolbarbutton-border-radius: 0 !important;
                 --arrowpanel-border-radius: 0 !important;
-              }
-
-              #tabpanels {
-                background: transparent !important;
-                background-color: transparent !important;
-              }
-
-              #browser {
-                background: transparent !important;
-                background-color: transparent !important;
-              }
-
-              #browser:not(.browser-toolbox-background) {
-                background-color: var(--toolbar-bgcolor);
-              }
-
-              #main-window {
-                background-color: #0000 !important;
-              }
-
-              #browser {
-                background-color: #12121290 !important;
-              }
-              #browser[transparent-url], #navigator-toolbox[transparent-url] {
-                background-color: #0000 !important;
               }
             }
           '';
