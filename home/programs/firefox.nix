@@ -4,160 +4,215 @@
   config,
   ...
 }:
+let
+  inherit (pkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
+  bpc = buildFirefoxXpiAddon rec {
+    pname = "bypass_paywalls_clean";
+    version = "4.2.8.7";
+    addonId = "magnolia@12.34";
+    url = "https://gitflic.ru/project/magnolia1234/bpc_uploads/blob/raw?file=${pname}-${version}.xpi";
+    sha256 = "sha256-9ON7dRylqQEdETbi7a0hKibtf6dBw8hROhQokdP2RBk=";
+    meta = with pkgs.lib; {
+      homepage = "https://twitter.com/Magnolia1234B";
+      description = "Bypass Paywalls of (custom) news sites";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+  right-click-borescope = buildFirefoxXpiAddon rec {
+    pname = "right_click_borescope";
+    version = "0.0.4";
+    addonId = "{1772ab92-844c-4a81-9804-89e4fffa5054}";
+    url = "https://addons.mozilla.org/firefox/downloads/file/3947059/${pname}-${version}.xpi";
+    sha256 = "sha256-iks2o99cg3H5dSE3/94rMPCRvc9axXTglbgI6cXpXwA=";
+    meta = with pkgs.lib; {
+      homepage = "https://github.com/blackle/Right-Click-Borescope";
+      description = "List all images under your cursor, even ones hidden by other elements";
+      license = licenses.publicDomain;
+      platforms = platforms.all;
+    };
+  };
+  unhook = buildFirefoxXpiAddon rec {
+    pname = "youtube_recommended_videos";
+    version = "1.6.7";
+    addonId = "myallychou@gmail.com";
+    url = "https://addons.mozilla.org/firefox/downloads/file/4263531/${pname}-${version}.xpi";
+    sha256 = "sha256-u21ouN9IyOzkTkFSeDz+QBp9psJ1F2Nmsvqp6nh0DRU=";
+    meta = with pkgs.lib; {
+      homepage = "https://unhook.app/";
+      description = "Hide YouTube related videos, comments, video suggestions wall, homepage recommendations, trending tab, and other distractions.";
+      license = licenses.unfree;
+      platforms = platforms.all;
+    };
+  };
+
+  utils =
+    let
+      src = pkgs.fetchFromGitHub {
+        owner = "MrOtherGuy";
+        repo = "fx-autoconfig";
+        rev = "d76528e93d0c61bef9ca9a4af1e58e545e9099c1";
+        hash = "sha256-W0MO8waK+1ZKg94uvuE42RJxxvI9dWabkMzziP8U2i0=";
+      };
+    in
+    (pkgs.runCommand "fx-autoconfig-utils" { } ''
+      mkdir -p "$out"
+      cp ${src}/profile/chrome/utils/* "$out/"
+    '');
+
+  enforce-transparent = builtins.fetchurl {
+    url = "https://gist.githubusercontent.com/wrldspawn/9e76f2b4600d2a84a460735d6c037dfa/raw/enforceTransparent.sys.mjs";
+    sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
+  };
+
+  toggle-toolbar = # js
+    ''
+      // ==UserScript==
+      // @name            Toggle Toolbar
+      // @author          werapi
+      // @version         1
+      // @description
+      // @onlyonce
+      // ==/UserScript==
+      import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+
+      Windows.onCreated(async (win) => {
+        const { parent } = win;
+        if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+
+        await Windows.waitWindowLoading(parent);
+
+        const doc = parent.document;
+        const toolbox = doc.getElementById("navigator-toolbox");
+
+        const menuitem = doc.createXULElement("menuitem");
+        menuitem.id = "context-toggle-toolbar";
+        menuitem.setAttribute("label", "Toggle Toolbar");
+        menuitem.setAttribute("accesskey", "T");
+
+        menuitem.addEventListener("command", () => {
+          if (toolbox) {
+            const isHidden = toolbox.style.display === "none";
+            if (isHidden) {
+              toolbox.style.display = "";
+              toolbox.style.visibility = "";
+            } else {
+              toolbox.style.display = "none";
+              toolbox.style.visibility = "collapse";
+            }
+          }
+        });
+
+        const contentAreaContextMenu = doc.getElementById("contentAreaContextMenu");
+        if (contentAreaContextMenu) {
+          const separator = doc.createXULElement("menuseparator");
+          separator.id = "context-toggle-toolbar-separator";
+          contentAreaContextMenu.appendChild(separator);
+          contentAreaContextMenu.appendChild(menuitem);
+        }
+
+        const key = doc.createXULElement("key");
+        key.id = "key-toggle-toolbar";
+        key.setAttribute("modifiers", "alt");
+        key.setAttribute("key", "T");
+        key.addEventListener("command", () => {
+          menuitem.click();
+        });
+
+        const keyset = doc.getElementById("mainKeyset");
+        if (keyset) {
+          keyset.appendChild(key);
+        }
+      });
+    '';
+
+  transparent-browser-by-url = # js
+    ''
+      // ==UserScript==
+      // @name            Transparent Browser By URL
+      // @author          werapi
+      // @version         1
+      // @description     Make #browser transparent for matching URLs
+      // @onlyonce
+      // ==/UserScript==
+      import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+
+      Windows.onCreated(async (win) => {
+        const { parent } = win;
+        if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+
+        await Windows.waitWindowLoading(parent);
+
+        const doc = parent.document;
+        const browserEl = doc.getElementById("browser");
+        const toolboxEl = doc.getElementById("navigator-toolbox");
+
+        const transparentUrls = [
+          /^https:\/\/renji-xd\.github\.io\/texthooker-ui/,
+        ];
+
+        function shouldBeTransparent(url) {
+          if (!url) return false;
+          return transparentUrls.some(pattern => pattern.test(url));
+        }
+
+        function updateBrowserBackground(url) {
+          if (!browserEl || !toolboxEl) return;
+
+          if (shouldBeTransparent(url)) {
+            browserEl.setAttribute("transparent-url", "true");
+            toolboxEl.setAttribute("transparent-url", "true");
+          } else {
+            browserEl.removeAttribute("transparent-url");
+            toolboxEl.removeAttribute("transparent-url");
+          }
+        }
+
+        if (parent.gBrowser.selectedBrowser) {
+          updateBrowserBackground(parent.gBrowser.selectedBrowser.currentURI?.spec);
+        }
+
+        parent.gBrowser.tabContainer.addEventListener("TabSelect", () => {
+          const url = parent.gBrowser.selectedBrowser?.currentURI?.spec;
+          updateBrowserBackground(url);
+        });
+
+        const TransparencyListener = {
+          onLocationChange(browser, webProgress, request, uri, flags) {
+            // Only update if this is the selected browser and it's the top-level frame
+            if (browser === parent.gBrowser.selectedBrowser && webProgress.isTopLevel) {
+              updateBrowserBackground(uri?.spec);
+            }
+          }
+        };
+        parent.gBrowser.addTabsProgressListener(TransparencyListener);
+      });
+    '';
+in
 {
   options = {
     firefox.enable = lib.mkEnableOption "Enables firefox";
   };
   config = lib.mkIf config.firefox.enable {
-    xdg.configFile."glide/glide".source =
-      config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory + "/.mozilla/firefox";
-    xdg.configFile."glide/glide.ts".source = ./glide/glide.ts;
     home.sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
     };
+    xdg.configFile."glide/glide".source =
+      config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory + "/.mozilla/firefox";
+    xdg.configFile."glide/glide.ts".source = ./glide/glide.ts;
+
+    home.file = {
+      "${config.programs.firefox.configPath}/glide/chrome/utils".source = utils;
+      "${config.programs.firefox.configPath}/glide/chrome/JS/enforceTransparent.sys.mjs".source =
+        enforce-transparent;
+      "${config.programs.firefox.configPath}/glide/chrome/JS/toggleToolbar.sys.mjs".text = toggle-toolbar;
+      "${config.programs.firefox.configPath}/glide/chrome/JS/transparentBrowserByUrl.sys.mjs".text =
+        transparent-browser-by-url;
+    };
+
     # stylix.targets.firefox.enable = false;
     stylix.targets.firefox.profileNames = [ "glide" ];
     stylix.targets.firefox.colorTheme.enable = true;
-    home.file."${config.programs.firefox.configPath}/glide/chrome/utils".source =
-      let
-        src = pkgs.fetchFromGitHub {
-          owner = "MrOtherGuy";
-          repo = "fx-autoconfig";
-          rev = "d76528e93d0c61bef9ca9a4af1e58e545e9099c1";
-          hash = "sha256-W0MO8waK+1ZKg94uvuE42RJxxvI9dWabkMzziP8U2i0=";
-        };
-      in
-      (pkgs.runCommand "fx-autoconfig-utils" { } ''
-        mkdir -p "$out"
-        cp ${src}/profile/chrome/utils/* "$out/"
-      '');
-    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/enforceTransparent.sys.mjs".source =
-      builtins.fetchurl {
-        url = "https://gist.githubusercontent.com/wrldspawn/9e76f2b4600d2a84a460735d6c037dfa/raw/enforceTransparent.sys.mjs";
-        sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
-      };
-    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/toggleToolbar.sys.mjs".text = # js
-      ''
-        // ==UserScript==
-        // @name            Toggle Toolbar
-        // @author          werapi
-        // @version         1
-        // @description
-        // @onlyonce
-        // ==/UserScript==
-        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
-
-        Windows.onCreated(async (win) => {
-          const { parent } = win;
-          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
-
-          await Windows.waitWindowLoading(parent);
-
-          const doc = parent.document;
-          const toolbox = doc.getElementById("navigator-toolbox");
-
-          const menuitem = doc.createXULElement("menuitem");
-          menuitem.id = "context-toggle-toolbar";
-          menuitem.setAttribute("label", "Toggle Toolbar");
-          menuitem.setAttribute("accesskey", "T");
-
-          menuitem.addEventListener("command", () => {
-            if (toolbox) {
-              const isHidden = toolbox.style.display === "none";
-              if (isHidden) {
-                toolbox.style.display = "";
-                toolbox.style.visibility = "";
-              } else {
-                toolbox.style.display = "none";
-                toolbox.style.visibility = "collapse";
-              }
-            }
-          });
-
-          const contentAreaContextMenu = doc.getElementById("contentAreaContextMenu");
-          if (contentAreaContextMenu) {
-            const separator = doc.createXULElement("menuseparator");
-            separator.id = "context-toggle-toolbar-separator";
-            contentAreaContextMenu.appendChild(separator);
-            contentAreaContextMenu.appendChild(menuitem);
-          }
-
-          const key = doc.createXULElement("key");
-          key.id = "key-toggle-toolbar";
-          key.setAttribute("modifiers", "alt");
-          key.setAttribute("key", "T");
-          key.addEventListener("command", () => {
-            menuitem.click();
-          });
-
-          const keyset = doc.getElementById("mainKeyset");
-          if (keyset) {
-            keyset.appendChild(key);
-          }
-        });
-      '';
-    home.file."${config.programs.firefox.configPath}/glide/chrome/JS/transparentBrowserByUrl.sys.mjs".text = # js
-      ''
-        // ==UserScript==
-        // @name            Transparent Browser By URL
-        // @author          werapi
-        // @version         1
-        // @description     Make #browser transparent for matching URLs
-        // @onlyonce
-        // ==/UserScript==
-        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
-
-        Windows.onCreated(async (win) => {
-          const { parent } = win;
-          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
-
-          await Windows.waitWindowLoading(parent);
-
-          const doc = parent.document;
-          const browserEl = doc.getElementById("browser");
-          const toolboxEl = doc.getElementById("navigator-toolbox");
-
-          const transparentUrls = [
-            /^https:\/\/renji-xd\.github\.io\/texthooker-ui/,
-          ];
-
-          function shouldBeTransparent(url) {
-            if (!url) return false;
-            return transparentUrls.some(pattern => pattern.test(url));
-          }
-
-          function updateBrowserBackground(url) {
-            if (!browserEl || !toolboxEl) return;
-
-            if (shouldBeTransparent(url)) {
-              browserEl.setAttribute("transparent-url", "true");
-              toolboxEl.setAttribute("transparent-url", "true");
-            } else {
-              browserEl.removeAttribute("transparent-url");
-              toolboxEl.removeAttribute("transparent-url");
-            }
-          }
-
-          if (parent.gBrowser.selectedBrowser) {
-            updateBrowserBackground(parent.gBrowser.selectedBrowser.currentURI?.spec);
-          }
-
-          parent.gBrowser.tabContainer.addEventListener("TabSelect", () => {
-            const url = parent.gBrowser.selectedBrowser?.currentURI?.spec;
-            updateBrowserBackground(url);
-          });
-
-          const TransparencyListener = {
-            onLocationChange(browser, webProgress, request, uri, flags) {
-              // Only update if this is the selected browser and it's the top-level frame
-              if (browser === parent.gBrowser.selectedBrowser && webProgress.isTopLevel) {
-                updateBrowserBackground(uri?.spec);
-              }
-            }
-          };
-          parent.gBrowser.addTabsProgressListener(TransparencyListener);
-        });
-      '';
 
     programs.firefox = {
       enable = true;
@@ -267,6 +322,7 @@
             absolute-enable-right-click
             annotations-restored
             bitwarden
+            bpc
             clearurls
             cliget
             cookies-txt
@@ -294,11 +350,13 @@
             redirect-to-wiki-gg
             refined-github
             return-youtube-dislikes
+            right-click-borescope
             sidebery
             sponsorblock
             stylus
             translate-web-pages
             ublock-origin
+            unhook
             videospeed
             violentmonkey
             wayback-machine
