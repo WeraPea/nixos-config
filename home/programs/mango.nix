@@ -113,8 +113,8 @@
           # Layouts
           bind=SUPER,t,setlayout,tile
           bind=SUPER+CTRL,t,setlayout,right_tile
-          bind=SUPER,g,setlayout,vertical_grid
-          bind=SUPER+CTRL,g,setlayout,grid
+          bind=SUPER,g,setlayout,tgmix
+          bind=SUPER+CTRL,g,setlayout,vertical_grid
           bind=SUPER,v,setlayout,vertical_tile
           bind=SUPER,w,spawn,${pkgs.writeShellScript "mango-toggle-monocle" ''
             selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
@@ -132,6 +132,7 @@
               [VT]="vertical_tile"
               [VG]="vertical_grid"
               [VK]="vertical_deck"
+              [TG]="tgmix"
             )
 
             cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
@@ -319,6 +320,16 @@
           mousebind=SUPER,btn_right,moveresize,curresize
           mousebind=NONE,btn_left,toggleoverview,-1
           mousebind=NONE,btn_right,killclient,0
+
+          tagrule=id:1,layout_name:tile
+          tagrule=id:2,layout_name:tile
+          tagrule=id:3,layout_name:tile
+          tagrule=id:4,layout_name:tile
+          tagrule=id:5,layout_name:tile
+          tagrule=id:6,layout_name:tile
+          tagrule=id:7,layout_name:tile
+          tagrule=id:8,layout_name:tile
+          tagrule=id:9,layout_name:tile
 
           env=QT_QPA_PLATFORM,wayland
           env=MOZ_ENABLE_WAYLAND,1

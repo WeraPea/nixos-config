@@ -44,7 +44,7 @@ in
           mainDisplay = "DPI-1";
           extraConfig = # hyprlang
             ''
-              monitorrule=DPI-1,0.5,1,tile,0,1.5,0,0,1872,1404,84.996002,0,0,0,0
+              monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002
 
               animations=0
 

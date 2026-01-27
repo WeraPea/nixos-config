@@ -51,6 +51,6 @@ writeShellScriptBin "rotate-screen" ''
       usage
       ;;
   esac
-  mmsg -d setoption,monitorrule,DPI-1,0.5,1,tile,$transform,1.5,0,0,1872,1404,84.996002,0,0,0,0
+  mmsg -d setoption,monitorrule,name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:$transform,
   mmsg -d setoption,tablet_rotation,$transform
 ''

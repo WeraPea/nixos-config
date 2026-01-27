@@ -37,9 +37,9 @@
               HDMI_A_2_overscan_right = 97;
             }; # hyprlang
             ''
-              monitorrule=DP-2,0.5,1,tile,0,1,${toString DP_2_x},${toString DP_2_y},${toString DP_2_width},${toString DP_2_height},144,0,0,0,0
-              monitorrule=HDMI-A-1,0.5,1,tile,0,1,${toString HDMI_A_1_x},${toString HDMI_A_1_y},${toString HDMI_A_1_width},${toString HDMI_A_1_height},75,0,0,0,0
-              monitorrule=HDMI-A-2,0.5,1,tile,0,1,${toString HDMI_A_2_x},${toString HDMI_A_2_y},${toString HDMI_A_2_width},${toString HDMI_A_2_height},60,${toString HDMI_A_2_overscan_top},${toString HDMI_A_2_overscan_bottom},${toString HDMI_A_2_overscan_left},${toString HDMI_A_2_overscan_right}
+              monitorrule=name:DP-2,x:${toString DP_2_x},y:${toString DP_2_y},width:${toString DP_2_width},height:${toString DP_2_height},refresh:144
+              monitorrule=name:HDMI-A-1,x:${toString HDMI_A_1_x},y:${toString HDMI_A_1_y},width:${toString HDMI_A_1_width},height:${toString HDMI_A_1_height},refresh:75
+              monitorrule=name:HDMI-A-2,x:${toString HDMI_A_2_x},y:${toString HDMI_A_2_y},width:${toString HDMI_A_2_width},height:${toString HDMI_A_2_height},refresh:60,overscan_top:${toString HDMI_A_2_overscan_top},overscan_bottom:${toString HDMI_A_2_overscan_bottom},overscan_left:${toString HDMI_A_2_overscan_left},overscan_right:${toString HDMI_A_2_overscan_right}
 
               bind=SUPER,F1,focusmon,HDMI-A-1
               bind=SUPER,F1,view,1

@@ -17,7 +17,7 @@
           enable = true;
           extraConfig = # hyprlang
             ''
-              monitorrule=eDP-1,0.5,1,tile,0,1,0,0,1920,1080,60,0,0,0,0
+              monitorrule=name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60
             '';
           mainDisplay = "eDP-1";
         };
