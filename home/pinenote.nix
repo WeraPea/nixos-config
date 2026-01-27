@@ -75,6 +75,12 @@ in
             }
           else
             inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
+
+        firefox = {
+          mobile.enable = true;
+          minimal.enable = true;
+          theme.dark.enable = false;
+        };
       }
 
     ];

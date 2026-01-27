@@ -79,6 +79,13 @@ in
 
     cursor.name = lib.mkForce "Bibata-Modern-Ice";
 
+    opacity = lib.mkForce {
+      applications = 1.;
+      desktop = 1.;
+      popups = 1.;
+      terminal = 1.;
+    };
+
     base16Scheme = lib.mkForce {
       scheme = "eink-light";
       base00 = "#ffffff";

@@ -188,48 +188,83 @@ let
         parent.gBrowser.addTabsProgressListener(TransparencyListener);
       });
     '';
+
+  cfg = config.firefox;
+
+  baseFirefoxPackage =
+    if cfg.mobile.enable then
+      # pkgs.firefox-mobile
+      pkgs.firefox
+    else
+      pkgs.glide-browser;
+
+  firefoxPackage = baseFirefoxPackage.override {
+    extraPrefsFiles = [
+      (builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
+        sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
+      })
+    ];
+  };
+
+  profileName = "default";
 in
 {
-  options = {
-    firefox.enable = lib.mkEnableOption "Enables firefox";
+  options.firefox = {
+    enable = lib.mkEnableOption "Enables firefox";
+    mobile.enable = lib.mkEnableOption "Enable firefox-mobile package";
+    minimal.enable = lib.mkEnableOption "minimal addons";
+    theme = {
+      dark.enable = lib.mkEnableOption "dark theme" // {
+        default = true;
+      };
+      backgroundColor = lib.mkOption {
+        type = lib.types.str;
+        default =
+          let
+            opacityHex = percentage: lib.toHexString (builtins.floor (percentage * 255 + 0.5));
+          in
+          "${config.lib.stylix.colors.withHashtag.base00}${opacityHex config.stylix.opacity.applications}";
+      };
+    };
   };
-  config = lib.mkIf config.firefox.enable {
+  config = lib.mkIf cfg.enable {
     home.sessionVariables = {
       MOZ_USE_XINPUT2 = "1";
     };
-    xdg.configFile."glide/glide".source =
-      config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory + "/.mozilla/firefox";
-    xdg.configFile."glide/glide.ts".source = ./glide/glide.ts;
+    xdg.configFile."glide/glide" = lib.mkIf (!cfg.mobile.enable) {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.mozilla/firefox";
+    };
+    xdg.configFile."glide/glide.ts" = lib.mkIf (!cfg.mobile.enable) {
+      source = ./glide/glide.ts;
+    };
 
     home.file = {
-      "${config.programs.firefox.configPath}/glide/chrome/utils".source = utils;
-      "${config.programs.firefox.configPath}/glide/chrome/JS/enforceTransparent.sys.mjs".source =
+      "${config.programs.firefox.configPath}/${profileName}/chrome/utils".source = utils;
+      "${config.programs.firefox.configPath}/${profileName}/chrome/JS/enforceTransparent.sys.mjs".source =
         enforce-transparent;
-      "${config.programs.firefox.configPath}/glide/chrome/JS/toggleToolbar.sys.mjs".text = toggle-toolbar;
-      "${config.programs.firefox.configPath}/glide/chrome/JS/transparentBrowserByUrl.sys.mjs".text =
+      "${config.programs.firefox.configPath}/${profileName}/chrome/JS/toggleToolbar.sys.mjs".text =
+        toggle-toolbar;
+      "${config.programs.firefox.configPath}/${profileName}/chrome/JS/transparentBrowserByUrl.sys.mjs".text =
         transparent-browser-by-url;
     };
 
-    # stylix.targets.firefox.enable = false;
-    stylix.targets.firefox.profileNames = [ "glide" ];
-    stylix.targets.firefox.colorTheme.enable = true;
+    stylix.targets.firefox = {
+      profileNames = [ profileName ];
+      colorTheme.enable = true;
+    };
 
     programs.firefox = {
       enable = true;
-      package = pkgs.glide-browser.override {
-        extraPrefsFiles = [
-          (builtins.fetchurl {
-            url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
-            sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
-          })
-        ];
-      };
+      package = firefoxPackage;
+      release = lib.mkIf (!cfg.mobile.enable) "148.0b4";
       # configPath = "${config.xdg.configHome}/glide/glide";
-      release = "148.0b4";
+
       languagePacks = [
         "en-US"
         "pl"
       ];
+
       policies = {
         # https://mozilla.github.io/policy-templates/
         Handlers = {
@@ -269,15 +304,9 @@ in
         PasswordManagerEnabled = false;
 
         ExtensionSettings = {
-          "uBlock0@raymondhill.net" = {
-            private_browsing = true;
-          };
-          "addon@darkreader.org" = {
-            private_browsing = true;
-          };
-          "sponsorBlocker@ajay.app" = {
-            default_area = "menupanel";
-          };
+          "uBlock0@raymondhill.net".private_browsing = true;
+          "addon@darkreader.org".private_browsing = true;
+          "sponsorBlocker@ajay.app".default_area = "menupanel";
         };
         "3rdparty".Extensions = {
           # See:
@@ -314,64 +343,73 @@ in
           };
         };
       };
-      profiles.glide = {
-        name = "glide";
+      profiles.${profileName} = {
+        name = profileName;
+
         extensions = {
           force = true;
-          packages = with pkgs.nur.repos.rycee.firefox-addons; [
-            absolute-enable-right-click
-            annotations-restored
-            bitwarden
-            bpc
-            clearurls
-            cliget
-            cookies-txt
-            darkreader
-            don-t-fuck-with-paste
-            enhanced-github
-            enhancer-for-youtube
-            facebook-container
-            floccus
-            gitako-github-file-tree
-            github-file-icons
-            github-isometric-contributions
-            hyperchat
-            image-max-url
-            image-search-options
-            indie-wiki-buddy
-            istilldontcareaboutcookies
-            linkwarden
-            lovely-forks
-            multiselect-for-youtube
-            nixpkgs-pr-tracker
-            nyaa-linker
-            onetab
-            polish-dictionary
-            redirect-to-wiki-gg
-            refined-github
-            return-youtube-dislikes
-            right-click-borescope
-            sidebery
-            sponsorblock
-            stylus
-            translate-web-pages
-            ublock-origin
-            unhook
-            videospeed
-            violentmonkey
-            wayback-machine
-            web-archives
-            web-scrobbler
-            widegithub
-            wikipedia-vector-skin
-            yang
-            yomitan
-            youtube-no-translation
+          packages =
+            with pkgs.nur.repos.rycee.firefox-addons;
+            let
+              minimalExtensions = [
+                bitwarden
+                bpc
+                clearurls
+                don-t-fuck-with-paste
+                facebook-container
+                floccus
+                image-max-url
+                istilldontcareaboutcookies
+                linkwarden
+                nixpkgs-pr-tracker
+                onetab
+                polish-dictionary
+                right-click-borescope
+                stylus
+                translate-web-pages
+                ublock-origin
+                violentmonkey
+                wayback-machine
+                web-archives
+                wikipedia-vector-skin
+                yang
+                yomitan
+              ];
+              allExtensions = minimalExtensions ++ [
+                absolute-enable-right-click
+                annotations-restored
+                cliget
+                cookies-txt
+                darkreader
+                enhanced-github
+                enhancer-for-youtube
+                gitako-github-file-tree
+                github-file-icons
+                github-isometric-contributions
+                hyperchat
+                image-search-options
+                indie-wiki-buddy
+                lovely-forks
+                multiselect-for-youtube
+                nyaa-linker
+                redirect-to-wiki-gg
+                refined-github
+                return-youtube-dislikes
+                sidebery
+                sponsorblock
+                unhook
+                videospeed
+                web-scrobbler
+                widegithub
+                youtube-no-translation
 
-            # ff2mpv # TODO:
+                # ff2mpv # TODO:
 
-            # extatic # TODO:
-          ];
+                # extatic # TODO:
+              ];
+            in
+            if cfg.minimal.enable then minimalExtensions else allExtensions;
+
           settings = {
             # "addon@darkreader.org".settings.theme = with config.lib.stylix.colors.withHashtag; {
             #   fontFamily = config.stylix.fonts.sansSerif.name;
@@ -389,32 +427,28 @@ in
             #   # "detectDarkTheme": true
             # };
             "{9a3104a2-02c2-464c-b069-82344e5ed4ec}".settings = {
-              "settings" = {
-                "titleTranslation" = true;
-                "originalThumbnails" = {
-                  "enabled" = true;
+              settings = {
+                titleTranslation = true;
+                originalThumbnails.enabled = true;
+                audioTranslation = {
+                  enabled = true;
+                  language = "original";
                 };
-                "audioTranslation" = {
-                  "enabled" = true;
-                  "language" = "original";
+                descriptionTranslation = true;
+                subtitlesTranslation = {
+                  enabled = true;
+                  language = "original";
+                  asrEnabled = false;
                 };
-                "descriptionTranslation" = true;
-                "subtitlesTranslation" = {
-                  "enabled" = true;
-                  "language" = "original";
-                  "asrEnabled" = false;
+                youtubeDataApi = {
+                  enabled = false;
+                  apiKey = "";
                 };
-                "youtubeDataApi" = {
-                  "enabled" = false;
-                  "apiKey" = "";
-                };
-                "askForSupport" = {
-                  "enabled" = false;
-                };
+                askForSupport.enabled = false;
               };
             };
             "enhancerforyoutube@maximerf.addons.mozilla.org".settings = {
-              "controls" = [
+              controls = [
                 "loop"
                 "reverse-playlist"
                 "cards-end-screens"
@@ -422,36 +456,38 @@ in
                 "size"
                 "options"
               ];
-              "controlbar" = {
-                "active" = true;
-                "autohide" = false;
-                "centered" = false;
-                "position" = "absolute";
+              controlbar = {
+                active = true;
+                autohide = false;
+                centered = false;
+                position = "absolute";
               };
-              "selectquality" = true;
-              "qualityvideos" = "highres";
-              "qualityplaylists" = "highres";
-              "qualityembeds" = "hd1080";
-              "controlspeedmousebutton" = true;
-              "ignoreplaylists" = false;
-              "pausevideos" = false;
-              "miniplayersize" = "_640x360";
-              "hidecardsendscreens" = true;
-              "blackbars" = true;
-              "theatermode" = true;
-              "hideshorts" = true;
-              "convertshorts" = true;
-              "hiderelated" = true;
+              selectquality = true;
+              qualityvideos = "highres";
+              qualityplaylists = "highres";
+              qualityembeds = "hd1080";
+              controlspeedmousebutton = true;
+              ignoreplaylists = false;
+              pausevideos = false;
+              miniplayersize = "_640x360";
+              hidecardsendscreens = true;
+              blackbars = true;
+              theatermode = true;
+              hideshorts = true;
+              convertshorts = true;
+              hiderelated = true;
             };
           };
         };
         search = {
           force = true;
           default = "ddg";
+
           engines = {
             bing.metaData.hidden = true;
             perplexity.metaData.hidden = true;
             ebay.metaData.hidden = true; # still showing up for some reason
+
             noogle = {
               name = "Noogle";
               urls = [ { template = "https://noogle.dev?term={searchTerms}"; } ];
@@ -525,8 +561,10 @@ in
             };
           };
         };
-        # TODO: make the below be customizable from nix options
-        userChrome = # css
+
+        userChrome =
+          # lib.mkIf (!cfg.mobile.enable)
+          # css
           ''
             @-moz-document url(chrome://browser/content/browser.xul), url(chrome://browser/content/browser.xhtml) {
               #browser,
@@ -543,25 +581,25 @@ in
               }
 
               #nav-bar {
-                border-top: 0px !important;
-                border-bottom: 0px !important;
+                border-top: 0 !important;
+                border-bottom: 0 !important;
               }
               #navigator-toolbox {
-                border-bottom: 0px !important;
+                border-bottom: 0 !important;
               }
               #tabbrowser-tabs {
-                border-inline: 0px !important;
+                border-inline: 0 !important;
               }
 
               #urlbar:not([breakout-extend]) .urlbar-background {
                 border: none !important;
               }
               #urlbar[breakout-extend] .urlbar-background {
-                background-color: #121212d0 !important;
+                background-color: ${cfg.theme.backgroundColor} !important;
               }
 
               #browser, #navigator-toolbox {
-                background-color: #12121290 !important;
+                background-color: ${cfg.theme.backgroundColor} !important;
               }
               #browser[transparent-url], #navigator-toolbox[transparent-url] {
                 background-color: #0000 !important;
@@ -582,7 +620,9 @@ in
               }
             }
           '';
-        userContent = # css
+        userContent =
+          # lib.mkIf (!cfg.mobile.enable)
+          # css
           ''
             :root {
               --in-content-page-background: #0000 !important;
@@ -609,7 +649,7 @@ in
               }
               .list-preview .media-preview-card .content,
               .hover-data {
-                background-color: #121212f0 !important;
+                background-color: ${cfg.theme.backgroundColor} !important;
               }
             }
             @-moz-document regexp("https://renji-xd.github.io/texthooker-ui/") {
@@ -635,15 +675,17 @@ in
           "browser.startup.page" = 3; # previous-session
           "browser.tabs.unloadOnLowMemory" = true;
           "browser.toolbars.bookmarks.visibility" = "always";
-          "browser.uidensity" = 1;
+          "browser.uidensity" = if cfg.mobile.enable then 2 else 1;
           "extensions.autoDisableScopes" = 0; # extensions
           "findbar.highlightAll" = true;
           "general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS" = 3;
           "general.smoothScroll.msdPhysics.enabled" = true;
           "general.smoothScroll.msdPhysics.motionBeginSpringConstant" = 300;
-          "layout.css.prefers-color-scheme.content-override" = 0; # dark
+          "layout.css.prefers-color-scheme.content-override" = if cfg.theme.dark.enable then 0 else 1;
           "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
           "browser.tabs.allow_transparent_browser" = true;
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "browser.aboutConfig.showWarning" = false;
           "browser.uiCustomization.state" = builtins.toJSON {
             placements = {
               widget-overflow-fixed-list = [ ];
@@ -682,9 +724,7 @@ in
                 "alltabs-button"
               ];
               vertical-tabs = [ ];
-              PersonalToolbar = [
-                "personal-bookmarks"
-              ];
+              PersonalToolbar = [ "personal-bookmarks" ];
             };
             "currentVersion" = 23;
           };
