@@ -16,6 +16,8 @@
 
 // a lot taken from https://github.com/glide-browser/glide/discussions/63
 
+glide.g.mapleader = "<C-Space>";
+
 glide.keymaps.del("normal", "<A-h>");
 glide.keymaps.del("normal", "<C-j>");
 glide.keymaps.del("normal", "<C-k>");
@@ -93,7 +95,7 @@ glide.keymaps.set(
       await glide.keys.send("<Esc>", { skip_mappings: true });
 
       // additional actions you want to perform on esc, like:
-      await glide.excmds.execute("clear");
+      // await glide.excmds.execute("clear");
     },
   ),
 );
