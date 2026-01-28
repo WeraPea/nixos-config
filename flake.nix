@@ -47,6 +47,10 @@
       url = "github:glide-browser/glide.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    firefox-extensions-declarative = {
+      url = "github:firefox-extensions-declarative/firefox-extensions-declarative";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

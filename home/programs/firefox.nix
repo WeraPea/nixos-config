@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 let
@@ -189,6 +190,25 @@ let
       });
     '';
 
+  nexusmodsDownloadfix = builtins.fetchurl {
+    url = "https://github.com/randomtdev/nexusmods_downloadfix/raw/9d94d132a2ab208a08821bffa28ae6ffad1ba38b/nexusmods_downloadfix.user.js";
+    sha256 = "1dyi9nkzaqkjzfzr51lwlfzg9589vx73sv52n0r3ank307gc9ml3";
+  };
+  automail = builtins.fetchurl {
+    url = "https://update.greasyfork.org/scripts/370473/1715243/Automail.user.js";
+    sha256 = "09j49rx49kcsq2dn55izdapbcxhkjyrzv998hmxcqh9698fv9pag";
+  };
+  anilistAutoRefresh = builtins.fetchurl {
+    name = "anilistAutoRefresh";
+    url = "https://update.greasyfork.org/scripts/502647/1422176/Anilist%20Auto%20Refresh%20on%20Session%20Expiry.user.js";
+    sha256 = "0wchbzpf6lrwq2wp4mk8in7ccl9jlnhl7hcqfa2ihpqbhxpibkcr";
+  };
+  ytNotInterestedInOneClick = builtins.fetchurl {
+    name = "ytNotInterestedInOneClick";
+    url = "https://update.greasyfork.org/scripts/396936/1698527/YT%3A%20not%20interested%20in%20one%20click.user.js";
+    sha256 = "169aq7j9pzwdsmp3005l3cpyny3wakaagmpi1lvw06dymk670kl1";
+  };
+
   cfg = config.firefox;
 
   baseFirefoxPackage =
@@ -341,6 +361,56 @@ in
               "ublock-cookies-easylist"
             ];
           };
+          # violentmonkey
+          "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" = {
+            options.autoUpdate = 0;
+            scripts = map (path: builtins.readFile path) [
+              automail
+              anilistAutoRefresh
+              nexusmodsDownloadfix
+              ytNotInterestedInOneClick
+            ];
+          };
+          "addon@darkreader.org" = {
+            syncSettings = false;
+            previewNewDesign = true;
+            enableForProtectedPages = true;
+            theme = {
+              mode = 1;
+              brightness = 100;
+              contrast = 100;
+              grayscale = 0;
+              sepia = 0;
+              useFont = false;
+              fontFamily = "";
+              textStroke = 0;
+              engine = "dynamicTheme";
+              stylesheet = "";
+              darkSchemeBackgroundColor = config.lib.stylix.colors.withHashtag.base00;
+              darkSchemeTextColor = config.lib.stylix.colors.withHashtag.base07;
+              lightSchemeBackgroundColor = config.lib.stylix.colors.withHashtag.base00;
+              lightSchemeTextColor = config.lib.stylix.colors.withHashtag.base07;
+              scrollbarColor = "";
+              selectionColor = "auto";
+              styleSystemControls = true; # ???
+              darkColorScheme = "Default";
+              lightColorScheme = "Default";
+              immediateModify = false;
+            };
+            disabledFor = [
+              "anilist.co"
+              "app.tuta.com"
+              "cad.onshape.com"
+              "connect.prusa3d.com"
+              "docs.google.com"
+              "duckduckgo.com"
+              "google.com/maps"
+              "mapy.geoportal.gov.pl"
+              "web.archive.org"
+              "www.desmos.com"
+              "www.youtube.com"
+            ];
+          };
         };
       };
       profiles.${profileName} = {
@@ -361,14 +431,10 @@ in
                 image-max-url
                 istilldontcareaboutcookies
                 linkwarden
-                nixpkgs-pr-tracker
                 onetab
                 polish-dictionary
                 right-click-borescope
-                stylus
-                translate-web-pages
                 ublock-origin
-                violentmonkey
                 wayback-machine
                 web-archives
                 wikipedia-vector-skin
@@ -380,8 +446,6 @@ in
                 annotations-restored
                 cliget
                 cookies-txt
-                darkreader
-                enhanced-github
                 enhancer-for-youtube
                 gitako-github-file-tree
                 github-file-icons
@@ -389,18 +453,21 @@ in
                 hyperchat
                 image-search-options
                 indie-wiki-buddy
-                lovely-forks
+                inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.darkreader-declarative
+                inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.violentmonkey-declarative
                 multiselect-for-youtube
+                nixpkgs-pr-tracker
                 nyaa-linker
                 redirect-to-wiki-gg
                 refined-github
                 return-youtube-dislikes
                 sidebery
                 sponsorblock
+                stylus
+                translate-web-pages
                 unhook
                 videospeed
                 web-scrobbler
-                widegithub
                 youtube-no-translation
 
                 # ff2mpv # TODO:
@@ -411,21 +478,6 @@ in
             if cfg.minimal.enable then minimalExtensions else allExtensions;
 
           settings = {
-            # "addon@darkreader.org".settings.theme = with config.lib.stylix.colors.withHashtag; {
-            #   fontFamily = config.stylix.fonts.sansSerif.name;
-            #   lightSchemeBackgroundColor = base00;
-            #   darkSchemeBackgroundColor = base00;
-            #   lightSchemeTextColor = base05;
-            #   darkSchemeTextColor = base05;
-            #   selectionColor = base0D;
-            #   syncSettings = false;
-            #   # "previewNewDesign": true,
-            #   # "previewNewestDesign": false,
-            #   # "enableForPDF": true,
-            #   # "enableForProtectedPages": false,
-            #   # "enableContextMenus": false,
-            #   # "detectDarkTheme": true
-            # };
             "{9a3104a2-02c2-464c-b069-82344e5ed4ec}".settings = {
               settings = {
                 titleTranslation = true;
@@ -667,25 +719,28 @@ in
           '';
 
         settings = {
+          "browser.aboutConfig.showWarning" = false;
           "browser.download.useDownloadDir" = false;
           "browser.gesture.swipe.left" = ""; # to not go back in history by mistake when using a touchpad
           "browser.gesture.swipe.right" = "";
           "browser.search.separatePrivateDefault" = false;
           "browser.startup.homepage" = "https://duckduckgo.com/";
           "browser.startup.page" = 3; # previous-session
+          "browser.tabs.allow_transparent_browser" = true;
           "browser.tabs.unloadOnLowMemory" = true;
           "browser.toolbars.bookmarks.visibility" = "always";
           "browser.uidensity" = if cfg.mobile.enable then 2 else 1;
           "extensions.autoDisableScopes" = 0; # extensions
+          "extensions.update.autoUpdateDefault" = false;
+          "extensions.update.enabled" = false;
           "findbar.highlightAll" = true;
           "general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS" = 3;
           "general.smoothScroll.msdPhysics.enabled" = true;
           "general.smoothScroll.msdPhysics.motionBeginSpringConstant" = 300;
           "layout.css.prefers-color-scheme.content-override" = if cfg.theme.dark.enable then 0 else 1;
           "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
-          "browser.tabs.allow_transparent_browser" = true;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "browser.aboutConfig.showWarning" = false;
+          "xpinstall.signatures.required" = false;
           "browser.uiCustomization.state" = builtins.toJSON {
             placements = {
               widget-overflow-fixed-list = [ ];
