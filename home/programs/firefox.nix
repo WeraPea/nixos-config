@@ -46,6 +46,19 @@ let
       platforms = platforms.all;
     };
   };
+  jiten-reader = buildFirefoxXpiAddon rec {
+    pname = "jiten_reader";
+    version = "1.0.0";
+    addonId = "reader@jiten.moe";
+    url = "https://addons.mozilla.org/firefox/downloads/file/4659273/${pname}-${version}.xpi";
+    sha256 = "sha256-yEij6ucQCbDUKt/GE5fZ32WR5Fd0yDfNm/q5bwW6tqg=";
+    meta = with pkgs.lib; {
+      homepage = "https://jiten.moe";
+      description = "Learn Japanese by immersion by parsing texts, getting definitions for words and tracking your knowledge.";
+      license = licenses.asl20;
+      platforms = platforms.all;
+    };
+  };
 
   utils =
     let
@@ -455,6 +468,7 @@ in
                 indie-wiki-buddy
                 inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.darkreader-declarative
                 inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.violentmonkey-declarative
+                jiten-reader
                 multiselect-for-youtube
                 nixpkgs-pr-tracker
                 nyaa-linker
