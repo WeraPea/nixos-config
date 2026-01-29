@@ -94,6 +94,10 @@ let
           keys = "SUPER,o";
           command = "toggleoverlay";
         }
+        {
+          keys = "SUPER,b";
+          command = "toggle_render_border";
+        }
       ];
     }
     (mkClipboardMode {
