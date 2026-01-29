@@ -4,6 +4,193 @@
   pkgs,
   ...
 }:
+let
+  parseBindMode =
+    {
+      name,
+      keys ? "",
+      binds,
+      returnByDefault ? false,
+      returnKeybind ? "NONE,Escape",
+    }:
+    builtins.concatStringsSep "\n" (
+      lib.optional (keys != "") "bind=${keys},setkeymode,${name}"
+      ++ [ "keymode=${name}" ]
+      ++ (builtins.concatMap (
+        {
+          keys,
+          command,
+          return ? returnByDefault,
+        }:
+        [ "bind=${keys},${command}" ] ++ lib.optional return "bind=${keys},setkeymode,default"
+      ) binds)
+      ++ lib.optional (returnKeybind != "") "bind=${returnKeybind},setkeymode,default"
+      ++ [ "keymode=default" ]
+    )
+    + "\n";
+  parseBindModes = bindModes: builtins.concatStringsSep "\n" (map parseBindMode bindModes) + "\n";
+  mkClipboardMode =
+    {
+      name,
+      keys,
+      pasteCmd,
+      copyCmdOther, # for pasting into another selection
+    }:
+    {
+      inherit name keys;
+      returnByDefault = true;
+      binds = [
+        {
+          keys = "SUPER,p";
+          command = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
+        }
+        {
+          keys = "SUPER,o";
+          command = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
+        }
+        {
+          keys = "SUPER,s";
+          command = ''spawn_shell,glide "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
+        }
+        {
+          keys = "SUPER+CTRL,s";
+          command = ''spawn_shell,glide --new-window "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
+        }
+        {
+          keys = "SUPER,j";
+          command = ''spawn_shell,glide "jisho.org/search/$(${pasteCmd})"'';
+        }
+        {
+          keys = "SUPER+CTRL,j";
+          command = ''spawn_shell,glide --new-window "jisho.org/search/$(${pasteCmd})"'';
+        }
+        {
+          keys = "SUPER,h";
+          command = ''spawn_shell,glide "$(${pasteCmd})"'';
+        }
+        {
+          keys = "SUPER+CTRL,h";
+          command = ''spawn_shell,glide --new-window "$(${pasteCmd})"'';
+        }
+      ];
+    };
+  bindModes = [
+    {
+      name = "common";
+      returnKeybind = "";
+      binds = [
+        {
+          keys = "SUPER+CTRL,r";
+          command = "reload_config";
+        }
+      ];
+    }
+    {
+      name = "leader";
+      keys = "SUPER,space";
+      returnByDefault = true;
+      binds = [
+        {
+          keys = "SUPER,o";
+          command = "toggleoverlay";
+        }
+      ];
+    }
+    (mkClipboardMode {
+      name = "clipboard";
+      keys = "SUPER,o";
+      pasteCmd = "wl-paste";
+      copyCmdOther = "wl-copy -p";
+    })
+    (mkClipboardMode {
+      name = "primary";
+      keys = "SUPER,p";
+      pasteCmd = "wl-paste -p";
+      copyCmdOther = "wl-copy";
+    })
+    {
+      name = "run";
+      keys = "SUPER,r";
+      returnByDefault = true;
+      binds = [
+        {
+          keys = "SUPER,a";
+          command = "spawn,anki";
+        }
+        {
+          keys = "SUPER,c";
+          command = "spawn,chatterino";
+        }
+        {
+          keys = "SUPER,f";
+          command = "spawn,glide";
+        }
+        {
+          keys = "SUPER,r";
+          command = "spawn,rofi -show drun -show-icons";
+        }
+        {
+          keys = "SUPER,s";
+          command = "spawn,steam";
+        }
+        {
+          keys = "SUPER,t";
+          command = "spawn,kitty";
+        }
+        {
+          keys = "SUPER,v";
+          command = "spawn,vesktop";
+        }
+      ];
+    }
+    {
+      name = "mpd";
+      keys = "SUPER,x";
+      returnByDefault = true;
+      binds = [
+        {
+          keys = "SUPER,x";
+          command = "spawn,mpc toggle";
+        }
+        {
+          keys = "SUPER,space";
+          command = "spawn,mpc toggle";
+        }
+        {
+          keys = "SUPER,n";
+          command = "spawn,mpc next";
+        }
+        {
+          keys = "SUPER,p";
+          command = "spawn,mpc prev";
+        }
+        {
+          keys = "SUPER,j";
+          command = "spawn,mpc volume -5";
+        }
+        {
+          keys = "SUPER,k";
+          command = "spawn,mpc volume +5";
+        }
+        {
+          keys = "SUPER,f";
+          command = ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
+        }
+      ];
+    }
+    {
+      name = "kill";
+      keys = "SUPER,q";
+      returnByDefault = true;
+      binds = [
+        {
+          keys = "SUPER,q";
+          command = "killclient,";
+        }
+      ];
+    }
+  ];
+in
 {
   options = {
     mango.enable = lib.mkEnableOption "enables mango";
@@ -200,120 +387,6 @@
           # bind=SUPER,mouse_up,spawn,hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.75) | if . < 1 then 1 else . end')
           # bind=SUPER,mouse:274,spawn,hyprctl -q keyword cursor:zoom_factor 1
 
-          keymode=common
-          bind=SUPER+CTRL,r,reload_config
-          keymode=default
-
-          bind=SUPER,o,setkeymode,clipboard
-          keymode=clipboard
-          bind=SUPER,p,spawn_shell,wl-paste | wl-copy -p
-          bind=SUPER,p,setkeymode,default
-
-          bind=SUPER,o,spawn_shell,wl-paste | wl-copy -p
-          bind=SUPER,o,setkeymode,default
-
-          bind=SUPER,s,spawn_shell,glide "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
-          bind=SUPER,s,setkeymode,default
-          bind=SUPER+CTRL,s,spawn_shell,glide --new-window "duckduckgo.com/?q=$(wl-paste | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
-          bind=SUPER+CTRL,s,setkeymode,default
-
-          bind=SUPER,j,spawn_shell,glide "jisho.org/search/$(wl-paste)"
-          bind=SUPER,j,setkeymode,default
-          bind=SUPER+CTRL,j,spawn_shell,glide --new-window "jisho.org/search/$(wl-paste)"
-          bind=SUPER+CTRL,j,setkeymode,default
-
-          bind=SUPER,h,spawn_shell,glide "$(wl-paste)"
-          bind=SUPER,h,setkeymode,default
-          bind=SUPER+CTRL,h,spawn_shell,glide --new-window "$(wl-paste)"
-          bind=SUPER+CTRL,h,setkeymode,default
-
-          bind=NONE,Escape,setkeymode,default
-          keymode=default
-
-          bind=SUPER,p,setkeymode,primary
-          keymode=primary
-          bind=SUPER,o,spawn_shell,wl-paste -p | wl-copy
-          bind=SUPER,o,setkeymode,default
-
-          bind=SUPER,p,spawn_shell,wl-paste -p | wl-copy
-          bind=SUPER,p,setkeymode,default
-
-          bind=SUPER,s,spawn_shell,glide "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
-          bind=SUPER,s,setkeymode,default
-          bind=SUPER+CTRL,s,spawn_shell,glide --new-window "duckduckgo.com/?q=$(wl-paste -p | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"
-          bind=SUPER+CTRL,s,setkeymode,default
-
-          bind=SUPER,j,spawn_shell,glide "jisho.org/search/$(wl-paste -p)"
-          bind=SUPER,j,setkeymode,default
-          bind=SUPER+CTRL,j,spawn_shell,glide --new-window "jisho.org/search/$(wl-paste -p)"
-          bind=SUPER+CTRL,j,setkeymode,default
-
-          bind=SUPER,h,spawn_shell,glide "$(wl-paste -p)"
-          bind=SUPER,h,setkeymode,default
-          bind=SUPER+CTRL,h,spawn_shell,glide --new-window "$(wl-paste -p)"
-          bind=SUPER+CTRL,h,setkeymode,default
-
-          bind=NONE,Escape,setkeymode,default
-          keymode=default
-
-          bind=SUPER,r,setkeymode,run
-          keymode=run
-          bind=SUPER,a,spawn,anki
-          bind=SUPER,a,setkeymode,default
-
-          bind=SUPER,c,spawn,chatterino
-          bind=SUPER,c,setkeymode,default
-
-          bind=SUPER,f,spawn,glide
-          bind=SUPER,f,setkeymode,default
-
-          bind=SUPER,r,spawn,rofi -show drun -show-icons
-          bind=SUPER,r,setkeymode,default
-
-          bind=SUPER,s,spawn,steam
-          bind=SUPER,s,setkeymode,default
-
-          bind=SUPER,t,spawn,kitty
-          bind=SUPER,t,setkeymode,default
-
-          bind=SUPER,v,spawn,vesktop
-          bind=SUPER,v,setkeymode,default
-
-          bind=NONE,Escape,setkeymode,default
-          keymode=default
-
-          bind=SUPER,x,setkeymode,mpd
-          keymode=mpd
-          bind=SUPER,x,spawn,mpc toggle
-          bind=SUPER,x,setkeymode,default
-
-          bind=SUPER,space,spawn,mpc toggle
-          bind=SUPER,space,setkeymode,default
-
-          bind=SUPER,n,spawn,mpc next
-          bind=SUPER,n,setkeymode,default
-
-          bind=SUPER,p,spawn,mpc prev
-          bind=SUPER,p,setkeymode,default
-
-          bind=SUPER,j,spawn,mpc volume -5
-          bind=SUPER,j,setkeymode,default
-
-          bind=SUPER,k,spawn,mpc volume +5
-          bind=SUPER,k,setkeymode,default
-
-          bind=SUPER,f,spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"
-          bind=SUPER,f,setkeymode,default
-          bind=NONE,Escape,setkeymode,default
-          keymode=default
-
-          bind=SUPER,q,setkeymode,kill
-          keymode=kill
-          bind=SUPER,q,killclient,
-          bind=SUPER,q,setkeymode,default
-          bind=NONE,Escape,setkeymode,default
-          keymode=default
-
           # Mouse Button Bindings
           # NONE mode key only work in ov mode
           mousebind=SUPER,btn_left,moveresize,curmove
@@ -371,7 +444,8 @@
           else
             ""
         )
-        + config.mango.extraConfig;
+        + config.mango.extraConfig
+        + parseBindModes bindModes;
     };
 
     systemd.user.targets.mango-session = {
