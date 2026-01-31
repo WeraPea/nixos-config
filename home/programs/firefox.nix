@@ -9,10 +9,10 @@ let
   inherit (pkgs.nur.repos.rycee.firefox-addons) buildFirefoxXpiAddon;
   bpc = buildFirefoxXpiAddon rec {
     pname = "bypass_paywalls_clean";
-    version = "4.2.8.7";
+    version = "4.2.9.6";
     addonId = "magnolia@12.34";
-    url = "https://gitflic.ru/project/magnolia1234/bpc_uploads/blob/raw?file=${pname}-${version}.xpi";
-    sha256 = "sha256-9ON7dRylqQEdETbi7a0hKibtf6dBw8hROhQokdP2RBk=";
+    url = "https://gitflic.ru/project/magnolia1234/bpc_uploads/blob/raw?file=${pname}-latest.xpi";
+    sha256 = "sha256-Jf9wYjFVxEfAGXo7qMFG28gW4pipvNuOAvqJGXKBq4s=";
     meta = with pkgs.lib; {
       homepage = "https://twitter.com/Magnolia1234B";
       description = "Bypass Paywalls of (custom) news sites";
