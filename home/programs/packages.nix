@@ -3,7 +3,6 @@
   lib,
   config,
   osConfig,
-  inputs,
   outputs,
   ...
 }:
@@ -21,7 +20,6 @@
           (_7zz.override { enableUnfree = true; })
           appimage-run
           bc
-          cachix
           catimg
           cloc
           fastfetch
@@ -49,32 +47,22 @@
           sshfs
           tldr
           wget
-          wl-clipboard
           wol
-          xdg-utils
           yazi
           yt-dlp
         ]
         (lib.mkIf osConfig.graphics.enable [
-          (outputs.packages.${pkgs.stdenv.hostPlatform.system}.sony-headphones-client.overrideAttrs (old: {
-            nativeBuildInputs = old.nativeBuildInputs ++ [ makeWrapper ];
-            postInstall = ''
-              wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${config.home.homeDirectory}/.config/sony-headphones-client.toml
-            ''; # have to touch it first - otherwise it assumes it is incorrect and uses default path
-          }))
-          dragon-drop
+          anki
           outputs.packages.${pkgs.stdenv.hostPlatform.system}._0x0
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.browserexport
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.search
           playerctl
           pwvucontrol
           tigervnc
           wayvnc
           wev
+          wl-clipboard
           wlr-randr
+          xdg-utils
         ])
         (lib.mkIf osConfig.gaming.enable [
           alsa-oss
@@ -96,9 +84,15 @@
           wineWowPackages.stable
         ])
         (lib.mkIf config.desktopPackages.enable [
+          (outputs.packages.${pkgs.stdenv.hostPlatform.system}.sony-headphones-client.overrideAttrs (old: {
+            nativeBuildInputs = old.nativeBuildInputs ++ [ makeWrapper ];
+            postInstall = ''
+              wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${config.home.homeDirectory}/.config/sony-headphones-client.toml
+            ''; # have to touch it first - otherwise it assumes it is incorrect and uses default path
+          }))
           android-tools
-          anki
           chatterino7
+          dragon-drop
           flatpak
           # freecad-wayland
           helvum
@@ -109,7 +103,10 @@
           openjdk17
           openscad
           orca-slicer
-          # outputs.packages.${pkgs.stdenv.hostPlatform.system}.blender
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.search
           prusa-slicer
           qmk
           rofi
