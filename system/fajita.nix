@@ -48,5 +48,11 @@ in
     "audio"
   ]; # TODO: ????
 
+  services.udev.packages = [
+    (pkgs.writeTextDir "lib/udev/rules.d/83-backlight.rules" ''
+      SUBSYSTEM=="backlight", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
+    '')
+  ];
+
   zramSwap.enable = true;
 }

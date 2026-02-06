@@ -23,6 +23,7 @@ in
         home.stateVersion = "25.11";
         home.packages = with pkgs; [
           # chatty
+          brightnessctl
         ];
         programs.zathura.enable = false;
         desktopPackages.enable = false;
@@ -41,7 +42,7 @@ in
             '';
         };
         quickshell.enable = true;
-        programs.quickshell.activeConfig = "pinenote"; # TODO:
+        programs.quickshell.activeConfig = "fajita";
         programs.quickshell.package =
           if (config.buildSystem == "x86_64-linux") then
             pkgsCross.quickshell.override {

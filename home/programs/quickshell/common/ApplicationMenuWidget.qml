@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Io
 import QtQuick.Layouts
 import Quickshell.Widgets
-import "common/config"
+import "config"
 
 Item {
     id: root

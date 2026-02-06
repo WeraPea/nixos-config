@@ -3,8 +3,7 @@ import Quickshell.Io
 import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell.Widgets
-import "common"
-import "common/config"
+import "config"
 
 Item {
     id: root
@@ -12,6 +11,7 @@ Item {
     required property string icon
 
     property int max_brightness: 255
+    property int min_brightness: 0
     property int brightness
     property int prev_brightness
 
@@ -59,7 +59,7 @@ Item {
             let delta = mouse.x - press_x;
             if (wasHeld || Math.abs(delta) > 10 || Date.now() - press_time > pressAndHoldInterval) {
                 wasHeld = true;
-                root.brightness = Math.max(0, Math.min(max_brightness, (prev_brightness + delta * (max_brightness / slider_width))));
+                root.brightness = Math.max(min_brightness, Math.min(max_brightness, prev_brightness + delta * ((max_brightness - min_brightness) / slider_width)));
             }
         }
     }
@@ -77,7 +77,7 @@ Item {
         content: Component {
             Slider {
                 id: slider
-                from: 0
+                from: root.min_brightness
                 to: root.max_brightness
                 value: root.brightness
 
