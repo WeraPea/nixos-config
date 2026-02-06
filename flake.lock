@@ -554,15 +554,16 @@
     "mobile-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1763065138,
-        "narHash": "sha256-46lJeUYH8YrfTccAoKQbO9lprq4dlo9VVLk+StPBSWM=",
-        "owner": "mobile-nixos",
+        "lastModified": 1765220494,
+        "narHash": "sha256-TziCsqbGFyfAzDpy0MH4G70dh8UgLiPU1H7p0i6VjXc=",
+        "owner": "matthiasdotsh",
         "repo": "mobile-nixos",
-        "rev": "1943b7b06fcd1a2c87f4b89df58231915cc2ca44",
+        "rev": "9ce9223b5a40de006f21bc93a296a7b93e74ee36",
         "type": "github"
       },
       "original": {
-        "owner": "mobile-nixos",
+        "owner": "matthiasdotsh",
+        "ref": "sdm845",
         "repo": "mobile-nixos",
         "type": "github"
       }

@@ -28,7 +28,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mobile-nixos = {
-      url = "github:mobile-nixos/mobile-nixos";
+      url = "github:matthiasdotsh/mobile-nixos/sdm845";
+      # url = "github:mobile-nixos/mobile-nixos";
       flake = false;
     };
     fcitx-virtualkeyboard-adapter = {
@@ -180,6 +181,11 @@
             (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-fajita"; })
             ./home/fajita.nix
             ./system/fajita.nix
+          ];
+        };
+        fajita-from-x86_64 = fajita.extendModules {
+          modules = [
+            { config.buildSystem = "x86_64-linux"; }
           ];
         };
       };
