@@ -48,7 +48,19 @@ in
         After = [ "graphical-session.target" ];
       };
       Service = {
-        ExecStart = pkgs.writeShellScript "wvkbd-hidden" "${lib.getExe pkgs.wvkbd} --hidden";
+        ExecStart =
+          with config.lib.stylix.colors;
+          pkgs.writeShellScript "wvkbd-hidden" ''
+            ${lib.getExe pkgs.wvkbd} --hidden \
+                --bg ${base00}\
+                --fg ${base02}\
+                --fg-sp ${base01}\
+                --press ${base03}\
+                --press-sp ${base03}\
+                --text ${base07}\
+                --text-sp ${base07}\
+                --fn "${config.stylix.fonts.sansSerif.name}"\
+                -R 0 -H 500'';
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
