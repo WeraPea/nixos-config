@@ -1,20 +1,9 @@
 {
   lib,
   pkgs,
-  inputs,
-  config,
   outputs,
   ...
 }:
-let
-  pkgsCross = import inputs.nixpkgs {
-    system = "x86_64-linux";
-    crossSystem = {
-      config = "aarch64-unknown-linux-gnu";
-    };
-    overlays = [ inputs.quickshell.overlays.default ];
-  };
-in
 {
   home-manager = {
     sharedModules = [
@@ -54,27 +43,6 @@ in
         };
         quickshell.enable = true;
         programs.quickshell.activeConfig = "pinenote";
-        programs.quickshell.package =
-          if (config.buildSystem == "x86_64-linux") then
-            pkgsCross.quickshell.override {
-              inherit (pkgs)
-                qt6
-                breakpad
-                jemalloc
-                cli11
-                wayland
-                wayland-protocols
-                wayland-scanner
-                xorg
-                libdrm
-                pipewire
-                pam
-                polkit
-                glib
-                ;
-            }
-          else
-            inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
 
         firefox = {
           mobile.enable = true;

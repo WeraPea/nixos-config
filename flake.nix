@@ -36,10 +36,6 @@
       url = "github:horriblename/fcitx-virtualkeyboard-adapter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/quickshell/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     mango = {
       url = "github:WeraPea/mangowc/combined";
       inputs.nixpkgs.follows = "nixpkgs";

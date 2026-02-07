@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   outputs,
   lib,
   pkgs,
@@ -11,7 +10,7 @@ let
     base: name:
     pkgs.runCommand name { } ''
       mkdir -p $out/common
-      ${pkgs.lndir}/bin/lndir -silent ${base} $out
+      cp -r ${base}/. $out
       cp -r ${./common}/. $out/common
       substituteInPlace $out/common/BrightnessWidget.qml \
         --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
@@ -51,7 +50,6 @@ in
       configs.pinenote = make-config pinenote-patched "pinenote";
       configs.fajita = make-config fajita-patched "fajita";
       systemd.enable = true;
-      package = lib.mkDefault inputs.quickshell.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
     };
   };
 }
