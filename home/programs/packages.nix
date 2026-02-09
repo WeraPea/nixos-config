@@ -97,6 +97,7 @@
           # freecad-wayland
           helvum
           krita
+          legcord
           mecab # for anki plugin
           nmap
           ntfs3g
@@ -113,7 +114,6 @@
           scrcpy
           steam-run
           usbutils
-          vesktop
         ])
       ];
   };
