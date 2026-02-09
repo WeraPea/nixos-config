@@ -25,6 +25,7 @@
           fastfetch
           ffmpeg
           file
+          gallery-dl
           gdu
           imagemagick
           jq
