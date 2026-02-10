@@ -142,8 +142,8 @@ let
           command = "spawn,kitty";
         }
         {
-          keys = "SUPER,v";
-          command = "spawn,vesktop";
+          keys = "SUPER,d";
+          command = "spawn,legcord";
         }
       ];
     }
@@ -250,10 +250,14 @@ in
           focus_on_activate=0
           focus_cross_monitor=1
           view_current_to_back=0
+          drag_corner=4
 
           scroller_structs=0
           scroller_default_proportion=1
           scroller_proportion_preset=0.5,1.0
+
+          zoom_centered=0
+          zoom_speed=0.5
 
           windowrule=title:Chatterino - Overlay,isoverlay:1
 
@@ -391,8 +395,15 @@ in
           # bind=SUPER,mouse_up,spawn,hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.75) | if . < 1 then 1 else . end')
           # bind=SUPER,mouse:274,spawn,hyprctl -q keyword cursor:zoom_factor 1
 
+          axisbind=SUPER,UP,screen_zoom_in
+          axisbind=SUPER,DOWN,screen_zoom_out
+
+          axisbind=SUPER+CTRL,UP,screen_zoom_in
+          axisbind=SUPER+CTRL,DOWN,screen_zoom_out
+
           # Mouse Button Bindings
           # NONE mode key only work in ov mode
+          mousebind=SUPER+CTRL,btn_left,screen_zoom_move
           mousebind=SUPER,btn_left,moveresize,curmove
           mousebind=SUPER,btn_right,moveresize,curresize
           mousebind=NONE,btn_left,toggleoverview,-1
