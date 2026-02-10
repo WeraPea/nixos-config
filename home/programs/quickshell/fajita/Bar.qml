@@ -41,7 +41,7 @@ Scope {
 
                     CommandWidget {
                         text: "󰚪"
-                        command: ["rotate-screen", "switch"] // TODO:
+                        command: ["rotate-screen", "switch", bar.screen.name] // TODO:
                     }
                     BrightnessWidget {
                         device: "ae94000.dsi.0"

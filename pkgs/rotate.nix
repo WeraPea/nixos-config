@@ -7,15 +7,15 @@ writeShellScriptBin "rotate-screen" ''
   set -euo pipefail
 
   usage() {
-    echo "Usage: $0 <transform: 0|1|2|3|cw|ccw|switch>" >&2
+    echo "Usage: $0 <transform: 0|1|2|3|cw|ccw|switch> <output>" >&2
     exit 1
   }
 
-  [[ $# -ne 1 ]] && usage
+  [[ $# -ne 2 ]] && usage
 
   order=(normal 90 180 270)
 
-  current=$(${lib.getExe wlr-randr} --json | jq -r '.[] | select(.name=="DPI-1") | .transform')
+  current=$(${lib.getExe wlr-randr} --json | jq -r --arg name "$2" '.[] | select(.name==$name) | .transform')
 
   transform=-1
   for i in "''${!order[@]}"; do
@@ -51,6 +51,14 @@ writeShellScriptBin "rotate-screen" ''
       usage
       ;;
   esac
-  mmsg -d setoption,monitorrule,name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:$transform,
+
+  # can't use wlr-randr for rotation as mango will reset it only any option change
+  mmsg -d setoption,monitorrule,$(${lib.getExe wlr-randr} --json | jq -r --arg name "$2" '
+    .[]
+    | select(.name==$name)
+    | . as $o
+    | ($o.modes[] | select(.current==true)) as $m
+    | "name:\($o.name),scale:\($o.scale),x:\($o.position.x),y:\($o.position.y),width:\($m.width),height:\($m.height),refresh:\($m.refresh)"
+  '),rr:$transform
   mmsg -d setoption,tablet_rotation,$transform
 ''
