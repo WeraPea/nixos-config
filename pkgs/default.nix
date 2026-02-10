@@ -11,8 +11,7 @@ rec {
   browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
   kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
-  manga-ocr = callPackage ./manga-ocr.nix { };
-  manga-ocr-from-file = callPackage ./manga-ocr-from-file.nix { inherit manga-ocr; };
+  manga-ocr-from-file = callPackage ./manga-ocr-from-file.nix { };
   mpv-http-mitmytproxy = callPackage ./mpv-http-mitmytproxy.nix { };
   mpv-websocket = callPackage ./mpv-websocket.nix { };
   mpv-websocket-script = callPackage ./mpv-websocket-script.nix { inherit mpv-websocket; };

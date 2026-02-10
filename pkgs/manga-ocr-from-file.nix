@@ -1,5 +1,5 @@
-{ manga-ocr, writers }:
-writers.writePython3Bin "manga-ocr-from-file" { libraries = [ manga-ocr ]; } ''
+{ python3Packages, writers }:
+writers.writePython3Bin "manga-ocr-from-file" { libraries = [ python3Packages.manga-ocr ]; } ''
   import sys
   from manga_ocr import MangaOcr
   mocr = MangaOcr()
