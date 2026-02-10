@@ -244,7 +244,7 @@ in
           enable_hotarea=0
           warpcursor=0
           sloppyfocus=1
-          axis_bind_apply_timeout=100
+          axis_bind_apply_timeout=10
           drag_tile_to_tile=1
           cursor_hide_timeout=5
           focus_on_activate=0
@@ -257,7 +257,8 @@ in
           scroller_proportion_preset=0.5,1.0
 
           zoom_centered=0
-          zoom_speed=0.5
+          zoom_speed=0.2
+          zoom_max=20
 
           windowrule=title:Chatterino - Overlay,isoverlay:1
 
@@ -391,10 +392,6 @@ in
           bind=NONE,XF86AudioPrev,spawn,mpc prev
           bind=NONE,XF86AudioNext,spawn,mpc next
 
-          # bind=SUPER,mouse_down,spawn,hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '.float * 1.333')
-          # bind=SUPER,mouse_up,spawn,hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float * 0.75) | if . < 1 then 1 else . end')
-          # bind=SUPER,mouse:274,spawn,hyprctl -q keyword cursor:zoom_factor 1
-
           axisbind=SUPER,UP,screen_zoom_in
           axisbind=SUPER,DOWN,screen_zoom_out
 
@@ -403,6 +400,7 @@ in
 
           # Mouse Button Bindings
           # NONE mode key only work in ov mode
+          mousebind=SUPER,btn_middle,screen_zoom_move
           mousebind=SUPER+CTRL,btn_left,screen_zoom_move
           mousebind=SUPER,btn_left,moveresize,curmove
           mousebind=SUPER,btn_right,moveresize,curresize
