@@ -18,7 +18,6 @@
         desktopPackages.enable = false;
 
         koreader.enable = true;
-        services.swww.enable = lib.mkForce false;
         wvkbd.enable = true;
 
         mango = {

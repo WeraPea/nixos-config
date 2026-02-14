@@ -7,7 +7,6 @@
 {
   stylix = {
     enable = true;
-    image = ./wallpaper.png;
     base16Scheme = ./molokai.yaml;
     fonts = {
       monospace = {
