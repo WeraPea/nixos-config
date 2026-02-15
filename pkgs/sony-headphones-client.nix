@@ -9,7 +9,9 @@
   glew,
   glfw,
   imgui,
-  xorg,
+  libX11,
+  libXinerama,
+  libXi,
   libxcursor,
   libxrandr,
   makeDesktopItem,
@@ -39,9 +41,9 @@ stdenv.mkDerivation {
     glew
     glfw
     imgui
-    xorg.libX11
-    xorg.libXinerama
-    xorg.libXi
+    libX11
+    libXinerama
+    libXi
     libxcursor
     libxrandr
   ];

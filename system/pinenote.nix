@@ -31,15 +31,6 @@ in
       pkgsCross.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" { }
     )
   );
-  boot.kernelPatches = [
-    {
-      name = "enable swap"; # required for zswap to be enabled
-      patch = null;
-      structuredExtraConfig = with lib.kernel; {
-        SWAP = yes;
-      };
-    }
-  ];
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.05";
   fileSystems."/" = {

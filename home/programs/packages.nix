@@ -82,7 +82,7 @@
           ryubing
           steamtinkerlaunch
           winetricks
-          wineWowPackages.stable
+          wineWow64Packages.stable
         ])
         (lib.mkIf config.desktopPackages.enable [
           (outputs.packages.${pkgs.stdenv.hostPlatform.system}.sony-headphones-client.overrideAttrs (old: {
