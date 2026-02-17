@@ -26,8 +26,10 @@
           extraConfig = # hyprlang
             ''
               monitorrule=name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60
-              bind=NONE,XF86PowerOff,spawn,${lib.getExe pkgs.wlopm} --toggle "*"
             '';
+          bindModes.default.binds.bind = {
+            "NONE,XF86PowerOff" = ''spawn,${lib.getExe pkgs.wlopm} --toggle "*"'';
+          };
         };
         quickshell.enable = true;
         programs.quickshell.activeConfig = "fajita";

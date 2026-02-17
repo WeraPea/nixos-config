@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  lib,
   ...
 }:
 {
@@ -40,52 +41,34 @@
               monitorrule=name:DP-2,x:${toString DP_2_x},y:${toString DP_2_y},width:${toString DP_2_width},height:${toString DP_2_height},refresh:144
               monitorrule=name:HDMI-A-1,x:${toString HDMI_A_1_x},y:${toString HDMI_A_1_y},width:${toString HDMI_A_1_width},height:${toString HDMI_A_1_height},refresh:75
               monitorrule=name:HDMI-A-2,x:${toString HDMI_A_2_x},y:${toString HDMI_A_2_y},width:${toString HDMI_A_2_width},height:${toString HDMI_A_2_height},refresh:60,overscan_top:${toString HDMI_A_2_overscan_top},overscan_bottom:${toString HDMI_A_2_overscan_bottom},overscan_left:${toString HDMI_A_2_overscan_left},overscan_right:${toString HDMI_A_2_overscan_right}
-
-              bind=SUPER,F1,focusmon,HDMI-A-1
-              bind=SUPER,F1,view,1
-              bind=SUPER,F2,focusmon,HDMI-A-1
-              bind=SUPER,F2,view,2
-              bind=SUPER,F3,focusmon,HDMI-A-1
-              bind=SUPER,F3,view,3
-              bind=SUPER,F4,focusmon,HDMI-A-1
-              bind=SUPER,F4,view,4
-              bind=SUPER,F5,focusmon,HDMI-A-1
-              bind=SUPER,F5,view,5
-
-              bind=SUPER,6,focusmon,HDMI-A-2
-              bind=SUPER,6,view,1
-              bind=SUPER,7,focusmon,HDMI-A-2
-              bind=SUPER,7,view,2
-              bind=SUPER,8,focusmon,HDMI-A-2
-              bind=SUPER,8,view,3
-              bind=SUPER,9,focusmon,HDMI-A-2
-              bind=SUPER,9,view,4
-              bind=SUPER,0,focusmon,HDMI-A-2
-              bind=SUPER,0,view,5
-
-              bind=SUPER+SHIFT,F1,tagmon,HDMI-A-1
-              bind=SUPER+SHIFT,F1,tag,1
-              bind=SUPER+SHIFT,F2,tagmon,HDMI-A-1
-              bind=SUPER+SHIFT,F2,tag,2
-              bind=SUPER+SHIFT,F3,tagmon,HDMI-A-1
-              bind=SUPER+SHIFT,F3,tag,3
-              bind=SUPER+SHIFT,F4,tagmon,HDMI-A-1
-              bind=SUPER+SHIFT,F4,tag,4
-              bind=SUPER+SHIFT,F5,tagmon,HDMI-A-1
-              bind=SUPER+SHIFT,F5,tag,5
-
-              bind=SUPER+SHIFT,6,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,6,tag,1
-              bind=SUPER+SHIFT,7,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,7,tag,2
-              bind=SUPER+SHIFT,8,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,8,tag,3
-              bind=SUPER+SHIFT,9,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,9,tag,4
-              bind=SUPER+SHIFT,0,tagmon,HDMI-A-2
-              bind=SUPER+SHIFT,0,tag,5
             '';
           mainDisplay = "DP-2";
+          bindModes.default.binds.bind =
+            (builtins.listToAttrs (
+              builtins.concatMap (w: [
+                (lib.nameValuePair "SUPER,F${w}" [
+                  "focusmon,HDMI-A-1"
+                  "view,${w}"
+                ])
+                (lib.nameValuePair "SUPER+SHIFT,F${w}" [
+                  "tagmon,HDMI-A-1"
+                  "tag,${w}"
+                ])
+              ]) (map toString (lib.range 1 5))
+            ))
+            // (builtins.listToAttrs (
+              builtins.concatMap (w: [
+                (lib.nameValuePair "SUPER,${toString (lib.mod (w + 5) 10)}" [
+                  "focusmon,HDMI-A-2"
+                  "view,${toString w}"
+                ])
+                (lib.nameValuePair "SUPER+SHIFT,F${toString (lib.mod (w + 5) 10)}" [
+                  "tagmon,HDMI-A-2"
+                  "tag,${toString w}"
+                ])
+              ]) (lib.range 1 5)
+            ));
+
         };
         quickshell.enable = true;
         beets.enable = true;

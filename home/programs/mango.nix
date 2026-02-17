@@ -5,195 +5,260 @@
   ...
 }:
 let
+  cfg = config.mango;
   parseBindMode =
     {
       name,
-      keys ? "",
+      enterKeybind ? "",
       binds,
       returnByDefault ? false,
-      returnKeybind ? "NONE,Escape",
+      returnKeybind ? if (name != "default" && name != "common") then "bind=NONE,Escape" else "",
     }:
     builtins.concatStringsSep "\n" (
-      lib.optional (keys != "") "bind=${keys},setkeymode,${name}"
+      lib.optional (enterKeybind != "") "bind=${enterKeybind},setkeymode,${name}"
       ++ [ "keymode=${name}" ]
-      ++ (builtins.concatMap (
-        {
-          keys,
-          command,
-          return ? returnByDefault,
-        }:
-        [ "bind=${keys},${command}" ] ++ lib.optional return "bind=${keys},setkeymode,default"
-      ) binds)
-      ++ lib.optional (returnKeybind != "") "bind=${returnKeybind},setkeymode,default"
+      ++ (builtins.concatLists (
+        lib.mapAttrsToList (
+          bindType: bindings:
+          (builtins.concatLists (
+            lib.mapAttrsToList (
+              bind: value:
+              let
+                command = lib.toList (if builtins.isAttrs value then value.command else value);
+                return = if builtins.isAttrs value then value.return or returnByDefault else returnByDefault;
+              in
+              (builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) command)
+              ++ lib.optional return "${bindType}=${bind},setkeymode,default"
+            ) bindings
+          ))
+        ) binds
+      ))
+      ++ lib.optional (returnKeybind != "") "${returnKeybind},setkeymode,default"
       ++ [ "keymode=default" ]
     )
     + "\n";
-  parseBindModes = bindModes: builtins.concatStringsSep "\n" (map parseBindMode bindModes) + "\n";
+  parseBindModes =
+    bindModes:
+    builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: parseBindMode ({ inherit name; } // value)) bindModes
+    )
+    + "\n";
   mkClipboardMode =
     {
-      name,
-      keys,
+      enterKeybind,
       pasteCmd,
       copyCmdOther, # for pasting into another selection
     }:
     {
-      inherit name keys;
+      inherit enterKeybind;
       returnByDefault = true;
-      binds = [
-        {
-          keys = "SUPER,p";
-          command = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
-        }
-        {
-          keys = "SUPER,o";
-          command = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
-        }
-        {
-          keys = "SUPER,s";
-          command = ''spawn_shell,glide "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
-        }
-        {
-          keys = "SUPER+CTRL,s";
-          command = ''spawn_shell,glide --new-window "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
-        }
-        {
-          keys = "SUPER,j";
-          command = ''spawn_shell,glide "jisho.org/search/$(${pasteCmd})"'';
-        }
-        {
-          keys = "SUPER+CTRL,j";
-          command = ''spawn_shell,glide --new-window "jisho.org/search/$(${pasteCmd})"'';
-        }
-        {
-          keys = "SUPER,h";
-          command = ''spawn_shell,glide "$(${pasteCmd})"'';
-        }
-        {
-          keys = "SUPER+CTRL,h";
-          command = ''spawn_shell,glide --new-window "$(${pasteCmd})"'';
-        }
-      ];
+      binds.bind = {
+        "SUPER,p" = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
+        "SUPER,o" = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
+        "SUPER,s" =
+          ''spawn_shell,glide "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
+        "SUPER+CTRL,s" =
+          ''spawn_shell,glide --new-window "duckduckgo.com/?q=$(${pasteCmd} | python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.stdin.read().strip()))")"'';
+        "SUPER,j" = ''spawn_shell,glide "jisho.org/search/$(${pasteCmd})"'';
+        "SUPER+CTRL,j" = ''spawn_shell,glide --new-window "jisho.org/search/$(${pasteCmd})"'';
+        "SUPER,h" = ''spawn_shell,glide "$(${pasteCmd})"'';
+        "SUPER+CTRL,h" = ''spawn_shell,glide --new-window "$(${pasteCmd})"'';
+      };
     };
-  bindModes = [
-    {
-      name = "common";
-      returnKeybind = "";
-      binds = [
-        {
-          keys = "SUPER+CTRL,r";
-          command = "reload_config";
-        }
-      ];
-    }
-    {
-      name = "leader";
-      keys = "SUPER,space";
+  mango-toggle-monocle = pkgs.writeShellScript "mango-toggle-monocle" ''
+    selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
+    tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && ($4 == 1 || $4 == 3) { print $3 }')
+    lfile="/tmp/mango-last-layout-pre-monocle-per-monitor"
+    declare -A l_to_layout=(
+      [S]="scroller"
+      [T]="tile"
+      [G]="grid"
+      [M]="monocle"
+      [K]="deck"
+      [CT]="center_tile"
+      [RT]="right_tile"
+      [VS]="vertical_scroller"
+      [VT]="vertical_tile"
+      [VG]="vertical_grid"
+      [VK]="vertical_deck"
+      [TG]="tgmix"
+    )
+
+    cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
+    cur_layout="''${l_to_layout[$cur_layout]}"
+
+    if [[ "$cur_layout" == "monocle" ]]; then
+      last_layout=$(grep -e "$selmon $tag" "$lfile" | cut -d' ' -f3)
+      if [[ "$last_layout" == "" ]]; then
+        last_layout="tile";
+      fi
+      mmsg -d setlayout,"$last_layout"
+    else
+      [[ -f "$lfile" ]] || : > "$lfile"
+      if grep -q "^$selmon $tag" "$lfile"; then
+        sed -i "s/^$selmon $tag .*/$selmon $tag $cur_layout/" "$lfile"
+      else
+        echo "$selmon $tag $cur_layout" >> "$lfile"
+      fi
+      mmsg -d setlayout,monocle
+    fi;
+  '';
+  bindModes = {
+    default.binds = {
+      bind =
+        (builtins.listToAttrs (
+          builtins.concatMap (w: [
+            (lib.nameValuePair "SUPER,${w}" [
+              "focusmon,${cfg.mainDisplay}"
+              "view,${w}"
+            ])
+            (lib.nameValuePair "SUPER+SHIFT,${w}" [
+              "tagmon,${cfg.mainDisplay}"
+              "tag,${w}"
+            ])
+          ]) (map toString (lib.range 1 5))
+        ))
+        // {
+          "SUPER,j" = "focusstack,next";
+          "SUPER,k" = "focusstack,prev";
+          "SUPER,h" = "focusdir,left";
+          "SUPER,l" = "focusdir,right";
+
+          "SUPER,i" = "incnmaster,+1";
+          "SUPER,u" = "incnmaster,-1";
+          # "SUPER,h" = "setmfact,-0.05";
+          # "SUPER,l" = "setmfact,+0.05";
+          "SUPER,Return" = "zoom";
+          # "SUPER,code:59" = "focusmon,left";
+          # "SUPER+SHIFT,code:59" = "tagmon,left,0";
+          # "SUPER,code:60" = "focusmon,right";
+          # "SUPER+SHIFT,code:60" = "tagmon,right,0";
+
+          "SUPER+CTRL,k" = "exchange_client,up";
+          "SUPER+CTRL,j" = "exchange_client,down";
+          "SUPER+CTRL,h" = "exchange_client,left";
+          "SUPER+CTRL,l" = "exchange_client,right";
+
+          # Layouts
+          "SUPER,t" = "setlayout,tile";
+          "SUPER+CTRL,t" = "setlayout,right_tile";
+          "SUPER,g" = "setlayout,tgmix";
+          "SUPER+CTRL,g" = "setlayout,vertical_grid";
+          "SUPER,v" = "setlayout,vertical_tile";
+          "SUPER,w" = "spawn,${mango-toggle-monocle}";
+          "SUPER,N" = "setlayout,scroller";
+          "SUPER,M" = "switch_proportion_preset";
+
+          "SUPER,e" = "togglefloating";
+          "SUPER,f" = "togglefullscreen";
+          "SUPER+CTRL,f" = "togglefakefullscreen";
+
+          "NONE,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1";
+          "NONE,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1";
+          "SHIFT,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost";
+          "SHIFT,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost";
+
+          "SUPER,space" = "spawn,makoctl dismiss";
+          "SUPER+CTRL,space" = "spawn,makoctl restore";
+          "NONE,Print" = "spawn,screenshot";
+          # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
+
+          "SUPER,s" = "spawn,search";
+          "SUPER,c" = "spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons";
+          "SUPER,d" = "spawn,rofi -show window -show-icons";
+          "SUPER,b" = "spawn,${lib.getExe pkgs.rofi-bluetooth}";
+
+          "SUPER,F10" = "spawn,ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7";
+          "SUPER,F9" = "spawn,ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7";
+
+          "SUPER,F11" = "spawn,ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7";
+          "SUPER,F12" = "spawn,ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7";
+
+          "SUPER+SHIFT,F11" = "spawn,ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7";
+          "SUPER+SHIFT,F12" = "spawn,ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7";
+
+          "NONE,XF86AudioMute" = "spawn,${lib.getExe pkgs.pamixer} -t";
+
+          "NONE,XF86MonBrightnessUp" = "spawn,brightnessctl set 10%+";
+          "NONE,XF86MonBrightnessDown" = "spawn,brightnessctl set 10%-";
+
+          "NONE,XF86AudioPlay" = "spawn,mpc toggle";
+          "NONE,XF86AudioPause" = "spawn,mpc pause";
+          "NONE,XF86AudioPrev" = "spawn,mpc prev";
+          "NONE,XF86AudioNext" = "spawn,mpc next";
+        };
+      axisbind = {
+        "SUPER,UP" = "screen_zoom_in";
+        "SUPER,DOWN" = "screen_zoom_out";
+
+        "SUPER+CTRL,UP" = "screen_zoom_in";
+        "SUPER+CTRL,DOWN" = "screen_zoom_out";
+      };
+      mousebind = {
+        "SUPER,btn_middle" = "screen_zoom_move";
+        "SUPER+CTRL,btn_left" = "screen_zoom_move";
+        "SUPER,btn_left" = "moveresize,curmove";
+        "SUPER,btn_right" = "moveresize,curresize";
+        "NONE,btn_left" = "toggleoverview,-1";
+        "NONE,btn_right" = "killclient,0";
+      };
+    };
+    common.binds.bind = {
+      "SUPER+CTRL,r" = "reload_config";
+    };
+    leader = {
+      enterKeybind = "SUPER,space";
       returnByDefault = true;
-      binds = [
-        {
-          keys = "SUPER,o";
-          command = "toggleoverlay";
-        }
-        {
-          keys = "SUPER,b";
-          command = "toggle_render_border";
-        }
-      ];
-    }
-    (mkClipboardMode {
-      name = "clipboard";
-      keys = "SUPER,o";
+      binds.bind = {
+        "SUPER,o" = "toggleoverlay";
+        "SUPER,b" = "toggle_render_border";
+      };
+    };
+    clipboard = mkClipboardMode {
+      enterKeybind = "SUPER,o";
       pasteCmd = "wl-paste";
       copyCmdOther = "wl-copy -p";
-    })
-    (mkClipboardMode {
-      name = "primary";
-      keys = "SUPER,p";
+    };
+    primary = mkClipboardMode {
+      enterKeybind = "SUPER,p";
       pasteCmd = "wl-paste -p";
       copyCmdOther = "wl-copy";
-    })
-    {
-      name = "run";
-      keys = "SUPER,r";
+    };
+    run = {
+      enterKeybind = "SUPER,r";
       returnByDefault = true;
-      binds = [
-        {
-          keys = "SUPER,a";
-          command = "spawn,anki";
-        }
-        {
-          keys = "SUPER,c";
-          command = "spawn,chatterino";
-        }
-        {
-          keys = "SUPER,f";
-          command = "spawn,glide";
-        }
-        {
-          keys = "SUPER,r";
-          command = "spawn,rofi -show drun -show-icons";
-        }
-        {
-          keys = "SUPER,s";
-          command = "spawn,steam";
-        }
-        {
-          keys = "SUPER,t";
-          command = "spawn,kitty";
-        }
-        {
-          keys = "SUPER,d";
-          command = "spawn,legcord";
-        }
-      ];
-    }
-    {
-      name = "mpd";
-      keys = "SUPER,x";
+      binds.bind = {
+        "SUPER,a" = "spawn,anki";
+        "SUPER,c" = "spawn,chatterino";
+        "SUPER,f" = "spawn,glide";
+        "SUPER,r" = "spawn,rofi -show drun -show-icons";
+        "SUPER,s" = "spawn,steam";
+        "SUPER,t" = "spawn,kitty";
+        "SUPER,d" = "spawn,legcord";
+      };
+    };
+    mpd = {
+      enterKeybind = "SUPER,x";
       returnByDefault = true;
-      binds = [
-        {
-          keys = "SUPER,x";
-          command = "spawn,mpc toggle";
-        }
-        {
-          keys = "SUPER,space";
-          command = "spawn,mpc toggle";
-        }
-        {
-          keys = "SUPER,n";
-          command = "spawn,mpc next";
-        }
-        {
-          keys = "SUPER,p";
-          command = "spawn,mpc prev";
-        }
-        {
-          keys = "SUPER,j";
-          command = "spawn,mpc volume -5";
-        }
-        {
-          keys = "SUPER,k";
-          command = "spawn,mpc volume +5";
-        }
-        {
-          keys = "SUPER,f";
-          command = ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
-        }
-      ];
-    }
-    {
-      name = "kill";
-      keys = "SUPER,q";
+      binds.bind = {
+        "SUPER,x" = "spawn,mpc toggle";
+        "SUPER,space" = "spawn,mpc toggle";
+        "SUPER,n" = "spawn,mpc next";
+        "SUPER,p" = "spawn,mpc prev";
+        "SUPER,j" = "spawn,mpc volume -5";
+        "SUPER,k" = "spawn,mpc volume +5";
+        "SUPER,f" =
+          ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
+      };
+    };
+    kill = {
+      enterKeybind = "SUPER,q";
       returnByDefault = true;
-      binds = [
-        {
-          keys = "SUPER,q";
-          command = "killclient,";
-        }
-      ];
-    }
-  ];
+      binds.bind = {
+        "SUPER,q" = "killclient,";
+      };
+    };
+  };
 in
 {
   options = {
@@ -203,8 +268,13 @@ in
       default = "";
     };
     mango.mainDisplay = lib.mkOption { };
+    mango.bindModes = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      apply = userModes: lib.recursiveUpdate bindModes userModes;
+    };
   };
-  config = lib.mkIf config.mango.enable {
+  config = lib.mkIf cfg.enable {
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
@@ -261,151 +331,6 @@ in
 
           windowrule=title:Chatterino - Overlay,isoverlay:1
 
-          bind=SUPER,1,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,1,view,1
-          bind=SUPER,2,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,2,view,2
-          bind=SUPER,3,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,3,view,3
-          bind=SUPER,4,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,4,view,4
-          bind=SUPER,5,focusmon,${config.mango.mainDisplay}
-          bind=SUPER,5,view,5
-
-          bind=SUPER+SHIFT,1,tagmon,${config.mango.mainDisplay}
-          bind=SUPER+SHIFT,1,tag,1
-          bind=SUPER+SHIFT,2,tagmon,${config.mango.mainDisplay}
-          bind=SUPER+SHIFT,2,tag,2
-          bind=SUPER+SHIFT,3,tagmon,${config.mango.mainDisplay}
-          bind=SUPER+SHIFT,3,tag,3
-          bind=SUPER+SHIFT,4,tagmon,${config.mango.mainDisplay}
-          bind=SUPER+SHIFT,4,tag,4
-          bind=SUPER+SHIFT,5,tagmon,${config.mango.mainDisplay}
-          bind=SUPER+SHIFT,5,tag,5
-
-          bind=SUPER,j,focusstack,next
-          bind=SUPER,k,focusstack,prev
-          bind=SUPER,h,focusdir,left
-          bind=SUPER,l,focusdir,right
-
-          bind=SUPER,i,incnmaster,+1
-          bind=SUPER,u,incnmaster,-1
-          # bind=SUPER,h,setmfact,-0.05
-          # bind=SUPER,l,setmfact,+0.05
-          bind=SUPER,Return,zoom
-          # bind=SUPER,code:59,focusmon,left
-          # bind=SUPER+SHIFT,code:59,tagmon,left,0
-          # bind=SUPER,code:60,focusmon,right
-          # bind=SUPER+SHIFT,code:60,tagmon,right,0
-
-          # Unfortunately stack based exchange is still being worked on.
-          # take these lesser directional based ones.
-          bind=SUPER+CTRL,k,exchange_client,up
-          bind=SUPER+CTRL,j,exchange_client,down
-          bind=SUPER+CTRL,h,exchange_client,left
-          bind=SUPER+CTRL,l,exchange_client,right
-
-          # Layouts
-          bind=SUPER,t,setlayout,tile
-          bind=SUPER+CTRL,t,setlayout,right_tile
-          bind=SUPER,g,setlayout,tgmix
-          bind=SUPER+CTRL,g,setlayout,vertical_grid
-          bind=SUPER,v,setlayout,vertical_tile
-          bind=SUPER,w,spawn,${pkgs.writeShellScript "mango-toggle-monocle" ''
-            selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-            tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && ($4 == 1 || $4 == 3) { print $3 }')
-            lfile="/tmp/mango-last-layout-pre-monocle-per-monitor"
-            declare -A l_to_layout=(
-              [S]="scroller"
-              [T]="tile"
-              [G]="grid"
-              [M]="monocle"
-              [K]="deck"
-              [CT]="center_tile"
-              [RT]="right_tile"
-              [VS]="vertical_scroller"
-              [VT]="vertical_tile"
-              [VG]="vertical_grid"
-              [VK]="vertical_deck"
-              [TG]="tgmix"
-            )
-
-            cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
-            cur_layout="''${l_to_layout[$cur_layout]}"
-
-            if [[ "$cur_layout" == "monocle" ]]; then
-              last_layout=$(grep -e "$selmon $tag" "$lfile" | cut -d' ' -f3)
-              if [[ "$last_layout" == "" ]]; then
-                last_layout="tile";
-              fi
-              mmsg -d setlayout,"$last_layout"
-            else
-              [[ -f "$lfile" ]] || : > "$lfile"
-              if grep -q "^$selmon $tag" "$lfile"; then
-                sed -i "s/^$selmon $tag .*/$selmon $tag $cur_layout/" "$lfile"
-              else
-                echo "$selmon $tag $cur_layout" >> "$lfile"
-              fi
-              mmsg -d setlayout,monocle
-            fi;
-          ''}
-          bind=SUPER,N,setlayout,scroller
-          bind=SUPER,M,switch_proportion_preset
-          bind=SUPER,N,setlayout,scroller
-
-          bind=SUPER,e,togglefloating
-          bind=SUPER,f,togglefullscreen
-          bind=SUPER+CTRL,f,togglefakefullscreen
-
-          bind=NONE,XF86AudioLowerVolume,spawn,${lib.getExe pkgs.pamixer} -d 1
-          bind=NONE,XF86AudioRaiseVolume,spawn,${lib.getExe pkgs.pamixer} -i 1
-          bind=SHIFT,XF86AudioLowerVolume,spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost
-          bind=SHIFT,XF86AudioRaiseVolume,spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost
-
-          bind=SUPER,space,spawn,makoctl dismiss
-          bind=SUPER+CTRL,space,spawn,makoctl restore
-          bind=NONE,Print,spawn,screenshot
-          # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
-
-          bind=SUPER,s,spawn,search
-          bind=SUPER,c,spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons
-          bind=SUPER,d,spawn,rofi -show window -show-icons
-          bind=SUPER,b,spawn,${lib.getExe pkgs.rofi-bluetooth}
-
-          bind=SUPER,F10,spawn,ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7
-          bind=SUPER,F9,spawn,ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7
-
-          bind=SUPER,F11,spawn,ddccontrol -r 0xe2 -w 5 dev:/dev/i2c-7
-          bind=SUPER,F12,spawn,ddccontrol -r 0xe2 -w 6 dev:/dev/i2c-7
-
-          bind=SUPER+SHIFT,F11,spawn,ddccontrol -r 0xe5 -W -1 dev:/dev/i2c-7
-          bind=SUPER+SHIFT,F12,spawn,ddccontrol -r 0xe5 -W +1 dev:/dev/i2c-7
-
-          bind=NONE,XF86AudioMute,spawn,${lib.getExe pkgs.pamixer} -t
-
-          bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl set 10%+
-          bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl set 10%-
-
-          bind=NONE,XF86AudioPlay,spawn,mpc toggle
-          bind=NONE,XF86AudioPause,spawn,mpc pause
-          bind=NONE,XF86AudioPrev,spawn,mpc prev
-          bind=NONE,XF86AudioNext,spawn,mpc next
-
-          axisbind=SUPER,UP,screen_zoom_in
-          axisbind=SUPER,DOWN,screen_zoom_out
-
-          axisbind=SUPER+CTRL,UP,screen_zoom_in
-          axisbind=SUPER+CTRL,DOWN,screen_zoom_out
-
-          # Mouse Button Bindings
-          # NONE mode key only work in ov mode
-          mousebind=SUPER,btn_middle,screen_zoom_move
-          mousebind=SUPER+CTRL,btn_left,screen_zoom_move
-          mousebind=SUPER,btn_left,moveresize,curmove
-          mousebind=SUPER,btn_right,moveresize,curresize
-          mousebind=NONE,btn_left,toggleoverview,-1
-          mousebind=NONE,btn_right,killclient,0
-
           tagrule=id:1,layout_name:tile
           tagrule=id:2,layout_name:tile
           tagrule=id:3,layout_name:tile
@@ -432,24 +357,13 @@ in
           exec-once=systemctl --user reset-failed
           exec-once=systemctl --user start mango-session.target
         ''
-        + (
-          if config.programs.quickshell.enable then # hyprlang
-            ''
-              exec-once=systemctl --user restart quickshell
-            ''
-          else
-            ""
-        )
-        + (
-          if config.programs.waybar.enable then # hyprlang
-            ''
-              exec-once=waybar
-            ''
-          else
-            ""
-        )
-        + config.mango.extraConfig
-        + parseBindModes bindModes;
+        + (builtins.concatStringsSep "\n" (
+          lib.optional config.programs.quickshell.enable "exec-once=systemctl --user restart quickshell"
+        ))
+        + "\n"
+        + parseBindModes cfg.bindModes
+        + "\n"
+        + cfg.extraConfig;
     };
 
     systemd.user.targets.mango-session = {
