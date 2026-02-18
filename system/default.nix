@@ -40,6 +40,9 @@
     networking = {
       hostName = config.user.hostname;
       networkmanager.enable = true;
+      firewall.allowedUDPPorts = [
+        5355 # LLMNR
+      ];
     };
 
     time.timeZone = "Europe/Warsaw";
