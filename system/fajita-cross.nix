@@ -61,9 +61,14 @@ in
     })
   ];
 
-  mobile.boot.stage-1.kernel.package = lib.mkIf (config.buildSystem == "x86_64-linux") (
+  mobile.boot.stage-1.kernel.package =
+    let
+      p = if (config.buildSystem == "x86_64-linux") then pkgsCross else pkgs;
+    in
     lib.mkForce (
-      pkgsCross.callPackage "${inputs.mobile-nixos}/devices/families/sdm845-mainline/kernel" { }
-    )
-  );
+      (p.callPackage "${inputs.mobile-nixos}/devices/families/sdm845-mainline/kernel" { }).overrideAttrs
+        (old: {
+          patches = (old.patches or [ ]) ++ [ ./bluetooth-btaddr.patch ];
+        })
+    );
 }
