@@ -13,6 +13,7 @@
         home.packages = with pkgs; [
           # chatty
           brightnessctl
+          legcord
         ];
         programs.zathura.enable = false;
         desktopPackages.enable = false;

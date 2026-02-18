@@ -275,6 +275,7 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    wayland.systemd.target = "mango-session.target";
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
@@ -355,10 +356,10 @@ in
             ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots XDG_SESSION_TYPE NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH SDL_VIDEODRIVER WINDOW_MANAGER GDK_BACKEND OZONE_PLATFORM ELECTRON_OZONE_PLATFORM_HINT MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
           ''}
           exec-once=systemctl --user reset-failed
-          exec-once=systemctl --user start mango-session.target
+          exec-once=systemctl --user restart mango-session.target
         ''
         + (builtins.concatStringsSep "\n" (
-          lib.optional config.programs.quickshell.enable "exec-once=systemctl --user restart quickshell"
+          lib.optional config.wvkbd.enable "exec-once=sleep 5; systemctl --user restart fcitx5-daemon"
         ))
         + "\n"
         + parseBindModes cfg.bindModes
