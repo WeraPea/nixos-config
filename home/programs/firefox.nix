@@ -48,10 +48,10 @@ let
   };
   jiten-reader = buildFirefoxXpiAddon rec {
     pname = "jiten_reader";
-    version = "1.0.0";
+    version = "1.0.4";
     addonId = "reader@jiten.moe";
-    url = "https://addons.mozilla.org/firefox/downloads/file/4659273/${pname}-${version}.xpi";
-    sha256 = "sha256-yEij6ucQCbDUKt/GE5fZ32WR5Fd0yDfNm/q5bwW6tqg=";
+    url = "https://addons.mozilla.org/firefox/downloads/file/4697819/${pname}-${version}.xpi";
+    sha256 = "sha256-y+nIGc/ON7DwDvDlBO1UzERswO6b8UmF9iVBl9O2OoM=";
     meta = with pkgs.lib; {
       homepage = "https://jiten.moe";
       description = "Learn Japanese by immersion by parsing texts, getting definitions for words and tracking your knowledge.";
