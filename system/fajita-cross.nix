@@ -7,14 +7,13 @@
 }:
 let
   releaseTools = import "${inputs.mobile-nixos}/lib/release-tools.nix" { inherit pkgs; };
-  inherit (releaseTools.withPkgs pkgs) knownSystems;
   pkgsCross =
     (releaseTools.evalWith {
       device = "oneplus-fajita";
       modules = [ ];
       additionalConfiguration = {
-        nixpkgs.localSystem = knownSystems.x86_64-linux;
-        nixpkgs.crossSystem = knownSystems.aarch64-linux // {
+        nixpkgs.buildPlatform.system = "x86_64-linux";
+        nixpkgs.crossSystem = {
           system = "aarch64-linux";
           isAarch32 = false;
         };

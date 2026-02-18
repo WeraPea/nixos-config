@@ -28,8 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mobile-nixos = {
-      url = "github:matthiasdotsh/mobile-nixos/sdm845";
-      # url = "github:mobile-nixos/mobile-nixos";
+      url = "github:WeraPea/mobile-nixos/sdm845";
       flake = false;
     };
     fcitx-virtualkeyboard-adapter = {
