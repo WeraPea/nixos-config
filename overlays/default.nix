@@ -7,5 +7,6 @@
     (import ./opencomposite.nix)
     (import ./bs-manager.nix)
     (import ./glide.nix)
+    (import ./webtorrent-mpv-hook.nix)
   ];
 }
