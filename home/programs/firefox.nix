@@ -222,6 +222,21 @@ let
     sha256 = "169aq7j9pzwdsmp3005l3cpyny3wakaagmpi1lvw06dymk670kl1";
   };
 
+  texthooker-clear =
+    pkgs.writeText "texthooker-copy-primary.js" # js
+      ''
+        // ==UserScript==
+        // @name         texthooker-ui clear
+        // @match        https://renji-xd.github.io/texthooker-ui/*
+        // ==/UserScript==
+        (function () {
+          window.addEventListener('blur', () => {
+            window.getSelection().removeAllRanges();
+            document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          });
+        })();
+      '';
+
   cfg = config.firefox;
 
   baseFirefoxPackage =
@@ -378,9 +393,10 @@ in
           "{aecec67f-0d10-4fa7-b7c7-609a2db280cf}" = {
             options.autoUpdate = 0;
             scripts = map (path: builtins.readFile path) [
-              automail
               anilistAutoRefresh
+              automail
               nexusmodsDownloadfix
+              texthooker-clear
               ytNotInterestedInOneClick
             ];
           };
