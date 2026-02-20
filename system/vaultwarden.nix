@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  domain = "vault.${config.networking.domain}";
+  domain = "vault.${config.domain}";
 in
 {
   sops.secrets."vaultwarden/admin_token" = { };

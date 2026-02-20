@@ -15,23 +15,6 @@
     openssh.enable = true;
     upower.enable = true;
     vnstat.enable = true;
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-      publish = {
-        enable = true;
-        addresses = true;
-      };
-    };
-    resolved = {
-      enable = true;
-      settings.Resolve = {
-        DNS = [ "9.9.9.9#dns.quad9.net" ];
-        DNSOverTLS = true;
-        LLMNR = true;
-        MulticastDNS = false;
-      };
-    };
     pipewire = lib.mkIf config.graphics.enable {
       alsa.enable = true;
       alsa.support32Bit = true;

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  domain = "link.${config.networking.domain}";
+  domain = "link.${config.domain}";
 in
 {
   services.linkwarden = {
