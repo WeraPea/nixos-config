@@ -19,8 +19,6 @@ in
     ./mango.nix
     ./fajita-cross.nix
   ];
-  mobile.hardware.ram = 1024 * 10;
-  mobile.boot.boot-control.enable = false;
   user.hostname = "fajita";
   hardware.opentabletdriver.enable = lib.mkForce false;
   system.stateVersion = "25.11";
