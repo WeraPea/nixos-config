@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "glensv2";
-  version = "v1.8.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "rtr46";
