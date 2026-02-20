@@ -72,6 +72,7 @@
       gc.automatic = true;
       optimise.automatic = true;
       settings = {
+        narinfo-cache-positive-ttl = 3600;
         trusted-users = [
           "@wheel"
           "root"
