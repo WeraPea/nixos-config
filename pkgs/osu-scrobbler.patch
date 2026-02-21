@@ -1,0 +1,64 @@
+diff --git a/src/scrobbler/listenbrainz/mod.rs b/src/scrobbler/listenbrainz/mod.rs
+index fb3a069..11f63bd 100644
+--- a/src/scrobbler/listenbrainz/mod.rs
++++ b/src/scrobbler/listenbrainz/mod.rs
+@@ -1,11 +1,12 @@
+ mod payloads;
+ 
+ use crate::{config::ListenBrainzConfig, logger::Logger, scrobbler::REQWEST};
+-use anyhow::{Context, Result, bail};
++use anyhow::{Context, Result};
+ use colored::Colorize;
+ use payloads::{Listen, ListenType, Listens};
+ use reqwest::StatusCode;
+ use serde::Deserialize;
++use std::{thread, time::Duration};
+ 
+ const API_BASE_URL: &str = "https://api.listenbrainz.org/1";
+ 
+@@ -37,17 +38,36 @@ impl ListenBrainzScrobbler {
+ 
+     pub fn scrobble(&self, artist: &str, title: &str, album: Option<&str>, total_length: u32) -> Result<()> {
+         let user_token = &self.config.user_token;
+-        let status = REQWEST
+-            .post(format!("{API_BASE_URL}/submit-listens"))
+-            .header("authorization", format!("Token {user_token}"))
+-            .json(&Listens::new(ListenType::Single, vec![Listen::new(artist, title, album, total_length)]))
+-            .send()?
+-            .status();
+ 
+-        if status != StatusCode::OK {
+-            bail!("Received status code {status}.");
++        let mut last_err = None;
++
++        for attempt in 0..5 {
++            match REQWEST
++                .post(format!("{API_BASE_URL}/submit-listens"))
++                .header("authorization", format!("Token {user_token}"))
++                .json(&Listens::new(
++                    ListenType::Single,
++                    vec![Listen::new(artist, title, album, total_length)],
++                ))
++                .send()
++            {
++                Ok(resp) => {
++                    let status = resp.status();
++                    if status == StatusCode::OK {
++                        return Ok(());
++                    }
++                    last_err = Some(anyhow::anyhow!("Received status code {status}."));
++                }
++                Err(e) => {
++                    last_err = Some(e.into());
++                }
++            }
++
++            if attempt < 4 {
++                thread::sleep(Duration::from_secs(2));
++            }
+         }
+ 
+-        Ok(())
++        Err(last_err.unwrap_or_else(|| anyhow::anyhow!("Request failed.")))
+     }
+ }

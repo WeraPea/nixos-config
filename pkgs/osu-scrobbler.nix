@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./osu-scrobbler-Cargo.lock;
   };
 
+  patches = [ ./osu-scrobbler.patch ];
+
   postPatch = ''
     ln -s ${./osu-scrobbler-Cargo.lock} Cargo.lock
   '';
