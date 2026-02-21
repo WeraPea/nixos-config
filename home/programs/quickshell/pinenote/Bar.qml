@@ -62,7 +62,7 @@ Scope {
                     }
                     BatteryWidget {
                         query: function (d) {
-                            return d.nativePath == "ws8100_pen";
+                            return d.nativePath == "ws8100_pen" && d.isPresent;
                         }
                         icon: "   "
                         icon_charging: "   "
