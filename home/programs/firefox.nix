@@ -223,7 +223,7 @@ let
   };
 
   texthooker-clear =
-    pkgs.writeText "texthooker-copy-primary.js" # js
+    pkgs.writeText "texthooker-clear.js" # js
       ''
         // ==UserScript==
         // @name         texthooker-ui clear
