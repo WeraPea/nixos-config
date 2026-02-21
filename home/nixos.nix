@@ -62,7 +62,7 @@
                   "focusmon,HDMI-A-2"
                   "view,${toString w}"
                 ])
-                (lib.nameValuePair "SUPER+SHIFT,F${toString (lib.mod (w + 5) 10)}" [
+                (lib.nameValuePair "SUPER+SHIFT,${toString (lib.mod (w + 5) 10)}" [
                   "tagmon,HDMI-A-2"
                   "tag,${toString w}"
                 ])

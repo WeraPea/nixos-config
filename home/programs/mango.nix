@@ -199,8 +199,6 @@ let
         "SUPER+CTRL,btn_left" = "screen_zoom_move";
         "SUPER,btn_left" = "moveresize,curmove";
         "SUPER,btn_right" = "moveresize,curresize";
-        "NONE,btn_left" = "toggleoverview,-1";
-        "NONE,btn_right" = "killclient,0";
       };
     };
     common.binds.bind = {
