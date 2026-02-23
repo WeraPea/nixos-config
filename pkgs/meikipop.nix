@@ -1,4 +1,4 @@
-# only tested for usage of glensv2
+# only tested for usage of glensv2 and screenai
 {
   lib,
   buildPythonPackage,
@@ -8,16 +8,17 @@
   pillow,
   requests,
   betterproto,
+  protobuf,
 }:
 buildPythonPackage rec {
   pname = "meikipop";
-  version = "1.8.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "rtr46";
     repo = "meikipop";
     rev = "v${version}";
-    hash = "sha256-zbpyf/1E45lsMp92Nli2V1r1dHxBZT+mL5lk2O4+mvU=";
+    hash = "sha256-lkiyYuUni8VVyEPgviD5w2f+thodJP9I0YPaM7YjWXY=";
   };
 
   installPhase = ''
@@ -34,8 +35,12 @@ buildPythonPackage rec {
 
     # disable japanese only filtering
     substituteInPlace src/ocr/providers/glensv2/provider.py \
-      --replace '                        if not line_has_japanese:' '                        # if not line_has_japanese:' \
-      --replace '                            continue' '                            # continue'
+      --replace-fail '                        if not line_has_japanese:' '                        # if not line_has_japanese:' \
+      --replace-fail '                            continue' '                            # continue'
+
+    substituteInPlace src/ocr/providers/screenai/provider.py \
+      --replace-fail '            if not line_has_japanese:' '            # if not line_has_japanese:' \
+      --replace-fail '                continue' '                # continue'
   '';
 
   format = false;
@@ -45,6 +50,7 @@ buildPythonPackage rec {
     pillow
     requests
     betterproto
+    protobuf
   ];
 
   meta = with lib; {
