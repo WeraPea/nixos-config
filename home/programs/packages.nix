@@ -95,7 +95,6 @@
           chatterino7
           dragon-drop
           flatpak
-          # freecad-wayland
           helvum
           krita
           legcord

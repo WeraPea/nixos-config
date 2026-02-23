@@ -14,6 +14,10 @@
           homeDirectory = "/home/wera";
           stateVersion = "23.11";
         };
+        home.packages = with pkgs; [
+          freecad
+          blender
+        ];
         mango = {
           enable = true;
           extraConfig =
