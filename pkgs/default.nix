@@ -32,5 +32,5 @@ rec {
   usb-tablet = callPackage ./usb-tablet.nix { };
   vrlink = callPackage ./vrlink.nix { };
   yt-sub-converter = callPackage ./yt-sub-converter.nix { };
-  glensv2 = pkgs.python3.pkgs.callPackage ./glensv2.nix { };
+  meikipop = pkgs.python3.pkgs.callPackage ./meikipop.nix { };
 }

@@ -1,3 +1,4 @@
+# only tested for usage of glensv2
 {
   lib,
   buildPythonPackage,
@@ -9,7 +10,7 @@
   betterproto,
 }:
 buildPythonPackage rec {
-  pname = "glensv2";
+  pname = "meikipop";
   version = "1.8.0";
 
   src = fetchFromGitHub {
@@ -20,15 +21,15 @@ buildPythonPackage rec {
   };
 
   installPhase = ''
-    mkdir -p $out/${python.sitePackages}/glensv2
-    cp -r src/* $out/${python.sitePackages}/glensv2
+    mkdir -p $out/${python.sitePackages}/meikipop
+    cp -r src/* $out/${python.sitePackages}/meikipop
   '';
 
   postPatch = ''
     for file in $(find src -type f -name "*.py"); do
       substituteInPlace "$file" \
-        --replace "from src." "from glensv2." \
-        --replace "import src." "import glensv2."
+        --replace "from src." "from meikipop." \
+        --replace "import src." "import meikipop."
     done
 
     # disable japanese only filtering
@@ -47,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Google Lens OCR v2 (glensv2) yoinked from Meikipop.";
+    description = "meikipop - universal japanese ocr popup dictionary for windows, linux and macos";
     homepage = "https://github.com/rtr46/meikipop";
     license = licenses.gpl3Only;
     platforms = platforms.all;
