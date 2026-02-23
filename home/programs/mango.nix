@@ -249,6 +249,22 @@ let
           ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
       };
     };
+    wocr = {
+      enterKeybind = "SUPER,a";
+      returnByDefault = true;
+      binds.bind =
+        let
+          nc = lib.getExe pkgs.netcat;
+          mkWocrCmd = c: "spawn_shell,echo ${c} | ${nc} -U $XDG_RUNTIME_DIR/wocr.sock";
+        in
+        {
+          "SUPER,s" = mkWocrCmd "scan";
+          "SUPER,f" = mkWocrCmd "scan_fullscreen";
+          "SUPER,r" = mkWocrCmd "rescan";
+          "SUPER,c" = mkWocrCmd "clear";
+          "SUPER,w" = mkWocrCmd "show_region";
+        };
+    };
     kill = {
       enterKeybind = "SUPER,q";
       returnByDefault = true;

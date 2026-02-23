@@ -47,6 +47,10 @@
       url = "github:firefox-extensions-declarative/firefox-extensions-declarative";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wocr = {
+      url = "github:WeraPea/wocr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -64,8 +68,9 @@
       overlays = with inputs; [
         fcitx-virtualkeyboard-adapter.overlays.default
         glide.overlays.default
-        pinenote-usb-tablet.overlays.default
         nur.overlays.default
+        pinenote-usb-tablet.overlays.default
+        wocr.overlays.default
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
