@@ -16,7 +16,7 @@
         };
         home.packages = with pkgs; [
           freecad
-          blender
+          (blender.withPackages (p: [ p.py-slvs ]))
         ];
         mango = {
           enable = true;
