@@ -93,5 +93,9 @@
 
   services = {
     cliphist.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
+    wl-clip-persist = {
+      enable = true;
+      clipboardType = "both";
+    };
   };
 }
