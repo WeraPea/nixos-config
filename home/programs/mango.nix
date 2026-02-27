@@ -367,7 +367,7 @@ in
 
           # script needed due to 256 char limit
           exec-once=${pkgs.writeScript "update-dbus-env-mango" ''
-            ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots XDG_SESSION_TYPE NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH SDL_VIDEODRIVER WINDOW_MANAGER GDK_BACKEND OZONE_PLATFORM ELECTRON_OZONE_PLATFORM_HINT MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
+            ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH SDL_VIDEODRIVER WINDOW_MANAGER GDK_BACKEND OZONE_PLATFORM ELECTRON_OZONE_PLATFORM_HINT MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
           ''}
           exec-once=systemctl --user reset-failed
           exec-once=systemctl --user restart mango-session.target
