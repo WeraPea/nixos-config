@@ -32,6 +32,9 @@ Scope {
                     MangoLayoutWidget {
                         screen: bar.modelData.name
                     }
+                    MangoKeymodeWidget {
+                        screen: bar.modelData.name
+                    }
                     MangoClientWidget {
                         screen: bar.modelData.name
                         Layout.fillWidth: true
