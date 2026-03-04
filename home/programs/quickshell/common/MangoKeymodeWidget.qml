@@ -16,7 +16,8 @@ TextObject {
             "leader": "L",
             "mpd": "M",
             "run": "R",
-            "qocr": "Q"
+            "qocr": "Q",
+            "qocre": "QE",
         }[keymode] || keymode;
     }
     property var keymodeColors: function (keymode) {
@@ -28,7 +29,8 @@ TextObject {
             "leader": Colors.base09,
             "mpd": Colors.base0A,
             "run": Colors.base0B,
-            "qocr": Colors.base0A
+            "qocr": Colors.base0A,
+            "qocre": Colors.base0A,
         }[keymode] || Colors.foreground;
     }
 

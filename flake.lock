@@ -914,11 +914,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1772600536,
-        "narHash": "sha256-Eidpu+TMeMhvY+pO5qiGZjQpFCVlc03fvkFbDE+ZeHE=",
+        "lastModified": 1772653840,
+        "narHash": "sha256-uspiOyJn4WbkBtedbsDkBKCHsoa266SUlJQt1hULr2A=",
         "owner": "WeraPea",
         "repo": "qocr",
-        "rev": "ad4b8163506383d4effa0078fcc8175aed3e9490",
+        "rev": "a949d77208ebdb9aabea87f642844eb61cedd178",
         "type": "github"
       },
       "original": {

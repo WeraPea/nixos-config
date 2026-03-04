@@ -283,21 +283,32 @@ let
           ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
       };
     };
-    qocr = {
-      enter.bind = "SUPER,a";
-      returnByDefault = true;
-      binds.bind =
-        let
-          mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
-        in
-        {
+    qocr =
+      let
+        mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
+        binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd "scan_fullscreen";
           "SUPER,r" = mkQocrCmd "rescan";
           "SUPER,c" = mkQocrCmd "clear";
           "SUPER,w" = mkQocrCmd "show_region";
         };
-    };
+      in
+      {
+        enter.bind = "SUPER,a";
+        onEntry = mkQocrCmd "set_config japaneseOnly true";
+        returnByDefault = true;
+        binds.bind = {
+          "SUPER,a" = {
+            name = "qocre";
+            onEntry = mkQocrCmd "set_config japaneseOnly false";
+            onReturn = mkQocrCmd "set_config japaneseOnly true";
+            returnByDefault = true;
+            binds.bind = binds;
+          };
+        }
+        // binds;
+      };
     kill = {
       enter.bind = "SUPER,q";
       returnByDefault = true;
