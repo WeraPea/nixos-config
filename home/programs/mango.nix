@@ -58,7 +58,7 @@ let
                   [ "${bindType}=${bind},${com}" ];
             in
             (builtins.concatMap emitBind commands)
-            ++ lib.optional shouldReturn "${bindType}=${bind},setkeymode,${returnTo}"
+            ++ lib.optionals shouldReturn (emitTransition onReturn returnTo { ${bindType} = bind; })
           ) bindings
         ));
     in
