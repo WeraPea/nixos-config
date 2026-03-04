@@ -47,8 +47,8 @@
       url = "github:firefox-extensions-declarative/firefox-extensions-declarative";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    wocr = {
-      url = "github:WeraPea/wocr";
+    qocr = {
+      url = "github:WeraPea/qocr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -70,7 +70,7 @@
         glide.overlays.default
         nur.overlays.default
         pinenote-usb-tablet.overlays.default
-        wocr.overlays.default
+        qocr.overlays.default
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (

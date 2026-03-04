@@ -906,6 +906,27 @@
         "type": "github"
       }
     },
+    "qocr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1772600536,
+        "narHash": "sha256-Eidpu+TMeMhvY+pO5qiGZjQpFCVlc03fvkFbDE+ZeHE=",
+        "owner": "WeraPea",
+        "repo": "qocr",
+        "rev": "ad4b8163506383d4effa0078fcc8175aed3e9490",
+        "type": "github"
+      },
+      "original": {
+        "owner": "WeraPea",
+        "repo": "qocr",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "erosanix": "erosanix",
@@ -922,10 +943,10 @@
         "nur": "nur",
         "pinenote-nixos": "pinenote-nixos",
         "pinenote-usb-tablet": "pinenote-usb-tablet",
+        "qocr": "qocr",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
-        "treefmt-nix": "treefmt-nix_3",
-        "wocr": "wocr"
+        "treefmt-nix": "treefmt-nix_3"
       }
     },
     "scenefx": {
@@ -980,7 +1001,7 @@
         "gnome-shell": "gnome-shell",
         "nixpkgs": "nixpkgs_6",
         "nur": "nur_2",
-        "systems": "systems_4",
+        "systems": "systems_5",
         "tinted-foot": "tinted-foot",
         "tinted-kitty": "tinted-kitty",
         "tinted-schemes": "tinted-schemes",
@@ -1235,27 +1256,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "wocr": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "systems": "systems_5"
-      },
-      "locked": {
-        "lastModified": 1771887219,
-        "narHash": "sha256-0n5VhAYfY4Ctx3NHH/0rwbI13JtNBjTX0Kcz7JbThiU=",
-        "owner": "WeraPea",
-        "repo": "wocr",
-        "rev": "fc49f98a6eccc0601b3c3101c725c4b7ace1041a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "WeraPea",
-        "repo": "wocr",
         "type": "github"
       }
     }

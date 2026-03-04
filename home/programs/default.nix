@@ -29,7 +29,7 @@
     ./mango.nix
     ./nix-search-tv.nix
     ./beets.nix
-    ./wocr.nix
+    ./qocr.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
@@ -45,7 +45,7 @@
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   nix-search-tv.enable = lib.mkDefault true;
-  wocr.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
+  qocr.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";

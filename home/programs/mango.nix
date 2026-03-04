@@ -249,20 +249,19 @@ let
           ''spawn_shell,glide --new-window "$(ffprobe /mnt/mnt3/music/"$(mpc current --format %file%)" -print_format json -show_streams -v quiet | jq -r '.streams.[].tags.PURL')"'';
       };
     };
-    wocr = {
+    qocr = {
       enterKeybind = "SUPER,a";
       returnByDefault = true;
       binds.bind =
         let
-          nc = lib.getExe pkgs.netcat;
-          mkWocrCmd = c: "spawn_shell,echo ${c} | ${nc} -U $XDG_RUNTIME_DIR/wocr.sock";
+          mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
         in
         {
-          "SUPER,s" = mkWocrCmd "scan";
-          "SUPER,f" = mkWocrCmd "scan_fullscreen";
-          "SUPER,r" = mkWocrCmd "rescan";
-          "SUPER,c" = mkWocrCmd "clear";
-          "SUPER,w" = mkWocrCmd "show_region";
+          "SUPER,s" = mkQocrCmd "scan";
+          "SUPER,f" = mkQocrCmd "scan_fullscreen";
+          "SUPER,r" = mkQocrCmd "rescan";
+          "SUPER,c" = mkQocrCmd "clear";
+          "SUPER,w" = mkQocrCmd "show_region";
         };
     };
     kill = {
