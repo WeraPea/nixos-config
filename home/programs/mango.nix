@@ -15,46 +15,63 @@ let
       return ? if (name != "default" && name != "common") then { bind = "NONE,Escape"; } else { },
       onEntry ? [ ],
       onReturn ? [ ],
+      returnTo ? "default",
+      outerKeymode ? "default",
     }:
-    builtins.concatStringsSep "\n" (
-      (builtins.concatLists (
-        lib.mapAttrsToList (
-          bindType: binding:
-          (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onEntry))
-          ++ [ "${bindType}=${binding},setkeymode,${name}" ]
-        ) enter
-      ))
-      ++ [ "keymode=${name}" ]
-      ++ (builtins.concatLists (
-        lib.mapAttrsToList (
-          bindType: bindings:
-          (builtins.concatLists (
-            lib.mapAttrsToList (
-              bind: value:
-              let
-                commands = lib.toList (if builtins.isAttrs value then value.command else value);
-                return = if builtins.isAttrs value then value.return or returnByDefault else returnByDefault;
-              in
-              (builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) commands)
-              ++ lib.optional return "${bindType}=${bind},setkeymode,default"
-            ) bindings
-          ))
-        ) binds
-      ))
-      ++ (builtins.concatLists (
-        lib.mapAttrsToList (
-          bindType: binding:
-          (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onReturn))
-          ++ [ "${bindType}=${binding},setkeymode,default" ]
-        ) return
-      ))
-      ++ [ "keymode=default" ]
-    )
-    + "\n";
+    (builtins.concatLists (
+      lib.mapAttrsToList (
+        bindType: binding:
+        (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onEntry))
+        ++ [ "${bindType}=${binding},setkeymode,${name}" ]
+      ) enter
+    ))
+    ++ [ "keymode=${name}" ]
+    ++ (builtins.concatLists (
+      lib.mapAttrsToList (
+        bindType: bindings:
+        (builtins.concatLists (
+          lib.mapAttrsToList (
+            bind: value:
+            let
+              isNestedMode = builtins.isAttrs value && value ? name;
+              commands = lib.toList (if value ? command then value.command else value);
+              shouldReturn =
+                if isNestedMode then
+                  false
+                else if value ? return then
+                  value.return
+                else
+                  returnByDefault;
+              emitBind =
+                com:
+                if builtins.isAttrs com then
+                  [ "" ] ++ parseBindMode ({ outerKeymode = name; } // com)
+                else
+                  [ "${bindType}=${bind},${com}" ];
+            in
+            (builtins.concatMap emitBind commands)
+            ++ lib.optional shouldReturn "${bindType}=${bind},setkeymode,${returnTo}"
+          ) bindings
+        ))
+      ) binds
+    ))
+    ++ (builtins.concatLists (
+      lib.mapAttrsToList (
+        bindType: binding:
+        (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onReturn))
+        ++ [ "${bindType}=${binding},setkeymode,${returnTo}" ]
+      ) return
+    ))
+    ++ [
+      "keymode=${outerKeymode}"
+      ""
+    ];
   parseBindModes =
     bindModes:
     builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: value: parseBindMode ({ inherit name; } // value)) bindModes
+      builtins.concatLists (
+        lib.mapAttrsToList (name: value: parseBindMode ({ inherit name; } // value)) bindModes
+      )
     )
     + "\n";
   mkClipboardMode =
