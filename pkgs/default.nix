@@ -11,7 +11,6 @@ rec {
   browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
   kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
-  manga-ocr-from-file = callPackage ./manga-ocr-from-file.nix { };
   mpv-http-mitmytproxy = callPackage ./mpv-http-mitmytproxy.nix { };
   mpv-websocket = callPackage ./mpv-websocket.nix { };
   mpv-websocket-script = callPackage ./mpv-websocket-script.nix { inherit mpv-websocket; };
@@ -22,7 +21,7 @@ rec {
   rakuyomi = callPackage ./rakuyomi.nix { };
   rename-torrents = callPackage ./rename-torrents.nix { };
   rotate = callPackage ./rotate.nix { };
-  screenshot = callPackage ./screenshot.nix { inherit manga-ocr-from-file; };
+  screenshot = callPackage ./screenshot.nix { };
   search = callPackage ./search.nix { inherit nyaasi; };
   sony-headphones-client = callPackage ./sony-headphones-client.nix { };
   sqlite-backup = pkgs.python3.pkgs.callPackage ./sqlite-backup.nix { };

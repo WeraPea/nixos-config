@@ -2,27 +2,21 @@
   lib,
   writeShellScriptBin,
   grim,
-  imagemagick,
-  manga-ocr-from-file,
   rofi,
   slurp,
-  tesseract,
   wl-clipboard,
 }:
 writeShellScriptBin "screenshot" ''
   export PATH="${
     lib.makeBinPath ([
       grim
-      imagemagick
-      manga-ocr-from-file
       rofi
       slurp
-      tesseract
       wl-clipboard
     ])
   }:$PATH"
 
-  case "$(printf 'selected area\nselected window\nfull screen\ncurrent monitor\nselected monitor\nselected area to text' | rofi -dmenu -l 6 -i -p "Screenshot which area?")" in
+  case "$(printf 'selected area\nfull screen\ncurrent monitor\nselected monitor\ncurrent window' | rofi -dmenu -l 6 -i -p "Screenshot which area?")" in
   "selected area") slurp | grim -g - /tmp/grim_screenshot.png ;;
   # "selected window") hyprshot -m window -o /tmp/ -f hyprshot_screenshot.png ;;
   "full screen")
@@ -34,31 +28,17 @@ writeShellScriptBin "screenshot" ''
     output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
     grim -o "$output" /tmp/grim_screenshot.png
     ;;
-  # "selected monitor")
-  #   sleep 0.2
-  #   grim /tmp/hyprshot_screenshot.png
-  #   ;;
-  "selected area to text") slurp | grim -g - /tmp/grim_screenshow_to_text.png ;;
+  "selected monitor") slurp -o | grim -g - /tmp/grim_screenshot.png ;;
+  "current window")
+    sleep 0.2
+    output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
+    geometry=$(mmsg -x -o "$output" | awk '/^x /{x=$2} /^y /{y=$2} /^width /{w=$2} /^height /{h=$2} END{print x","y" "w"x"h}')
+    grim -g "$geometry" /tmp/grim_screenshot.png
+    ;;
   *) exit ;;
   esac
 
   file -f /tmp/grim_screenshot.png >/dev/null 2>&1 && cat /tmp/grim_screenshot.png | wl-copy
-
-  sleep 0.1
-  if test -f /tmp/grim_screenshow_to_text.png; then
-    lang=$(printf 'eng\njpn' | rofi -dmenu -l 2)
-    if [[ $lang == "eng" ]]; then
-      mogrify -modulate 100,0 -resize 400% /tmp/grim_screenshow_to_text.png
-      magick convert /tmp/grim_screenshow_to_text.png -colorspace Gray /tmp/grim_screenshot_to_text_grayscale.png
-      tesseract -l eng /tmp/grim_screenshot_to_text_grayscale.png /tmp/tesseract_screenshot &>/dev/null
-      tr '\n' ' ' </tmp/tesseract_screenshot.txt | wl-copy
-      rm /tmp/tesseract_screenshot.txt /tmp/grim_screenshot_to_text_grayscale.png
-    elif [[ $lang == "jpn" ]]; then
-      manga-ocr-from-file /tmp/grim_screenshow_to_text.png | wl-copy
-    fi
-    rm /tmp/grim_screenshow_to_text.png
-    exit
-  fi
 
   while true; do
     name=$(rofi -dmenu -p "Filename" -lines 0 -width 30)
