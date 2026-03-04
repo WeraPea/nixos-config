@@ -13,9 +13,14 @@ let
       binds,
       returnByDefault ? false,
       returnKeybind ? if (name != "default" && name != "common") then "bind=NONE,Escape" else "",
+      onEntry ? [ ],
+      onReturn ? [ ],
     }:
     builtins.concatStringsSep "\n" (
-      lib.optional (enterKeybind != "") "bind=${enterKeybind},setkeymode,${name}"
+      lib.optionals (enterKeybind != "") (
+        (builtins.concatMap (com: [ "bind=${enterKeybind},${com}" ]) (lib.toList onEntry))
+        ++ [ "bind=${enterKeybind},setkeymode,${name}" ]
+      )
       ++ [ "keymode=${name}" ]
       ++ (builtins.concatLists (
         lib.mapAttrsToList (
@@ -24,16 +29,19 @@ let
             lib.mapAttrsToList (
               bind: value:
               let
-                command = lib.toList (if builtins.isAttrs value then value.command else value);
+                commands = lib.toList (if builtins.isAttrs value then value.command else value);
                 return = if builtins.isAttrs value then value.return or returnByDefault else returnByDefault;
               in
-              (builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) command)
+              (builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) commands)
               ++ lib.optional return "${bindType}=${bind},setkeymode,default"
             ) bindings
           ))
         ) binds
       ))
-      ++ lib.optional (returnKeybind != "") "${returnKeybind},setkeymode,default"
+      ++ lib.optionals (returnKeybind != "") (
+        (builtins.concatMap (com: [ "${returnKeybind},${com}" ]) (lib.toList onReturn))
+        ++ [ "${returnKeybind},setkeymode,default" ]
+      )
       ++ [ "keymode=default" ]
     )
     + "\n";
