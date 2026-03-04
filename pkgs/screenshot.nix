@@ -16,21 +16,29 @@ writeShellScriptBin "screenshot" ''
     ])
   }:$PATH"
 
-  case "$(printf 'selected area\nfull screen\ncurrent monitor\nselected monitor\ncurrent window' | rofi -dmenu -l 6 -i -p "Screenshot which area?")" in
+  if [[ -n "$1" ]]; then
+    choice="$1"
+    rofi_used=0
+  else
+    choice="$(printf 'selected area\nfull screen\ncurrent monitor\nselected monitor\ncurrent window' | rofi -dmenu -l 6 -i -p "Screenshot which area?")"
+    rofi_used=1
+  fi
+
+  case $choice in
   "selected area") slurp | grim -g - /tmp/grim_screenshot.png ;;
   # "selected window") hyprshot -m window -o /tmp/ -f hyprshot_screenshot.png ;;
   "full screen")
-    sleep 0.2
+    [[ $rofi_used == 1 ]] && sleep 0.2
     grim /tmp/grim_screenshot.png
     ;;
   "current monitor")
-    sleep 0.2
+    [[ $rofi_used == 1 ]] && sleep 0.2
     output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
     grim -o "$output" /tmp/grim_screenshot.png
     ;;
   "selected monitor") slurp -o | grim -g - /tmp/grim_screenshot.png ;;
   "current window")
-    sleep 0.2
+    [[ $rofi_used == 1 ]] && sleep 0.2
     output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
     geometry=$(mmsg -x -o "$output" | awk '/^x /{x=$2} /^y /{y=$2} /^width /{w=$2} /^height /{h=$2} END{print x","y" "w"x"h}')
     grim -g "$geometry" /tmp/grim_screenshot.png

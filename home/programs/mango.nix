@@ -195,7 +195,8 @@ let
           "SUPER,space" = "spawn,makoctl dismiss";
           "SUPER+CTRL,space" = "spawn,makoctl restore";
           "NONE,Print" = "spawn,screenshot";
-          # bind=SHIFT,Print,spawn,hyprshot -m window -c -o /tmp/ -f hyprshot_screenshot.png # TODO:
+          "SHIFT,Print" = "spawn_shell,screenshot 'current window'";
+          "CTRL+SHIFT,Print" = "spawn_shell,screenshot 'current monitor'";
 
           "SUPER,s" = "spawn,search";
           "SUPER,c" = "spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons";
