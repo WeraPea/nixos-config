@@ -9,18 +9,21 @@ let
   parseBindMode =
     {
       name,
-      enterKeybind ? "",
+      enter ? { },
       binds,
       returnByDefault ? false,
-      returnKeybind ? if (name != "default" && name != "common") then "bind=NONE,Escape" else "",
+      return ? if (name != "default" && name != "common") then { bind = "NONE,Escape"; } else { },
       onEntry ? [ ],
       onReturn ? [ ],
     }:
     builtins.concatStringsSep "\n" (
-      lib.optionals (enterKeybind != "") (
-        (builtins.concatMap (com: [ "bind=${enterKeybind},${com}" ]) (lib.toList onEntry))
-        ++ [ "bind=${enterKeybind},setkeymode,${name}" ]
-      )
+      (builtins.concatLists (
+        lib.mapAttrsToList (
+          bindType: binding:
+          (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onEntry))
+          ++ [ "${bindType}=${binding},setkeymode,${name}" ]
+        ) enter
+      ))
       ++ [ "keymode=${name}" ]
       ++ (builtins.concatLists (
         lib.mapAttrsToList (
@@ -38,10 +41,13 @@ let
           ))
         ) binds
       ))
-      ++ lib.optionals (returnKeybind != "") (
-        (builtins.concatMap (com: [ "${returnKeybind},${com}" ]) (lib.toList onReturn))
-        ++ [ "${returnKeybind},setkeymode,default" ]
-      )
+      ++ (builtins.concatLists (
+        lib.mapAttrsToList (
+          bindType: binding:
+          (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onReturn))
+          ++ [ "${bindType}=${binding},setkeymode,default" ]
+        ) return
+      ))
       ++ [ "keymode=default" ]
     )
     + "\n";
@@ -53,12 +59,12 @@ let
     + "\n";
   mkClipboardMode =
     {
-      enterKeybind,
+      enter,
       pasteCmd,
       copyCmdOther, # for pasting into another selection
     }:
     {
-      inherit enterKeybind;
+      inherit enter;
       returnByDefault = true;
       binds.bind = {
         "SUPER,p" = "spawn_shell,${pasteCmd} | ${copyCmdOther}";
@@ -213,7 +219,7 @@ let
       "SUPER+CTRL,r" = "reload_config";
     };
     leader = {
-      enterKeybind = "SUPER,space";
+      enter.bind = "SUPER,space";
       returnByDefault = true;
       binds.bind = {
         "SUPER,o" = "toggleoverlay";
@@ -221,17 +227,17 @@ let
       };
     };
     clipboard = mkClipboardMode {
-      enterKeybind = "SUPER,o";
+      enter.bind = "SUPER,o";
       pasteCmd = "wl-paste";
       copyCmdOther = "wl-copy -p";
     };
     primary = mkClipboardMode {
-      enterKeybind = "SUPER,p";
+      enter.bind = "SUPER,p";
       pasteCmd = "wl-paste -p";
       copyCmdOther = "wl-copy";
     };
     run = {
-      enterKeybind = "SUPER,r";
+      enter.bind = "SUPER,r";
       returnByDefault = true;
       binds.bind = {
         "SUPER,a" = "spawn,anki";
@@ -244,7 +250,7 @@ let
       };
     };
     mpd = {
-      enterKeybind = "SUPER,x";
+      enter.bind = "SUPER,x";
       returnByDefault = true;
       binds.bind = {
         "SUPER,x" = "spawn,mpc toggle";
@@ -258,7 +264,7 @@ let
       };
     };
     qocr = {
-      enterKeybind = "SUPER,a";
+      enter.bind = "SUPER,a";
       returnByDefault = true;
       binds.bind =
         let
@@ -273,7 +279,7 @@ let
         };
     };
     kill = {
-      enterKeybind = "SUPER,q";
+      enter.bind = "SUPER,q";
       returnByDefault = true;
       binds.bind = {
         "SUPER,q" = "killclient,";
