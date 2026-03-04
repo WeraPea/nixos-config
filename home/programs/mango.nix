@@ -302,7 +302,7 @@ let
           "SUPER,a" = {
             name = "qocre";
             onEntry = mkQocrCmd "set_config japaneseOnly false";
-            onReturn = mkQocrCmd "set_config japaneseOnly true";
+            onReturn = "spawn_shell,sleep 1; qocr ipc call ocr set_config japaneseOnly true";
             returnByDefault = true;
             binds.bind = binds;
           };
