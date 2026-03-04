@@ -292,6 +292,7 @@ let
           "SUPER,r" = mkQocrCmd "rescan";
           "SUPER,c" = mkQocrCmd "clear";
           "SUPER,w" = mkQocrCmd "show_region";
+          "SUPER,v" = mkQocrCmd "toggle_config viewMode";
         };
       in
       {
