@@ -18,16 +18,17 @@ let
       returnTo ? "default",
       outerKeymode ? "default",
     }:
-    (builtins.concatLists (
-      lib.mapAttrsToList (
-        bindType: binding:
-        (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onEntry))
-        ++ [ "${bindType}=${binding},setkeymode,${name}" ]
-      ) enter
-    ))
-    ++ [ "keymode=${name}" ]
-    ++ (builtins.concatLists (
-      lib.mapAttrsToList (
+    let
+      emitTransition =
+        commands: targetMode: binds:
+        builtins.concatLists (
+          lib.mapAttrsToList (
+            bindType: binding:
+            (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList commands))
+            ++ [ "${bindType}=${binding},setkeymode,${targetMode}" ]
+          ) binds
+        );
+      emitBinds =
         bindType: bindings:
         (builtins.concatLists (
           lib.mapAttrsToList (
@@ -52,16 +53,12 @@ let
             (builtins.concatMap emitBind commands)
             ++ lib.optional shouldReturn "${bindType}=${bind},setkeymode,${returnTo}"
           ) bindings
-        ))
-      ) binds
-    ))
-    ++ (builtins.concatLists (
-      lib.mapAttrsToList (
-        bindType: binding:
-        (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList onReturn))
-        ++ [ "${bindType}=${binding},setkeymode,${returnTo}" ]
-      ) return
-    ))
+        ));
+    in
+    (emitTransition onEntry name enter)
+    ++ [ "keymode=${name}" ]
+    ++ (builtins.concatLists (lib.mapAttrsToList emitBinds binds))
+    ++ (emitTransition onReturn returnTo return)
     ++ [
       "keymode=${outerKeymode}"
       ""
@@ -72,8 +69,7 @@ let
       builtins.concatLists (
         lib.mapAttrsToList (name: value: parseBindMode ({ inherit name; } // value)) bindModes
       )
-    )
-    + "\n";
+    );
   mkClipboardMode =
     {
       enter,
