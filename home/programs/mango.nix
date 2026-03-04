@@ -46,7 +46,14 @@ let
               emitBind =
                 com:
                 if builtins.isAttrs com then
-                  [ "" ] ++ parseBindMode ({ outerKeymode = name; } // com)
+                  [ "" ]
+                  ++ parseBindMode (
+                    {
+                      outerKeymode = name;
+                      enter.${bindType} = bind;
+                    }
+                    // com
+                  )
                 else
                   [ "${bindType}=${bind},${com}" ];
             in
