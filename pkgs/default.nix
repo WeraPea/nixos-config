@@ -30,5 +30,6 @@ rec {
   udev-gothic-hs-nf = callPackage ./udev-gothic-hs-nf.nix { };
   usb-tablet = callPackage ./usb-tablet.nix { };
   vrlink = callPackage ./vrlink.nix { };
+  yomitan-api = callPackage ./yomitan-api.nix { };
   yt-sub-converter = callPackage ./yt-sub-converter.nix { };
 }

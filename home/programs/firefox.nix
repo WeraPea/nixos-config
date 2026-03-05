@@ -3,6 +3,7 @@
   lib,
   config,
   inputs,
+  outputs,
   ...
 }:
 let
@@ -286,6 +287,9 @@ in
     xdg.configFile."glide/glide.ts" = lib.mkIf (!cfg.mobile.enable) {
       source = ./glide/glide.ts;
     };
+    home.file.".glide-browser" = lib.mkIf (!cfg.mobile.enable) {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.mozilla";
+    };
 
     home.file = {
       "${config.programs.firefox.configPath}/${profileName}/chrome/utils".source = utils;
@@ -311,6 +315,10 @@ in
       languagePacks = [
         "en-US"
         "pl"
+      ];
+
+      nativeMessagingHosts = [
+        outputs.packages.${pkgs.stdenv.hostPlatform.system}.yomitan-api
       ];
 
       policies = {

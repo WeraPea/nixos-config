@@ -1,0 +1,26 @@
+diff --git a/yomitan_api.py b/yomitan_api.py
+index 9b024e5..ae87bd3 100755
+--- a/yomitan_api.py
++++ b/yomitan_api.py
+@@ -10,6 +10,7 @@ import sys
+ import time
+ import traceback
+ import urllib
++import tempfile
+ 
+ ADDR = "127.0.0.1"
+ PORT = 19633
+@@ -18,8 +19,11 @@ PROCESS_STARTUP_WAIT = 5
+ YOMITAN_API_NATIVE_MESSAGING_VERSION = 1
+ BLACKLISTED_PATHS = ["favicon.ico"]
+ 
+-script_path = os.path.realpath(os.path.dirname(__file__))
+-crowbarfile_path = script_path + "/.crowbar"
++_runtime_dir = os.environ.get("XDG_RUNTIME_DIR") or tempfile.gettempdir()
++_state_dir = os.path.join(os.environ.get("XDG_STATE_HOME") or os.path.expanduser("~/.local/state"), "yomitan-api")
++os.makedirs(_state_dir, exist_ok=True)
++script_path = _state_dir
++crowbarfile_path = os.path.join(_runtime_dir, "yomitan-api.crowbar")
+ 
+ def error_log(message: str, error: str = "") -> None:
+     try:
