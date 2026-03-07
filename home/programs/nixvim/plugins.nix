@@ -88,7 +88,6 @@
       nixvimInjections = true;
       settings = {
         ensureInstalled = "all";
-        indent.enable = true;
         highlight.enable = true;
       };
     };
