@@ -167,7 +167,7 @@
         };
         no = {
           setCursor = "%";
-          expansion = ''nix % --override-input nixpkgs (pushd ~/nixos-config/; nix flake metadata nixpkgs | grep "Locked URL" | grep -e "path:.*" -o; popd)'';
+          expansion = "nix % --override-input nixpkgs (pushd ~/nixos-config && nix flake metadata nixpkgs | awk '/Locked URL/{print $NF}' && popd)";
         };
         lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
         ng = "nvim +:Neogit";
