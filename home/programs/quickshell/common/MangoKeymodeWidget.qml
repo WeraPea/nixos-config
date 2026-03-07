@@ -18,7 +18,7 @@ TextObject {
             "run": "R",
             "qocr": "Q",
             "qocre": "QE",
-            "qocrc": "QE",
+            "qocrc": "QC",
         }[keymode] || keymode;
     }
     property var keymodeColors: function (keymode) {
