@@ -287,13 +287,33 @@ let
     qocr =
       let
         mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
+        qocr-trigger-popup = "spawn,${pkgs.writeScript "qocr-trigger-popup" ''
+          output=$(mmsg -g -o | awk '$3 == "1" {print $1}')
+          xy=$(${lib.getExe' pkgs.wl-find-cursor "wl-find-cursor"} -p)
+          qocr ipc call ocr trigger_popup $xy $output
+        ''}";
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd "scan_fullscreen";
           "SUPER,r" = mkQocrCmd "rescan";
-          "SUPER,c" = mkQocrCmd "clear";
+          "SUPER,c" = {
+            name = "qocrc";
+            returnByDefault = true;
+            binds.bind = {
+              "SUPER,c" = mkQocrCmd "clear_all";
+              "SUPER,a" = mkQocrCmd "clear_all";
+              "SUPER,r" = mkQocrCmd "clear_overlay";
+            };
+          };
           "SUPER,w" = mkQocrCmd "show_region";
-          "SUPER,v" = mkQocrCmd "toggle_config viewMode";
+          "SUPER,v" = mkQocrCmd "toggle_config overlayOnHover";
+          "SUPER,d" = mkQocrCmd "toggle_config showOverlay";
+          "SUPER,q" = mkQocrCmd "toggle_config autoRescan";
+          "SUPER,e" = qocr-trigger-popup;
+          "SUPER,t" = {
+            command = qocr-trigger-popup;
+            return = false;
+          };
         };
       in
       {

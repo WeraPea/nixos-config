@@ -914,11 +914,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1772657173,
-        "narHash": "sha256-sQZkGldhKlX1ceyTeC9Rfy5LrOp6bv0KtBvM7MjAkf8=",
+        "lastModified": 1772882207,
+        "narHash": "sha256-Jzq6LyMkdNTmeRyi07TtDIUaZEhYNYgYcM9cWutZ0hc=",
         "owner": "WeraPea",
         "repo": "qocr",
-        "rev": "2772a5bcefe56f07ad4e220a7798bf0a5510be9d",
+        "rev": "bf946320932237921b18ba28c12058eba0e71e21",
         "type": "github"
       },
       "original": {
@@ -946,7 +946,8 @@
         "qocr": "qocr",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
-        "treefmt-nix": "treefmt-nix_3"
+        "treefmt-nix": "treefmt-nix_3",
+        "wl-find-cursor": "wl-find-cursor"
       }
     },
     "scenefx": {
@@ -1256,6 +1257,26 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "wl-find-cursor": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1770094839,
+        "narHash": "sha256-IUreWEOWF1loS5SiAh8XPFrKE35Pxv6e8hhvdtNvjiU=",
+        "owner": "cjacker",
+        "repo": "wl-find-cursor",
+        "rev": "ce1a125702b466dc537c5490f7888b4a68dee883",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cjacker",
+        "repo": "wl-find-cursor",
         "type": "github"
       }
     }

@@ -51,6 +51,10 @@
       url = "github:WeraPea/qocr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wl-find-cursor = {
+      url = "github:cjacker/wl-find-cursor";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -71,6 +75,9 @@
         nur.overlays.default
         pinenote-usb-tablet.overlays.default
         qocr.overlays.default
+        (final: prev: {
+          wl-find-cursor = wl-find-cursor.packages.${final.stdenv.hostPlatform.system}.default;
+        })
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
