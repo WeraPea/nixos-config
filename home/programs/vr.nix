@@ -45,7 +45,7 @@ lib.mkIf osConfig.gaming.enable {
     '')
   ];
   xdg.configFile."openxr/1/active_runtime.json".source =
-    "${pkgs.monado-custom}/share/openxr/1/openxr_monado.json";
+    "${pkgs.monado}/share/openxr/1/openxr_monado.json";
   xdg.configFile."openvr/openvrpaths.vrpath-monado".text = ''
     {
       "config" :

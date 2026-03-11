@@ -12,7 +12,6 @@ lib.mkIf config.gaming.enable {
     # WMR_HANDTRACKING = "0"; # TODO:
   };
   services.monado = {
-    package = pkgs.monado-custom;
     enable = true;
     defaultRuntime = true;
     highPriority = true;
