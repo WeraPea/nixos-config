@@ -2,12 +2,14 @@
   lib,
   pkgs,
   config,
+  inputs,
   ...
 }:
 
 let
   cfg = config.qocr;
   jsonFormat = pkgs.formats.json { };
+  qocr = inputs.qocr.packages.${pkgs.stdenv.hostPlatform.system}.qocr;
 in
 {
   options.qocr = {
@@ -21,7 +23,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs.qocr ];
+    home.packages = [ qocr ];
 
     xdg.configFile."qocr/config.json".source = jsonFormat.generate "qocr-config.json" cfg.settings;
 
@@ -32,7 +34,7 @@ in
         PartOf = [ "graphical-session.target" ];
       };
       Service = {
-        ExecStart = lib.getExe pkgs.qocr;
+        ExecStart = lib.getExe qocr;
         Restart = "on-failure";
       };
       Install = {

@@ -74,7 +74,6 @@
         glide.overlays.default
         nur.overlays.default
         pinenote-usb-tablet.overlays.default
-        qocr.overlays.default
         (final: prev: {
           wl-find-cursor = final.callPackage "${wl-find-cursor}/wl-find-cursor.nix" { };
         })
