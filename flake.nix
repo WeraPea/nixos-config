@@ -53,7 +53,7 @@
     };
     wl-find-cursor = {
       url = "github:cjacker/wl-find-cursor";
-      inputs.nixpkgs.follows = "nixpkgs";
+      flake = false; # flake only provides x86_64-linux
     };
   };
 
@@ -76,7 +76,7 @@
         pinenote-usb-tablet.overlays.default
         qocr.overlays.default
         (final: prev: {
-          wl-find-cursor = wl-find-cursor.packages.${final.stdenv.hostPlatform.system}.default;
+          wl-find-cursor = final.callPackage "${wl-find-cursor}/wl-find-cursor.nix" { };
         })
       ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
