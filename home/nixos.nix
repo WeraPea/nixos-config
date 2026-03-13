@@ -15,8 +15,9 @@
           stateVersion = "23.11";
         };
         home.packages = with pkgs; [
-          freecad
           (blender.withPackages (p: [ p.py-slvs ]))
+          freecad
+          inkscape
         ];
         mango = {
           enable = true;
