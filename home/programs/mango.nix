@@ -137,6 +137,11 @@ let
       mmsg -d setlayout,monocle
     fi;
   '';
+  qocr-trigger-popup = "spawn,${pkgs.writeScript "qocr-trigger-popup" ''
+    output=$(mmsg -g -o | awk '$3 == "1" {print $1}')
+    xy=$(${lib.getExe' pkgs.wl-find-cursor "wl-find-cursor"} -p)
+    qocr ipc call ocr trigger_popup $xy $output
+  ''}";
   bindModes = {
     default.binds = {
       bind =
@@ -202,6 +207,8 @@ let
           "SUPER,c" = "spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons";
           "SUPER,d" = "spawn,rofi -show window -show-icons";
           "SUPER,b" = "spawn,${lib.getExe pkgs.rofi-bluetooth}";
+
+          "SUPER,Tab" = qocr-trigger-popup;
 
           "SUPER,F10" = "spawn,ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7";
           "SUPER,F9" = "spawn,ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7";
@@ -287,11 +294,6 @@ let
     qocr =
       let
         mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
-        qocr-trigger-popup = "spawn,${pkgs.writeScript "qocr-trigger-popup" ''
-          output=$(mmsg -g -o | awk '$3 == "1" {print $1}')
-          xy=$(${lib.getExe' pkgs.wl-find-cursor "wl-find-cursor"} -p)
-          qocr ipc call ocr trigger_popup $xy $output
-        ''}";
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd "scan_fullscreen";
