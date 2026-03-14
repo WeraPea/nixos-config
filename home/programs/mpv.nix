@@ -142,8 +142,8 @@
         tab = "script-binding progressbar/request-display";
         MBTN_LEFT = "script-binding progressbar/left-click";
 
-        RIGHT = "seek  3";
-        LEFT = "seek -3";
+        RIGHT = "seek 3 exact";
+        LEFT = "seek -3 exact";
         UP = "add volume +2";
         DOWN = "add volume -2";
 
