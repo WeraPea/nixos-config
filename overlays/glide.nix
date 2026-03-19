@@ -46,10 +46,6 @@ final: prev: {
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
 
-        cat >> "$libDir/mozilla.cfg" << EOF
-        ${extraPrefs}
-        EOF
-
         cat > "$libDir/mozilla.cfg" << EOF
         ${mozillaCfg}
         EOF
