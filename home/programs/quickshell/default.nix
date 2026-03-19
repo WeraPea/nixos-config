@@ -25,8 +25,7 @@ let
       } \
       --replace-fail usb-tablet ${
         lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet
-      } \
-      --replace-fail dbus-send ${lib.getExe' pkgs.dbus "dbus-send"};
+      }
   '';
 
   fajita-patched = pkgs.runCommand "fajita-patched" { } ''

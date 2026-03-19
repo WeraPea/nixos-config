@@ -44,7 +44,7 @@ Scope {
                     }
                     CommandWidget {
                         text: ""
-                        command: ["dbus-send", "--dest=org.pinenote.PineNoteCtl", "--type=method_call", "/org/pinenote/PineNoteCtl", "org.pinenote.Ebc1.GlobalRefresh"]
+                        command: ["busctl", "--user", "call", "org.pinenote.PineNoteCtl", "/org/pinenote/PineNoteCtl", "org.pinenote.Ebc1", "GlobalRefresh"]
                     }
                     CommandWidget {
                         text: "󰓶"
