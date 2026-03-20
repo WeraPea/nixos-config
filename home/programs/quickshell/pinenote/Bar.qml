@@ -46,6 +46,7 @@ Scope {
                         text: ""
                         command: ["busctl", "--user", "call", "org.pinenote.PineNoteCtl", "/org/pinenote/PineNoteCtl", "org.pinenote.Ebc1", "GlobalRefresh"]
                     }
+                    EinkWidget {}
                     CommandWidget {
                         text: "󰓶"
                         command: ["sudo", "usb-tablet"]
