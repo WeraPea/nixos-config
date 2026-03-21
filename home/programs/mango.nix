@@ -252,6 +252,8 @@ let
       binds.bind = {
         "SUPER,o" = "toggleoverlay";
         "SUPER,b" = "toggle_render_border";
+        "SUPER,t" =
+          "spawn_shell,glide --new-window https://renji-xd.github.io/texthooker-ui/; sleep 1; mmsg -d togglefloating; mmsg -d toggleoverlay; mmsg -d togglefakefullscreen; mmsg -d resizewin,540,820; mmsg -d movewin,3844,0";
       };
     };
     clipboard = mkClipboardMode {
