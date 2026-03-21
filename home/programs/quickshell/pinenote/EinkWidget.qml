@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell.Io
+import Quickshell
 import QtQuick.Layouts
 import "common"
 import "common/config"
@@ -72,7 +73,7 @@ Item {
                     if (lines[2] !== undefined)
                         popup.driverMode = parseInt(parseVal(lines[2]));
                     if (lines[3] !== undefined)
-                        popup.redrawDelay = parseInt(parseVal(lines[4]));
+                        popup.redrawDelay = parseInt(parseVal(lines[3]));
                     popup.visible = true;
                 }
             }
@@ -113,6 +114,17 @@ Item {
         content: Component {
             RowLayout {
                 spacing: 5
+
+                CommandWidget {
+                    text: "S"
+                    command: ["pinenote-screenshot"]
+                    commandProc.workingDirectory: Quickshell.env("HOME") + "/screenshots"
+                    mouseArea.onClicked: {
+                        commandProc.startDetached();
+                        popup.visible = false;
+                    }
+                    Component.onCompleted: Quickshell.execDetached(["mkdir", "-p", commandProc.workingDirectory])
+                }
 
                 CommandWidget {
                     text: ({

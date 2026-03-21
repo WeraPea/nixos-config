@@ -17,6 +17,7 @@
           with outputs.packages.${pkgs.stdenv.hostPlatform.system};
           [
             brightnessctl
+            pinenote-screenshot
             rotate
             switch-boot-partition
             xournalpp
