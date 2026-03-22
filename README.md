@@ -12,7 +12,7 @@ ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulatio
 
 ### programs
 
-- **Compositor**: [mango](https://github.com/WeraPea/mangowc/tree/combined) (custom fork with overscan, zoom, tablet/touch support)
+- **Compositor**: [mango](https://github.com/WeraPea/mangowc/tree/combined) (custom fork with overscan, zoom, tablet/touch support, dithering)
 - **Bar**: quickshell
 - **Browser**: glide (desktop), firefox (mobile)
 - **Terminal**: kitty
@@ -35,8 +35,8 @@ ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulatio
 - **Browsers**: Custom userchrome CSS
 
 #### overlays & custom derivations
-- **PineNote tools**: [usb-tablet](https://github.com/WeraPea/pinenote-usb-tablet) helper, boot partition switcher
-- **mpv scripts**: Anki card creation, YouTube subtitle conversion, mitmproxy integration, progressbar
+- **PineNote tools**: [usb-tablet](https://github.com/WeraPea/pinenote-usb-tablet) helper, boot partition switcher, framebuffer screenshot tool
+- **mpv scripts**: Anki card creation, YouTube subtitle conversion, mitmytproxy integration, progressbar
 - **koreader**: Bundled with rakuyomi, anki-koplugin; patched for PineNote (screen refresh + pen bindings)
 - **nyaasi**: rofi torrent search
 - [OpenTabletDriver fork](https://github.com/WeraPea/OpenTabletDriver) - PineNote USB tablet support
