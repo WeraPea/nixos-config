@@ -30,6 +30,7 @@
     ./nix-search-tv.nix
     ./beets.nix
     ./qocr.nix
+    ./pinenote-dither-sync.nix
   ];
 
   desktopPackages.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;

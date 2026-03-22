@@ -42,6 +42,7 @@
               exec-once=${lib.getExe pkgs.xwayland-satellite} :11
             '';
         };
+        pinenote-dither-sync.enable = true;
         quickshell.enable = true;
         programs.quickshell.activeConfig = "pinenote";
 

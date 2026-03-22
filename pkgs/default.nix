@@ -17,6 +17,7 @@ rec {
   mpv-youtube-srv3-subs = callPackage ./mpv-youtube-srv3-subs.nix { inherit yt-sub-converter; };
   nyaasi = callPackage ./nyaasi.nix { };
   osu-scrobbler = callPackage ./osu-scrobbler.nix { };
+  pinenote-dither-sync = callPackage ./pinenote-dither-sync.nix { };
   pinenote-screenshot = callPackage ./pinenote-screenshot.nix { };
   progressbar = callPackage ./progressbar.nix { };
   rakuyomi = callPackage ./rakuyomi.nix { };
