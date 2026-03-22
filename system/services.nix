@@ -121,8 +121,8 @@
       autostart = false;
       interface.privateKeyFile = "/etc/protonvpn";
       endpoint = {
-        publicKey = "agoivyLoPqor8MxA/s6UWJSMcA2pMl+ajO3vy/q3oWQ=";
-        ip = "103.125.235.18";
+        publicKey = "9Yy7/zeaFvKd/ETcLg0PvsJb5PVMj9dX4Wg7NVNVbCs=";
+        ip = "149.88.103.48";
         port = 51820;
       };
     };
