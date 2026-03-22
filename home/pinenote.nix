@@ -36,6 +36,7 @@
               monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002
 
               animations=0
+              dither=1
 
               env=DISPLAY,:11
               exec-once=${lib.getExe pkgs.xwayland-satellite} :11
