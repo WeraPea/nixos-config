@@ -249,6 +249,10 @@ let
     leader = {
       enter.bind = "SUPER,space";
       returnByDefault = true;
+      binds.bindr."SUPER,space" = {
+        command = "spawn,true";
+        return = false;
+      }; # suppresses sending space up to apps
       binds.bind = {
         "SUPER,o" = "toggleoverlay";
         "SUPER,b" = "toggle_render_border";
