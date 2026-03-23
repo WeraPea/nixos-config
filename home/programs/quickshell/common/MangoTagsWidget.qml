@@ -19,7 +19,7 @@ RowLayout {
             width: workspaceText.width + 20
             height: 30
 
-            border.color: modelData.visible ? (monitor.selmon & modelData.selected ? Colors.accent : Colors.foregroundSecondary) : "transparent"
+            border.color: modelData.visible ? (monitor.selmon ? Colors.accent : Colors.foregroundSecondary) : "transparent"
             border.width: 1
             radius: 0
 
