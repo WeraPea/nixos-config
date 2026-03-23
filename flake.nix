@@ -55,6 +55,10 @@
       url = "github:cjacker/wl-find-cursor";
       flake = false; # flake only provides x86_64-linux
     };
+    bs-scrobbler = {
+      url = "github:WeraPea/bs-scrobbler";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -70,6 +74,7 @@
         "aarch64-linux"
       ];
       overlays = with inputs; [
+        bs-scrobbler.overlays.default
         fcitx-virtualkeyboard-adapter.overlays.default
         glide.overlays.default
         nur.overlays.default

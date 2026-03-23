@@ -9,6 +9,7 @@
 lib.mkIf osConfig.gaming.enable {
   home.packages = [
     outputs.packages.${pkgs.stdenv.hostPlatform.system}.vrlink
+    pkgs.bs-scrobbler
     pkgs.lighthouse-steamvr
     pkgs.wayvr
     (pkgs.writeShellScriptBin "monado-steamvr-switch" ''
