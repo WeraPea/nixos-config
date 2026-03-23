@@ -929,11 +929,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1772882207,
-        "narHash": "sha256-Jzq6LyMkdNTmeRyi07TtDIUaZEhYNYgYcM9cWutZ0hc=",
+        "lastModified": 1773583374,
+        "narHash": "sha256-AevFaZasqYndW9Pqur9UZQO4jlvFIpCwuYl7SPbe98g=",
         "owner": "WeraPea",
         "repo": "qocr",
-        "rev": "bf946320932237921b18ba28c12058eba0e71e21",
+        "rev": "93e19f5891f3f17fefa48a0b89ed7cef50d94823",
         "type": "github"
       },
       "original": {
