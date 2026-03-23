@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -41,6 +42,9 @@
           command = "setlocal spell spelllang=en";
         }
       ];
+      extraPlugins = [
+        pkgs.vimPlugins.nvim_context_vt
+      ];
       extraConfigLua = ''
         vim.g.clipboard = 'osc52'
         vim.cmd([[
@@ -56,6 +60,9 @@
               [vim.diagnostic.severity.INFO]  = " ",
             },
         }})
+        require('nvim_context_vt').setup({
+          prefix = '',
+        })
       '';
     };
   };

@@ -27,6 +27,8 @@
     undotree.enable = true;
     which-key.enable = true;
     treesitter-context.enable = true;
+    treesitter-context.settings.max_lines = 10;
+    barbecue.enable = true;
     markdown-preview.enable = true;
     nvim-surround.enable = true;
     rainbow-delimiters.enable = true;
@@ -216,7 +218,7 @@
       enable = true;
       settings = {
         mapping = {
-          "<C-Space>" = ''cmp.mapping.complete()'';
+          "<C-Space>" = "cmp.mapping.complete()";
           "<C-d>" = "cmp.mapping.scroll_docs(-4)";
           "<C-e>" = "cmp.mapping.close()";
           "<C-f>" = "cmp.mapping.scroll_docs(4)";
