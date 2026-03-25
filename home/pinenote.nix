@@ -38,6 +38,8 @@
               animations=0
               dither=1
 
+              tablet_map_to_mon=name:DPI-1
+
               env=DISPLAY,:11
               exec-once=${lib.getExe pkgs.xwayland-satellite} :11
             '';

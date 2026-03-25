@@ -60,5 +60,4 @@ writeShellScriptBin "rotate-screen" ''
     | ($o.modes[] | select(.current==true)) as $m
     | "name:\($o.name),scale:\($o.scale),x:\($o.position.x),y:\($o.position.y),width:\($m.width),height:\($m.height),refresh:\($m.refresh)"
   '),rr:$transform
-  mmsg -d setoption,tablet_rotation,$transform
 ''
