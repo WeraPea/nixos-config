@@ -31,6 +31,9 @@
         mango = {
           enable = true;
           mainDisplay = "DPI-1";
+          defaultLayout = "scroller";
+          bindModes.default.binds.touchgesturebind."down,any,any,3" =
+            "spawn,busctl --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh";
           extraConfig = # hyprlang
             ''
               monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002

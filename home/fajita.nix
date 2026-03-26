@@ -24,6 +24,7 @@
         mango = {
           enable = true;
           mainDisplay = "DSI-1";
+          defaultLayout = "scroller";
           extraConfig = # hyprlang
             ''
               monitorrule=name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60

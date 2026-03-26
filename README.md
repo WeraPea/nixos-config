@@ -12,7 +12,7 @@ ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulatio
 
 ### programs
 
-- **Compositor**: [mango](https://github.com/WeraPea/mangowc/tree/combined) (custom fork with overscan, zoom, tablet/touch support, dithering)
+- **Compositor**: [mango](https://github.com/WeraPea/mangowc/tree/combined) (custom fork with overscan, zoom, tablet/touch support, dithering, touch gestures)
 - **Bar**: quickshell
 - **Browser**: glide (desktop), firefox (mobile)
 - **Terminal**: kitty

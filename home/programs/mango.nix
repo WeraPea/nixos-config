@@ -242,6 +242,20 @@ let
         "SUPER,btn_left" = "moveresize,curmove";
         "SUPER,btn_right" = "moveresize,curresize";
       };
+      touchgesturebind = {
+        # swipe,edge,distance,fingers
+        "up,any,any,3" = "spawn,pkill -SIGRTMIN wvkbd";
+
+        "left,any,any,3" = "viewtoright";
+        "right,any,any,3" = "viewtoleft";
+        "left,any,any,4" = "tagtoright";
+        "right,any,any,4" = "tagtoleft";
+
+        "left,bottom,any,1" = "focusdir,right";
+        "right,bottom,any,1" = "focusdir,left";
+        "left,bottom,any,2" = "exchange_client,right";
+        "right,bottom,any,2" = "exchange_client,left";
+      };
     };
     common.binds.bind = {
       "SUPER+CTRL,r" = "reload_config";
@@ -357,6 +371,9 @@ in
       default = "";
     };
     mango.mainDisplay = lib.mkOption { };
+    mango.defaultLayout = lib.mkOption {
+      default = "tile";
+    };
     mango.bindModes = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -421,15 +438,15 @@ in
 
           windowrule=title:Chatterino - Overlay,isoverlay:1
 
-          tagrule=id:1,layout_name:tile
-          tagrule=id:2,layout_name:tile
-          tagrule=id:3,layout_name:tile
-          tagrule=id:4,layout_name:tile
-          tagrule=id:5,layout_name:tile
-          tagrule=id:6,layout_name:tile
-          tagrule=id:7,layout_name:tile
-          tagrule=id:8,layout_name:tile
-          tagrule=id:9,layout_name:tile
+          tagrule=id:1,layout_name:${cfg.defaultLayout}
+          tagrule=id:2,layout_name:${cfg.defaultLayout}
+          tagrule=id:3,layout_name:${cfg.defaultLayout}
+          tagrule=id:4,layout_name:${cfg.defaultLayout}
+          tagrule=id:5,layout_name:${cfg.defaultLayout}
+          tagrule=id:6,layout_name:${cfg.defaultLayout}
+          tagrule=id:7,layout_name:${cfg.defaultLayout}
+          tagrule=id:8,layout_name:${cfg.defaultLayout}
+          tagrule=id:9,layout_name:${cfg.defaultLayout}
 
           env=QT_QPA_PLATFORM,wayland
           env=MOZ_ENABLE_WAYLAND,1
