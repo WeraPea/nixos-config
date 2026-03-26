@@ -382,6 +382,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     wayland.systemd.target = "mango-session.target";
+    services.polkit-gnome.enable = true;
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
