@@ -32,6 +32,14 @@ Item {
         onClicked: menuLoader.active = !menuLoader.active
     }
 
+    IpcHandler {
+        target: "app-menu"
+
+        function toggle(): void {
+            menuLoader.active = !menuLoader.active;
+        }
+    }
+
     FileView {
         id: usageFile
         path: Quickshell.env("HOME") + "/.config/quickshell/app-usage.json"

@@ -245,6 +245,14 @@ let
       touchgesturebind = {
         # swipe,edge,distance,fingers
         "up,any,any,3" = "spawn,pkill -SIGRTMIN wvkbd";
+        "up,bottom,short,1" = "spawn,pkill -SIGRTMIN wvkbd";
+
+        "up,bottom,medium,1" = "toggleoverview";
+        "down,top,any,1" =
+          "spawn,qs -c ${config.programs.quickshell.activeConfig} ipc call app-menu toggle";
+
+        "down_left,top,medium,1" = "killclient";
+        "right,left,any,3" = "reload_config";
 
         "left,any,any,3" = "viewtoright";
         "right,any,any,3" = "viewtoleft";
