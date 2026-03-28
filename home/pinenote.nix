@@ -36,7 +36,7 @@
             "spawn,busctl --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh";
           extraConfig = # hyprlang
             ''
-              monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002
+              monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1
 
               animations=0
               dither=1
