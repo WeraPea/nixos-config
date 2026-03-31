@@ -331,9 +331,8 @@ let
             name = "qocrc";
             returnByDefault = true;
             binds.bind = {
-              "SUPER,c" = mkQocrCmd "clear_all";
-              "SUPER,a" = mkQocrCmd "clear_all";
-              "SUPER,r" = mkQocrCmd "clear_overlay";
+              "SUPER,c" = mkQocrCmd "clear_overlay";
+              "SUPER,r" = mkQocrCmd "clear_all";
             };
           };
           "SUPER,w" = mkQocrCmd "show_region";
