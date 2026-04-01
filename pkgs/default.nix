@@ -33,5 +33,6 @@ rec {
   usb-tablet = callPackage ./usb-tablet.nix { };
   vrlink = callPackage ./vrlink.nix { };
   yomitan-api = callPackage ./yomitan-api.nix { };
+  yomitan-ultimate-audio = callPackage ./yomitan-ultimate-audio.nix { };
   yt-sub-converter = callPackage ./yt-sub-converter.nix { };
 }

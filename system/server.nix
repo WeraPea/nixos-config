@@ -6,6 +6,7 @@
     ./caddy.nix
     ./linkwarden.nix
     ./dns.nix
+    ./yomitan-ultimate-audio.nix
   ];
   options = {
     domain = lib.mkOption { description = "domain"; };
@@ -15,6 +16,7 @@
     domain = "werapi.duckdns.org";
     graphics.enable = false;
     system.stateVersion = "24.11";
+    yomitan-ultimate-audio.enable = true;
     # ps2 samba server
     services.samba = {
       enable = true;
