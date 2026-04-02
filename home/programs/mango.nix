@@ -351,7 +351,9 @@ let
           "SUPER,t" = {
             name = "qocrt";
             return.bind = "SUPER,t";
-            binds.bind = lib.filterAttrs (key: bind: key != "SUPER,t") (stripNestedModes binds);
+            binds.bind =
+              cfg.bindModes.default.binds.bind
+              // lib.filterAttrs (key: bind: key != "SUPER,t") (stripNestedModes binds);
           };
         };
       in
