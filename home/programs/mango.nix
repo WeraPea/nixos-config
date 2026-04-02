@@ -15,6 +15,7 @@ let
       return ? if (name != "default" && name != "common") then { bind = "NONE,Escape"; } else { },
       onEntry ? [ ],
       onReturn ? [ ],
+      onReturnPre ? [ ],
       returnTo ? "default",
       outerKeymode ? "default",
     }:
@@ -57,7 +58,10 @@ let
                 else
                   [ "${bindType}=${bind},${com}" ];
             in
-            (builtins.concatMap emitBind commands)
+            lib.optionals shouldReturn (
+              builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) (lib.toList onReturnPre)
+            )
+            ++ (builtins.concatMap emitBind commands)
             ++ lib.optionals shouldReturn (emitTransition onReturn returnTo { ${bindType} = bind; })
           ) bindings
         ));
@@ -323,6 +327,8 @@ let
     qocr =
       let
         mkQocrCmd = c: "spawn_shell,qocr ipc call ocr ${c}";
+        stripNestedModes =
+          binds: builtins.mapAttrs (key: bind: if bind ? name then "setkeymode,${bind.name}" else bind) binds;
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd ''scan_output $(mmsg -g -o | awk '$3 == "1" {print $1}')'';
@@ -343,8 +349,12 @@ let
           "SUPER,z" = mkQocrCmd "toggle_config yomitan.autoPlayFirstAudio";
           "SUPER,t" = qocr-trigger-popup;
           "SUPER,e" = {
-            command = qocr-trigger-popup;
-            return = false;
+            name = "qocrek";
+            onEntry = qocr-trigger-popup;
+            return.bind = "SUPER,a";
+            binds.bind = stripNestedModes binds // {
+              "SUPER,e" = qocr-trigger-popup;
+            };
           };
         };
       in
@@ -356,9 +366,9 @@ let
           "SUPER,a" = {
             name = "qocre";
             onEntry = mkQocrCmd "set_config japaneseOnly false";
-            onReturn = "spawn_shell,sleep 1; qocr ipc call ocr set_config japaneseOnly true";
+            onReturnPre = "spawn_shell,sleep 1; qocr ipc call ocr set_config japaneseOnly true";
             returnByDefault = true;
-            binds.bind = binds;
+            binds.bind = stripNestedModes binds;
           };
         }
         // binds;
