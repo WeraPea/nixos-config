@@ -30,7 +30,6 @@ in
     qocr.settings = {
       yomitan = {
         fetchAudio = true;
-        autoPlayFirstAudio = true;
       };
     };
 

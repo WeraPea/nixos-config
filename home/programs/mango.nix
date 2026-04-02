@@ -347,14 +347,11 @@ let
           "SUPER,d" = mkQocrCmd "toggle_config showOverlay";
           "SUPER,q" = mkQocrCmd "toggle_config autoRescan";
           "SUPER,z" = mkQocrCmd "toggle_config yomitan.autoPlayFirstAudio";
-          "SUPER,t" = qocr-trigger-popup;
-          "SUPER,e" = {
-            name = "qocrek";
-            onEntry = qocr-trigger-popup;
-            return.bind = "SUPER,a";
-            binds.bind = stripNestedModes binds // {
-              "SUPER,e" = qocr-trigger-popup;
-            };
+          "SUPER,e" = qocr-trigger-popup;
+          "SUPER,t" = {
+            name = "qocrt";
+            return.bind = "SUPER,t";
+            binds.bind = lib.filterAttrs (key: bind: key != "SUPER,t") (stripNestedModes binds);
           };
         };
       in
