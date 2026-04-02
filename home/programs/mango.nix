@@ -340,8 +340,9 @@ let
           "SUPER,v" = mkQocrCmd "toggle_config overlayOnHover";
           "SUPER,d" = mkQocrCmd "toggle_config showOverlay";
           "SUPER,q" = mkQocrCmd "toggle_config autoRescan";
-          "SUPER,e" = qocr-trigger-popup;
-          "SUPER,t" = {
+          "SUPER,z" = mkQocrCmd "toggle_config yomitan.autoPlayFirstAudio";
+          "SUPER,t" = qocr-trigger-popup;
+          "SUPER,e" = {
             command = qocr-trigger-popup;
             return = false;
           };

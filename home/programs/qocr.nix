@@ -28,7 +28,10 @@ in
     xdg.configFile."qocr/config.json".source = jsonFormat.generate "qocr-config.json" cfg.settings;
 
     qocr.settings = {
-      yomitan.fetchAudio = true;
+      yomitan = {
+        fetchAudio = true;
+        autoPlayFirstAudio = true;
+      };
     };
 
     systemd.user.services.qocr = {
