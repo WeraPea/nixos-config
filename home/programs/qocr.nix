@@ -27,6 +27,10 @@ in
 
     xdg.configFile."qocr/config.json".source = jsonFormat.generate "qocr-config.json" cfg.settings;
 
+    qocr.settings = {
+      yomitan.fetchAudio = true;
+    };
+
     systemd.user.services.qocr = {
       Unit = {
         Description = "qocr";

@@ -950,11 +950,11 @@
         "systems": "systems_5"
       },
       "locked": {
-        "lastModified": 1774998927,
-        "narHash": "sha256-7vA10nqTkYJyjlNf2M9rhYbIGm7ui8vqLj4bAIX86gU=",
+        "lastModified": 1775097410,
+        "narHash": "sha256-Abp7LMnk0AVekCi5lv51b/ZGs9SDlXiN7f82unQWTHo=",
         "owner": "WeraPea",
         "repo": "qocr",
-        "rev": "00653cd1dec50194e4804396cbc6d678a0cb1591",
+        "rev": "eb9d1baec3757d5949d3980ee343c0b6d6436718",
         "type": "github"
       },
       "original": {

@@ -322,10 +322,11 @@ let
     };
     qocr =
       let
-        mkQocrCmd = c: "spawn,qocr ipc call ocr ${c}";
+        mkQocrCmd = c: "spawn_shell,qocr ipc call ocr ${c}";
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
-          "SUPER,f" = mkQocrCmd "scan_fullscreen";
+          "SUPER,f" = mkQocrCmd ''scan_output $(mmsg -g -o | awk '$3 == "1" {print $1}')'';
+          "SUPER,g" = mkQocrCmd "scan_fullscreen";
           "SUPER,r" = mkQocrCmd "rescan";
           "SUPER,c" = {
             name = "qocrc";
