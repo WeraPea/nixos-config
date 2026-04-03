@@ -1,5 +1,5 @@
 diff --git a/beetsplug/vocadb/base.py b/beetsplug/vocadb/base.py
-index 0827b75..98f0fce 100644
+index 0827b75..8bf744c 100644
 --- a/beetsplug/vocadb/base.py
 +++ b/beetsplug/vocadb/base.py
 @@ -43,6 +43,8 @@ from beetsplug.vocadb.vocadb_api_client import (
@@ -11,9 +11,18 @@ index 0827b75..98f0fce 100644
  if TYPE_CHECKING:
      from collections.abc import Iterable, Sequence
      from optparse import Values
-@@ -534,17 +536,39 @@ class PluginBase(MetadataSourcePlugin):
-             remote_item_candidates := remote_item_find_result.items
-         ):
+@@ -529,22 +531,44 @@ class PluginBase(MetadataSourcePlugin):
+                 lang=self.language_preference,
+             )
+         )
+-        remote_item_candidates: tuple[SongForApiContract, ...] | None
+-        if not remote_item_find_result or not (
+-            remote_item_candidates := remote_item_find_result.items
+-        ):
++        remote_item_candidates: tuple[SongForApiContract, ...] = ()
++        if remote_item_find_result and remote_item_find_result.items:
++            remote_item_candidates = tuple(remote_item_find_result.items)
++        else:
              self._log.debug(msg=f"Found 0 results for '{title}'")
 -            return
 +
