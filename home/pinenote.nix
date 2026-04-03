@@ -34,18 +34,16 @@
           defaultLayout = "scroller";
           bindModes.default.binds.touchgesturebind."down,any,any,3" =
             "spawn,busctl --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh";
-          extraConfig = # hyprlang
-            ''
-              monitorrule=name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1
+        };
+        wayland.windowManager.mango.settings = {
+          monitorrule = "name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1";
 
-              animations=0
-              dither=1
+          animations = lib.mkForce 0;
+          dither = 1;
+          tablet_map_to_mon = "name:DPI-1";
 
-              tablet_map_to_mon=name:DPI-1
-
-              env=DISPLAY,:11
-              exec-once=${lib.getExe pkgs.xwayland-satellite} :11
-            '';
+          env = [ "DISPLAY,:11" ];
+          exec-once = [ "${lib.getExe pkgs.xwayland-satellite} :11" ];
         };
         pinenote-dither-sync.enable = true;
         quickshell.enable = true;

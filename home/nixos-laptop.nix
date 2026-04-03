@@ -15,12 +15,10 @@
         };
         mango = {
           enable = true;
-          extraConfig = # hyprlang
-            ''
-              monitorrule=name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60
-            '';
           mainDisplay = "eDP-1";
         };
+        wayland.windowManager.mango.settings.monitorrule =
+          "name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60";
         quickshell.enable = true;
       }
     ];

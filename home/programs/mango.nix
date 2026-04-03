@@ -406,10 +406,6 @@ in
 {
   options = {
     mango.enable = lib.mkEnableOption "enables mango";
-    mango.extraConfig = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
-    };
     mango.mainDisplay = lib.mkOption { };
     mango.defaultLayout = lib.mkOption {
       default = "tile";
@@ -426,92 +422,78 @@ in
     wayland.windowManager.mango = {
       enable = true;
       systemd.enable = false;
-      settings =
-        with config.lib.stylix.colors;
-        "" # hyprlang
-        + ''
-          animations=1
-          animation_fade_in=0
-          animation_fade_out=0
-          animation_type_close=slide
-          animation_duration_move=300
-          animation_duration_open=200
-          animation_duration_tag=250
-          animation_duration_close=250
-          animation_duration_focus=250
+      settings = with config.lib.stylix.colors; {
+        animations = 1;
+        animation_fade_in = 0;
+        animation_fade_out = 0;
+        animation_type_close = "slide";
+        animation_duration_move = 300;
+        animation_duration_open = 200;
+        animation_duration_tag = 250;
+        animation_duration_close = 250;
+        animation_duration_focus = 250;
 
-          gappih=0
-          gappiv=0
-          gappoh=0
-          gappov=0
-          borderpx=1
-          no_border_when_single=0
+        gappih = 0;
+        gappiv = 0;
+        gappoh = 0;
+        gappov = 0;
+        borderpx = 1;
+        no_border_when_single = 0;
 
-          rootcolor=0x${base00}ff
-          bordercolor=0x${base02}ff
-          focuscolor=0x${cyan}ff
-          urgentcolor=0x${red}ff
+        rootcolor = "0x${base00}ff";
+        bordercolor = "0x${base02}ff";
+        focuscolor = "0x${cyan}ff";
+        urgentcolor = "0x${red}ff";
 
-          repeat_rate=100
-          repeat_delay=300
-          xkb_rules_layout=pl
+        repeat_rate = 100;
+        repeat_delay = 300;
+        xkb_rules_layout = "pl";
 
-          new_is_master=0
-          default_mfact=0.5
-          enable_hotarea=0
-          warpcursor=0
-          sloppyfocus=1
-          axis_bind_apply_timeout=10
-          drag_tile_to_tile=1
-          cursor_hide_timeout=5
-          focus_on_activate=0
-          focus_cross_monitor=1
-          view_current_to_back=0
-          drag_corner=4
+        new_is_master = 0;
+        default_mfact = 0.5;
+        enable_hotarea = 0;
+        warpcursor = 0;
+        sloppyfocus = 1;
+        axis_bind_apply_timeout = 10;
+        drag_tile_to_tile = 1;
+        cursor_hide_timeout = 5;
+        focus_on_activate = 0;
+        focus_cross_monitor = 1;
+        view_current_to_back = 0;
+        drag_corner = 4;
 
-          scroller_structs=0
-          scroller_default_proportion=1
-          scroller_proportion_preset=0.5,1.0
+        scroller_structs = 0;
+        scroller_default_proportion = 1;
+        scroller_proportion_preset = "0.5,1.0";
 
-          zoom_centered=0
-          zoom_speed=0.2
-          zoom_max=20
+        zoom_centered = 0;
+        zoom_speed = 0.2;
+        zoom_max = 20;
 
-          windowrule=title:Chatterino - Overlay,isoverlay:1
+        windowrule = "title:Chatterino - Overlay,isoverlay:1";
+        tagrule = map (id: "id:${toString id},layout_name:${cfg.defaultLayout}") (lib.range 1 9);
+        env = [
+          "QT_QPA_PLATFORM,wayland"
+          "MOZ_ENABLE_WAYLAND,1"
+          "NIXOS_OZONE_WL,1"
+          "ELECTRON_OZONE_PLATFORM_HINT,wayland"
+          "OZONE_PLATFORM,wayland"
+          "GDK_BACKEND,wayland"
+          "WINDOW_MANAGER,mango"
+          "SDL_VIDEODRIVER,wayland"
+        ];
 
-          tagrule=id:1,layout_name:${cfg.defaultLayout}
-          tagrule=id:2,layout_name:${cfg.defaultLayout}
-          tagrule=id:3,layout_name:${cfg.defaultLayout}
-          tagrule=id:4,layout_name:${cfg.defaultLayout}
-          tagrule=id:5,layout_name:${cfg.defaultLayout}
-          tagrule=id:6,layout_name:${cfg.defaultLayout}
-          tagrule=id:7,layout_name:${cfg.defaultLayout}
-          tagrule=id:8,layout_name:${cfg.defaultLayout}
-          tagrule=id:9,layout_name:${cfg.defaultLayout}
-
-          env=QT_QPA_PLATFORM,wayland
-          env=MOZ_ENABLE_WAYLAND,1
-          env=NIXOS_OZONE_WL,1
-          env=ELECTRON_OZONE_PLATFORM_HINT,wayland
-          env=OZONE_PLATFORM,wayland
-          env=GDK_BACKEND,wayland
-          env=WINDOW_MANAGER,mango
-          env=SDL_VIDEODRIVER,wayland
-
+        exec-once = [
           # script needed due to 256 char limit
-          exec-once=${pkgs.writeScript "update-dbus-env-mango" ''
+          "${pkgs.writeScript "update-dbus-env-mango" ''
             ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH SDL_VIDEODRIVER WINDOW_MANAGER GDK_BACKEND OZONE_PLATFORM ELECTRON_OZONE_PLATFORM_HINT MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
-          ''}
-          exec-once=systemctl --user reset-failed
-          exec-once=systemctl --user restart mango-session.target
-        ''
-        + (builtins.concatStringsSep "\n" (
-          lib.optional config.wvkbd.enable "exec-once=sleep 5; systemctl --user restart fcitx5-daemon"
-        ))
-        + "\n"
-        + parseBindModes cfg.bindModes
-        + "\n"
-        + cfg.extraConfig;
+          ''}"
+          "systemctl --user reset-failed"
+          "systemctl --user restart mango-session.target"
+        ]
+        ++ lib.optional config.wvkbd.enable "sleep 5; systemctl --user restart fcitx5-daemon";
+      };
+      extraConfig = parseBindModes cfg.bindModes;
     };
 
     systemd.user.targets.mango-session = {
@@ -519,9 +501,7 @@ in
         Description = "mango compositor session";
         Documentation = [ "man:systemd.special(7)" ];
         BindsTo = [ "graphical-session.target" ];
-        Wants = [
-          "graphical-session-pre.target"
-        ];
+        Wants = [ "graphical-session-pre.target" ];
         After = [ "graphical-session-pre.target" ];
       };
     };

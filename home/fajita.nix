@@ -25,14 +25,12 @@
           enable = true;
           mainDisplay = "DSI-1";
           defaultLayout = "scroller";
-          extraConfig = # hyprlang
-            ''
-              monitorrule=name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60
-            '';
           bindModes.default.binds.bind = {
             "NONE,XF86PowerOff" = ''spawn,${lib.getExe pkgs.wlopm} --toggle "*"'';
           };
         };
+        wayland.windowManager.mango.settings.monitorrule =
+          "name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60";
         quickshell.enable = true;
         programs.quickshell.activeConfig = "fajita";
 
