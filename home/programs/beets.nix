@@ -46,6 +46,7 @@
           "edit"
           "vocadb"
           "utaitedb"
+          "touhoudb"
         ];
         musicbrainz = {
           genres = true;
