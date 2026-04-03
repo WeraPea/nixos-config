@@ -104,6 +104,7 @@
           openjdk17
           openscad
           orca-slicer
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.anki-helper
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot

@@ -5,6 +5,7 @@ in
 rec {
   _0x0 = callPackage ./0x0.nix { };
   anacreon-mpv-script = callPackage ./anacreon-mpv-script.nix { };
+  anki-helper = callPackage ./anki-helper.nix { inherit screenshot; };
   anki-koplugin = callPackage ./anki-koplugin.nix { };
   aria2dl = callPackage ./aria2dl.nix { };
   beets-vocadb = callPackage ./beets-vocadb.nix { };

@@ -347,6 +347,17 @@ let
               "SUPER,r" = mkQocrCmd "clear_all";
             };
           };
+          "SUPER,x" = {
+            name = "qocra";
+            returnByDefault = true;
+            binds.bind = {
+              "SUPER,x" = "spawn_shell,anki-helper 'current monitor'";
+              "SUPER,s" = "spawn_shell,anki-helper 'current monitor'";
+              "SUPER+CTRL,s" = "spawn,anki-helper";
+              "SUPER,d" = "spawn_shell,${lib.getExe pkgs.libnotify} $(anki-helper print Expression) -t 1500";
+              "SUPER,q" = "spawn,anki-helper show";
+            };
+          };
           "SUPER,w" = mkQocrCmd "show_region";
           "SUPER,v" = mkQocrCmd "toggle_config overlayOnHover";
           "SUPER,d" = mkQocrCmd "toggle_config showOverlay";

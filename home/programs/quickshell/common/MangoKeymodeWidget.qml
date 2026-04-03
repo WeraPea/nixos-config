@@ -19,7 +19,8 @@ TextObject {
             "qocr": "Q",
             "qocre": "QE",
             "qocrc": "QC",
-            "qocrt": "QT"
+            "qocrt": "QT",
+            "qocra": "QA"
         }[keymode] || keymode;
     }
     property var keymodeColors: function (keymode) {
@@ -34,7 +35,8 @@ TextObject {
             "qocr": Colors.base0A,
             "qocre": Colors.base0A,
             "qocrc": Colors.base0A,
-            "qocrt": Colors.base0A
+            "qocrt": Colors.base0A,
+            "qocra": Colors.base0A
         }[keymode] || Colors.foreground;
     }
 
