@@ -196,8 +196,8 @@ let
           "SHIFT,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost";
           "SHIFT,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost";
 
-          "SUPER,space" = "spawn,makoctl dismiss";
-          "SUPER+CTRL,space" = "spawn,makoctl restore";
+          "SUPER,z" = "spawn,makoctl dismiss";
+          "SUPER+CTRL,z" = "spawn,makoctl restore";
           "NONE,Print" = "spawn,screenshot";
           "SHIFT,Print" = "spawn_shell,screenshot 'current window'";
           "CTRL+SHIFT,Print" = "spawn_shell,screenshot 'current monitor'";
