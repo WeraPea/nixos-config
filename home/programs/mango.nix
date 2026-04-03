@@ -36,14 +36,8 @@ let
             bind: value:
             let
               isNestedMode = builtins.isAttrs value && value ? name;
-              commands = lib.toList (if value ? command then value.command else value);
-              shouldReturn =
-                if isNestedMode then
-                  false
-                else if value ? return then
-                  value.return
-                else
-                  returnByDefault;
+              commands = lib.toList (value.command or value);
+              shouldReturn = if isNestedMode then false else value.return or returnByDefault;
               emitBind =
                 com:
                 if builtins.isAttrs com then
@@ -141,11 +135,12 @@ let
       mmsg -d setlayout,monocle
     fi;
   '';
-  qocr-trigger-popup = "spawn,${pkgs.writeScript "qocr-trigger-popup" ''
+  qocr-trigger-popup-script = pkgs.writeScript "qocr-trigger-popup" ''
     output=$(mmsg -g -o | awk '$3 == "1" {print $1}')
     xy=$(${lib.getExe' pkgs.wl-find-cursor "wl-find-cursor"} -p)
     qocr ipc call ocr trigger_popup $xy $output
-  ''}";
+  '';
+  qocr-trigger-popup = "spawn,${qocr-trigger-popup-script}";
   bindModes = {
     default.binds = {
       bind =
@@ -329,6 +324,16 @@ let
         mkQocrCmd = c: "spawn_shell,qocr ipc call ocr ${c}";
         stripNestedModes =
           binds: builtins.mapAttrs (key: bind: if bind ? name then "setkeymode,${bind.name}" else bind) binds;
+        convertBindModes =
+          modes:
+          lib.foldl' lib.recursiveUpdate { } (
+            lib.mapAttrsToList (
+              name: mode:
+              lib.concatMapAttrs (type: key: {
+                ${type}."${key}" = [ "setkeymode,${name}" ] ++ lib.toList (mode.onEntry or [ ]);
+              }) (mode.enter or { })
+            ) modes
+          );
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd ''scan_output $(mmsg -g -o | awk '$3 == "1" {print $1}')'';
@@ -351,9 +356,15 @@ let
           "SUPER,t" = {
             name = "qocrt";
             return.bind = "SUPER,t";
-            binds.bind =
-              cfg.bindModes.default.binds.bind
-              // lib.filterAttrs (key: bind: key != "SUPER,t") (stripNestedModes binds);
+            binds = lib.recursiveUpdate (convertBindModes cfg.bindModes) {
+              bind = cfg.bindModes.default.binds.bind;
+              bindp."NONE,SHIFT_L" = "spawn,${pkgs.writeScript "qocr-trigger-hover" ''
+                if [ "$(qocr ipc call ocr hover_on)" == "true" ]; then
+                  ${qocr-trigger-popup-script}
+                fi
+              ''}";
+              bindpr."SHIFT,SHIFT_L" = mkQocrCmd "hover_off";
+            };
           };
         };
       in
