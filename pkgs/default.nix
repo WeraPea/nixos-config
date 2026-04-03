@@ -8,8 +8,9 @@ rec {
   anki-helper = callPackage ./anki-helper.nix { inherit screenshot; };
   anki-koplugin = callPackage ./anki-koplugin.nix { };
   aria2dl = callPackage ./aria2dl.nix { };
-  beets-vocadb = callPackage ./beets-vocadb.nix { };
+  beets-vocadb = callPackage ./beets-vocadb.nix { inherit httpx-retries; };
   browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
+  httpx-retries = pkgs.python3.pkgs.callPackage ./httpx-retries.nix { };
   kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
   mpv-http-mitmytproxy = callPackage ./mpv-http-mitmytproxy.nix { };
