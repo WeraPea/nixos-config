@@ -29,7 +29,6 @@
     ./mango.nix
     ./nix-search-tv.nix
     ./beets.nix
-    ./qocr.nix
     ./pinenote-dither-sync.nix
   ];
 
@@ -46,7 +45,6 @@
   mpd.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
   fcitx5.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
   nix-search-tv.enable = lib.mkDefault true;
-  qocr.enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
 
   home.shellAliases = {
     cp = "cp -rip";
@@ -95,8 +93,12 @@
   services = {
     cliphist.enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
     wl-clip-persist = {
-      enable = true;
+      enable = lib.mkIf osConfig.graphics.enable <| lib.mkDefault true;
       clipboardType = "both";
+    };
+    qocr = {
+      enable = lib.mkIf config.desktopPackages.enable <| lib.mkDefault true;
+      settings.yomitan.fetchAudio = true;
     };
   };
 }

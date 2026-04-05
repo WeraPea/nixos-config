@@ -116,6 +116,7 @@
               nix-index-database.homeModules.nix-index
               nixvim.homeModules.nixvim
               sops-nix.homeManagerModules.sops
+              qocr.homeModules.qocr
               ({ config, ... }: import ./sops.nix { username = config.home.username; })
             ];
           };
