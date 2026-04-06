@@ -18,20 +18,21 @@
         with outputs.packages.${pkgs.stdenv.hostPlatform.system};
         [
           anacreon-mpv-script
+          autosubsync-mpv
+          mpris
+          mpv-http-mitmytproxy
           mpv-image-viewer.detect-image
           mpv-image-viewer.equalizer
           mpv-image-viewer.freeze-window
           mpv-image-viewer.image-positioning
           mpv-image-viewer.minimap
           mpv-image-viewer.status-line
-          mpris
-          mpv-http-mitmytproxy
           mpv-websocket-script
+          mpv-youtube-srv3-subs
           progressbar
+          sponsorblock
           thumbfast
           webtorrent-mpv-hook
-          sponsorblock
-          mpv-youtube-srv3-subs
         ];
       defaultProfiles = [ "high-quality" ];
       config = {
