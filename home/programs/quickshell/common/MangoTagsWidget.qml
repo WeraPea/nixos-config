@@ -34,7 +34,7 @@ RowLayout {
 
             MouseArea {
                 anchors.fill: parent
-                onPressed: {
+                onClicked: {
                     Mango.select(workspace.modelData.index, screen);
                 }
             }
