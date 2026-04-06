@@ -332,8 +332,8 @@ let
     };
     common.binds.bind = {
       "SUPER+CTRL,r" = [
-        "setkeymode,default"
         "reload_config"
+        "setkeymode,default"
       ];
     };
     leader = {
