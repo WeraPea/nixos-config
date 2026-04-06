@@ -34,6 +34,10 @@ Scope {
                     }
                     MangoKeymodeWidget {
                         screen: bar.modelData.name
+                        modeIndex: 1
+                    }
+                    MangoKeymodeWidget {
+                        screen: bar.modelData.name
                     }
                     MangoClientWidget {
                         screen: bar.modelData.name

@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.mango;
+  rsiLimit = 2;
   parseBindMode =
     {
       name,
@@ -16,10 +17,21 @@ let
       onEntry ? [ ],
       onReturn ? [ ],
       onReturnPre ? [ ],
-      returnTo ? "default",
+      returnTo ? (if (lib.isString recSubmodeOf) then recSubmodeOf else "default"),
       outerKeymode ? "default",
-    }:
+      recSubmodeOf ? null, # allows for "recursive" submodes, limited by mango's 27 character keymode name limit though
+      rsi ? 0,
+      recEnterIsReturnReturnToPass ? "default",
+      ...
+    }@args:
     let
+      recEnterIsReturn =
+        if args ? recEnterIsReturn && lib.isBool args.recEnterIsReturn then
+          args.recEnterIsReturn
+        else
+          false;
+      name = if (lib.isString recSubmodeOf) then "${recSubmodeOf}-${args.name}" else args.name;
+      baseMode = mode: lib.last (lib.splitString "-" mode);
       emitTransition =
         commands: targetMode: binds:
         builtins.concatLists (
@@ -35,20 +47,51 @@ let
           lib.mapAttrsToList (
             bind: value:
             let
-              isNestedMode = builtins.isAttrs value && value ? name;
               commands = lib.toList (value.command or value);
-              shouldReturn = if isNestedMode then false else value.return or returnByDefault;
+              shouldReturn = if value ? name then false else value.return or returnByDefault;
+              extendSubmode = (
+                args ? recSubmodeOf
+                && lib.isString args.recSubmodeOf
+                && value ? recSubmodeOf
+                && baseMode args.recSubmodeOf != value.recSubmodeOf # shouldn't not happen
+              );
+              recSubmodeOf =
+                if extendSubmode then
+                  "${args.recSubmodeOf}-${value.recSubmodeOf}"
+                else
+                  value.recSubmodeOf or args.recSubmodeOf or null;
+              rsi = if extendSubmode then (args.rsi or 0) + 1 else args.rsi or 0;
+              recEnterIsReturn = value.recEnterIsReturn or args.recEnterIsReturn or null;
+              recEnterIsReturnReturnToPass =
+                if value ? recSubmodeOf then returnTo else args.recEnterIsReturnReturnToPass or "default";
+
               emitBind =
                 com:
                 if builtins.isAttrs com then
-                  [ "" ]
-                  ++ parseBindMode (
-                    {
-                      outerKeymode = name;
-                      enter.${bindType} = bind;
-                    }
-                    // com
-                  )
+                  if com ? setkeymode && !(lib.isString recSubmodeOf && com.setkeymode == baseMode recSubmodeOf) then
+                    [
+                      "${bindType}=${bind},setkeymode,${
+                        lib.concatStringsSep "-" (
+                          (if lib.isString recSubmodeOf then [ recSubmodeOf ] else [ ]) ++ [ com.setkeymode ]
+                        )
+                      }"
+                    ]
+                  else
+                    parseBindMode (
+                      {
+                        outerKeymode = name;
+                        enter.${bindType} = bind;
+                      }
+                      // com
+                      // {
+                        inherit
+                          recSubmodeOf
+                          rsi
+                          recEnterIsReturn
+                          recEnterIsReturnReturnToPass
+                          ;
+                      }
+                    )
                 else
                   [ "${bindType}=${bind},${com}" ];
             in
@@ -60,20 +103,43 @@ let
           ) bindings
         ));
     in
-    (emitTransition onEntry name enter)
-    ++ [ "keymode=${name}" ]
-    ++ (builtins.concatLists (lib.mapAttrsToList emitBinds binds))
-    ++ (emitTransition onReturn returnTo return)
-    ++ [
-      "keymode=${outerKeymode}"
-      ""
-    ];
+    if (lib.isString recSubmodeOf && args.name == baseMode recSubmodeOf) then
+      lib.optionals recEnterIsReturn (emitTransition onReturn recEnterIsReturnReturnToPass enter)
+    else if rsi >= rsiLimit then
+      [ ]
+    else
+      [ "" ]
+      ++ (emitTransition onEntry name enter)
+      ++ [ "keymode=${name}" ]
+      ++ (builtins.concatLists (lib.mapAttrsToList emitBinds binds))
+      ++ (emitTransition onReturn returnTo return)
+      ++ [
+        "keymode=${outerKeymode}"
+        ""
+      ];
   parseBindModes =
     bindModes:
     builtins.concatStringsSep "\n" (
       builtins.concatLists (
         lib.mapAttrsToList (name: value: parseBindMode ({ inherit name; } // value)) bindModes
       )
+    );
+  stripNestedModes =
+    binds:
+    builtins.mapAttrs (
+      key: bind: if bind ? name then bind // { setkeymode = bind.name; } else bind
+    ) binds;
+  convertBindModes =
+    modes: recSubmodeOf:
+    lib.foldl' lib.recursiveUpdate { } (
+      lib.mapAttrsToList (
+        name: mode:
+        lib.concatMapAttrs (type: key: {
+          ${type}."${key}" = mode // {
+            inherit name recSubmodeOf;
+          };
+        }) (mode.enter or { })
+      ) modes
     );
   mkClipboardMode =
     {
@@ -265,7 +331,10 @@ let
       };
     };
     common.binds.bind = {
-      "SUPER+CTRL,r" = "reload_config";
+      "SUPER+CTRL,r" = [
+        "setkeymode,default"
+        "reload_config"
+      ];
     };
     leader = {
       enter.bind = "SUPER,space";
@@ -322,18 +391,6 @@ let
     qocr =
       let
         mkQocrCmd = c: "spawn_shell,qocr ipc call ocr ${c}";
-        stripNestedModes =
-          binds: builtins.mapAttrs (key: bind: if bind ? name then "setkeymode,${bind.name}" else bind) binds;
-        convertBindModes =
-          modes:
-          lib.foldl' lib.recursiveUpdate { } (
-            lib.mapAttrsToList (
-              name: mode:
-              lib.concatMapAttrs (type: key: {
-                ${type}."${key}" = [ "setkeymode,${name}" ] ++ lib.toList (mode.onEntry or [ ]);
-              }) (mode.enter or { })
-            ) modes
-          );
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
           "SUPER,f" = mkQocrCmd ''scan_output $(mmsg -g -o | awk '$3 == "1" {print $1}')'';
@@ -366,8 +423,9 @@ let
           "SUPER,e" = qocr-trigger-popup;
           "SUPER,t" = {
             name = "qocrt";
-            return.bind = "SUPER,t";
-            binds = lib.recursiveUpdate (convertBindModes cfg.bindModes) {
+            recEnterIsReturn = true;
+            return = { };
+            binds = lib.recursiveUpdate (convertBindModes cfg.bindModes "qocrt") {
               bind = cfg.bindModes.default.binds.bind;
               bindp."NONE,SHIFT_L" = "spawn,${pkgs.writeScript "qocr-trigger-hover" ''
                 if [ "$(qocr ipc call ocr hover_on)" == "true" ]; then

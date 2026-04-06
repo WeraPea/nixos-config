@@ -3,10 +3,18 @@ import "config"
 
 TextObject {
     required property string screen
+    property int modeIndex: 0
     property var monitor: Mango.monitors.find(m => m.name == screen)
-    visible: monitor.keymode !== "default"
+    visible: keymode !== "default"
 
-    text: `[${mapKeymode(monitor.keymode)}]`
+    property string keymode: {
+        var parts = monitor.keymode.split("-");
+        if (parts.length <= modeIndex)
+            return "default";
+        else
+            return parts[parts.length - 1 - modeIndex];
+    }
+
     property var mapKeymode: function (keymode) {
         return {
             "default": "D",
@@ -40,5 +48,6 @@ TextObject {
         }[keymode] || Colors.foreground;
     }
 
-    color: keymodeColors(monitor.keymode)
+    text: `[${mapKeymode(keymode)}]`
+    color: keymodeColors(keymode)
 }
