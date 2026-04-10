@@ -433,6 +433,7 @@ let
                 fi
               ''}";
               bindpr."SHIFT,SHIFT_L" = mkQocrCmd "hover_off";
+              bindp."none,Escape" = mkQocrCmd "close_popup";
             };
           };
         };
