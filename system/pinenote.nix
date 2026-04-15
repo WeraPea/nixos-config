@@ -58,23 +58,6 @@ in
     }
   ];
 
-  services.pipewire.wireplumber.configPackages = [
-    (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez-no-suspend.conf" ''
-      monitor.bluez.rules = [
-        {
-          matches = [
-            { node.name = "~bluez_output.*" }
-          ]
-          actions = {
-            update-props = {
-              session.suspend-timeout-seconds = 0
-            }
-          }
-        }
-      ]
-    '')
-  ]; # otherwise there is a bit of audio dropped on each cold start
-
   services.journald.storage = "volatile";
   zramSwap.enable = true;
   stylix = {
