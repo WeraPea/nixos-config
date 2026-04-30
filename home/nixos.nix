@@ -60,6 +60,7 @@
             HDMI_A_1_y = DP_2_y;
             HDMI_A_1_width = 1280;
             HDMI_A_1_height = 1024;
+            HDMI_A_1_overscan_bottom = 64;
 
             HDMI_A_2_x = 0;
             HDMI_A_2_y = DP_2_y + DP_2_height - HDMI_A_2_height + HDMI_A_2_overscan_top;
@@ -71,7 +72,7 @@
             HDMI_A_2_overscan_right = 97;
           }; [
             "name:DP-2,x:${toString DP_2_x},y:${toString DP_2_y},width:${toString DP_2_width},height:${toString DP_2_height},refresh:144"
-            "name:HDMI-A-1,x:${toString HDMI_A_1_x},y:${toString HDMI_A_1_y},width:${toString HDMI_A_1_width},height:${toString HDMI_A_1_height},refresh:75"
+            "name:HDMI-A-1,x:${toString HDMI_A_1_x},y:${toString HDMI_A_1_y},width:${toString HDMI_A_1_width},height:${toString HDMI_A_1_height},refresh:75,overscan_bottom:${toString HDMI_A_1_overscan_bottom}"
             "name:HDMI-A-2,x:${toString HDMI_A_2_x},y:${toString HDMI_A_2_y},width:${toString HDMI_A_2_width},height:${toString HDMI_A_2_height},refresh:60,overscan_top:${toString HDMI_A_2_overscan_top},overscan_bottom:${toString HDMI_A_2_overscan_bottom},overscan_left:${toString HDMI_A_2_overscan_left},overscan_right:${toString HDMI_A_2_overscan_right}"
           ];
         quickshell.enable = true;
