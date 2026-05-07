@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.28.3";
+  version = "1.29.1";
 
   selectSystem =
     attrs:
@@ -18,8 +18,8 @@ let
   src = fetchurl {
     url = "https://github.com/tachibana-shin/rakuyomi/releases/download/v${version}/rakuyomi-${arch}.zip";
     hash = selectSystem {
-      "x86_64-linux" = "sha256-5kTa3BR2El6FQMht1s2Y54sFSDt7223LyEVQgz/wGIc=";
-      "aarch64-linux" = "sha256-LLh2sn6yLLrbtVR8+mI19xChfqItF+epgNtmxgJznbE=";
+      "x86_64-linux" = "sha256-y9GldCU1Lv2KZnqRfncOYZtdaz+3aUakC8CSWzGLpH0=";
+      "aarch64-linux" = "sha256-fF/HncsluLFYxEmtimTNKkwdmvjqGNtYIOz2KLv1olw=";
     };
   };
 in
