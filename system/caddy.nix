@@ -22,4 +22,7 @@
       acme_dns duckdns {env.DUCKDNS_TOKEN}
     '';
   };
+  services.caddy.virtualHosts."anki.${config.domain}".extraConfig = ''
+    reverse_proxy nixos:8765
+  '';
 }
