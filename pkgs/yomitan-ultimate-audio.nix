@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "yomitan-ultimate-audio";
@@ -18,8 +19,9 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
 
   postPatch = ''
-    npm pkg set dependencies.tsx="$(npm pkg get devDependencies.tsx --json | tr -d '"')"
-    npm pkg delete devDependencies.tsx
+    npm=${lib.getExe' nodejs "npm"}
+    $npm pkg set dependencies.tsx="$($npm pkg get devDependencies.tsx --json | tr -d '"')"
+    $npm pkg delete devDependencies.tsx
   '';
 
   meta = {
