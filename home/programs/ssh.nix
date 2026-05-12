@@ -22,6 +22,10 @@
         controlPath = "~/.ssh/master-%r@%n:%p";
         controlPersist = "no";
       };
+      "lavender" = {
+        hostname = "lavender";
+        port = 8022;
+      };
     };
   };
 }
