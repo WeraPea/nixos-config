@@ -38,7 +38,6 @@
         };
         settings = {
           placement_strategy = "top-left";
-          shell = "fish";
 
           confirm_os_window_close = 2;
           allow_remote_control = "yes";

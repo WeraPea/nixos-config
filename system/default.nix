@@ -21,6 +21,7 @@
     user.username = lib.mkDefault "wera";
 
     users.users.${config.user.username} = {
+      shell = pkgs.fish;
       extraGroups = [
         "video"
         "networkmanager"

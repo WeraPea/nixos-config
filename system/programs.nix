@@ -21,6 +21,7 @@
       {
         dconf.enable = lib.mkIf config.graphics.enable true;
         fuse.userAllowOther = true;
+        fish.enable = true;
         gnupg.agent = {
           enable = true;
           enableSSHSupport = true;
