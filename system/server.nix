@@ -5,7 +5,7 @@
     ./vaultwarden.nix
     ./caddy.nix
     ./linkwarden.nix
-    ./dns.nix
+    ./router.nix
     ./yomitan-ultimate-audio.nix
   ];
   options = {
@@ -17,6 +17,7 @@
     graphics.enable = false;
     system.stateVersion = "24.11";
     yomitan-ultimate-audio.enable = true;
+    services.openssh.settings.PasswordAuthentication = false;
     # ps2 samba server
     services.samba = {
       enable = true;
