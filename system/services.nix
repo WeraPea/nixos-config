@@ -10,6 +10,21 @@
     ./vr.nix
   ];
 
+  systemd.services.vnstat.serviceConfig.ExecStart =
+    lib.mkForce "${config.services.vnstat.package}/bin/vnstatd -n --config ${
+      pkgs.writeTextFile {
+        name = "vnstat.conf";
+        text = ''
+          AlwaysAddNewInterfaces 1
+          5MinuteHours 744
+          HourlyDays -1
+          DailyDays -1
+          MonthlyMonths -1
+          TopDayEntries 100
+        '';
+      }
+    }";
+
   services = {
     fstrim.enable = true;
     openssh.enable = true;
