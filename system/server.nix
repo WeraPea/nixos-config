@@ -18,6 +18,13 @@
     system.stateVersion = "24.11";
     yomitan-ultimate-audio.enable = true;
     services.openssh.settings.PasswordAuthentication = false;
+    services.tailscale = {
+      useRoutingFeatures = "server";
+      extraSetFlags = [
+        "--advertise-routes=192.168.1.0/24"
+        "--advertise-exit-node"
+      ];
+    };
     # ps2 samba server
     services.samba = {
       enable = true;

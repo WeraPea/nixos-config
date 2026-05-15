@@ -28,6 +28,12 @@
   services = {
     fstrim.enable = true;
     openssh.enable = true;
+    tailscale = {
+      enable = true;
+      extraSetFlags = [
+        "--hostname=${config.networking.hostName}-ts"
+      ];
+    };
     upower.enable = true;
     vnstat.enable = true;
     pipewire = lib.mkIf config.graphics.enable {
