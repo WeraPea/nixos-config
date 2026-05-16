@@ -26,6 +26,10 @@
         hostname = "lavender";
         port = 8022;
       };
+      "lavender-ts" = {
+        hostname = "lavender-ts";
+        port = 8022;
+      };
     };
   };
 }
