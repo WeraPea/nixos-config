@@ -14,7 +14,9 @@ TextObject {
             "RT": Colors.base0E,
             "G": Colors.base0D,
             "VG": Colors.base0D,
-            "TG": Colors.base0D
+            "F": Colors.base0D,
+            "VF": Colors.base0D,
+            "DW": Colors.base0D
         }[layout] || Colors.foreground;
     }
 

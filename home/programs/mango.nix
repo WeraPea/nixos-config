@@ -179,7 +179,9 @@ let
       [VT]="vertical_tile"
       [VG]="vertical_grid"
       [VK]="vertical_deck"
-      [TG]="tgmix"
+      [F]="fair"
+      [VF]="vertical_fair"
+      [DW]="dwindle"
     )
 
     cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
@@ -223,8 +225,8 @@ let
           ]) (map toString (lib.range 1 5))
         ))
         // {
-          "SUPER,j" = "focusstack,next";
-          "SUPER,k" = "focusstack,prev";
+          "SUPER,j" = "focusdir,down";
+          "SUPER,k" = "focusdir,up";
           "SUPER,h" = "focusdir,left";
           "SUPER,l" = "focusdir,right";
 
@@ -246,11 +248,12 @@ let
           # Layouts
           "SUPER,t" = "setlayout,tile";
           "SUPER+CTRL,t" = "setlayout,right_tile";
-          "SUPER,g" = "setlayout,tgmix";
-          "SUPER+CTRL,g" = "setlayout,vertical_grid";
+          "SUPER,g" = "setlayout,fair";
+          "SUPER+CTRL,g" = "setlayout,vertical_fair";
           "SUPER,v" = "setlayout,vertical_tile";
           "SUPER,w" = "spawn,${mango-toggle-monocle}";
           "SUPER,N" = "setlayout,scroller";
+          "SUPER,d" = "setlayout,dwindle";
           "SUPER,M" = "switch_proportion_preset";
 
           "SUPER,e" = "togglefloating";
@@ -270,7 +273,6 @@ let
 
           "SUPER,s" = "spawn,search";
           "SUPER,c" = "spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons";
-          "SUPER,d" = "spawn,rofi -show window -show-icons";
           "SUPER,b" = "spawn,${lib.getExe pkgs.rofi-bluetooth}";
 
           "SUPER,Tab" = qocr-trigger-popup;
