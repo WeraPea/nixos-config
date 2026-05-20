@@ -1,6 +1,9 @@
-pkgs:
+{ pkgs, inputs }:
 let
-  callPackage = pkgs.callPackage;
+  inherit (pkgs) callPackage;
+  inherit (inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system})
+    pinenote-usb-tablet
+    ;
 in
 rec {
   _0x0 = callPackage ./0x0.nix { };
@@ -32,7 +35,7 @@ rec {
   streamlink-ttvlol = callPackage ./streamlink-ttvlol.nix { };
   switch-boot-partition = callPackage ./switch-boot-partition.nix { };
   udev-gothic-hs-nf = callPackage ./udev-gothic-hs-nf.nix { };
-  usb-tablet = callPackage ./usb-tablet.nix { };
+  usb-tablet = callPackage ./usb-tablet.nix { inherit pinenote-usb-tablet; };
   vrlink = callPackage ./vrlink.nix { };
   yomitan-api = callPackage ./yomitan-api.nix { };
   yomitan-ultimate-audio = callPackage ./yomitan-ultimate-audio.nix { };

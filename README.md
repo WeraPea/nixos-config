@@ -8,7 +8,7 @@
 - **server** - `x86_64` server (router, Vaultwarden, Linkwarden, Samba for PS2 OPL)
 - **fajita** - `arm64` OnePlus 6T (Mobile NixOS)
 
-ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulation. Rebuild/deployment commands are `fish` abbreviations in `home/programs/fish.nix`.
+ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulation. Rebuild/deployment commands are `fish` abbreviations in `modules/fish.nix`.
 
 ### programs
 

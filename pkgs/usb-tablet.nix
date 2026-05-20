@@ -1,8 +1,14 @@
-{ lib, pkgs, ... }:
-pkgs.writers.writePython3Bin "usb-tablet"
+{
+  lib,
+  writers,
+  pinenote-usb-tablet,
+  ...
+}:
+writers.writePython3Bin "usb-tablet"
   {
     doCheck = false;
   }
+  # python
   ''
     import os
     import sys
@@ -123,7 +129,7 @@ pkgs.writers.writePython3Bin "usb-tablet"
                 Path("/sys/class/backlight/backlight_cool/brightness").write_text(str(0))
 
                 subprocess.run(["modprobe", "libcomposite"], check=False)
-                self.usb_proc = subprocess.Popen(["${lib.getExe' pkgs.pinenote-usb-tablet "pinenote-usb-tablet"}"])
+                self.usb_proc = subprocess.Popen(["${lib.getExe' pinenote-usb-tablet "pinenote-usb-tablet"}"])
 
                 self.monitor_charger()
 

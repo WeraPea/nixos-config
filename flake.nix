@@ -1,17 +1,26 @@
 {
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix.url = "github:nix-community/stylix";
-    nur.url = "github:nix-community/NUR";
-    erosanix.url = "github:emmanuelrosa/erosanix";
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rycee = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    erosanix = {
+      url = "github:emmanuelrosa/erosanix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,7 +30,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
@@ -34,6 +46,7 @@
     fcitx-virtualkeyboard-adapter = {
       url = "github:horriblename/fcitx-virtualkeyboard-adapter";
       inputs.nixpkgs.follows = "nixpkgs";
+      flake = false; # flake has no aarch64-linux
     };
     mango = {
       url = "github:WeraPea/mangowc/combined";
@@ -53,6 +66,7 @@
     };
     wl-find-cursor = {
       url = "github:cjacker/wl-find-cursor";
+      inputs.nixpkgs.follows = "nixpkgs";
       flake = false; # flake only provides x86_64-linux
     };
     bs-scrobbler = {
@@ -69,137 +83,70 @@
     }@inputs:
     let
       inherit (self) outputs;
+      inherit (nixpkgs) lib;
+      inherit (nixpkgs.lib.fileset) toList fileFilter;
       systems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
-      overlays = with inputs; [
-        bs-scrobbler.overlays.default
-        fcitx-virtualkeyboard-adapter.overlays.default
-        glide.overlays.default
-        nur.overlays.default
-        pinenote-usb-tablet.overlays.default
-        (final: prev: {
-          wl-find-cursor = final.callPackage "${wl-find-cursor}/wl-find-cursor.nix" { };
-        })
-      ];
       foreachSystem = nixpkgs.lib.genAttrs systems;
       pkgsBySystem = foreachSystem (
         system:
-        import inputs.nixpkgs {
-          inherit system overlays;
-          config = {
-            allowUnfree = true;
-          };
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
         }
       );
       treefmtEval = foreachSystem (
-        system: inputs.treefmt-nix.lib.evalModule pkgsBySystem.${system} ./treefmt.nix
-      );
-      commonModules = with inputs; [
-        erosanix.nixosModules.protonvpn
-        home-manager.nixosModules.home-manager
-        mango.nixosModules.mango
-        nixpkgs-xr.nixosModules.nixpkgs-xr
-        nur.modules.nixos.default
-        sops-nix.nixosModules.sops
-        stylix.nixosModules.stylix
-        {
-          home-manager = {
-            useUserPackages = true;
-            useGlobalPkgs = true;
-            extraSpecialArgs = {
-              inherit inputs outputs;
-            };
-            sharedModules = [
-              mango.hmModules.mango
-              nix-index-database.homeModules.nix-index
-              nixvim.homeModules.nixvim
-              sops-nix.homeManagerModules.sops
-              qocr.homeModules.qocr
-              ({ config, ... }: import ./sops.nix { username = config.home.username; })
-            ];
+        system:
+        inputs.treefmt-nix.lib.evalModule pkgsBySystem.${system} {
+          projectRootFile = "flake.nix";
+          programs = {
+            nixfmt.enable = true;
+            shellcheck.enable = true;
+            shfmt.enable = true;
           };
         }
-        { nixpkgs.overlays = overlays; }
-        (
-          { pkgs, lib, ... }:
-          {
-            options.buildSystem = lib.mkOption { default = pkgs.stdenv.hostPlatform.system; }; # this is a mess and i probably don't need it
-          }
-        )
-        ./overlays
-        ./stylix
-        ./system
-        ({ config, ... }: import ./sops.nix { username = config.user.username; })
-      ];
+      );
+
+      isNixModule = file: file.hasExt "nix" && file.name != "flake.nix";
+      importTree =
+        path:
+        builtins.filter (p: !lib.any (lib.hasPrefix "_") (lib.splitString "/" (toString p))) (
+          toList (fileFilter isNixModule path)
+        );
+      mkNixConfig =
+        host: module:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [ module ] ++ importTree ./modules;
+        };
+      mkNixConfigs =
+        paths:
+        builtins.listToAttrs (
+          map (
+            path:
+            let
+              name = lib.removeSuffix ".nix" (baseNameOf path);
+            in
+            {
+              inherit name;
+              value = mkNixConfig name path;
+            }
+          ) paths
+        );
     in
     {
-      packages = foreachSystem (system: import ./pkgs pkgsBySystem.${system});
+      packages = foreachSystem (
+        system:
+        import ./pkgs {
+          inherit inputs;
+          pkgs = pkgsBySystem.${system};
+        }
+      );
       formatter = foreachSystem (system: treefmtEval.${system}.config.build.wrapper);
-
-      nixosConfigurations = rec {
-        nixos = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-          };
-          modules = commonModules ++ [
-            ./home/nixos.nix
-            ./system/nixos.nix
-            ./system/hardware-configuration-nixos.nix
-          ];
-        };
-        nixos-laptop = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-          };
-          modules = commonModules ++ [
-            ./home/nixos-laptop.nix
-            ./system/nixos-laptop.nix
-            ./system/hardware-configuration-nixos-laptop.nix
-          ];
-        };
-        server = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-          };
-          modules = commonModules ++ [
-            ./home/server.nix
-            ./system/server.nix
-            ./system/hardware-configuration-server.nix
-          ];
-        };
-        pinenote = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-          };
-          modules = commonModules ++ [
-            inputs.pinenote-nixos.nixosModules.default
-            ./home/pinenote.nix
-            ./system/pinenote.nix
-          ];
-        };
-        pinenote-from-x86_64 = pinenote.extendModules {
-          modules = [
-            { config.buildSystem = "x86_64-linux"; }
-          ];
-        };
-        fajita = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = {
-            inherit inputs outputs;
-          };
-          modules = commonModules ++ [
-            (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-fajita"; })
-            ./home/fajita.nix
-            ./system/fajita.nix
-          ];
-        };
-        fajita-from-x86_64 = fajita.extendModules {
-          modules = [
-            { config.buildSystem = "x86_64-linux"; }
-          ];
-        };
-      };
+      nixosConfigurations = mkNixConfigs (importTree ./hosts);
     };
 }
