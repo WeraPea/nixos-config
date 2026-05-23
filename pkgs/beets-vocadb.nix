@@ -4,7 +4,7 @@
   fetchFromGitHub,
   httpx-retries,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "beets-vocadb";
   version = "unstable-2026-02-01";
   pyproject = true;
@@ -19,6 +19,9 @@ python3.pkgs.buildPythonApplication rec {
   patches = [ ./beets-vocadb-purl.patch ];
 
   preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "ruff (>=0.14.14,<0.15.0)" "ruff (>=0.14.14)" \
+      --replace-fail "msgspec (>=0.19.0,<0.20.0)" "msgspec (>=0.19.0)";
     substituteInPlace beetsplug/vocadb/mapper.py \
       --replace-fail "track_id=None," "track_id=track_id,";
   '';
@@ -39,16 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     httpx-retries
     msgspec
     mutagen
-    (ruff.overrideAttrs {
-      version = "0.14.14";
-      src = fetchFromGitHub {
-        owner = "astral-sh";
-        repo = "ruff";
-        tag = "0.14.14";
-        hash = "sha256-h6XYWK6NxelLCfqG0geiAj3XbcqzbeFKeFMMDsy8fm8=";
-      };
-      cargoHash = "sha256-H5ZaBDV0YTdExu42Dt1Bq379vJ3FtddKtdLkMW+qC78=";
-    })
+    ruff
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

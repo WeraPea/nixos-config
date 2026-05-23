@@ -121,7 +121,7 @@ in
           chatterino7
           dragon-drop
           flatpak
-          helvum
+          crosspipe
           krita
           legcord
           mecab # for anki plugin

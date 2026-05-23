@@ -57,6 +57,7 @@ in
           "--hostname=${config.networking.hostName}-ts"
         ];
       };
+      speechd.enable = false;
       udev.packages = with pkgs; [
         platformio-core.udev
         (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules" ''
@@ -113,9 +114,7 @@ in
       LC_TIME = "pl_PL.UTF-8";
     };
 
-    systemd.coredump.extraConfig = ''
-      Storage=none
-    '';
+    systemd.coredump.settings.Coredump.Storage = "none";
 
     nixpkgs.config.allowUnfree = true;
     nix = {

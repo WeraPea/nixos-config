@@ -26,6 +26,7 @@ in
       programs.nixvim = {
         enable = true;
         globals.mapleader = " ";
+        nixpkgs.config.allowUnfree = true;
         autoCmd = [
           # Remove trailing whitespace on save
           {

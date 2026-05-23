@@ -42,7 +42,6 @@ ARM64 targets can be built from x86_64 using cross-compilation + binfmt emulatio
 - [OpenTabletDriver fork](https://github.com/WeraPea/OpenTabletDriver) - PineNote USB tablet support
 - **beets-vocadb**: PURL tag support for Opus files
 - **launch-osu**: Automated osu! fetching and scrobbler
-- glide-browser: Extra prefs/policies support
 - webtorrent-mpv-hook: P2P cutoff on completion
 - **wvkbd**: Virtual keyboard with app blacklist
 

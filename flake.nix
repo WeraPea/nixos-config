@@ -5,10 +5,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixvim.url = "github:nix-community/nixvim";
     stylix = {
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,7 +42,6 @@
     };
     fcitx-virtualkeyboard-adapter = {
       url = "github:horriblename/fcitx-virtualkeyboard-adapter";
-      inputs.nixpkgs.follows = "nixpkgs";
       flake = false; # flake has no aarch64-linux
     };
     mango = {
@@ -56,17 +52,13 @@
       url = "github:WeraPea/glide.nix/binaryName-fix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    firefox-extensions-declarative = {
-      url = "github:firefox-extensions-declarative/firefox-extensions-declarative";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    firefox-extensions-declarative.url = "github:firefox-extensions-declarative/firefox-extensions-declarative";
     qocr = {
       url = "github:WeraPea/qocr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     wl-find-cursor = {
       url = "github:cjacker/wl-find-cursor";
-      inputs.nixpkgs.follows = "nixpkgs";
       flake = false; # flake only provides x86_64-linux
     };
     bs-scrobbler = {

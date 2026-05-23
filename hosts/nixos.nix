@@ -147,9 +147,13 @@
         "noatime"
       ];
     };
-    "/mnt/2tb-mnt".label = "Linux\\x20Data";
+    "/mnt/2tb-mnt" = {
+      label = "Linux\\x20Data";
+      fsType = "ext4";
+    };
     "/mnt/win" = {
       label = "Windows";
+      fsType = "ntfs";
       options = [
         "rw"
         "uid=1000"
@@ -157,6 +161,7 @@
     };
     "/mnt/mnt2" = {
       label = "Windows\\x20Data";
+      fsType = "ntfs";
       options = [
         "rw"
         "uid=1000"

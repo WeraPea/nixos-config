@@ -22,8 +22,8 @@ in
           src = final.fetchFromGitHub {
             owner = "WeraPea";
             repo = "OpenTabletDriver";
-            rev = "a5ced396059003dff0379984bab1810383204020";
-            hash = "sha256-DvE9LLAWcnUDg9PylLeruNw5/5X0jS1D1RCCZ/4RJ+Y=";
+            rev = "4afdee7cc6543193740f6511de8a3242f23c48d2";
+            hash = "sha256-kegHYOXBY1K4Q7rfIryZ64Rr028DGp19J+ZNzfIfQ6k=";
           };
         });
 
@@ -104,6 +104,30 @@ in
           patches = [ ];
           doCheck = false;
         });
+
+        lutris = prev.lutris.override {
+          # Intercept buildFHSEnv to modify target packages
+          buildFHSEnv =
+            args:
+            final.buildFHSEnv (
+              args
+              // {
+                multiPkgs =
+                  envPkgs:
+                  let
+                    # Fetch original package list
+                    originalPkgs = args.multiPkgs envPkgs;
+
+                    # Disable tests for openldap
+                    customLdap = envPkgs.openldap.overrideAttrs (_: {
+                      doCheck = false;
+                    });
+                  in
+                  # Replace broken openldap with the custom one
+                  builtins.filter (p: (p.pname or "") != "openldap") originalPkgs ++ [ customLdap ];
+              }
+            );
+        };
       })
     ];
   };

@@ -10,19 +10,6 @@ let
   inherit (pkgs.firefox-addons)
     buildFirefoxXpiAddon
     ;
-  bpc = buildFirefoxXpiAddon rec {
-    pname = "bypass_paywalls_clean";
-    version = "4.2.9.6";
-    addonId = "magnolia@12.34";
-    url = "https://gitflic.ru/project/magnolia1234/bpc_uploads/blob/raw?file=${pname}-latest.xpi";
-    sha256 = "sha256-Jf9wYjFVxEfAGXo7qMFG28gW4pipvNuOAvqJGXKBq4s=";
-    meta = with pkgs.lib; {
-      homepage = "https://twitter.com/Magnolia1234B";
-      description = "Bypass Paywalls of (custom) news sites";
-      license = licenses.mit;
-      platforms = platforms.all;
-    };
-  };
   right-click-borescope = buildFirefoxXpiAddon rec {
     pname = "right_click_borescope";
     version = "0.0.4";
@@ -38,10 +25,10 @@ let
   };
   unhook = buildFirefoxXpiAddon rec {
     pname = "youtube_recommended_videos";
-    version = "1.6.7";
+    version = "1.6.9";
     addonId = "myallychou@gmail.com";
-    url = "https://addons.mozilla.org/firefox/downloads/file/4263531/${pname}-${version}.xpi";
-    sha256 = "sha256-u21ouN9IyOzkTkFSeDz+QBp9psJ1F2Nmsvqp6nh0DRU=";
+    url = "https://addons.mozilla.org/firefox/downloads/file/4733035/${pname}-${version}.xpi";
+    sha256 = "sha256-Rrv0C3gazjI3cf8ZPF3ieFtBDV2INkH48Hw5Oo+W1pw=";
     meta = with pkgs.lib; {
       homepage = "https://unhook.app/";
       description = "Hide YouTube related videos, comments, video suggestions wall, homepage recommendations, trending tab, and other distractions.";
@@ -51,10 +38,10 @@ let
   };
   jiten-reader = buildFirefoxXpiAddon rec {
     pname = "jiten_reader";
-    version = "1.0.4";
+    version = "1.1.1";
     addonId = "reader@jiten.moe";
-    url = "https://addons.mozilla.org/firefox/downloads/file/4697819/${pname}-${version}.xpi";
-    sha256 = "sha256-y+nIGc/ON7DwDvDlBO1UzERswO6b8UmF9iVBl9O2OoM=";
+    url = "https://addons.mozilla.org/firefox/downloads/file/4807200/${pname}-${version}.xpi";
+    sha256 = "sha256-U6gYiw1EVJMiT+RkWoCMMHG1ohIrdjsgIFeLsM8SoF0=";
     meta = with pkgs.lib; {
       homepage = "https://jiten.moe";
       description = "Learn Japanese by immersion by parsing texts, getting definitions for words and tracking your knowledge.";
@@ -221,8 +208,8 @@ let
   };
   ytNotInterestedInOneClick = builtins.fetchurl {
     name = "ytNotInterestedInOneClick";
-    url = "https://update.greasyfork.org/scripts/396936/1698527/YT%3A%20not%20interested%20in%20one%20click.user.js";
-    sha256 = "169aq7j9pzwdsmp3005l3cpyny3wakaagmpi1lvw06dymk670kl1";
+    url = "https://update.greasyfork.org/scripts/396936/1823095/YT%3A%20not%20interested%20in%20one%20click.user.js";
+    sha256 = "18h7qwflgxw6k50gbg7dh8gcvyjix5z3mkffawjhsasicq2mcxsy";
   };
 
   texthooker-clear =
@@ -293,9 +280,9 @@ in
       home.sessionVariables = {
         MOZ_USE_XINPUT2 = "1";
       };
-      xdg.configFile."glide/glide" = lib.mkIf (!cfg.mobile.enable) {
-        source = hmConfig.lib.file.mkOutOfStoreSymlink "${hmConfig.home.homeDirectory}/.mozilla/firefox";
-      };
+      # xdg.configFile."glide/glide" = lib.mkIf (!cfg.mobile.enable) {
+      #   source = hmConfig.lib.file.mkOutOfStoreSymlink "${hmConfig.home.homeDirectory}/.mozilla/firefox";
+      # };
       xdg.configFile."glide/glide.ts" = lib.mkIf (!cfg.mobile.enable) {
         source = ./glide/glide.ts;
       };
@@ -321,8 +308,8 @@ in
       programs.firefox = {
         enable = true;
         package = firefoxPackage;
-        release = lib.mkIf (!cfg.mobile.enable) "148.0b4";
-        # configPath = "${config.xdg.configHome}/glide/glide";
+        release = lib.mkIf (!cfg.mobile.enable) "151.0b4";
+        configPath = lib.mkIf (!cfg.mobile.enable) "${hmConfig.xdg.configHome}/glide/glide";
 
         languagePacks = [
           "en-US"
@@ -472,7 +459,6 @@ in
               let
                 minimalExtensions = [
                   bitwarden
-                  bpc
                   clearurls
                   don-t-fuck-with-paste
                   facebook-container
@@ -500,7 +486,6 @@ in
                   github-file-icons
                   github-isometric-contributions
                   hyperchat
-                  image-search-options
                   indie-wiki-buddy
                   inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.darkreader-declarative
                   inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.violentmonkey-declarative
@@ -510,7 +495,6 @@ in
                   nyaa-linker
                   redirect-to-wiki-gg
                   refined-github
-                  return-youtube-dislikes
                   sidebery
                   sponsorblock
                   stylus
