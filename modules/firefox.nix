@@ -10,68 +10,6 @@ let
   inherit (pkgs.firefox-addons)
     buildFirefoxXpiAddon
     ;
-  glide-browser = lib.makeOverridable (
-    {
-      extraPrefs ? "",
-      extraPrefsFiles ? [ ],
-
-      extraPolicies ? { },
-      extraPoliciesFiles ? [ ],
-      ...
-    }:
-    let
-      policiesJson = pkgs.writeText "policies.json" (
-        builtins.toJSON {
-          policies = {
-            DisableAppUpdate = true;
-          }
-          // extraPolicies;
-        }
-      );
-
-      mozillaCfg = ''
-        // mozilla.cfg
-      '';
-    in
-    inputs.glide.packages.${pkgs.stdenv.hostPlatform.system}.glide-browser.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ pkgs.jq ];
-
-      postInstall = (oldAttrs.postInstall or "") + ''
-        libDir="$out/lib/glide-browser-bin-${oldAttrs.version}"
-        mkdir -p "$libDir/distribution"
-
-        POL_PATH="$libDir/distribution/policies.json"
-        rm -f "$POL_PATH"
-        cat ${policiesJson} > "$POL_PATH"
-
-        extraPoliciesFiles=(${toString extraPoliciesFiles})
-        for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
-          jq -s '.[0] * .[1]' $extraPoliciesFile "$POL_PATH" > .tmp.json
-          mv .tmp.json "$POL_PATH"
-        done
-
-        # preparing for autoconfig
-        prefsDir="$libDir/defaults/pref"
-        mkdir -p "$prefsDir"
-
-        echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
-        echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
-
-        cat > "$libDir/mozilla.cfg" << EOF
-        ${mozillaCfg}
-        EOF
-
-        extraPrefsFiles=(${toString extraPrefsFiles})
-        for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
-          cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
-        done
-
-        cat >> "$libDir/mozilla.cfg" << EOF
-        ${extraPrefs}
-        EOF
-      '';
-    })
-  ) { };
   bpc = buildFirefoxXpiAddon rec {
     pname = "bypass_paywalls_clean";
     version = "4.2.9.6";
@@ -130,8 +68,8 @@ let
       src = pkgs.fetchFromGitHub {
         owner = "MrOtherGuy";
         repo = "fx-autoconfig";
-        rev = "d76528e93d0c61bef9ca9a4af1e58e545e9099c1";
-        hash = "sha256-W0MO8waK+1ZKg94uvuE42RJxxvI9dWabkMzziP8U2i0=";
+        rev = "d469a80f12e286c0e937d8b93c01dfc2d55dca8f";
+        hash = "sha256-czNgt62fofg3hXw7F4wXSv/+ZAsGtO6bg3sUOiUXcu4=";
       };
     in
     (pkgs.runCommand "fx-autoconfig-utils" { } ''
@@ -311,7 +249,7 @@ let
       # pkgs.firefox-mobile
       pkgs.firefox
     else
-      glide-browser;
+      inputs.glide.packages.${pkgs.stdenv.hostPlatform.system}.glide-browser-bin;
 
   firefoxPackage = baseFirefoxPackage.override {
     extraPrefsFiles = [
@@ -770,17 +708,27 @@ in
                 }
 
                 :root {
+                  background: transparent;
+                }
+
+                * {
+                  --toolbox-bgcolor: #0000 !important;
+                  --toolbox-bgcolor-inactive: #0000 !important;
                   --tab-selected-bgcolor: #0000 !important;
                   --browser-page-background: #0000 !important;
                   --content-view-background: #0000 !important;
                   --tabpanel-background-color: #0000 !important;
-                  background: transparent;
 
                   --in-content-page-background: #0000 !important;
                   --in-content-box-background: #0000 !important;
                   --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
-                  --toolbarbutton-border-radius: 0 !important;
-                  --arrowpanel-border-radius: 0 !important;
+                  /*--toolbarbutton-border-radius: 0 !important;*/
+                  /*--arrowpanel-border-radius: 0 !important;*/
+                  /*--urlbar-border-radius: 0 !important;*/
+                  --border-radius-medium: 0 !important;
+                  --border-radius-small: 0 !important;
+                  --panel-border-radius: 0 !important;
+                  --focus-outline-width: 0 !important;
                 }
               }
             '';

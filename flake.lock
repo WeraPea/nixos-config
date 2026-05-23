@@ -438,20 +438,22 @@
     },
     "glide": {
       "inputs": {
+        "home-manager": "home-manager",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1770545016,
-        "narHash": "sha256-CJp+OLEuYCiO4gJkPfGgOgMe//XM2ti+7yEANqVk5lQ=",
-        "owner": "glide-browser",
+        "lastModified": 1779553021,
+        "narHash": "sha256-h1Ew8qfDk2lbU1pqvQqZ4kHzv2HtNNKw/RUYy8qGz3w=",
+        "owner": "WeraPea",
         "repo": "glide.nix",
-        "rev": "f51cab253dac2c90ee219100feca12c0efd30750",
+        "rev": "f1b0ad2e0c92fbf9dd405767d60c9ac9a4c939ac",
         "type": "github"
       },
       "original": {
-        "owner": "glide-browser",
+        "owner": "WeraPea",
+        "ref": "binaryName-fix",
         "repo": "glide.nix",
         "type": "github"
       }
@@ -476,6 +478,27 @@
       }
     },
     "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "glide",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1770818644,
+        "narHash": "sha256-DYS4jIRpRoKOzJjnR/QqEd/MlT4OZZpt8CrBLv+cjsE=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "0acbd1180697de56724821184ad2c3e6e7202cd7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "home-manager_2": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -853,7 +876,7 @@
         "fcitx-virtualkeyboard-adapter": "fcitx-virtualkeyboard-adapter",
         "firefox-extensions-declarative": "firefox-extensions-declarative",
         "glide": "glide",
-        "home-manager": "home-manager",
+        "home-manager": "home-manager_2",
         "mango": "mango",
         "mobile-nixos": "mobile-nixos",
         "nix-index-database": "nix-index-database",

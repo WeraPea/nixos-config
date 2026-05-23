@@ -53,7 +53,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     glide = {
-      url = "github:glide-browser/glide.nix";
+      url = "github:WeraPea/glide.nix/binaryName-fix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     firefox-extensions-declarative = {
