@@ -72,6 +72,13 @@ in
 
   pinenote.config.enable = true;
   pinenote.pinenote-service.enable = true;
+  pinenote.pinenote-service.package =
+    let
+      p = if (config.werapi.buildSystem == "x86_64-linux") then pkgsCross else pkgs;
+    in
+    p.callPackage "${inputs.pinenote-nixos}/packages/pinenote-service.nix" { };
+
+  boot.initrd.systemd.tpm2.enable = false;
 
   stylix.targets.fish.enable = false;
   stylix = {

@@ -309,7 +309,11 @@ in
         enable = true;
         package = firefoxPackage;
         release = lib.mkIf (!cfg.mobile.enable) "151.0b4";
-        configPath = lib.mkIf (!cfg.mobile.enable) "${hmConfig.xdg.configHome}/glide/glide";
+        configPath =
+          if cfg.mobile.enable then
+            "${hmConfig.xdg.configHome}/mozilla/firefox"
+          else
+            "${hmConfig.xdg.configHome}/glide/glide";
 
         languagePacks = [
           "en-US"

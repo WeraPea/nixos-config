@@ -128,6 +128,15 @@ in
               }
             );
         };
+
+        nh =
+          let
+            old-nixpkgs = import (fetchTarball {
+              url = "https://github.com/NixOS/nixpkgs/archive/a82ccc39b39b621151d6732718e3e250109076fa.tar.gz";
+              sha256 = "1664s8ffaa3hcvz4d4hwca2l6xl25j8dvzxwmd2ckcskcncq1zc1";
+            }) { system = final.stdenv.hostPlatform.system; };
+          in
+          old-nixpkgs.nh; # until nh gives me remote copy progress back
       })
     ];
   };
