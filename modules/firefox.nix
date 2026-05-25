@@ -717,6 +717,8 @@ in
                   --border-radius-small: 0 !important;
                   --panel-border-radius: 0 !important;
                   --focus-outline-width: 0 !important;
+                  --lwt-accent-color-inactive: #0000 !important;
+                  --lwt-accent-color: #0000 !important;
                 }
               }
             '';
