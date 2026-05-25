@@ -221,14 +221,18 @@ let
       bind =
         (builtins.listToAttrs (
           builtins.concatMap (w: [
-            (lib.nameValuePair "SUPER,${w}" [
-              "focusmon,${cfg.mainDisplay}"
-              "view,${w}"
-            ])
-            (lib.nameValuePair "SUPER+SHIFT,${w}" [
-              "tagmon,${cfg.mainDisplay}"
-              "tag,${w}"
-            ])
+            (lib.nameValuePair "SUPER,${w}" (
+              lib.optional (cfg.mainDisplay != null) "focusmon,${cfg.mainDisplay}"
+              ++ [
+                "view,${w}"
+              ]
+            ))
+            (lib.nameValuePair "SUPER+SHIFT,${w}" (
+              lib.optional (cfg.mainDisplay != null) "focusmon,${cfg.mainDisplay}"
+              ++ [
+                "tag,${w}"
+              ]
+            ))
           ]) (map toString (lib.range 1 5))
         ))
         // {
@@ -482,7 +486,9 @@ in
       description = "Whether to enable ${moduleName}.";
       type = lib.types.bool;
     };
-    mainDisplay = lib.mkOption { };
+    mainDisplay = lib.mkOption {
+      default = null;
+    };
     defaultLayout = lib.mkOption {
       default = "tile";
     };

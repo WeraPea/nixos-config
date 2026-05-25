@@ -48,6 +48,7 @@ in
           bc
           catimg
           cloc
+          dnsutils
           fastfetch
           ffmpeg
           file
@@ -61,6 +62,7 @@ in
           newsboat
           nh
           nix-output-monitor
+          nmap
           onefetch
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.flake-source
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.rename-torrents
@@ -126,7 +128,6 @@ in
           krita
           legcord
           mecab # for anki plugin
-          nmap
           ntfs3g
           openjdk17
           openscad
