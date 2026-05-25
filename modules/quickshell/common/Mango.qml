@@ -91,7 +91,7 @@ Singleton {
         id: select
         property string tag
         property string monitor
-        command: ["mmsg", "dispatch", `focuscrossmon${tag},${monitor}`]
+        command: ["mmsg", "dispatch", `viewcrossmon,${tag},${monitor}`]
     }
     function select(tag, monitor) {
         select.tag = tag;
