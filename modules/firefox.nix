@@ -308,7 +308,7 @@ in
       programs.firefox = {
         enable = true;
         package = firefoxPackage;
-        release = lib.mkIf (!cfg.mobile.enable) "151.0b4";
+        release = lib.mkIf (!cfg.mobile.enable) "152.0b2";
         configPath =
           if cfg.mobile.enable then
             "${hmConfig.xdg.configHome}/mozilla/firefox"

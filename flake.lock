@@ -437,16 +437,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1779553021,
-        "narHash": "sha256-h1Ew8qfDk2lbU1pqvQqZ4kHzv2HtNNKw/RUYy8qGz3w=",
-        "owner": "WeraPea",
+        "lastModified": 1779668702,
+        "narHash": "sha256-voOAZYH429fsPg2PBRXtHP0yWXhtGOmTfl0I03uNwfA=",
+        "owner": "glide-browser",
         "repo": "glide.nix",
-        "rev": "f1b0ad2e0c92fbf9dd405767d60c9ac9a4c939ac",
+        "rev": "287f90235434f7e574dccebed3a4caa1ca443d1d",
         "type": "github"
       },
       "original": {
-        "owner": "WeraPea",
-        "ref": "binaryName-fix",
+        "owner": "glide-browser",
         "repo": "glide.nix",
         "type": "github"
       }
