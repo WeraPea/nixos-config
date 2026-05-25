@@ -2,9 +2,17 @@
   lib,
   writeShellScriptBin,
   wlr-randr,
+  jq,
 }:
 writeShellScriptBin "rotate-screen" ''
   set -euo pipefail
+
+  export PATH="${
+    lib.makeBinPath [
+      jq
+      wlr-randr
+    ]
+  }:$PATH"
 
   usage() {
     echo "Usage: $0 <transform: 0|1|2|3|cw|ccw|switch> <output>" >&2
@@ -15,7 +23,7 @@ writeShellScriptBin "rotate-screen" ''
 
   order=(normal 90 180 270)
 
-  current=$(${lib.getExe wlr-randr} --json | jq -r --arg name "$2" '.[] | select(.name==$name) | .transform')
+  current=$(wlr-randr --json | jq -r --arg name "$2" '.[] | select(.name==$name) | .transform')
 
   transform=-1
   for i in "''${!order[@]}"; do
@@ -53,7 +61,7 @@ writeShellScriptBin "rotate-screen" ''
   esac
 
   # can't use wlr-randr for rotation as mango will reset it only any option change
-  mmsg -d setoption,monitorrule,$(${lib.getExe wlr-randr} --json | jq -r --arg name "$2" '
+  mmsg dispatch setoption,monitorrule,$(wlr-randr --json | jq -r --arg name "$2" '
     .[]
     | select(.name==$name)
     | . as $o

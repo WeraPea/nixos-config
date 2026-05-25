@@ -168,8 +168,9 @@ let
       };
     };
   mango-toggle-monocle = pkgs.writeShellScript "mango-toggle-monocle" ''
-    selmon=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-    tag=$(mmsg -g -t | awk -v mon="$selmon" '$1 == mon && $2 == "tag" && ($4 == 1 || $4 == 3) { print $3 }')
+    export PATH="${lib.makeBinPath [ pkgs.jq ]}:$PATH"
+    selmon=$(mmsg get all-monitors | jq -r '.monitors[] | select(.active) | .name')
+    tag=$(mmsg get all-monitors | jq -r '.monitors[] | select(.active) | .active_tags[.1]')
     lfile="/tmp/mango-last-layout-pre-monocle-per-monitor"
     declare -A l_to_layout=(
       [S]="scroller"
@@ -188,7 +189,7 @@ let
       [DW]="dwindle"
     )
 
-    cur_layout=$(mmsg -g -l | grep "$selmon" | cut -d' ' -f3)
+    cur_layout=$(mmsg get all-monitors | jq -r '.monitors[] | select(.active) | .layout_symbol')
     cur_layout="''${l_to_layout[$cur_layout]}"
 
     if [[ "$cur_layout" == "monocle" ]]; then
@@ -196,7 +197,7 @@ let
       if [[ "$last_layout" == "" ]]; then
         last_layout="tile";
       fi
-      mmsg -d setlayout,"$last_layout"
+      mmsg dispatch setlayout,"$last_layout"
     else
       [[ -f "$lfile" ]] || : > "$lfile"
       if grep -q "^$selmon $tag" "$lfile"; then
@@ -204,13 +205,13 @@ let
       else
         echo "$selmon $tag $cur_layout" >> "$lfile"
       fi
-      mmsg -d setlayout,monocle
+      mmsg dispatch setlayout,monocle
     fi;
   '';
   wl-find-cursor' = pkgs.callPackage "${inputs.wl-find-cursor}/wl-find-cursor.nix" { };
   wl-find-cursor = lib.getExe' wl-find-cursor' "wl-find-cursor";
-  qocr-trigger-popup-script = pkgs.writeScript "qocr-trigger-popup" ''
-    output=$(mmsg -g -o | awk '$3 == "1" {print $1}')
+  qocr-trigger-popup-script = pkgs.writeShellScript "qocr-trigger-popup" ''
+    output=$(mmsg get all-monitors | ${lib.getExe pkgs.jq} -r '.monitors[] | select(.active) | .name')
     xy=$(${wl-find-cursor} -p)
     qocr ipc call ocr trigger_popup $xy $output
   '';
@@ -355,7 +356,7 @@ let
         "SUPER,o" = "toggleoverlay";
         "SUPER,b" = "toggle_render_border";
         "SUPER,t" =
-          "spawn_shell,glide --new-window https://renji-xd.github.io/texthooker-ui/; sleep 1; mmsg -d togglefloating; mmsg -d toggleoverlay; mmsg -d togglefakefullscreen; mmsg -d resizewin,540,820; mmsg -d movewin,3842,0";
+          "spawn_shell,glide --new-window https://renji-xd.github.io/texthooker-ui/; sleep 1; mmsg dispatch togglefloating; mmsg dispatch toggleoverlay; mmsg dispatch togglefakefullscreen; mmsg dispatch resizewin,540,820; mmsg dispatch movewin,3842,0";
         "SUPER,d" = "toggle_dither";
       };
     };
@@ -401,7 +402,8 @@ let
         mkQocrCmd = c: "spawn_shell,qocr ipc call ocr ${c}";
         binds = {
           "SUPER,s" = mkQocrCmd "scan";
-          "SUPER,f" = mkQocrCmd ''scan_output $(mmsg -g -o | awk '$3 == "1" {print $1}')'';
+          "SUPER,f" =
+            mkQocrCmd "scan_output $(mmsg get all-monitors | ${lib.getExe pkgs.jq} -r '.monitors[] | select(.active) | .name')";
           "SUPER,g" = mkQocrCmd "scan_fullscreen";
           "SUPER,r" = mkQocrCmd "rescan";
           "SUPER,c" = {

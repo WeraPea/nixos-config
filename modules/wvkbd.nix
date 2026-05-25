@@ -10,7 +10,7 @@ let
   cfg = config.werapi.${moduleName};
   wvkbd-filter-activate = pkgs.writeShellScript "wvkbd-filter-activate" ''
     if [ "$1" = "activate" ]; then
-      grep -Fxq "$(mmsg -g | awk -v mon="$(mmsg -g | awk '$2 == "selmon" && $3 == 1 {print $1}')" '$1 == mon && $2 == "appid" { print $3 }')" ~/.config/wvkbd/blacklist && exit
+      grep -Fxq "$(mmsg get all-monitors | ${lib.getExe pkgs.jq} -r 'monitors[] | select(.active) | .active_client.appid')" ~/.config/wvkbd/blacklist && exit
       pkill -SIGUSR2 wvkbd
     elif [ "$1" = "deactivate" ]; then
       pkill -SIGUSR1 wvkbd

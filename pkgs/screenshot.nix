@@ -2,18 +2,20 @@
   lib,
   writeShellScriptBin,
   grim,
+  jq,
   rofi,
   slurp,
   wl-clipboard,
 }:
 writeShellScriptBin "screenshot" ''
   export PATH="${
-    lib.makeBinPath ([
+    lib.makeBinPath [
       grim
+      jq
       rofi
       slurp
       wl-clipboard
-    ])
+    ]
   }:$PATH"
 
   if [[ -n "$1" ]]; then
@@ -26,22 +28,30 @@ writeShellScriptBin "screenshot" ''
 
   case $choice in
   "selected area") slurp | grim -g - /tmp/grim_screenshot.png ;;
-  # "selected window") hyprshot -m window -o /tmp/ -f hyprshot_screenshot.png ;;
+  "selected window")
+    jq -r -n \
+      --argjson monitors "$(mmsg get all-monitors)" \
+      --argjson clients "$(mmsg get all-clients)" \
+      '$clients.clients[] | select(
+        . as $client |
+        $monitors.monitors[] | select(.name == $client.monitor) | .active_tags as $active_tags |
+        $client.tags | any(IN($active_tags[]))
+      ) | "\\(.x),\\(.y) \\(.width)x\\(.height)"
+      ' | slurp -r | grim -g - /tmp/grim_screenshot.png
+    ;;
   "full screen")
     [[ $rofi_used == 1 ]] && sleep 0.2
     grim /tmp/grim_screenshot.png
     ;;
   "current monitor")
     [[ $rofi_used == 1 ]] && sleep 0.2
-    output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
+    output=$(mmsg get all-monitors | jq -r ".monitors[] | select(.active) | .name")
     grim -o "$output" /tmp/grim_screenshot.png
     ;;
   "selected monitor") slurp -o | grim -g - /tmp/grim_screenshot.png ;;
   "current window")
     [[ $rofi_used == 1 ]] && sleep 0.2
-    output=$(mmsg -g -o | grep "selmon 1" | cut -d' ' -f1)
-    geometry=$(mmsg -x | grep "$output" | awk '{vals[$2]=$3} END{print vals["x"]","vals["y"]" "vals["width"]"x"vals["height"]}')
-    echo $geometry
+    geometry=$(mmsg get all-monitors | jq -r '.monitors[] | select(.active) | "\(.x),\(.y) \(.width)x\(.height)"')
     grim -g "$geometry" /tmp/grim_screenshot.png
     ;;
   *) exit ;;

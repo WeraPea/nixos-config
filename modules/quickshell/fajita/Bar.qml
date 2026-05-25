@@ -60,7 +60,7 @@ Scope {
                     TrayWidget {}
                     CommandWidget {
                         text: ""
-                        command: ["mmsg", "-d", "killclient"]
+                        command: ["mmsg", "dispatch", "killclient"]
                     }
                 }
             }
