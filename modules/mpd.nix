@@ -17,6 +17,7 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [ 6600 ];
     hm.services.mpd = {
       enable = true;
       network.listenAddress = "any";
