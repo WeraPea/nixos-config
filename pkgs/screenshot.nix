@@ -84,7 +84,7 @@ writeShellScriptBin "screenshot" ''
         break
       fi
     done
-    out_path = ~/Pictures/"$name".png
+    out_path="$HOME/Pictures/$name.png"
   fi
 
   mv /tmp/grim_screenshot.png $out_path
