@@ -22,7 +22,7 @@ writeShellScriptBin "screenshot" ''
     choice="$1"
     rofi_used=0
   else
-    choice="$(printf 'selected area\nfull screen\ncurrent monitor\nselected monitor\ncurrent window' | rofi -dmenu -l 6 -i -p "Screenshot which area?")"
+    choice="$(printf 'selected area\nselected window\nfull screen\ncurrent monitor\nselected monitor\ncurrent window' | rofi -dmenu -l 6 -i -p "Screenshot which area?")"
     rofi_used=1
   fi
 
