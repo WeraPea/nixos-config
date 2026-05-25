@@ -100,6 +100,7 @@
           };
         }
       );
+      specialArgs = { inherit inputs outputs self; };
 
       isNixModule = file: file.hasExt "nix" && file.name != "flake.nix";
       importTree =
@@ -110,9 +111,7 @@
       mkNixConfig =
         host: module:
         nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs outputs;
-          };
+          inherit specialArgs;
           modules = [ module ] ++ importTree ./modules;
         };
       mkNixConfigs =
@@ -133,10 +132,12 @@
     {
       packages = foreachSystem (
         system:
-        import ./pkgs {
-          inherit inputs;
-          pkgs = pkgsBySystem.${system};
-        }
+        import ./pkgs (
+          specialArgs
+          // {
+            pkgs = pkgsBySystem.${system};
+          }
+        )
       );
       formatter = foreachSystem (system: treefmtEval.${system}.config.build.wrapper);
       nixosConfigurations = mkNixConfigs (importTree ./hosts);

@@ -62,6 +62,7 @@ in
           nh
           nix-output-monitor
           onefetch
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.flake-source
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.rename-torrents
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.yt-sub-converter
           picocom

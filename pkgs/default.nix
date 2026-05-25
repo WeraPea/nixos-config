@@ -1,4 +1,9 @@
-{ pkgs, inputs }:
+{
+  pkgs,
+  inputs,
+  self,
+  ...
+}:
 let
   inherit (pkgs) callPackage;
   inherit (inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system})
@@ -13,6 +18,7 @@ rec {
   aria2dl = callPackage ./aria2dl.nix { };
   beets-vocadb = callPackage ./beets-vocadb.nix { inherit httpx-retries; };
   browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
+  flake-source = callPackage ./flake-source.nix { inherit self; };
   httpx-retries = pkgs.python3.pkgs.callPackage ./httpx-retries.nix { };
   kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
