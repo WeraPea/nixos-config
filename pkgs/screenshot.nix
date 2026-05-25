@@ -36,7 +36,7 @@ writeShellScriptBin "screenshot" ''
         . as $client |
         $monitors.monitors[] | select(.name == $client.monitor) | .active_tags as $active_tags |
         $client.tags | any(IN($active_tags[]))
-      ) | "\\(.x),\\(.y) \\(.width)x\\(.height)"
+      ) | "\(.x),\(.y) \(.width)x\(.height)"
       ' | slurp -r | grim -g - /tmp/grim_screenshot.png
     ;;
   "full screen")
