@@ -8,6 +8,8 @@ WrapperMouseArea {
     id: mouseArea
     property string screen
     acceptedButtons: Qt.LeftButton | Qt.RightButton
+    visible: Mpd.mpcAvailable
+
     TextObject {
         id: mpdText
         color: Mpd.playing ? Colors.foreground : Colors.foregroundSecondary

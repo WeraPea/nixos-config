@@ -7,9 +7,23 @@ import QtQuick
 Singleton {
     id: root
 
+    property bool mpcAvailable: false
+
+    Process {
+        id: whichProc
+        running: true
+        command: ["which", "mpc"]
+        onExited: (exitCode, exitStatus) => {
+            root.mpcAvailable = (exitCode === 0);
+            if (root.mpcAvailable) {
+                queryProc.running = true;
+                idleProc.running = true;
+            }
+        }
+    }
+
     Process {
         id: queryProc
-        running: true
         command: ["mpc", "status", "--format", "%title%\n%artist%\n%album%"]
         stdout: StdioCollector {
             onStreamFinished: {
@@ -103,10 +117,9 @@ Singleton {
 
     Process {
         id: idleProc
-        running: true
         command: ["mpc", "idle"]
         onRunningChanged: if (!running && !idleDisconnectedTimer.running)
-            running = true
+            running = root.mpcAvailable
         stdout: StdioCollector {
             onStreamFinished: queryProc.running = true
         }
