@@ -57,6 +57,10 @@
     "/boot" = {
       device = "/dev/disk/by-uuid/F96D-2B11";
       fsType = "vfat";
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
   };
 
