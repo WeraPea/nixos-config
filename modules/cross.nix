@@ -11,7 +11,8 @@ let
   pkgsX86_64 = import inputs.nixpkgs {
     system = "x86_64-linux";
   };
-  cross = config.werapi.buildSystem == "x86_64-linux" && pkgs.stdenv.hostPlatform.system != "x86_64-linux";
+  cross =
+    config.werapi.buildSystem == "x86_64-linux" && pkgs.stdenv.hostPlatform.system != "x86_64-linux";
   manPackage =
     if cross then
       pkgs.symlinkJoin {
@@ -40,5 +41,6 @@ in
   config = lib.mkIf cfg.enable {
     hm.programs.man.package = manPackage;
     documentation.man.man-db.package = manPackage;
+    documentation.man.cache.generateAtRuntime = !cross;
   };
 }
