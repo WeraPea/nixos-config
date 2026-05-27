@@ -33,7 +33,9 @@ in
     hm.services.mpdris2 = {
       enable = true;
     };
-    sops.secrets.listenbrainz_token = { };
+    sops.secrets.listenbrainz_token = {
+      owner = config.werapi.username;
+    };
     hm.services.mpdscribble = {
       enable = true;
       endpoints.listenbrainz = {
