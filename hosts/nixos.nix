@@ -54,6 +54,7 @@
     (blender.withPackages (p: [ p.py-slvs ]))
     freecad
     inkscape
+    mokuro
   ];
 
   hm = {
