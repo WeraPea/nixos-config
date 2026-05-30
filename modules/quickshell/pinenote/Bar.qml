@@ -40,7 +40,7 @@ Scope {
                     spacing: 5
                     CommandWidget {
                         text: "󰚪"
-                        command: ["rotate-screen", "switch", bar.screen.name] // TODO:
+                        command: ["rotate-screen", "auto", bar.screen.name]
                     }
                     CommandWidget {
                         text: ""
