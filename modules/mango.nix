@@ -40,9 +40,12 @@ let
         commands: targetMode: binds:
         builtins.concatLists (
           lib.mapAttrsToList (
-            bindType: binding:
-            (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList commands))
-            ++ [ "${bindType}=${binding},setkeymode,${targetMode}" ]
+            bindType: bindings:
+            (builtins.concatMap (
+              binding:
+              (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList commands))
+              ++ [ "${bindType}=${binding},setkeymode,${targetMode}" ]
+            ) (lib.toList bindings))
           ) binds
         );
       emitBinds =
@@ -135,16 +138,21 @@ let
     ) binds;
   convertBindModes =
     modes: recSubmodeOf:
-    lib.foldl' lib.recursiveUpdate { } (
-      lib.mapAttrsToList (
-        name: mode:
-        lib.concatMapAttrs (type: key: {
-          ${type}."${key}" = mode // {
+    let
+      enterBindToNormalBind =
+        name: mode: type: key:
+        let
+          key' = if builtins.isList key then lib.head key else key;
+        in
+        {
+          ${type}."${key'}" = mode // {
             inherit name recSubmodeOf;
           };
-        }) (mode.enter or { })
-      ) modes
-    );
+        };
+      enterBindsToNormalBinds =
+        name: mode: lib.concatMapAttrs (enterBindToNormalBind name mode) (mode.enter or { });
+    in
+    lib.foldl' lib.recursiveUpdate { } (lib.mapAttrsToList enterBindsToNormalBinds modes);
   mkClipboardMode =
     {
       enter,
@@ -216,6 +224,10 @@ let
     qocr ipc call ocr trigger_popup $xy $output
   '';
   qocr-trigger-popup = "spawn,${qocr-trigger-popup-script}";
+  force-kill = pkgs.writeShellScript "force-kill" ''
+    export PATH="${lib.makeBinPath [ pkgs.jq ]}:$PATH"
+    kill -9 $(mmsg get client $(mmsg get all-monitors | jq '.monitors[] | select(.active) | .active_client.id') | jq '.pid')
+  '';
   bindModes = {
     default.binds = {
       bind =
@@ -468,10 +480,16 @@ let
         // binds;
       };
     kill = {
-      enter.bind = "SUPER,q";
+      enter.bind = [
+        "SUPER,q"
+        "SUPER+CTRL,q"
+        "SUPER+SHIFT,q"
+      ];
       returnByDefault = true;
       binds.bind = {
-        "SUPER,q" = "killclient,";
+        "SUPER,q" = "killclient";
+        "SUPER+CTRL,q" = "spawn,${force-kill}";
+        "SUPER+SHIFT,q" = "spawn,${force-kill}";
       };
     };
   };
