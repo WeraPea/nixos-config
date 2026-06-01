@@ -565,6 +565,7 @@ in
           repeat_rate = 100;
           repeat_delay = 300;
           xkb_rules_layout = "pl";
+          middle_button_emulation = 1;
 
           new_is_master = 0;
           default_mfact = 0.5;
