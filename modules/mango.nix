@@ -240,7 +240,7 @@ let
               ]
             ))
             (lib.nameValuePair "SUPER+SHIFT,${w}" (
-              lib.optional (cfg.mainDisplay != null) "focusmon,${cfg.mainDisplay}"
+              lib.optional (cfg.mainDisplay != null) "tagmon,${cfg.mainDisplay}"
               ++ [
                 "tag,${w}"
               ]
