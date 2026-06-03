@@ -87,10 +87,7 @@ in
 
       services = {
         cliphist.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
-        wl-clip-persist = {
-          enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
-          clipboardType = "both";
-        };
+        wl-clip-persist.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
       };
     };
   };
