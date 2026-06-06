@@ -589,7 +589,6 @@ in
           zoom_max = 20;
 
           windowrule = "title:Chatterino - Overlay,isoverlay:1";
-          tagrule = map (id: "id:${toString id},layout_name:${cfg.defaultLayout}") (lib.range 1 9);
           env = [
             "QT_QPA_PLATFORM,wayland"
             "MOZ_ENABLE_WAYLAND,1"
@@ -603,11 +602,19 @@ in
 
           exec-once = [
             # script needed due to 256 char limit
-            "${pkgs.writeScript "update-dbus-env-mango" ''
+            (pkgs.writeShellScript "update-dbus-env-mango" ''
               ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd NIXOS_OZONE_WL XCURSOR_THEME XCURSOR_SIZE PATH SDL_VIDEODRIVER WINDOW_MANAGER GDK_BACKEND OZONE_PLATFORM ELECTRON_OZONE_PLATFORM_HINT MOZ_ENABLE_WAYLAND QT_QPA_PLATFORM
-            ''}"
+            '')
             "systemctl --user reset-failed"
             "systemctl --user restart mango-session.target"
+
+            (pkgs.writeShellScript "set-tagrules" (
+              builtins.concatStringsSep "\n" (
+                map (id: "mmsg dispatch setoption,tagrule,id:${toString id},layout_name:${cfg.defaultLayout}") (
+                  lib.range 1 9
+                )
+              )
+            ))
           ]
           ++ lib.optional config.werapi.wvkbd.enable "sleep 5; systemctl --user restart fcitx5-daemon";
         };
