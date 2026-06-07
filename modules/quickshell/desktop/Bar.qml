@@ -47,6 +47,7 @@ Scope {
                 RowLayout {
                     Layout.alignment: Qt.AlignRight
                     spacing: 5
+                    PrusaStatusWidget {}
                     MpdWidget {
                         screen: bar.modelData.name
                     }

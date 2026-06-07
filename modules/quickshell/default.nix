@@ -17,6 +17,10 @@ let
       cp -r ${./common}/. $out/common
       substituteInPlace $out/common/BrightnessWidget.qml \
         --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
+      substituteInPlace $out/common/PrusaStatus.qml \
+        --replace-fail prusa-status ${
+          lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.prusa-status
+        };
     '';
 
   pinenote-patched = pkgs.runCommand "pinenote-patched" { } ''

@@ -31,6 +31,7 @@ rec {
   pinenote-dither-sync = callPackage ./pinenote-dither-sync.nix { };
   pinenote-screenshot = callPackage ./pinenote-screenshot.nix { };
   progressbar = callPackage ./progressbar.nix { };
+  prusa-status = callPackage ./prusa-status.nix { };
   rakuyomi = callPackage ./rakuyomi.nix { };
   rename-torrents = callPackage ./rename-torrents.nix { };
   rotate = callPackage ./rotate.nix { };
