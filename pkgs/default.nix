@@ -47,4 +47,5 @@ rec {
   yomitan-api = callPackage ./yomitan-api.nix { };
   yomitan-ultimate-audio = callPackage ./yomitan-ultimate-audio.nix { };
   yt-sub-converter = callPackage ./yt-sub-converter.nix { };
+  yuru = callPackage ./yuru.nix { };
 }

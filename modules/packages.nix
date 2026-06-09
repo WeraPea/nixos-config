@@ -67,6 +67,7 @@ in
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.flake-source
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.rename-torrents
           outputs.packages.${pkgs.stdenv.hostPlatform.system}.yt-sub-converter
+          outputs.packages.${pkgs.stdenv.hostPlatform.system}.yuru
           picocom
           progress
           python3
