@@ -22,8 +22,6 @@ python3.pkgs.buildPythonApplication {
     substituteInPlace pyproject.toml \
       --replace-fail "ruff (>=0.14.14,<0.15.0)" "ruff (>=0.14.14)" \
       --replace-fail "msgspec (>=0.19.0,<0.20.0)" "msgspec (>=0.19.0)";
-    substituteInPlace beetsplug/vocadb/mapper.py \
-      --replace-fail "track_id=None," "track_id=track_id,";
   '';
 
   build-system = [
