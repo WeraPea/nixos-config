@@ -36,12 +36,9 @@ in
     sops.secrets.listenbrainz_token = {
       owner = config.werapi.username;
     };
-    hm.services.mpdscribble = {
+    hm.services.listenbrainz-mpd = {
       enable = true;
-      endpoints.listenbrainz = {
-        passwordFile = config.sops.secrets.listenbrainz_token.path;
-        username = "werapi";
-      };
+      settings.submission.token_file = config.sops.secrets.listenbrainz_token.path;
     };
     environment.systemPackages = with pkgs; [
       mpc
