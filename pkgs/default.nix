@@ -16,12 +16,12 @@ rec {
   anki-helper = callPackage ./anki-helper.nix { inherit screenshot; };
   anki-koplugin = callPackage ./anki-koplugin.nix { };
   aria2dl = callPackage ./aria2dl.nix { };
-  beets-vocadb = callPackage ./beets-vocadb.nix { inherit httpx-retries; };
+  beets-vocadb = callPackage ./beets-vocadb.nix { inherit strip-markdown; };
   browserexport = callPackage ./browserexport.nix { inherit kompress sqlite-backup; };
   flake-source = callPackage ./flake-source.nix { inherit self; };
-  httpx-retries = pkgs.python3.pkgs.callPackage ./httpx-retries.nix { };
   kompress = pkgs.python3.pkgs.callPackage ./kompress.nix { };
   launch-osu = callPackage ./launch-osu.nix { inherit osu-scrobbler; };
+  strip-markdown = pkgs.python3.pkgs.callPackage ./strip-markdown.nix { };
   mpv-http-mitmytproxy = callPackage ./mpv-http-mitmytproxy.nix { };
   mpv-websocket = callPackage ./mpv-websocket.nix { };
   mpv-websocket-script = callPackage ./mpv-websocket-script.nix { inherit mpv-websocket; };
