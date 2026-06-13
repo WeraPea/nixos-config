@@ -378,12 +378,12 @@ let
     };
     clipboard = mkClipboardMode {
       enter.bind = "SUPER,o";
-      pasteCmd = "wl-paste";
+      pasteCmd = "wl-paste -n";
       copyCmdOther = "wl-copy -p";
     };
     primary = mkClipboardMode {
       enter.bind = "SUPER,p";
-      pasteCmd = "wl-paste -p";
+      pasteCmd = "wl-paste -np";
       copyCmdOther = "wl-copy";
     };
     run = {
