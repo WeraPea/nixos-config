@@ -87,7 +87,6 @@ in
           pwvucontrol
           tigervnc
           wayvnc
-          werapi._0x0
           werapi.browserexport
           wev
           wl-clipboard
