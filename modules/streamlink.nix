@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -25,7 +24,7 @@ in
       ];
       xdg.dataFile.streamlink-ttvlol = {
         target = "streamlink/plugins/twitch.py";
-        source = outputs.packages.${pkgs.stdenv.hostPlatform.system}.streamlink-ttvlol;
+        source = pkgs.werapi.streamlink-ttvlol;
       };
       xdg.configFile.streamlink = {
         target = "streamlink/config";

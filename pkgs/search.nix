@@ -1,8 +1,8 @@
 {
   lib,
   writeShellScriptBin,
-  nyaasi,
   rofi,
+  werapi,
   searchHistFile ? "~/.cache/search-hist",
 }:
 writeShellScriptBin "search" ''
@@ -24,7 +24,7 @@ writeShellScriptBin "search" ''
   #   "$BROWSER" "$words"
   #   ;;
   "n")
-    ${lib.getExe nyaasi} "$words"
+    ${lib.getExe werapi.nyaasi} "$words"
     ;;
   "") exit ;;
   # *)

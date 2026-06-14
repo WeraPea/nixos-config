@@ -76,7 +76,6 @@
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
-      inherit (nixpkgs.lib.fileset) toList fileFilter;
       systems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -87,6 +86,7 @@
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [ self.overlays.default ];
         }
       );
       treefmtEval = foreachSystem (
@@ -101,12 +101,25 @@
         }
       );
       specialArgs = { inherit inputs outputs self; };
+      overlay = (
+        final: prev: { werapi = prev.werapi or { } // (importPackages final) // { inherit self; }; }
+      );
 
       isNixModule = file: file.hasExt "nix" && file.name != "flake.nix";
       importTree =
         path:
         builtins.filter (p: !lib.any (lib.hasPrefix "_") (lib.splitString "/" (toString p))) (
-          toList (fileFilter isNixModule path)
+          lib.fileset.toList (lib.fileset.fileFilter isNixModule path)
+        );
+      underscorePrefix = s: if builtins.match "[0-9].*" s != null then "_${s}" else s;
+      nameFromPath = path: underscorePrefix (lib.removeSuffix ".nix" (baseNameOf path));
+      pathsToAttrs =
+        mapFunc: paths:
+        builtins.listToAttrs (
+          map (path: {
+            name = nameFromPath path;
+            value = mapFunc path;
+          }) paths
         );
       mkNixConfig =
         host: module:
@@ -114,32 +127,13 @@
           inherit specialArgs;
           modules = [ module ] ++ importTree ./modules;
         };
-      mkNixConfigs =
-        paths:
-        builtins.listToAttrs (
-          map (
-            path:
-            let
-              name = lib.removeSuffix ".nix" (baseNameOf path);
-            in
-            {
-              inherit name;
-              value = mkNixConfig name path;
-            }
-          ) paths
-        );
+      mkNixConfigs = paths: pathsToAttrs (path: mkNixConfig (nameFromPath path) path) paths;
+      importPackages = pkgs: pathsToAttrs (path: pkgs.callPackage path { }) (importTree ./pkgs);
     in
     {
-      packages = foreachSystem (
-        system:
-        import ./pkgs (
-          specialArgs
-          // {
-            pkgs = pkgsBySystem.${system};
-          }
-        )
-      );
       formatter = foreachSystem (system: treefmtEval.${system}.config.build.wrapper);
+      overlays.default = overlay;
+      packages = foreachSystem (system: importPackages pkgsBySystem.${system});
       nixosConfigurations = mkNixConfigs (importTree ./hosts);
     };
 }

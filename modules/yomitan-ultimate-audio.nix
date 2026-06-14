@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -32,9 +31,7 @@ in
       description = "Whether to enable ${moduleName}.";
       type = lib.types.bool;
     };
-    package =
-      lib.mkPackageOption outputs.packages.${pkgs.stdenv.hostPlatform.system} "yomitan-ultimate-audio"
-        { };
+    package = lib.mkPackageOption pkgs.werapi "yomitan-ultimate-audio" { };
     host = mkOption {
       type = types.str;
       default = "127.0.0.1";

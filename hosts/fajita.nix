@@ -3,7 +3,6 @@
   pkgs,
   lib,
   inputs,
-  outputs,
   config,
   ...
 }:
@@ -59,7 +58,7 @@ in
     if (config.werapi.buildSystem == "x86_64-linux") then
       pkgsX86_64.callPackage ../pkgs/udev-gothic-hs-nf.nix { }
     else
-      outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf
+      pkgs.werapi.udev-gothic-hs-nf
   );
 
   # programs.calls.enable = true;

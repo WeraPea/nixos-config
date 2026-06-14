@@ -1,12 +1,12 @@
 {
-  self,
   stdenv,
+  werapi,
   writeShellScript,
 }:
 stdenv.mkDerivation {
   pname = "flake-source";
   version = "0";
-  src = self.sourceInfo.outPath;
+  src = werapi.self.sourceInfo.outPath;
   installPhase = ''
     mkdir -p $out/flake-source
     mkdir -p $out/bin

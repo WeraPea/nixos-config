@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -23,7 +22,7 @@ in
       enable = true;
       scripts =
         with pkgs.mpvScripts;
-        with outputs.packages.${pkgs.stdenv.hostPlatform.system};
+        with pkgs.werapi;
         [
           anacreon-mpv-script
           autosubsync-mpv

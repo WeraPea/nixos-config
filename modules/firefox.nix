@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -320,9 +319,7 @@ in
           "pl"
         ];
 
-        nativeMessagingHosts = [
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.yomitan-api
-        ];
+        nativeMessagingHosts = [ pkgs.werapi.yomitan-api ];
 
         policies = {
           # https://mozilla.github.io/policy-templates/

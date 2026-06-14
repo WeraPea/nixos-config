@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -64,10 +63,6 @@ in
           nix-output-monitor
           nmap
           onefetch
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.flake-source
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.rename-torrents
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.yt-sub-converter
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.yuru
           picocom
           progress
           python3
@@ -77,6 +72,10 @@ in
           sops
           sshfs
           tldr
+          werapi.flake-source
+          werapi.rename-torrents
+          werapi.yt-sub-converter
+          werapi.yuru
           wget
           wol
           yazi
@@ -84,12 +83,12 @@ in
         ])
         (lib.mkIf cfg.graphical.enable [
           anki
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}._0x0
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.browserexport
           playerctl
           pwvucontrol
           tigervnc
           wayvnc
+          werapi._0x0
+          werapi.browserexport
           wev
           wl-clipboard
           wlr-randr
@@ -104,18 +103,18 @@ in
           mangohud
           nvtopPackages.amd
           osu-lazer-bin
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.launch-osu
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.osu-scrobbler
           prismlauncher
           protonup-qt
           rpcs3
           ryubing
           steamtinkerlaunch
+          werapi.launch-osu
+          werapi.osu-scrobbler
           winetricks
           wineWow64Packages.stable
         ])
         (lib.mkIf cfg.desktop.enable [
-          (outputs.packages.${pkgs.stdenv.hostPlatform.system}.sony-headphones-client.overrideAttrs (old: {
+          (pkgs.werapi.sony-headphones-client.overrideAttrs (old: {
             nativeBuildInputs = old.nativeBuildInputs ++ [ makeWrapper ];
             postInstall = ''
               wrapProgram $out/bin/SonyHeadphonesClient --set-default SONYHEADPHONESCLIENT_CONFIG_PATH ${hmConfig.home.homeDirectory}/.config/sony-headphones-client.toml
@@ -133,17 +132,17 @@ in
           openjdk17
           openscad
           orca-slicer
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.anki-helper
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.aria2dl
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.nyaasi
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.screenshot
-          outputs.packages.${pkgs.stdenv.hostPlatform.system}.search
           prusa-slicer
           qmk
           rofi
           scrcpy
           steam-run
           usbutils
+          werapi.anki-helper
+          werapi.aria2dl
+          werapi.nyaasi
+          werapi.screenshot
+          werapi.search
         ])
       ];
   };

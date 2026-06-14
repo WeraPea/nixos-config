@@ -2,7 +2,7 @@
   lib,
   writers,
   imagemagick,
-  screenshot,
+  werapi,
   ankiUrl ? "http://127.0.0.1:8765",
   ankiField ? "Picture",
   maxHeight ? 480,
@@ -15,7 +15,7 @@ writers.writePython3Bin "anki-helper"
       ":"
       "${lib.makeBinPath [
         imagemagick
-        screenshot
+        werapi.screenshot
       ]}"
     ];
   }

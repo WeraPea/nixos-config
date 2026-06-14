@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -34,10 +33,10 @@ in
       highPriority = true;
     };
     environment.systemPackages = [
-      outputs.packages.${pkgs.stdenv.hostPlatform.system}.vrlink
       inputs.bs-scrobbler.packages.${pkgs.stdenv.hostPlatform.system}.bs-scrobbler
       pkgs.lighthouse-steamvr
       pkgs.wayvr
+      pkgs.werapi.vrlink
       (pkgs.writeShellScriptBin "monado-steamvr-switch" ''
         if [[ ! -L $HOME/.config/openvr/openvrpaths.vrpath ]]; then
           echo "$HOME/.config/openvr/openvrpaths.vrpath is not a symbolic link"

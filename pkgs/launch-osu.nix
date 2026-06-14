@@ -1,12 +1,12 @@
 {
   writeShellApplication,
-  osu-scrobbler,
+  werapi,
   ...
 }:
 writeShellApplication {
   name = "launch-osu";
   runtimeInputs = [
-    osu-scrobbler
+    werapi.osu-scrobbler
   ];
   text = ''
     export OSU_SCROBBLER_CONFIG_PATH=$HOME/.config/osu-scrobbler/config.toml

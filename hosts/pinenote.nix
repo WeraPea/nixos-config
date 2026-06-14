@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  outputs,
   inputs,
   config,
   ...
@@ -42,16 +41,13 @@ in
     wvkbd.enable = true;
   };
 
-  environment.systemPackages =
-    with pkgs;
-    with outputs.packages.${pkgs.stdenv.hostPlatform.system};
-    [
-      brightnessctl
-      pinenote-screenshot
-      rotate
-      switch-boot-partition
-      xournalpp
-    ];
+  environment.systemPackages = with pkgs; [
+    brightnessctl
+    werapi.pinenote-screenshot
+    werapi.rotate
+    werapi.switch-boot-partition
+    xournalpp
+  ];
 
   hm = {
     home.stateVersion = "25.05";
@@ -86,7 +82,7 @@ in
       if (config.werapi.buildSystem == "x86_64-linux") then
         pkgsX86_64.callPackage ../pkgs/udev-gothic-hs-nf.nix { }
       else
-        outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf
+        pkgs.werapi.udev-gothic-hs-nf
     );
 
     cursor.name = lib.mkForce "Bibata-Modern-Ice";
@@ -132,7 +128,7 @@ in
       groups = [ "wheel" ];
       commands = [
         {
-          command = lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet;
+          command = lib.getExe pkgs.werapi.usb-tablet;
           options = [
             "SETENV"
             "NOPASSWD"

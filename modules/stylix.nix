@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -45,7 +44,7 @@ in
       };
       fonts = {
         monospace = {
-          package = outputs.packages.${pkgs.stdenv.hostPlatform.system}.udev-gothic-hs-nf;
+          package = pkgs.werapi.udev-gothic-hs-nf;
           name = "UDEV Gothic 35HSDZNFLG";
         };
         sizes = {

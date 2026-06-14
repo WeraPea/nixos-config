@@ -1,52 +1,58 @@
 {
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  typing-extensions,
-  lz4,
-  zstandard,
+  python3,
+  pythonOverrides ? { },
 }:
+python3.pkgs.callPackage (
+  {
+    lib,
+    buildPythonPackage,
+    fetchFromGitHub,
+    hatch-vcs,
+    hatchling,
+    typing-extensions,
+    lz4,
+    zstandard,
+  }:
 
-buildPythonPackage rec {
-  pname = "kompress";
-  version = "0.3.20241214";
-  pyproject = true;
+  buildPythonPackage rec {
+    pname = "kompress";
+    version = "0.3.20241214";
+    pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "karlicoss";
-    repo = "kompress";
-    rev = "v${version}";
-    hash = "sha256-9RADSAnOr8GOLv7VJUDNumpe+8Lxu3r8g1/DEiqXshA=";
-  };
+    src = fetchFromGitHub {
+      owner = "karlicoss";
+      repo = "kompress";
+      rev = "v${version}";
+      hash = "sha256-9RADSAnOr8GOLv7VJUDNumpe+8Lxu3r8g1/DEiqXshA=";
+    };
 
-  build-system = [
-    hatch-vcs
-    hatchling
-  ];
-
-  dependencies = [
-    typing-extensions
-  ];
-
-  optional-dependencies = {
-    lz4 = [
-      lz4
+    build-system = [
+      hatch-vcs
+      hatchling
     ];
-    zstd = [
-      zstandard
+
+    dependencies = [
+      typing-extensions
     ];
-  };
 
-  pythonImportsCheck = [
-    "kompress"
-  ];
+    optional-dependencies = {
+      lz4 = [
+        lz4
+      ];
+      zstd = [
+        zstandard
+      ];
+    };
 
-  meta = {
-    description = "Helper to allow accessing compressed files/directories via pathlib.Path";
-    homepage = "https://github.com/karlicoss/kompress";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
-  };
-}
+    pythonImportsCheck = [
+      "kompress"
+    ];
+
+    meta = {
+      description = "Helper to allow accessing compressed files/directories via pathlib.Path";
+      homepage = "https://github.com/karlicoss/kompress";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ ];
+    };
+  }
+) pythonOverrides

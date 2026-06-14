@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  outputs,
   ...
 }:
 let
@@ -17,6 +18,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     nixpkgs.overlays = lib.mkAfter [
+      outputs.overlays.default
       (final: prev: {
         opentabletdriver = prev.opentabletdriver.overrideAttrs (old: {
           src = final.fetchFromGitHub {

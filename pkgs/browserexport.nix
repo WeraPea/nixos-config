@@ -2,8 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  kompress,
-  sqlite-backup,
+  werapi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,9 +23,9 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     click
-    kompress
+    werapi.kompress
     logzero
-    sqlite-backup
+    werapi.sqlite-backup
     ipython
   ];
 

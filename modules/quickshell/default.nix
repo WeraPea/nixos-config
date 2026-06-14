@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -18,30 +17,22 @@ let
       substituteInPlace $out/common/BrightnessWidget.qml \
         --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
       substituteInPlace $out/common/PrusaStatus.qml \
-        --replace-fail prusa-status ${
-          lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.prusa-status
-        };
+        --replace-fail prusa-status ${lib.getExe pkgs.werapi.prusa-status};
     '';
 
   pinenote-patched = pkgs.runCommand "pinenote-patched" { } ''
     mkdir -p $out
     cp -r ${./pinenote}/* $out
     substituteInPlace $out/Bar.qml \
-      --replace-fail rotate-screen ${
-        lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.rotate
-      } \
-      --replace-fail usb-tablet ${
-        lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.usb-tablet
-      }
+      --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate} \
+      --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet}
   '';
 
   fajita-patched = pkgs.runCommand "fajita-patched" { } ''
     mkdir -p $out
     cp -r ${./fajita}/* $out
     substituteInPlace $out/Bar.qml \
-      --replace-fail rotate-screen ${
-        lib.getExe outputs.packages.${pkgs.stdenv.hostPlatform.system}.rotate
-      }
+      --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate}
   '';
 in
 {

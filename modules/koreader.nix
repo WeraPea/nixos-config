@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -20,10 +19,9 @@ in
   config = lib.mkIf cfg.enable {
     hm = {
       home.packages = [ pkgs.koreader ];
-      xdg.configFile."koreader/plugins/rakuyomi.koplugin".source =
-        outputs.packages.${pkgs.stdenv.hostPlatform.system}.rakuyomi;
+      xdg.configFile."koreader/plugins/rakuyomi.koplugin".source = pkgs.werapi.rakuyomi;
       xdg.configFile."koreader/plugins/anki.koplugin".source = (
-        outputs.packages.${pkgs.stdenv.hostPlatform.system}.anki-koplugin.override {
+        pkgs.werapi.anki-koplugin.override {
           profiles = {
             default = (
               pkgs.writeText "default.lua" # lua

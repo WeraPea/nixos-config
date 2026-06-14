@@ -2,7 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
-  strip-markdown,
+  werapi,
 }:
 python3.pkgs.buildPythonPackage {
   pname = "beets-vocadb";
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonPackage {
     mutagen
     niquests
     ruff
-    strip-markdown
+    werapi.strip-markdown
     typing-extensions
   ];
 
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonPackage {
     msgspec
     mutagen
     niquests
-    strip-markdown
+    werapi.strip-markdown
     typing-extensions
   ];
 

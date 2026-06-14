@@ -1,9 +1,16 @@
 {
   lib,
+  stdenv,
   writers,
-  pinenote-usb-tablet,
+  werapi,
   ...
 }:
+
+let
+  inherit (werapi.self.inputs.pinenote-usb-tablet.packages.${stdenv.hostPlatform.system})
+    pinenote-usb-tablet
+    ;
+in
 writers.writePython3Bin "usb-tablet"
   {
     doCheck = false;

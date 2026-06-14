@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
@@ -25,7 +24,7 @@ in
       #     pluginOverrides = {
       #       vocadb = {
       #         enable = true;
-      #         propagatedBuildInputs = [ outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb ];
+      #         propagatedBuildInputs = [ pkgs.werapi.beets-vocadb ];
       #       };
       #     };
       #   }).overrideAttrs
@@ -34,9 +33,7 @@ in
       package = (
         # workaround: for whatever reason the above decided to ignore the plugin override after an update
         pkgs.python3.pkgs.beets.overrideAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [
-            outputs.packages.${pkgs.stdenv.hostPlatform.system}.beets-vocadb
-          ];
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.werapi.beets-vocadb ];
           doInstallCheck = false;
         })
       );

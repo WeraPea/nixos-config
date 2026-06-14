@@ -1,14 +1,13 @@
 {
   config,
   lib,
-  outputs,
   pkgs,
   ...
 }:
 let
   moduleName = "pinenote-dither-sync";
   cfg = config.werapi.${moduleName};
-  pinenote-dither-sync = outputs.packages.${pkgs.stdenv.hostPlatform.system}.pinenote-dither-sync;
+  pinenote-dither-sync = pkgs.werapi.pinenote-dither-sync;
 in
 {
   options.werapi.${moduleName} = {

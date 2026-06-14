@@ -1,7 +1,7 @@
 {
   lib,
-  yt-sub-converter,
   mpvScripts,
+  werapi,
 }:
 let
   version = "2026.01.22";
@@ -139,7 +139,7 @@ mpvScripts.buildLua {
     ls -al
     pwd
     substituteInPlace youtube-srv3-subs.lua \
-      --replace-fail "YTSubConverter" "${lib.getExe yt-sub-converter}"
+      --replace-fail "YTSubConverter" "${lib.getExe werapi.yt-sub-converter}"
   '';
 
   meta = with lib; {

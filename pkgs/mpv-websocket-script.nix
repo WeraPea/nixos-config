@@ -1,8 +1,8 @@
 {
   lib,
   mpvScripts,
-  mpv-websocket,
   writeTextDir,
+  werapi,
 }:
 mpvScripts.buildLua {
   pname = "mpv-websocket-script";
@@ -11,7 +11,7 @@ mpvScripts.buildLua {
   src =
     writeTextDir "websocket-script.lua" # lua
       ''
-        local mpv_websocket_path = "${lib.getExe' mpv-websocket "mpv_websocket"}"
+        local mpv_websocket_path = "${lib.getExe' werapi.mpv-websocket "mpv_websocket"}"
         local initialised_websocket
 
         local function find_mpv_socket()
