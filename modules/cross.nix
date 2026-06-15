@@ -11,6 +11,12 @@ let
   pkgsX86_64 = import inputs.nixpkgs {
     system = "x86_64-linux";
   };
+  pkgsCross = import inputs.nixpkgs {
+    system = "x86_64-linux";
+    crossSystem = {
+      config = "aarch64-unknown-linux-gnu";
+    };
+  };
   cross =
     config.werapi.buildSystem == "x86_64-linux" && pkgs.stdenv.hostPlatform.system != "x86_64-linux";
   manPackage =
@@ -42,5 +48,22 @@ in
     hm.programs.man.package = manPackage;
     documentation.man.man-db.package = manPackage;
     documentation.man.cache.generateAtRuntime = !cross;
+    nixpkgs.overlays = lib.mkOrder 2000 [
+      # overlays.nix is 1500 from mkAfter
+      (final: prev: {
+        werapi = prev.werapi or { } // {
+          yuru =
+            if cross then
+              ((pkgsCross.callPackage ../pkgs/yuru.nix { }).overrideAttrs (old: {
+                preBuild = (old.preBuild or "") + ''
+                  export CC_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/cc
+                  export CXX_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/c++
+                '';
+              }))
+            else
+              prev.werapi.yuru;
+        };
+      })
+    ];
   };
 }
