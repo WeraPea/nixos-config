@@ -60,11 +60,19 @@ in
       speechd.enable = false;
       udev.packages = with pkgs; [
         platformio-core.udev
-        (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules" ''
-          # DFU (Internal bootloader for STM32 and AT32 MCUs)
-          SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
-          SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
-        '')
+        (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules"
+          # udev
+          ''
+            # DFU (Internal bootloader for STM32 and AT32 MCUs)
+            SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
+            SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+          ''
+        )
+        (writeTextDir "lib/udev/rules.d/99-pinenote-gadget-touch.rules" # udev
+          ''
+            SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0095", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_IGNORE_DEVICE}="0", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+          ''
+        )
       ];
       upower.enable = true;
     };
