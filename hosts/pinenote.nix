@@ -43,6 +43,7 @@ in
 
   environment.systemPackages = with pkgs; [
     brightnessctl
+    inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system}.default
     werapi.pinenote-screenshot
     werapi.rotate
     werapi.switch-boot-partition

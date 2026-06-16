@@ -855,11 +855,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1779838926,
-        "narHash": "sha256-yOYijxdcvhnZVLJ7t0eh/At+2s0CNjB1kgcJ+AOS/MA=",
+        "lastModified": 1781627645,
+        "narHash": "sha256-wkkByApZDBHArBGxYmGXWHEKvF7yZNW3EiFnv6+AQy0=",
         "owner": "WeraPea",
         "repo": "pinenote-usb-tablet",
-        "rev": "a742b8d85f9fbab8110369b135348fd91915d609",
+        "rev": "b4f68fff20cbc46239786f3bba55fb7b46d7d41f",
         "type": "github"
       },
       "original": {

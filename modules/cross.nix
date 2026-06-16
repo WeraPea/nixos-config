@@ -48,6 +48,29 @@ in
     hm.programs.man.package = manPackage;
     documentation.man.man-db.package = manPackage;
     documentation.man.cache.generateAtRuntime = !cross;
+    hm.wayland.windowManager.mango.package =
+      if cross then
+        (pkgsCross.callPackage "${inputs.mango}/nix/default.nix" {
+          cjson = pkgs.cjson;
+          libGL = pkgs.libGL;
+          libinput = pkgs.libinput;
+          libX11 = pkgs.libX11;
+          libxcb = pkgs.libxcb;
+          libxcb-wm = pkgs.libxcb-wm;
+          libxkbcommon = pkgs.libxkbcommon;
+          pcre2 = pkgs.pcre2;
+          pixman = pkgs.pixman;
+          scenefx = inputs.mango.inputs.scenefx.packages.${pkgs.stdenv.hostPlatform.system}.scenefx;
+          wayland = pkgs.wayland;
+          wayland-protocols = pkgs.wayland-protocols;
+          wlroots_0_19 = pkgs.wlroots_0_19;
+          xwayland = pkgs.xwayland;
+        }).overrideAttrs
+          (old: {
+            nativeBuildInputs = old.nativeBuildInputs ++ [ pkgsCross.autoPatchelfHook ];
+          })
+      else
+        inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.default;
     nixpkgs.overlays = lib.mkOrder 2000 [
       # overlays.nix is 1500 from mkAfter
       (final: prev: {

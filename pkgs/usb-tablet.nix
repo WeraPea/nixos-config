@@ -136,7 +136,7 @@ writers.writePython3Bin "usb-tablet"
                 Path("/sys/class/backlight/backlight_cool/brightness").write_text(str(0))
 
                 subprocess.run(["modprobe", "libcomposite"], check=False)
-                self.usb_proc = subprocess.Popen(["${lib.getExe' pinenote-usb-tablet "pinenote-usb-tablet"}"])
+                self.usb_proc = subprocess.Popen(["${lib.getExe' pinenote-usb-tablet "pinenote-usb-tablet"}", "--grab-touchscreen"])
 
                 self.monitor_charger()
 
