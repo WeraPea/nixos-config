@@ -445,7 +445,6 @@ in
                 "mapy.geoportal.gov.pl"
                 "web.archive.org"
                 "www.desmos.com"
-                "www.youtube.com"
               ];
             };
           };
