@@ -298,7 +298,14 @@ let
           "SUPER,c" = "spawn,rofi -modi clipboard:cliphist-rofi-img -show clipboard -show-icons";
           "SUPER,b" = "spawn,${lib.getExe pkgs.rofi-bluetooth}";
 
-          "SUPER,Tab" = qocr-trigger-popup;
+          "SUPER,Tab" = "focusstack,next";
+          "SUPER+SHIFT,Tab" = "focusstack,prev";
+
+          "SUPER,y" = {
+            name = "togglejumphack";
+            returnByDefault = true;
+            binds.bindr."SUPER,SUPER_L" = "togglejump";
+          };
 
           "SUPER,F10" = "spawn,ddccontrol -r 0x10 -W +5 dev:/dev/i2c-7";
           "SUPER,F9" = "spawn,ddccontrol -r 0x10 -W -5 dev:/dev/i2c-7";
@@ -556,11 +563,23 @@ in
           gappov = 0;
           borderpx = 1;
           no_border_when_single = 0;
+          tab_bar_enable = 0;
 
           rootcolor = "0x${base00}ff";
           bordercolor = "0x${base02}ff";
           focuscolor = "0x${cyan}ff";
           urgentcolor = "0x${red}ff";
+          dropcolor = "0x${base0F}50";
+          overlaycolor = "0x${base0C}ff";
+
+          text_decorate_fg_color = "0x${base06}ff";
+          text_decorate_bg_color = "0x${base00}80";
+          text_decorate_focus_fg_color = "0x${base00}00";
+          text_decorate_focus_bg_color = "0x${base06}ff";
+          text_decorate_border_color = "0x${base0F}ff";
+
+          text_decorate_border_width = 1;
+          text_decorate_corner_radius = 0;
 
           repeat_rate = 100;
           repeat_delay = 300;
