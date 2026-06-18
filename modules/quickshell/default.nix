@@ -9,31 +9,18 @@ let
   cfg = config.werapi.${moduleName};
 
   make-config =
-    base: name:
-    pkgs.runCommand name { } ''
-      mkdir -p $out/common
-      cp -r ${base}/. $out
-      cp -r ${./common}/. $out/common
+    base:
+    pkgs.runCommand "quickshell-config" { } ''
+      cp -r ${base}/. $out/
       substituteInPlace $out/common/BrightnessWidget.qml \
         --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
       substituteInPlace $out/common/PrusaStatus.qml \
         --replace-fail prusa-status ${lib.getExe pkgs.werapi.prusa-status};
+      substituteInPlace $out/PinenoteBar.qml \
+        --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet}
+      substituteInPlace $out/PinenoteBar.qml $out/FajitaBar.qml \
+        --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate}
     '';
-
-  pinenote-patched = pkgs.runCommand "pinenote-patched" { } ''
-    mkdir -p $out
-    cp -r ${./pinenote}/* $out
-    substituteInPlace $out/Bar.qml \
-      --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate} \
-      --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet}
-  '';
-
-  fajita-patched = pkgs.runCommand "fajita-patched" { } ''
-    mkdir -p $out
-    cp -r ${./fajita}/* $out
-    substituteInPlace $out/Bar.qml \
-      --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate}
-  '';
 in
 {
   options.werapi.${moduleName} = {
@@ -46,10 +33,8 @@ in
   config = lib.mkIf cfg.enable {
     hm.programs.quickshell = {
       enable = true;
-      activeConfig = lib.mkDefault "desktop";
-      configs.desktop = make-config ./desktop "desktop";
-      configs.pinenote = make-config pinenote-patched "pinenote";
-      configs.fajita = make-config fajita-patched "fajita";
+      activeConfig = "default";
+      configs.default = make-config ./shell;
       systemd.enable = true;
     };
   };

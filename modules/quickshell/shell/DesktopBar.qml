@@ -4,7 +4,7 @@ import "common"
 
 Scope {
     Variants {
-        model: Quickshell.screens
+        model: Quickshell.screens.filter(s => !(["DSI-1", "DPI-1"].includes(s.name) || s.name.startsWith("HEADLESS-")))
 
         PanelWindow {
             id: bar

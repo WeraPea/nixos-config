@@ -5,7 +5,7 @@ import "common"
 
 Scope {
     Variants {
-        model: Quickshell.screens
+        model: Quickshell.screens.filter(s => s.name == "DSI-1")
 
         PanelWindow {
             id: bar

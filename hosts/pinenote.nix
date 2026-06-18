@@ -64,7 +64,6 @@ in
       env = [ "DISPLAY,:11" ];
       exec-once = [ "${lib.getExe pkgs.xwayland-satellite} :11" ];
     };
-    programs.quickshell.activeConfig = "pinenote";
   };
 
   pinenote.config.enable = true;

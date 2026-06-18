@@ -51,7 +51,6 @@ in
     programs.zathura.enable = false;
     wayland.windowManager.mango.settings.monitorrule =
       "name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60";
-    programs.quickshell.activeConfig = "fajita";
   };
 
   stylix.fonts.monospace.package = lib.mkForce (
