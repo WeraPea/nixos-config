@@ -2,22 +2,51 @@
   config,
   lib,
   pkgs,
+  outputs,
   ...
 }:
 let
   moduleName = "quickshell";
   cfg = config.werapi.${moduleName};
 
+  brightnessctl-pinenote = lib.getExe (
+    pkgs.werapi.mkRemoteWrapper {
+      hostname = config.werapi.hostname;
+      targetHostname = "pinenote";
+      package = outputs.nixosConfigurations.pinenote.pkgs.brightnessctl;
+    }
+  );
+  busctl-pinenote = lib.getExe (
+    pkgs.werapi.mkRemoteWrapper {
+      hostname = config.werapi.hostname;
+      targetHostname = "pinenote";
+      package = outputs.nixosConfigurations.pinenote.pkgs.systemd;
+      name = "busctl";
+    }
+  );
+  pinenote-screenshot = lib.getExe (
+    pkgs.werapi.mkRemoteWrapper {
+      hostname = config.werapi.hostname;
+      targetHostname = "pinenote";
+      package = outputs.nixosConfigurations.pinenote.pkgs.werapi.pinenote-screenshot;
+    }
+  );
+
   make-config =
     base:
     pkgs.runCommand "quickshell-config" { } ''
       cp -r ${base}/. $out/
       substituteInPlace $out/common/BrightnessWidget.qml \
-        --replace-fail brightnessctl ${lib.getExe pkgs.brightnessctl};
+        --replace-fail '"brightnessctl"' '"${lib.getExe pkgs.brightnessctl}"'
       substituteInPlace $out/common/PrusaStatus.qml \
-        --replace-fail prusa-status ${lib.getExe pkgs.werapi.prusa-status};
+        --replace-fail prusa-status ${lib.getExe pkgs.werapi.prusa-status}
       substituteInPlace $out/PinenoteBar.qml \
-        --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet}
+        --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet} \
+        --replace-fail brightnessctl-pinenote ${brightnessctl-pinenote} \
+        --replace-fail busctl ${busctl-pinenote}
+      substituteInPlace $out/common/EinkWidget.qml \
+        --replace-fail busctl ${busctl-pinenote} \
+        --replace-fail pinenote-screenshot ${pinenote-screenshot}
       substituteInPlace $out/PinenoteBar.qml $out/FajitaBar.qml \
         --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate}
     '';

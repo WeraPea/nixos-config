@@ -10,13 +10,15 @@ Item {
     required property string device
     required property string icon
 
+    property string brightnessctl: "brightnessctl"
+
     property int max_brightness: 255
     property int min_brightness: 0
     property int brightness
     property int prev_brightness
 
     onBrightnessChanged: {
-        setBrightnessProc.command = ["brightnessctl", "--device", root.device, "set", root.brightness];
+        setBrightnessProc.command = [brightnessctl, "--device", root.device, "set", root.brightness];
         setBrightnessProc.running = true;
     }
 
@@ -150,7 +152,7 @@ Item {
     }
     Process {
         id: getBrightnessProc
-        command: ["brightnessctl", "--device", root.device, "get"]
+        command: [brightnessctl, "--device", root.device, "get"]
         stdout: StdioCollector {
             onStreamFinished: {
                 root.brightness = parseInt(this.text);

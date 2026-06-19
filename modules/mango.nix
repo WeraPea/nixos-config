@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  outputs,
   pkgs,
   ...
 }:
@@ -360,6 +361,17 @@ let
         "right,bottom,any,1" = "focusdir,left";
         "left,bottom,any,2" = "exchange_client,right";
         "right,bottom,any,2" = "exchange_client,left";
+
+        "down,any,any,3" = "spawn,${
+          lib.getExe (
+            pkgs.werapi.mkRemoteWrapper {
+              hostname = config.werapi.hostname;
+              targetHostname = "pinenote";
+              package = outputs.nixosConfigurations.pinenote.pkgs.systemd;
+              name = "busctl";
+            }
+          )
+        } --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh"; # TODO: remove on fajita (bind rules would be nice)
       };
     };
     common.binds.bind = {

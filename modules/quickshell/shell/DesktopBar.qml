@@ -2,67 +2,65 @@ import Quickshell
 import QtQuick.Layouts
 import "common"
 
-Scope {
-    Variants {
-        model: Quickshell.screens.filter(s => !(["DSI-1", "DPI-1"].includes(s.name) || s.name.startsWith("HEADLESS-")))
+Variants {
+    model: Quickshell.screens.filter(s => !(["fajita", "pinenote"].includes(Hostname.hostname) || s.name.startsWith("HEADLESS-")))
 
-        PanelWindow {
-            id: bar
-            property var modelData
-            screen: modelData
-            color: "transparent"
+    PanelWindow {
+        id: bar
+        property var modelData
+        screen: modelData
+        color: "transparent"
 
-            anchors {
-                top: true
-                left: true
-                right: true
-            }
+        anchors {
+            top: true
+            left: true
+            right: true
+        }
 
-            implicitHeight: 30
+        implicitHeight: 30
 
+        RowLayout {
+            anchors.fill: parent
+            spacing: 5
             RowLayout {
-                anchors.fill: parent
+                Layout.alignment: Qt.AlignLeft
                 spacing: 5
-                RowLayout {
-                    Layout.alignment: Qt.AlignLeft
-                    spacing: 5
-                    MangoTagsWidget {
-                        screen: bar.modelData.name
-                    }
-                    MangoLayoutWidget {
-                        screen: bar.modelData.name
-                    }
-                    MangoKeymodeWidget {
-                        screen: bar.modelData.name
-                        modeIndex: 1
-                    }
-                    MangoKeymodeWidget {
-                        screen: bar.modelData.name
-                    }
-                    MangoClientWidget {
-                        screen: bar.modelData.name
-                        Layout.fillWidth: true
-                    }
+                MangoTagsWidget {
+                    screen: bar.modelData.name
                 }
-                RowLayout {
-                    Layout.alignment: Qt.AlignRight
-                    spacing: 5
-                    PrusaStatusWidget {}
-                    MpdWidget {
-                        screen: bar.modelData.name
-                    }
-                    BatteryWidget {
-                        query: function (d) {
-                            return d.model == "WH-1000XM6";
-                        }
-                        prefix: "󰂱"
-                    }
-                    AudioWidget {}
-                    TimeWidget {
-                        format: "ddd MMM d hh:mm"
-                    }
-                    TrayWidget {}
+                MangoLayoutWidget {
+                    screen: bar.modelData.name
                 }
+                MangoKeymodeWidget {
+                    screen: bar.modelData.name
+                    modeIndex: 1
+                }
+                MangoKeymodeWidget {
+                    screen: bar.modelData.name
+                }
+                MangoClientWidget {
+                    screen: bar.modelData.name
+                    Layout.fillWidth: true
+                }
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignRight
+                spacing: 5
+                PrusaStatusWidget {}
+                MpdWidget {
+                    screen: bar.modelData.name
+                }
+                BatteryWidget {
+                    query: function (d) {
+                        return d.model == "WH-1000XM6";
+                    }
+                    prefix: "󰂱"
+                }
+                AudioWidget {}
+                TimeWidget {
+                    format: "ddd MMM d hh:mm"
+                }
+                TrayWidget {}
             }
         }
     }
