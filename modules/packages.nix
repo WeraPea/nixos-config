@@ -140,6 +140,7 @@ in
           werapi.anki-helper
           werapi.aria2dl
           werapi.nyaasi
+          werapi.pinenote-vnc
           werapi.screenshot
           werapi.search
         ])
