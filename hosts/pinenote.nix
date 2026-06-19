@@ -52,7 +52,6 @@ in
 
   hm = {
     home.stateVersion = "25.05";
-    stylix.targets.fish.enable = false;
     programs.zathura.enable = false;
     wayland.windowManager.mango.settings = {
       monitorrule = "name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1";

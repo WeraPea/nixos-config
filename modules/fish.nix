@@ -20,6 +20,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.fish.enable = true;
     users.users.${config.werapi.username}.shell = pkgs.fish;
+    stylix.targets.fish.enable = false;
+    hm.stylix.targets.fish.enable = false;
     hm.programs.nix-your-shell.enable = true;
     hm.home.shell.enableFishIntegration = true;
     hm.programs.fish = {
