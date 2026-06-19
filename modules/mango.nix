@@ -531,13 +531,13 @@ in
     services.greetd = {
       enable = true;
       settings = rec {
-        initial_session = {
-          command = "mango";
-          # command = "mango -d 2>&1 | tee ~/logmango";
-          # command = "~/mango -d 2>&1 | tee ~/logmango";
+        mango = {
+          command = "mango 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
+          # command = "mango -d 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
+          # command = "~/mango -d 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
           user = config.werapi.username;
         };
-        default_session = initial_session;
+        default_session = mango;
       };
     };
     hm = {
