@@ -55,6 +55,7 @@
     freecad
     inkscape
     mokuro
+    xournalpp
   ];
 
   hm = {
