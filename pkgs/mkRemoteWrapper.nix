@@ -7,16 +7,22 @@
   hostname,
   targetHostname,
   targetSsh ? targetHostname,
-  package, # the derivation that we have to assume the target machine has in store
+  package ? null, # the derivation that we have to assume the target machine has in store
+  name ?
+    if (package != null) then
+      package.meta.mainProgram or (lib.getName package)
+    else
+      lib.tail (lib.splitString "/" exe),
+  exe ? lib.getExe' package name,
 }:
-writeShellScriptBin "${package.name}-remote-wrapped" (
+writeShellScriptBin "${name}-remote-wrapped" (
   if hostname == targetHostname then # sh
     ''
-      exec "${lib.getExe package}" "$@"
+      exec "${exe}" "$@"
     '' # sh
   else
     ''
-      exe="${builtins.unsafeDiscardStringContext (lib.getExe package)}"
+      exe="${builtins.unsafeDiscardStringContext exe}"
       remote_cmd=$(printf '%q ' "$exe" "$@")
       ${lib.getExe openssh} ${targetSsh} "sh -c $(printf '%q ' "$remote_cmd")"
     ''
