@@ -6,7 +6,7 @@
 stdenv.mkDerivation {
   pname = "flake-source";
   version = "0";
-  src = werapi.self.sourceInfo.outPath;
+  src = werapi.flake.sourceInfo.outPath;
   installPhase = ''
     mkdir -p $out/flake-source
     mkdir -p $out/bin

@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (werapi.self.inputs.pinenote-usb-tablet.packages.${stdenv.hostPlatform.system})
+  inherit (werapi.flake.inputs.pinenote-usb-tablet.packages.${stdenv.hostPlatform.system})
     pinenote-usb-tablet
     ;
 in

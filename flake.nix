@@ -102,7 +102,7 @@
       );
       specialArgs = { inherit inputs outputs self; };
       overlay = (
-        final: prev: { werapi = prev.werapi or { } // (importPackages final) // { inherit self; }; }
+        final: prev: { werapi = prev.werapi or { } // (importPackages final) // { flake = self; }; }
       );
 
       isNixModule = file: file.hasExt "nix" && file.name != "flake.nix";
