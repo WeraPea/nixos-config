@@ -128,10 +128,15 @@ in
       commands = [
         {
           command = lib.getExe pkgs.werapi.usb-tablet;
-          options = [
-            "SETENV"
-            "NOPASSWD"
-          ];
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/pinenote-usb-tablet";
+          options = [ "NOPASSWD" ];
+        } # sudo rules don't work with symlinks, amazing
+        {
+          command = lib.getExe inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system}.default;
+          options = [ "NOPASSWD" ];
         }
       ];
     }
