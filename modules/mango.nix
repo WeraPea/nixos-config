@@ -558,6 +558,7 @@ in
       wayland.windowManager.mango = {
         enable = true;
         systemd.enable = false;
+        package = config.programs.mango.package;
         settings = with config.lib.stylix.colors; {
           animations = 1;
           animation_fade_in = 0;
