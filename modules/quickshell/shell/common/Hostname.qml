@@ -6,6 +6,6 @@ Process {
     running: true
     command: ["hostname"]
     stdout: StdioCollector {
-        onStreamFinished: hostname = this.text
+        onStreamFinished: hostname = this.text.trim()
     }
 }
