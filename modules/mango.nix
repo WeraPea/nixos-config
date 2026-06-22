@@ -576,7 +576,7 @@ in
           gappov = 0;
           borderpx = 1;
           no_border_when_single = 0;
-          tab_bar_enable = 0;
+          tab_bar_height = 0;
 
           rootcolor = "0x${base00}ff";
           bordercolor = "0x${base02}ff";
@@ -585,14 +585,14 @@ in
           dropcolor = "0x${base0F}50";
           overlaycolor = "0x${base0C}ff";
 
-          text_decorate_fg_color = "0x${base06}ff";
-          text_decorate_bg_color = "0x${base00}80";
-          text_decorate_focus_fg_color = "0x${base00}00";
-          text_decorate_focus_bg_color = "0x${base06}ff";
-          text_decorate_border_color = "0x${base0F}ff";
+          jump_label_decorate_fg_color = "0x${base06}ff";
+          jump_label_decorate_bg_color = "0x${base00}80";
+          jump_label_decorate_focus_fg_color = "0x${base00}00";
+          jump_label_decorate_focus_bg_color = "0x${base06}ff";
+          jump_label_decorate_border_color = "0x${base0F}ff";
 
-          text_decorate_border_width = 1;
-          text_decorate_corner_radius = 0;
+          jump_label_decorate_border_width = 1;
+          jump_label_decorate_corner_radius = 0;
 
           repeat_rate = 100;
           repeat_delay = 300;
