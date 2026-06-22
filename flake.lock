@@ -909,8 +909,7 @@
         "rycee": "rycee",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
-        "treefmt-nix": "treefmt-nix_3",
-        "wl-find-cursor": "wl-find-cursor"
+        "treefmt-nix": "treefmt-nix_3"
       }
     },
     "rycee": {
@@ -1222,22 +1221,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "wl-find-cursor": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1770094839,
-        "narHash": "sha256-IUreWEOWF1loS5SiAh8XPFrKE35Pxv6e8hhvdtNvjiU=",
-        "owner": "cjacker",
-        "repo": "wl-find-cursor",
-        "rev": "ce1a125702b466dc537c5490f7888b4a68dee883",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cjacker",
-        "repo": "wl-find-cursor",
         "type": "github"
       }
     }

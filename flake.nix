@@ -57,10 +57,6 @@
       url = "github:WeraPea/qocr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    wl-find-cursor = {
-      url = "github:cjacker/wl-find-cursor";
-      flake = false; # flake only provides x86_64-linux
-    };
     bs-scrobbler = {
       url = "github:WeraPea/bs-scrobbler";
       inputs.nixpkgs.follows = "nixpkgs";

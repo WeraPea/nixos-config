@@ -217,12 +217,15 @@ let
       mmsg dispatch setlayout,monocle
     fi;
   '';
-  wl-find-cursor' = pkgs.callPackage "${inputs.wl-find-cursor}/wl-find-cursor.nix" { };
-  wl-find-cursor = lib.getExe' wl-find-cursor' "wl-find-cursor";
   qocr-trigger-popup-script = pkgs.writeShellScript "qocr-trigger-popup" ''
-    output=$(mmsg get all-monitors | ${lib.getExe pkgs.jq} -r '.monitors[] | select(.active) | .name')
-    xy=$(${wl-find-cursor} -p)
-    qocr ipc call ocr trigger_popup $xy $output
+    ${lib.getExe pkgs.jq} -rn \
+      --argjson monitors "$(mmsg get all-monitors)" \
+      --argjson cursor "$(mmsg get cursorpos)" \
+      '$monitors.monitors[] | select(.name == $cursor.monitor) as $monitor |
+      ($cursor.x|round - $monitor.x),
+      ($cursor.y|round - $monitor.y),
+      ($cursor.monitor)' \
+      | xargs qocr ipc call ocr trigger_popup
   '';
   qocr-trigger-popup = "spawn,${qocr-trigger-popup-script}";
   force-kill = pkgs.writeShellScript "force-kill" ''
