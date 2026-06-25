@@ -124,7 +124,14 @@ in
           dragon-drop
           flatpak
           crosspipe
-          krita
+          (pkgs.symlinkJoin {
+            name = "krita-xcb";
+            paths = [ krita ];
+            nativeBuildInputs = [ makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/krita --set QT_QPA_PLATFORM xcb
+            '';
+          }) # krita crashes under wayland when using eraser with opentabletdriver
           legcord
           mecab # for anki plugin
           ntfs3g
