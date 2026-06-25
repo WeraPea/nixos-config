@@ -24,8 +24,8 @@ in
           src = final.fetchFromGitHub {
             owner = "WeraPea";
             repo = "OpenTabletDriver";
-            rev = "de99474b99985f03f6fbaa2e80f6f36409896369";
-            hash = "sha256-pn9Ju056qq3C2JUbt9KU5KUnqKhHTJMgQ4PWDOhiX6o=";
+            rev = "415b3ba87c52f8e8d0aa0ebde6065ccea0c830ee";
+            hash = "sha256-fMy08nuyXVSBvhKj2D7ozbRFIRKetPaoVrdtgUo/Ynk=";
           };
         });
 
