@@ -48,6 +48,11 @@ in
           hostname = "lavender-ts";
           port = 8022;
         };
+        "pinenote" = {
+          hostname = "pinenote";
+          controlMaster = "auto";
+          controlPersist = 1800;
+        };
       };
     };
   };
