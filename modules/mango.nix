@@ -615,6 +615,7 @@ in
           focus_cross_monitor = 1;
           view_current_to_back = 0;
           drag_corner = 4;
+          touch_cancel_threshold_touches = 3;
 
           scroller_structs = 0;
           scroller_default_proportion = 1;
