@@ -70,7 +70,12 @@ in
         )
         (writeTextDir "lib/udev/rules.d/99-pinenote-gadget-touch.rules" # udev
           ''
+            # for use with OpenTabletDriver
             SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0095", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_IGNORE_DEVICE}="0", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1", ENV{LIBINPUT_DEVICE_GROUP}="OpenTabletDriver"
+
+            # for use without OpenTabletDriver (different product id)
+            SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+            SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ENV{LIBINPUT_DEVICE_GROUP}="pinenote-gadget-touch"
           ''
         )
       ];
