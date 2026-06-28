@@ -395,7 +395,6 @@ let
         "SUPER,b" = "toggle_render_border";
         "SUPER,t" =
           "spawn_shell,glide --new-window https://renji-xd.github.io/texthooker-ui/; sleep 1; mmsg dispatch togglefloating; mmsg dispatch toggleoverlay; mmsg dispatch togglefakefullscreen; mmsg dispatch resizewin,540,820; mmsg dispatch movewin,3842,0";
-        "SUPER,d" = "toggle_dither";
       };
     };
     clipboard = mkClipboardMode {

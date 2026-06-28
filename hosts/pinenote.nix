@@ -36,7 +36,6 @@ in
         "spawn,busctl --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh";
     };
     mpv.enable = false;
-    pinenote-dither-sync.enable = true;
     quickshell.enable = true;
     wvkbd.enable = true;
   };
@@ -57,7 +56,6 @@ in
       monitorrule = "name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1";
 
       animations = lib.mkForce 0;
-      dither = 1;
       tablet_map_to_mon = "name:DPI-1";
 
       env = [ "DISPLAY,:11" ];
