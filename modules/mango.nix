@@ -27,6 +27,7 @@ let
       recSubmodeOf ? null, # allows for "recursive" submodes, limited by mango's 27 character keymode name limit though
       rsi ? 0,
       recEnterIsReturnReturnToPass ? "default",
+      cloneKeymodes ? [ ],
       ...
     }@args:
     let
@@ -36,7 +37,39 @@ let
         else
           false;
       name = if (lib.isString recSubmodeOf) then "${recSubmodeOf}-${args.name}" else args.name;
+      argsWithDefaults = {
+        inherit
+          name
+          returnByDefault
+          returnTo
+          outerKeymode
+          rsi
+          recEnterIsReturn
+          ;
+      }
+      // args;
       baseMode = mode: lib.last (lib.splitString "-" mode);
+      mkBind =
+        bindType: binding: command:
+        let
+          command' =
+            builtins.replaceStrings # _
+              (lib.mapAttrsToList (name: value: "%${name}%") argsWithDefaults)
+              (lib.mapAttrsToList (name: value: toString value) argsWithDefaults)
+              command;
+          command'' =
+            if (lib.hasPrefix "spawn" command' && builtins.stringLength "${binding},${command'}" > 255) then
+              let
+                split-com = lib.splitString "," command';
+              in
+              "${builtins.head split-com},${pkgs.writeShellScript "mango-bind-too-long" (builtins.concatStringsSep "," (builtins.tail split-com))}"
+            else
+              command';
+        in
+        assert lib.assertMsg (
+          builtins.stringLength "${binding},${command''}" <= 255
+        ) "mango '${bindType}=${binding},${command''}' binding too long (>255 after '=')";
+        "${bindType}=${binding},${command''}";
       emitTransition =
         commands: targetMode: binds:
         builtins.concatLists (
@@ -44,7 +77,7 @@ let
             bindType: bindings:
             (builtins.concatMap (
               binding:
-              (builtins.concatMap (com: [ "${bindType}=${binding},${com}" ]) (lib.toList commands))
+              (builtins.concatMap (com: [ (mkBind bindType binding com) ]) (lib.toList commands))
               ++ [ "${bindType}=${binding},setkeymode,${targetMode}" ]
             ) (lib.toList bindings))
           ) binds
@@ -101,10 +134,10 @@ let
                       }
                     )
                 else
-                  [ "${bindType}=${bind},${com}" ];
+                  [ (mkBind bindType bind com) ];
             in
             lib.optionals shouldReturn (
-              builtins.concatMap (com: [ "${bindType}=${bind},${com}" ]) (lib.toList onReturnPre)
+              builtins.concatMap (com: [ (mkBind bindType bind com) ]) (lib.toList onReturnPre)
             )
             ++ (builtins.concatMap emitBind commands)
             ++ lib.optionals shouldReturn (emitTransition onReturn returnTo { ${bindType} = bind; })
@@ -124,7 +157,10 @@ let
       ++ [
         "keymode=${outerKeymode}"
         ""
-      ];
+      ]
+      ++ (builtins.concatLists (
+        map (keymode: parseBindMode (args // { cloneKeymodes = [ ]; } // keymode)) cloneKeymodes
+      ));
   parseBindModes =
     bindModes:
     builtins.concatStringsSep "\n" (
@@ -232,6 +268,82 @@ let
     export PATH="${lib.makeBinPath [ pkgs.jq ]}:$PATH"
     kill -9 $(mmsg get client $(mmsg get all-monitors | jq '.monitors[] | select(.active) | .active_client.id') | jq '.pid')
   '';
+  long-press-helper = pkgs.writeShellScript "mango-long-press-keybind-helper" ''
+    export PATH="${lib.makeBinPath [ pkgs.jq ]}:$PATH"
+    time=$1
+    keymode_name=$2
+    outer_keymode_name=$3
+    returnTo=$4
+    command=$5
+    tmp1=$(mktemp -u)
+    mkfifo "$tmp1"
+
+    timeout $time mmsg watch keymode > "$tmp1" &
+    mmsg_pid1=$!
+
+    jq -r --unbuffered '.keymode' < "$tmp1" | while read -r keymode; do
+      if [ "$keymode" != "$keymode_name" ]; then
+        kill "$mmsg_pid1"
+        rm "$tmp1"
+        kill $$
+        break
+      fi
+    done &
+    sleep $time
+    mmsg dispatch "$command"
+
+    tmp2=$(mktemp -u)
+    mkfifo "$tmp2"
+
+    mmsg watch keymode > "$tmp2" &
+    mmsg_pid2=$!
+
+    jq -r --unbuffered '.keymode' < "$tmp2" | while read -r keymode; do
+      if [ "$keymode" = "$outer_keymode_name" ]; then
+        (sleep 1 && mmsg dispatch setkeymode,$returnTo) &
+        timer_pid=$!
+      else
+        if [ -n "$timer_pid" ]; then
+          kill "$timer_pid" 2>/dev/null
+          kill "$mmsg_pid2"
+          rm "$tmp2"
+          break
+        fi
+      fi
+    done &
+
+    mmsg dispatch setkeymode,$outer_keymode_name
+
+    wait
+  '';
+  mkLongPressBind =
+    {
+      name,
+      longCommand,
+      shortCommand,
+      time ? 1,
+      bind,
+    }:
+    {
+      inherit name;
+      returnByDefault = true;
+      onEntry = "spawn_shell,${long-press-helper} ${toString time} %name% %name%1 %returnTo% ${lib.escapeShellArg longCommand}";
+      binds.bindr.${bind} = shortCommand;
+      cloneKeymodes = [
+        {
+          name = name + "1";
+          enter = { };
+          return = { };
+          returnByDefault = false;
+          binds.bind.${bind} = {
+            name = name + "2";
+            returnByDefault = false;
+            onEntry = "spawn_shell,${long-press-helper} ${toString time} %name% %outerKeymode% %returnTo% ${lib.escapeShellArg longCommand}";
+            binds.bindr.${bind} = "setkeymode,%returnTo%";
+          };
+        }
+      ];
+    };
   bindModes = {
     default.binds = {
       bind =
@@ -291,6 +403,19 @@ let
           "NONE,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1";
           "SHIFT,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost";
           "SHIFT,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost";
+
+          # "NONE,XF86AudioLowerVolume" = mkLongPressBind {
+          #   name = "voldown";
+          #   bind = "NONE,XF86AudioLowerVolume";
+          #   shortCommand = "spawn,${lib.getExe pkgs.pamixer} -d 1";
+          #   longCommand = "spawn,mpc prev";
+          # };
+          # "NONE,XF86AudioRaiseVolume" = mkLongPressBind {
+          #   name = "volup";
+          #   bind = "NONE,XF86AudioRaiseVolume";
+          #   shortCommand = "spawn,${lib.getExe pkgs.pamixer} -i 1";
+          #   longCommand = "spawn,mpc next";
+          # };
 
           "SUPER,z" = "spawn,makoctl dismiss";
           "SUPER+CTRL,z" = "spawn,makoctl restore";
