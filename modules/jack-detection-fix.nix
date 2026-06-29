@@ -1,15 +1,12 @@
-{
-  inputs,
-  ...
-}:
 let
-  moduleName = "qocr";
+  moduleName = "jack-detection-fix";
 in
 {
   flake.modules.${moduleName}.nixos =
     {
       config,
       lib,
+      pkgs,
       ...
     }:
     let
@@ -24,13 +21,12 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        home-manager.sharedModules = [
-          inputs.qocr.homeModules.qocr
+        hardware.firmware = [
+          (pkgs.writeTextDir "/lib/firmware/hda-jack-retask.fw" (builtins.readFile ./hda-jack-retask.fw))
         ];
-        hm.services.qocr = {
-          enable = true;
-          settings.yomitan.fetchAudio = true;
-        };
+        boot.extraModprobeConfig = ''
+          options snd-hda-intel patch=hda-jack-retask.fw
+        '';
       };
     };
 }
