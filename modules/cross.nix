@@ -1,4 +1,5 @@
 {
+  flake,
   inputs,
   ...
 }:
@@ -88,7 +89,7 @@ in
             werapi = prev.werapi or { } // {
               yuru =
                 if cross then
-                  ((pkgsCross.callPackage ../pkgs/yuru.nix { }).overrideAttrs (old: {
+                  ((pkgsCross.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs (old: {
                     preBuild = (old.preBuild or "") + ''
                       export CC_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/cc
                       export CXX_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/c++
