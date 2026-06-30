@@ -38,6 +38,7 @@ in
           minimal.enable = true;
         };
         koreader.enable = true;
+        mpd.enable = true;
         mpv.enable = false;
         quickshell.enable = true;
         wvkbd.enable = true;
@@ -51,7 +52,42 @@ in
         {
           mainDisplay = "DSI-1";
           defaultLayout = "scroller";
-          bindModes.default.binds.bind."NONE,XF86PowerOff" = "toggle_monitor,DSI-1";
+          bindModes.power = mango-lib.mkLongPressBind {
+            name = "power";
+            bind = "NONE,XF86PowerOff";
+            enter.bind = "NONE,XF86PowerOff";
+            longCommand = "spawn,"; # TODO: power menu
+            shortCommand = {
+              name = "lock";
+              onEntry = "disable_monitor,DSI-1"; # watcher for mon turning on in other ways?
+              binds.bind = {
+                "NONE,XF86PowerOff" = mango-lib.mkLongPressBind {
+                  recSubmodeOf = "lock";
+                  name = "voldown";
+                  bind = "NONE,XF86PowerOff";
+                  shortCommand = [
+                    "enable_monitor,DSI-1"
+                    "setkeymode,default"
+                  ];
+                  longCommand = "spawn,mpc --host nixos toggle";
+                };
+                "NONE,XF86AudioLowerVolume" = mango-lib.mkLongPressBind {
+                  recSubmodeOf = "lock";
+                  name = "voldown";
+                  bind = "NONE,XF86AudioLowerVolume";
+                  shortCommand = "spawn,${lib.getExe pkgs.pamixer} -d 1";
+                  longCommand = "spawn,mpc --host nixos prev";
+                };
+                "NONE,XF86AudioRaiseVolume" = mango-lib.mkLongPressBind {
+                  recSubmodeOf = "lock";
+                  name = "volup";
+                  bind = "NONE,XF86AudioRaiseVolume";
+                  shortCommand = "spawn,${lib.getExe pkgs.pamixer} -i 1";
+                  longCommand = "spawn,mpc --host nixos next";
+                };
+              };
+            };
+          };
           settings.monitorrule = "name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60";
         };
 

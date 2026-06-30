@@ -369,21 +369,24 @@
               shortCommand,
               time ? 1,
               bind,
-            }:
-            {
+              ...
+            }@args:
+            lib.recursiveUpdate args {
               inherit name;
-              returnByDefault = true;
-              onEntry = "spawn_shell,${mango-lib.long-press-helper} ${toString time} %name% %name%1 %returnTo% ${lib.escapeShellArg longCommand}";
-              binds.bindr.${bind} = shortCommand;
+              onEntry = [
+                "spawn_shell,${mango-lib.long-press-helper} ${toString time} %name% %name%1 %returnTo% ${lib.escapeShellArg longCommand}"
+              ];
+              binds.bindr.${bind} = {
+                return = true;
+                command = shortCommand;
+              };
               cloneKeymodes = [
                 {
                   name = name + "1";
                   enter = { };
                   return = { };
-                  returnByDefault = false;
                   binds.bind.${bind} = {
                     name = name + "2";
-                    returnByDefault = false;
                     onEntry = "spawn_shell,${mango-lib.long-press-helper} ${toString time} %name% %outerKeymode% %returnTo% ${lib.escapeShellArg longCommand}";
                     binds.bindr.${bind} = "setkeymode,%returnTo%";
                   };
