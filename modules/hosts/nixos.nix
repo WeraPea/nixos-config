@@ -20,36 +20,7 @@ in
         hostname = "nixos";
         defaultModules.enable = true;
         gaming.enable = true;
-
         beets.enable = true;
-        mango = {
-          mainDisplay = "DP-2";
-          bindModes.default.binds.bind =
-            (builtins.listToAttrs (
-              builtins.concatMap (w: [
-                (lib.nameValuePair "SUPER,F${w}" [
-                  "focusmon,HDMI-A-1"
-                  "view,${w}"
-                ])
-                (lib.nameValuePair "SUPER+SHIFT,F${w}" [
-                  "tagmon,HDMI-A-1"
-                  "tag,${w}"
-                ])
-              ]) (map toString (lib.range 1 5))
-            ))
-            // (builtins.listToAttrs (
-              builtins.concatMap (w: [
-                (lib.nameValuePair "SUPER,${toString (lib.mod (w + 5) 10)}" [
-                  "focusmon,HDMI-A-2"
-                  "view,${toString w}"
-                ])
-                (lib.nameValuePair "SUPER+SHIFT,${toString (lib.mod (w + 5) 10)}" [
-                  "tagmon,HDMI-A-2"
-                  "tag,${toString w}"
-                ])
-              ]) (lib.range 1 5)
-            ));
-        };
         mpd.enable = true;
         packages = {
           desktop.enable = true;
@@ -69,9 +40,34 @@ in
         xournalpp
       ];
 
-      hm = {
-        home.stateVersion = "23.11";
-        wayland.windowManager.mango.settings = {
+      wrappers.mango = {
+        mainDisplay = "DP-2";
+        bindModes.default.binds.bind =
+          (builtins.listToAttrs (
+            builtins.concatMap (w: [
+              (lib.nameValuePair "SUPER,F${w}" [
+                "focusmon,HDMI-A-1"
+                "view,${w}"
+              ])
+              (lib.nameValuePair "SUPER+SHIFT,F${w}" [
+                "tagmon,HDMI-A-1"
+                "tag,${w}"
+              ])
+            ]) (map toString (lib.range 1 5))
+          ))
+          // (builtins.listToAttrs (
+            builtins.concatMap (w: [
+              (lib.nameValuePair "SUPER,${toString (lib.mod (w + 5) 10)}" [
+                "focusmon,HDMI-A-2"
+                "view,${toString w}"
+              ])
+              (lib.nameValuePair "SUPER+SHIFT,${toString (lib.mod (w + 5) 10)}" [
+                "tagmon,HDMI-A-2"
+                "tag,${toString w}"
+              ])
+            ]) (lib.range 1 5)
+          ));
+        settings = {
           syncobj_enable = 1;
           monitorrule =
             with rec {
@@ -104,6 +100,7 @@ in
 
       services.ddccontrol.enable = true;
 
+      hm.home.stateVersion = "23.11";
       system.stateVersion = "23.11";
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 

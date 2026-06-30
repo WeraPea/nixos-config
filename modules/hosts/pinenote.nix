@@ -40,15 +40,22 @@ in
           theme.dark.enable = false;
         };
         koreader.enable = true;
-        mango = {
-          mainDisplay = "DPI-1";
-          defaultLayout = "scroller";
-          bindModes.default.binds.touchgesturebind."down,any,any,3" =
-            "spawn,busctl --user call org.pinenote.PineNoteCtl /org/pinenote/PineNoteCtl org.pinenote.Ebc1 GlobalRefresh";
-        };
         mpv.enable = false;
         quickshell.enable = true;
         wvkbd.enable = true;
+      };
+      wrappers.mango = {
+        mainDisplay = "DPI-1";
+        defaultLayout = "scroller";
+        settings = {
+          monitorrule = "name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1";
+
+          animations = lib.mkForce 0;
+          tablet_map_to_mon = "name:DPI-1";
+
+          env = [ "DISPLAY,:11" ];
+          exec-once = [ "${lib.getExe pkgs.xwayland-satellite} :11" ];
+        };
       };
 
       environment.systemPackages = with pkgs; [
@@ -63,15 +70,6 @@ in
       hm = {
         home.stateVersion = "25.05";
         programs.zathura.enable = false;
-        wayland.windowManager.mango.settings = {
-          monitorrule = "name:DPI-1,scale:1.5,x:0,y:0,width:1872,height:1404,refresh:84.996002,rr:1";
-
-          animations = lib.mkForce 0;
-          tablet_map_to_mon = "name:DPI-1";
-
-          env = [ "DISPLAY,:11" ];
-          exec-once = [ "${lib.getExe pkgs.xwayland-satellite} :11" ];
-        };
       };
 
       pinenote.config.enable = true;

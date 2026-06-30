@@ -21,7 +21,6 @@ in
         defaultModules.enable = true;
 
         jack-detection-fix.enable = true;
-        mango.mainDisplay = "eDP-1";
         packages.desktop.enable = true;
         quickshell.enable = true;
         streamlink.enable = true;
@@ -31,12 +30,12 @@ in
         brightnessctl
       ];
 
-      hm = {
-        home.stateVersion = "23.11";
-        wayland.windowManager.mango.settings.monitorrule =
-          "name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60";
+      wrappers.mango = {
+        mainDisplay = "eDP-1";
+        settings.monitorrule = "name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60";
       };
 
+      hm.home.stateVersion = "23.11";
       system.stateVersion = "23.11";
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 

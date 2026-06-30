@@ -38,17 +38,22 @@ in
           minimal.enable = true;
         };
         koreader.enable = true;
-        mango = {
-          mainDisplay = "DSI-1";
-          defaultLayout = "scroller";
-          bindModes.default.binds.bind = {
-            "NONE,XF86PowerOff" = ''spawn,${lib.getExe pkgs.wlopm} --toggle "*"'';
-          };
-        };
         mpv.enable = false;
         quickshell.enable = true;
         wvkbd.enable = true;
       };
+
+      wrappers.mango =
+        { config, ... }:
+        let
+          inherit (config) mango-lib;
+        in
+        {
+          mainDisplay = "DSI-1";
+          defaultLayout = "scroller";
+          bindModes.default.binds.bind."NONE,XF86PowerOff" = "toggle_monitor,DSI-1";
+          settings.monitorrule = "name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60";
+        };
 
       environment.systemPackages = with pkgs; [
         # chatty
@@ -59,8 +64,6 @@ in
       hm = {
         home.stateVersion = "25.11";
         programs.zathura.enable = false;
-        wayland.windowManager.mango.settings.monitorrule =
-          "name:DSI-1,scale:1.5,x:0,y:0,width:1080,height:2340,refresh:60";
       };
 
       stylix.fonts.monospace.package = lib.mkForce (

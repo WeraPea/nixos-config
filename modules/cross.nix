@@ -81,7 +81,7 @@ in
         hm.programs.man.package = manPackage;
         documentation.man.man-db.package = manPackage;
         documentation.man.cache.generateAtRuntime = !cross;
-        programs.mango.package = mango-pkg;
+        wrappers.mango.package = mango-pkg;
         nixpkgs.overlays = lib.mkOrder 2000 [
           # overlays.nix is 1500 from mkAfter
           (final: prev: {
