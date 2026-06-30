@@ -419,6 +419,7 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
+        systemd.packages = [ config.programs.mango.package ];
         wrappers.mango.nixos-config = config;
         programs.mango.enable = true;
         programs.mango.package = config.wrappers.mango.wrapper;
@@ -443,8 +444,14 @@ in
               Description = "mango compositor session";
               Documentation = [ "man:systemd.special(7)" ];
               BindsTo = [ "graphical-session.target" ];
-              Wants = [ "graphical-session-pre.target" ];
-              After = [ "graphical-session-pre.target" ];
+              Wants = [
+                "graphical-session-pre.target"
+                "mango-reload.service"
+              ];
+              After = [
+                "graphical-session-pre.target"
+                "mango-reload.service"
+              ];
             };
           };
         };

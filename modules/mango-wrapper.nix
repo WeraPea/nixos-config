@@ -33,6 +33,24 @@
         };
       };
       config = {
+        # modified from niri module (mango does not provide a unit file so you need to start this service yourself)
+        buildCommand.mangoReloadConfig = {
+          after = [ "symlinkScript" ];
+          data = ''
+            mkdir -p ${placeholder config.outputName}/lib/systemd/user/;
+            cat > ${placeholder config.outputName}/lib/systemd/user/mango-reload.service<<EOF
+            [Unit]
+            X-Reload-Triggers=${config.constructFiles.generatedConfig.path}
+
+            [Service]
+            Type=oneshot
+            RemainAfterExit=yes
+            ExecStart=${lib.getExe' pkgs.coreutils "true"}
+            ExecReload=${lib.getExe' config.package "mmsg"} dispatch load_config_file,${config.constructFiles.generatedConfig.path}
+            X-ReloadIfChanged=true
+            EOF
+          '';
+        };
         extraConfig = mango-lib.parseBindModes config.bindModes;
         mango-lib = {
           parseBindMode =
