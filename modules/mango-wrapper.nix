@@ -79,17 +79,20 @@
                 else
                   false;
               name = if (lib.isString recSubmodeOf) then "${recSubmodeOf}-${args.name}" else args.name;
-              argsWithDefaults = {
+              argsWithDefaults = args // {
                 inherit
                   name
                   returnByDefault
+                  onEntry
+                  onReturnPre
                   returnTo
                   outerKeymode
+                  recSubmodeOf
                   rsi
+                  rsiLimit
                   recEnterIsReturn
                   ;
-              }
-              // args;
+              };
               baseMode = mode: lib.last (lib.splitString "-" mode);
               mkBind =
                 bindType: binding: command:
@@ -170,6 +173,7 @@
                                 inherit
                                   recSubmodeOf
                                   rsi
+                                  rsiLimit
                                   recEnterIsReturn
                                   recEnterIsReturnReturnToPass
                                   ;
