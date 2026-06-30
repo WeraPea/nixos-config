@@ -2,6 +2,7 @@ keys:
   - &server age122e9efnu4efm330rwzlj07ywcv0vv6yffuvjq83dxh839txx9u6qwtvsyr
   - &nixos age1yvrhvv6ymd3pvmnsls7c9xtfktwads787tge9sflrampu40uhd0qnpmdae
   - &nixos-laptop age1kn8y4ddsz90f8rvlv6j8qzpa3ec0dyrzqydaprpckztnukdjl5esgmacae
+  - &fajita age1867225sftwy7uwsa9aejfrj39t7mxcyjaca2lglf5c6wsrqmefrs3ltgks
 creation_rules:
   - path_regex: /etc/sops/[^/]+\.(yaml|json|env|ini)$
     key_groups:
@@ -9,3 +10,4 @@ creation_rules:
       - *server
       - *nixos
       - *nixos-laptop
+      - *fajita
