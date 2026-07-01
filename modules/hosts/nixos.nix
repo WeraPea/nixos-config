@@ -21,7 +21,10 @@ in
         defaultModules.enable = true;
         gaming.enable = true;
         beets.enable = true;
-        mpd.enable = true;
+        mpd = {
+          enable = true;
+          server = true;
+        };
         packages = {
           desktop.enable = true;
           gaming.enable = true;
