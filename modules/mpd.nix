@@ -91,9 +91,6 @@ in
                   type "pipewire"
                   name "PipeWire Sound Server"
                 }
-                input_cache {
-                  size "100 MB"
-                }
                 database {
                   plugin  "proxy"
                   host    "${cfg.serverHostname}"
