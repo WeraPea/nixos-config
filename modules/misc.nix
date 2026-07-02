@@ -82,6 +82,11 @@ in
                 SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ENV{LIBINPUT_DEVICE_GROUP}="pinenote-gadget-touch"
               ''
             )
+            (writeTextDir "lib/udev/rules.d/99-arduino-rgbs.rules" # udev
+              ''
+                SUBSYSTEM=="tty", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0043", ATTRS{serial}=="9563533303135111E131", SYMLINK+="ttyRGBs", RUN+="${pkgs.coreutils}/bin/stty -F /dev/%k -hupcl"
+              ''
+            )
           ];
           upower.enable = true;
         };
