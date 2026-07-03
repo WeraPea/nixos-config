@@ -26,6 +26,7 @@ in
         caddy.enable = true;
         linkwarden.enable = true;
         vaultwarden.enable = true;
+        webdav.enable = true;
         yomitan-ultimate-audio.enable = true;
       };
 
