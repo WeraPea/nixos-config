@@ -59,13 +59,18 @@ in
             longCommand = "spawn,"; # TODO: power menu
             shortCommand = {
               name = "lock";
-              onEntry = "disable_monitor,DSI-1"; # watcher for mon turning on in other ways?
+              onEntry = [
+                "disable_monitor,DSI-1"
+                "disable_touchscreen"
+                # watcher for mon turning on in other ways?
+              ];
               binds.bind = {
                 "NONE,XF86PowerOff" = mango-lib.mkLongPressBind {
                   recSubmodeOf = "lock";
                   name = "voldown";
                   bind = "NONE,XF86PowerOff";
                   shortCommand = [
+                    "enable_touchscreen"
                     "enable_monitor,DSI-1"
                     "setkeymode,default"
                   ];

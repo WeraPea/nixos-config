@@ -552,11 +552,11 @@
         "scenefx": "scenefx"
       },
       "locked": {
-        "lastModified": 1782850205,
-        "narHash": "sha256-w/0BIp0EN3IQNX6MqelA0RQ/osEcXu4lmfVVInAG05U=",
+        "lastModified": 1783116786,
+        "narHash": "sha256-C01+si5w+dVOW1/RvsgzJ6sYqdkwuqxR2v5+ZvmumvE=",
         "owner": "WeraPea",
         "repo": "mangowc",
-        "rev": "29b34437079dd351f77b8c25f074722c31cb28eb",
+        "rev": "3cab6bb77170950fcb0b2cbfe795211fefe6a3c0",
         "type": "github"
       },
       "original": {
