@@ -37,18 +37,13 @@ in
           20048
           111
         ];
-        fileSystems."/mpd/musicDirectory" = lib.mkIf cfg.server {
+        fileSystems."/mpd/music" = lib.mkIf cfg.server {
           device = "/mnt/mnt3/music";
           fsType = "none";
           options = [ "bind" ];
         };
-        fileSystems."/mpd/playlistDirectory" = lib.mkIf cfg.server {
-          device = "/mnt/mnt3/music/playlists";
-          fsType = "none";
-          options = [ "bind" ];
-        };
-        fileSystems."/mnt/mpd-playlists" = lib.mkIf (!cfg.server) {
-          device = "${cfg.serverHostname}:/mpd/playlistDirectory";
+        fileSystems."/mpd" = lib.mkIf (!cfg.server) {
+          device = "${cfg.serverHostname}:/mpd/";
           fsType = "nfs";
           options = [
             "ro"
@@ -56,7 +51,7 @@ in
             "x-systemd.automount"
             "noauto"
           ];
-        }; # TODO: fix nfs on fajita
+        };
 
         services.nfs.server = lib.mkIf cfg.server {
           enable = true;
@@ -68,39 +63,20 @@ in
         hm.services.mpd = {
           enable = true;
           network.listenAddress = "any";
-          musicDirectory =
-            if cfg.server then "/mnt/mnt3/music/" else "nfs://${cfg.serverHostname}/mpd/musicDirectory";
-          playlistDirectory = if cfg.server then "/mnt/mnt3/music/playlists/" else "/mnt/mpd-playlists";
-          dbFile = null;
-          extraConfig =
-            if cfg.server then
-              ''
-                audio_output {
-                  type "pipewire"
-                  name "PipeWire Sound Server"
-                }
-                database {
-                  plugin           "simple"
-                  path             "/home/${config.werapi.username}/.local/share/mpd/mpd.db"
-                  cache_directory  "/home/${config.werapi.username}/.local/share/mpd/cache"
-                }
-              ''
-            else
-              ''
-                audio_output {
-                  type "pipewire"
-                  name "PipeWire Sound Server"
-                }
-                database {
-                  plugin  "proxy"
-                  host    "${cfg.serverHostname}"
-                  port    "6600"
-                }
-              '';
+          musicDirectory = if cfg.server then "/mpd/music" else "/home/${config.werapi.username}/music";
+          playlistDirectory =
+            if cfg.server then "/mpd/music/playlists" else "/home/${config.werapi.username}/music/playlists";
+          extraConfig = ''
+            audio_output {
+              type "pipewire"
+              name "PipeWire Sound Server"
+            }
+            save_absolute_paths_in_playlists "yes"
+          '';
         };
-        # hm.services.mpdris2 = {
-        #   enable = true;
-        # };
+        hm.services.mpdris2 = {
+          enable = true;
+        };
         sops.secrets.listenbrainz_token = {
           owner = config.werapi.username;
         };
@@ -112,6 +88,19 @@ in
           mpc
           rmpc
           cantata
+          (pkgs.writeShellScriptBin "mpd-playlists-remote-to-local" ''
+            out_dir=/home/${config.werapi.username}/music/playlists/
+            sync_music_dir=/home/${config.werapi.username}/music/sync/
+            mkdir -p "$out_dir"
+            for f in /mpd/music/playlists/*; do
+              basename=$(basename $f)
+              case $f in
+                *.*) filename="''${basename%.*}-sync.''${basename##*.}" ;;
+                *) filename="''${basename}-sync" ;;
+              esac
+              sed -e "s|^/mpd/music/|$sync_music_dir|" "$f" > "$out_dir"/$filename
+            done
+          '') # for offline copy
         ];
       };
     };

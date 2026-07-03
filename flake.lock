@@ -569,11 +569,11 @@
     "mobile-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1771379768,
-        "narHash": "sha256-CyFh9nPm+hMI9Ui5bPiNxoSK7qAy0KE1z9Qu1vro3jQ=",
+        "lastModified": 1783030643,
+        "narHash": "sha256-oigyZjM9R01/+Dv2E2n3/iI0TdhnJbePsDNAqWOsdcE=",
         "owner": "WeraPea",
         "repo": "mobile-nixos",
-        "rev": "1b426a8122a73931847b43bfc00720080b8183b9",
+        "rev": "fa124f1e08628594a07d8617e97f1068977388dd",
         "type": "github"
       },
       "original": {

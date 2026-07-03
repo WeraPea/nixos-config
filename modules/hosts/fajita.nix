@@ -97,6 +97,19 @@ in
         legcord
       ];
 
+      boot.supportedFilesystems = lib.mkOverride 5 [ "nfs" ];
+      mobile.kernel.structuredConfig = [
+        (
+          helpers: with helpers; {
+            NFS_FS = yes;
+            NFS_V4 = yes;
+            NFS_V4_1 = yes;
+            NFS_V4_2 = yes;
+            AUTOFS_FS = yes;
+          }
+        )
+      ];
+
       hm = {
         home.stateVersion = "25.11";
         programs.zathura.enable = false;

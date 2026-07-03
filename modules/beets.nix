@@ -42,7 +42,7 @@ in
             })
           );
           settings = {
-            directory = "/mnt/mnt3/music/beets";
+            directory = "/mpd/music/beets";
             plugins = [
               "chroma" # do i even use this?
               "embedart" # not for singletons
@@ -61,8 +61,7 @@ in
               genres = true;
             };
             smartplaylist = {
-              playlist_dir = "/mnt/mnt3/music/playlists";
-              relative_to = "/mnt/mnt3/music/";
+              playlist_dir = "/mpd/music/playlists";
               playlists = [
                 {
                   name = "all.m3u";
