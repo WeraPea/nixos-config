@@ -60,18 +60,22 @@ in
             shortCommand = {
               name = "lock";
               onEntry = [
-                "disable_monitor,DSI-1"
+                "disable_monitor,${config.mainDisplay}"
                 "disable_touchscreen"
                 # watcher for mon turning on in other ways?
               ];
               binds.bind = {
+                "NONE,XF86AudioPlay" = "spawn,mpc toggle";
+                "NONE,XF86AudioPause" = "spawn,mpc pause";
+                "NONE,XF86AudioPrev" = "spawn,mpc prev";
+                "NONE,XF86AudioNext" = "spawn,mpc next";
                 "NONE,XF86PowerOff" = mango-lib.mkLongPressBind {
                   recSubmodeOf = "lock";
                   name = "voldown";
                   bind = "NONE,XF86PowerOff";
                   shortCommand = [
                     "enable_touchscreen"
-                    "enable_monitor,DSI-1"
+                    "enable_monitor,${config.mainDisplay}"
                     "setkeymode,default"
                   ];
                   longCommand = "spawn,mpc toggle";
