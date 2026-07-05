@@ -103,7 +103,6 @@ in
       environment.systemPackages = with pkgs; [
         # chatty
         brightnessctl
-        legcord
       ];
 
       boot.supportedFilesystems = lib.mkOverride 5 [ "nfs" ];
