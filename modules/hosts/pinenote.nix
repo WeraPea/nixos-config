@@ -81,6 +81,7 @@ in
         p.callPackage "${inputs.pinenote-nixos}/packages/pinenote-service.nix" { };
 
       boot.initrd.systemd.tpm2.enable = false;
+      boot.kernelModules = [ "libcomposite" ];
 
       stylix.targets.fish.enable = false;
       stylix = {
