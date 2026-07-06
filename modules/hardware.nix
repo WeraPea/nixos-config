@@ -40,6 +40,25 @@ in
             ExecStart = "${pkgs.systemd}/bin/systemctl restart bluetooth.service";
           };
         };
+        systemd.services.rebind-rgbs = {
+          wantedBy = [ "post-resume.target" ];
+          after = [ "post-resume.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = pkgs.writeShellScript "rebind-rgbs" ''
+              for d in /sys/bus/usb/devices/*/serial; do
+                if (grep 9563533303135111E131 "$d"); then
+                  BUS_ID="$(basename "$(dirname "$d")")"
+                fi
+              done
+              if [ -n "$BUS_ID" ]; then
+                echo "$BUS_ID" > /sys/bus/usb/drivers/usb/unbind
+                sleep 1
+                echo "$BUS_ID" > /sys/bus/usb/drivers/usb/bind
+              fi
+            '';
+          };
+        };
       };
     };
 }
