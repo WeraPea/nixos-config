@@ -60,21 +60,9 @@ in
           ];
           upower.enable = true;
         };
-        systemd.services.bluetooth-resume-cleanup = {
-          description = "Restart bluetooth after resume to remove stale devices from UPower";
-          wantedBy = [ "post-resume.target" ];
-          after = [ "post-resume.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.systemd}/bin/systemctl restart bluetooth.service";
-          };
-        };
-        systemd.services.rebind-rgbs = {
-          wantedBy = [ "post-resume.target" ];
-          after = [ "post-resume.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = pkgs.writeShellScript "rebind-rgbs" ''
+        powerManagement.resumeCommands =
+          let
+            rebind-rgbs = pkgs.writeShellScript "rebind-rgbs" ''
               for d in /sys/bus/usb/devices/*/serial; do
                 if (grep 9563533303135111E131 "$d"); then
                   BUS_ID="$(basename "$(dirname "$d")")"
@@ -86,8 +74,11 @@ in
                 echo "$BUS_ID" > /sys/bus/usb/drivers/usb/bind
               fi
             '';
-          };
-        };
+          in
+          ''
+            ${pkgs.systemd}/bin/systemctl restart bluetooth.service # remove stale devices from UPower
+            ${rebind-rgbs}
+          '';
       };
     };
 }
