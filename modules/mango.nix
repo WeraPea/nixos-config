@@ -179,6 +179,10 @@ in
             return = false;
           }; # suppresses sending space up to apps
           binds.bind = {
+            "SUPER,space" = {
+              command = "spawn,true";
+              return = false;
+            };
             "SUPER,o" = "toggleoverlay";
             "SUPER,b" = "toggle_render_border";
             "SUPER,t" =
