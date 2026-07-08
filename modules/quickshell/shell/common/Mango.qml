@@ -20,6 +20,7 @@ Singleton {
     Process {
         id: queryProc
         running: true
+        onRunningChanged: running = true
         command: ["mmsg", "watch", "all-monitors"]
         stdout: SplitParser {
             onRead: line => {
