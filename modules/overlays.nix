@@ -92,6 +92,15 @@ in
               })
             ]; # can't easily override src as ffsubsync uses versioneer
           });
+
+          wvkbd = prev.wvkbd.overrideAttrs (old: {
+            src = final.fetchFromGitHub {
+              owner = "WeraPea";
+              repo = "wvkbd";
+              rev = "58d153d40bd5ab852dffa6cda5ae5db330cf0204";
+              hash = "sha256-6I+aozymoWk+OrT8pCOn+g1MY12QkQZaV1O/16rMbdU=";
+            };
+          }); # touch_cancel support and disabling popups
         }
       );
       forks = (

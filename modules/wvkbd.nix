@@ -39,6 +39,10 @@ in
           description = "List of client appids for which the virtual keyboard will not automatically show. Not used during deactivation.";
           type = lib.types.listOf lib.types.str;
         };
+        popups.enable = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+        };
       };
       config = lib.mkIf cfg.enable {
         hm = {
@@ -65,17 +69,20 @@ in
             Service = {
               ExecStart =
                 with config.lib.stylix.colors;
-                pkgs.writeShellScript "wvkbd-hidden" ''
-                  ${lib.getExe pkgs.wvkbd} --hidden \
-                      --bg ${base00}\
-                      --fg ${base02}\
-                      --fg-sp ${base01}\
-                      --press ${base03}\
-                      --press-sp ${base03}\
-                      --text ${base07}\
-                      --text-sp ${base07}\
-                      --fn "${config.stylix.fonts.sansSerif.name}"\
-                      -R 0 -H 500'';
+                pkgs.writeShellScript "wvkbd-hidden" (
+                  ''
+                    ${lib.getExe pkgs.wvkbd} --hidden \
+                        --bg ${base00}\
+                        --fg ${base02}\
+                        --fg-sp ${base01}\
+                        --press ${base03}\
+                        --press-sp ${base03}\
+                        --text ${base07}\
+                        --text-sp ${base07}\
+                        --fn "${config.stylix.fonts.sansSerif.name}"\
+                        -R 0 -H 500 ''
+                  + lib.optionalString (!cfg.popups.enable) "--hide-popups"
+                );
               Restart = "on-failure";
               RestartSec = 1;
               TimeoutStopSec = 10;
