@@ -323,7 +323,6 @@ in
         gappov = 0;
         borderpx = 1;
         no_border_when_single = 0;
-        tab_bar_height = 0;
 
         rootcolor = "0x${base00}ff";
         bordercolor = "0x${base02}ff";
@@ -424,6 +423,7 @@ in
       };
       config = lib.mkIf cfg.enable {
         systemd.packages = [ config.programs.mango.package ];
+        wrappers.mango.package = lib.mkDefault inputs.mango.packages.mango;
         wrappers.mango.nixos-config = config;
         programs.mango.enable = true;
         programs.mango.package = config.wrappers.mango.wrapper;

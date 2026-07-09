@@ -61,7 +61,7 @@ in
             scenefx = inputs.mango.inputs.scenefx.packages.${pkgs.stdenv.hostPlatform.system}.scenefx;
             wayland = pkgs.wayland;
             wayland-protocols = pkgs.wayland-protocols;
-            wlroots_0_19 = pkgs.wlroots_0_19;
+            wlroots_0_20 = pkgs.wlroots_0_20;
             xwayland = pkgs.xwayland;
           }).overrideAttrs
             (old: {
