@@ -17,8 +17,7 @@ in
       ...
     }:
     let
-      pkgsCross = import inputs.pinenote-nixos.inputs.nixpkgs {
-        # nixpkgs from pinenote-nixos to not rebuild the kernel when not needed
+      pkgsCross = import inputs.nixpkgs {
         system = "x86_64-linux";
         crossSystem = {
           config = "aarch64-unknown-linux-gnu";

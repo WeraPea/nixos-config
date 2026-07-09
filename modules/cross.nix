@@ -58,7 +58,7 @@ in
             pango = pkgs.pango;
             pcre2 = pkgs.pcre2;
             pixman = pkgs.pixman;
-            scenefx = inputs.mango.inputs.scenefx.packages.${pkgs.stdenv.hostPlatform.system}.scenefx;
+            scenefx = inputs.mango.inputs.scenefx.packages.${pkgs.stdenv.hostPlatform.system}.default;
             wayland = pkgs.wayland;
             wayland-protocols = pkgs.wayland-protocols;
             wlroots_0_20 = pkgs.wlroots_0_20;

@@ -42,6 +42,7 @@ in
           home = {
             username = config.werapi.username;
             homeDirectory = "/home/${config.werapi.username}";
+            pointerCursor.enable = true;
           };
           programs.home-manager.enable = true;
 
@@ -61,8 +62,6 @@ in
             x = "exit";
           };
           gtk.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
-          # gtk.gtk4.theme = config.gtk.theme;
-          gtk.gtk4.theme = null;
 
           programs = {
             aria2.enable = true;

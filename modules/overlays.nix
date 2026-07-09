@@ -149,38 +149,15 @@ in
             ];
           });
 
-          lutris = prev.lutris.override {
-            # Intercept buildFHSEnv to modify target packages
-            buildFHSEnv =
-              args:
-              final.buildFHSEnv (
-                args
-                // {
-                  multiPkgs =
-                    envPkgs:
-                    let
-                      # Fetch original package list
-                      originalPkgs = args.multiPkgs envPkgs;
-
-                      # Disable tests for openldap
-                      customLdap = envPkgs.openldap.overrideAttrs (_: {
-                        doCheck = false;
-                      });
-                    in
-                    # Replace broken openldap with the custom one
-                    builtins.filter (p: (p.pname or "") != "openldap") originalPkgs ++ [ customLdap ];
-                }
-              );
-          };
-
-          nh =
-            let
-              old-nixpkgs = import (fetchTarball {
-                url = "https://github.com/NixOS/nixpkgs/archive/a82ccc39b39b621151d6732718e3e250109076fa.tar.gz";
-                sha256 = "1664s8ffaa3hcvz4d4hwca2l6xl25j8dvzxwmd2ckcskcncq1zc1";
-              }) { system = final.stdenv.hostPlatform.system; };
-            in
-            old-nixpkgs.nh; # until nh gives me remote copy progress back
+          nh-unwrapped = prev.nh-unwrapped.overrideAttrs (old: {
+            patches =
+              old.patches or [ ]
+              ++
+                lib.optionals (final.stdenv.hostPlatform.system == "x86_64-linux") # not needed on machines that aren't used for building
+                  [
+                    ./nh-no-spinner-yes-progress.patch # gives actual info about remote copy progress instead of a fancy useless spinner
+                  ];
+          });
         }
       );
     };

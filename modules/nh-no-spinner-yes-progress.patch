@@ -1,0 +1,21 @@
+diff --git a/crates/nh-remote/src/copy.rs b/crates/nh-remote/src/copy.rs
+index c5663c9..f2bf457 100644
+--- a/crates/nh-remote/src/copy.rs
++++ b/crates/nh-remote/src/copy.rs
+@@ -250,15 +250,7 @@ pub fn copy_to_remote(
+   );
+   debug!(?cmd, "nix copy --to");
+ 
+-  let spinner =
+-    progress::spinner(format!("Copying closure to remote host '{host}'..."));
+-
+-  let copy_result = exec_with_spinner_streaming(cmd, &spinner);
+-
+-  // We finish and *clear*, because the log line needs to come next. If we try
+-  // to make the spinner change the text, we cannot reliably match the `info!`
+-  // or `error!` style.
+-  spinner.finish_and_clear();
++  let copy_result = exec_with_streaming(cmd, true);
+   let (exit_status, _stdout, stderr) =
+     copy_result.wrap_err("Failed to copy closure to remote host")?;
+ 

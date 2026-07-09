@@ -31,7 +31,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pinenote-nixos.url = "github:WeraPea/pinenote-nixos";
+    pinenote-nixos = {
+      url = "github:WeraPea/pinenote-nixos";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     pinenote-usb-tablet = {
       url = "github:WeraPea/pinenote-usb-tablet";
       inputs.nixpkgs.follows = "nixpkgs";
