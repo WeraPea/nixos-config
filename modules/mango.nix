@@ -310,7 +310,8 @@ in
         animations = 1;
         animation_fade_in = 0;
         animation_fade_out = 0;
-        animation_type_close = "slide";
+        animation_type_open = "zoom";
+        animation_type_close = "none";
         animation_duration_move = 300;
         animation_duration_open = 200;
         animation_duration_tag = 250;
