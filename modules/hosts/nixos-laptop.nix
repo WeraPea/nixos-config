@@ -32,7 +32,10 @@ in
 
       wrappers.mango = {
         mainDisplay = "eDP-1";
-        settings.monitorrule = "name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60";
+        settings = {
+          monitorrule = "name:eDP-1,x:0,y:0,width:1920,height:1080,refresh:60";
+          middle_button_emulation = 1;
+        };
       };
 
       hm.home.stateVersion = "23.11";

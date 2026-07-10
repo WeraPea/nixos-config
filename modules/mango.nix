@@ -344,7 +344,6 @@ in
         repeat_rate = 100;
         repeat_delay = 300;
         xkb_rules_layout = "pl";
-        middle_button_emulation = 1;
         drag_lock = 0;
 
         new_is_master = 0;
