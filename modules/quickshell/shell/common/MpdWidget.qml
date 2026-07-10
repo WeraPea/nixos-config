@@ -9,6 +9,7 @@ WrapperMouseArea {
     property string screen
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     visible: Mpd.mpcAvailable
+    property real volAcc: 0
 
     TextObject {
         id: mpdText
@@ -23,16 +24,18 @@ WrapperMouseArea {
     }
     onPressed: function (mouse) {
         if (mouse.button == Qt.LeftButton) {
-            Mpd.toggle();
+            Mpd.command("toggle");
         } else if (mouse.button == Qt.RightButton) {
             Mango.dispatch("spawn,cantata");
         }
     }
     onWheel: event => {
-        if (event.angleDelta.y > 0) {
-            Mpd.volumePercent += 1;
-        } else {
-            Mpd.volumePercent -= 1;
+        volAcc += Math.max(Math.min(event.angleDelta.y / 120, 1), -1);
+    }
+    onVolAccChanged: {
+        if (Math.abs(volAcc) >= 1) {
+            Mpd.volumePercent += Math.round(volAcc);
+            volAcc -= Math.round(volAcc);
         }
     }
     HoverHandler {

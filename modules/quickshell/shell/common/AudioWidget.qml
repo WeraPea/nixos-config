@@ -24,6 +24,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: -((30 - volumeText.implicitHeight) / 2)
         anchors.bottomMargin: -((30 - volumeText.implicitHeight) / 2)
+        property real volAcc: 0
 
         onPressed: function (mouse) {
             if (mouse.button == Qt.LeftButton) {
@@ -33,10 +34,12 @@ Item {
             }
         }
         onWheel: event => {
-            if (event.angleDelta.y > 0) {
-                Audio.sink.audio.volume += 0.01;
-            } else {
-                Audio.sink.audio.volume -= 0.01;
+            volAcc += Math.max(Math.min(event.angleDelta.y / 120, 1), -1);
+        }
+        onVolAccChanged: {
+            if (Math.abs(volAcc) >= 1) {
+                Audio.sink.audio.volume += Math.round(volAcc) / 100;
+                volAcc -= Math.round(volAcc);
             }
         }
     }
