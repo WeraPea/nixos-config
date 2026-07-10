@@ -1,5 +1,4 @@
 import Quickshell.Widgets
-import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import "config"
@@ -44,9 +43,10 @@ WrapperMouseArea {
     Window {
         id: tooltipWindow
         visible: hover.hovered
+        onVisibleChanged: Mpd.continous = visible
         flags: Qt.ToolTip | Qt.FramelessWindowHint
-        width: tooltipText.width + 12
-        height: tooltipText.height + 8
+        width: columnLayout.width + 12
+        height: columnLayout.height + 8
         x: hover.point.scenePosition.x + (mouseArea.Window.window ? mouseArea.Window.window.x : 0) - width
         y: hover.point.scenePosition.y + (mouseArea.Window.window ? mouseArea.Window.window.y : 0) + 20
         color: "transparent"
@@ -54,13 +54,23 @@ WrapperMouseArea {
         Rectangle {
             anchors.fill: parent
             color: Colors.background
-            radius: 4
+            radius: 0
+            border.color: Colors.accent
+            border.width: 1
 
-            TextObject {
-                id: tooltipText
-                color: Colors.foreground
+            ColumnLayout {
+                id: columnLayout
                 anchors.centerIn: parent
-                text: `${Mpd.artist} - ${Mpd.title} - ${Mpd.realVolumePercent}%` // TODO: add time preview
+                TextObject {
+                    id: tooltipText
+                    color: Colors.foreground
+                    text: `${Mpd.artist} - ${Mpd.title}`
+                }
+                TextObject {
+                    id: tooltipText2
+                    color: Colors.foreground
+                    text: `${Mpd.currentTime}/${Mpd.totalTime} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
+                }
             }
         }
     }

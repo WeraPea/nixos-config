@@ -8,6 +8,8 @@ Singleton {
     id: root
 
     property bool mpcAvailable: false
+    property bool continous: false
+    property string host: "localhost"
 
     Process {
         id: whichProc
@@ -24,7 +26,7 @@ Singleton {
 
     Process {
         id: queryProc
-        command: ["mpc", "status", "--format", "%title%\n%artist%\n%album%"]
+        command: ["mpc", "-h", root.host, "status", "--format", "%title%\n%artist%\n%album%"]
         stdout: StdioCollector {
             onStreamFinished: {
                 var lines = this.text.trim().split('\n');
@@ -117,7 +119,7 @@ Singleton {
 
     Process {
         id: idleProc
-        command: ["mpc", "idle"]
+        command: ["mpc", "-h", root.host, "idle"]
         onRunningChanged: if (!running && !idleDisconnectedTimer.running)
             running = root.mpcAvailable
         stdout: StdioCollector {
@@ -130,7 +132,7 @@ Singleton {
     }
     Process {
         id: idleDisconnectedProc
-        command: ["mpc", "-q"]
+        command: ["mpc", "-h", root.host, "-q"]
         stderr: StdioCollector {
             onStreamFinished: if (this.text != "") {
                 idleDisconnectedTimer.running = true;
@@ -146,17 +148,19 @@ Singleton {
         onTriggered: idleDisconnectedProc.running = true
     }
     Process {
-        id: toggleProc
-        command: ["mpc", "toggle"]
+        id: mpcCommandProc
+        property string cmd
+        command: ["sh", "-c", `mpc -h ${root.host} ${cmd}`]
     }
-    function toggle() {
-        toggleProc.running = true;
+    function command(command) {
+        mpcCommandProc.cmd = command;
+        mpcCommandProc.running = true;
     }
 
     Process {
         id: setVolumeProc
         property int value
-        command: ["mpc", "-q", "volume", value]
+        command: ["mpc", "-h", root.host, "-q", "volume", value]
     }
     onVolumePercentChanged: {
         if (realVolumePercent != volumePercent) {
@@ -164,6 +168,14 @@ Singleton {
             setVolumeProc.running = true;
             queryProc.running = true; // handles volume limit TODO: do it better
         }
+    }
+
+    Timer {
+        id: continousTimer
+        interval: 100
+        running: root.continous
+        repeat: true
+        onTriggered: queryProc.running = true
     }
 
     property bool playing: false
