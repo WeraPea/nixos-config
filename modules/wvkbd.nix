@@ -18,14 +18,34 @@ in
       wvkbd-filter-activate = pkgs.writeShellScript "wvkbd-filter-activate" ''
         if [ "$1" = "activate" ]; then
           grep -Fxq "$(mmsg get all-monitors | ${lib.getExe pkgs.jq} -r 'monitors[] | select(.active) | .active_client.appid')" ~/.config/wvkbd/blacklist && exit
-          pkill -SIGUSR2 wvkbd
+          ${lib.getExe wvkbd-state-set} 0
         elif [ "$1" = "deactivate" ]; then
-          pkill -SIGUSR1 wvkbd
+          ${lib.getExe wvkbd-state-set} 1
         else
           echo "Usage: $0 [activate|deactivate]"
           exit 1
         fi
       '';
+      wvkbd-state-set = pkgs.writeShellScriptBin "wvkbd-state-set" ''
+         read rate delay < ~/.config/wvkbd/repeat_info
+         if [ "$#" != 1 ]; then
+          active=$(cat /tmp/wvkbd-active || tee 1 /tmp/wvkbd-active)
+        else
+          active="$1"
+        fi
+        if [ "$active" = 0 ]; then
+          pkill -SIGUSR2 -x ${pkgs.wvkbd.meta.mainProgram}
+          mmsg dispatch setoption,repeat_rate,$rate
+          mmsg dispatch setoption,repeat_delay,$delay
+          echo 1 > /tmp/wvkbd-active
+        else
+          echo 0 > /tmp/wvkbd-active
+          pkill -SIGUSR1 -x ${pkgs.wvkbd.meta.mainProgram}
+          mmsg dispatch setoption,repeat_rate,${toString config.wrappers.mango.settings.repeat_rate}
+          mmsg dispatch setoption,repeat_delay,${toString config.wrappers.mango.settings.repeat_delay}
+        fi
+      '';
+      repeat_delay = if cfg.fake_repeat_delay then 1000 / cfg.repeat_rate else cfg.repeat_delay;
     in
     {
       options.werapi.${moduleName} = {
@@ -43,9 +63,29 @@ in
           default = true;
           type = lib.types.bool;
         };
+        repeat_rate = lib.mkOption {
+          default = 10;
+          type = lib.types.int;
+        };
+        repeat_delay = lib.mkOption {
+          default = 500;
+          type = lib.types.int;
+        };
+        fake_repeat_delay = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = "Uses wvkbd delay as if it was key repeat delay";
+        };
       };
-      config = lib.mkIf cfg.enable {
-        hm = {
+      config = {
+        nixpkgs.overlays = [
+          (final: prev: {
+            werapi = prev.werapi or { } // {
+              inherit wvkbd-state-set;
+            };
+          })
+        ];
+        hm = lib.mkIf cfg.enable {
           i18n.inputMethod = {
             enable = true;
             type = "fcitx5";
@@ -60,6 +100,12 @@ in
             };
           };
           xdg.configFile."wvkbd/blacklist".text = lib.concatStringsSep "\n" cfg.blacklist;
+          xdg.configFile."wvkbd/repeat_info".text = lib.concatStringsSep " " (
+            map toString [
+              cfg.repeat_rate
+              repeat_delay
+            ]
+          );
           systemd.user.services.wvkbd = {
             Unit = {
               Description = "wvkbd";
@@ -81,7 +127,8 @@ in
                         --text-sp ${base07}\
                         --fn "${config.stylix.fonts.sansSerif.name}"\
                         -R 0 -H 500 ''
-                  + lib.optionalString (!cfg.popups.enable) "--hide-popups"
+                  + lib.optionalString (!cfg.popups.enable) "--hide-popups "
+                  + lib.optionalString (cfg.fake_repeat_delay) "--long-press-ms ${toString cfg.repeat_delay} "
                 );
               Restart = "on-failure";
               RestartSec = 1;

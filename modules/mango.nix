@@ -133,8 +133,8 @@ in
           };
           touchgesturebind = {
             # swipe,edge,distance,fingers
-            "up,any,any,3" = "spawn,pkill -SIGRTMIN wvkbd";
-            "up,bottom,short,1" = "spawn,pkill -SIGRTMIN wvkbd";
+            "up,any,any,3" = "spawn,${lib.getExe pkgs.werapi.wvkbd-state-set}";
+            "up,bottom,short,1" = "spawn,${lib.getExe pkgs.werapi.wvkbd-state-set}";
 
             "up,bottom,medium,1" = "toggleoverview";
             "down,top,any,1" =
