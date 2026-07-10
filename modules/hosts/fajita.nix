@@ -60,7 +60,7 @@ in
             shortCommand = {
               name = "lock";
               onEntry = [
-                "disable_monitor,${config.mainDisplay}"
+                "sleep_monitor,${config.mainDisplay}"
                 "disable_touchscreen"
                 # watcher for mon turning on in other ways?
               ];
@@ -75,7 +75,7 @@ in
                   bind = "NONE,XF86PowerOff";
                   shortCommand = [
                     "enable_touchscreen"
-                    "enable_monitor,${config.mainDisplay}"
+                    "wakeup_monitor,${config.mainDisplay}"
                     "setkeymode,default"
                   ];
                   longCommand = "spawn,mpc toggle";
