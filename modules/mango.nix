@@ -345,6 +345,7 @@ in
         repeat_delay = 300;
         xkb_rules_layout = "pl";
         drag_lock = 0;
+        trackpad_scroll_factor = 0.25;
 
         new_is_master = 0;
         default_mfact = 0.5;
