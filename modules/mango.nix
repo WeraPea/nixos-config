@@ -136,6 +136,11 @@ in
             "up,any,any,3" = "spawn,${lib.getExe pkgs.werapi.wvkbd-state-set}";
             "up,bottom,short,1" = "spawn,${lib.getExe pkgs.werapi.wvkbd-state-set}";
 
+            "down_left,any,any,3" = "togglefullscreen";
+
+            "left,right,any,1" = "spawn,${lib.getExe pkgs.wtype} -P escape -p escape";
+            "right,left,any,1" = "spawn,${lib.getExe pkgs.wtype} -P escape -p escape";
+
             "up,bottom,medium,1" = "toggleoverview";
             "down,top,any,1" =
               "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call app-menu toggle";
