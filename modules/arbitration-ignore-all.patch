@@ -1,0 +1,30 @@
+diff --git a/src/evdev-tablet.c b/src/evdev-tablet.c
+index 0624e621..d0ab05ec 100644
+--- a/src/evdev-tablet.c
++++ b/src/evdev-tablet.c
+@@ -2289,7 +2289,6 @@ tablet_toggle_touch_device(struct tablet_dispatch *tablet,
+ 			   usec_t time)
+ {
+ 	enum evdev_arbitration_state which;
+-	struct phys_rect r = { 0 };
+ 	struct phys_rect *rect = NULL;
+ 
+ 	if (tablet_has_status(tablet, TABLET_TOOL_OUT_OF_RANGE) ||
+@@ -2297,16 +2296,8 @@ tablet_toggle_touch_device(struct tablet_dispatch *tablet,
+ 	    tablet_has_status(tablet, TABLET_TOOL_LEAVING_PROXIMITY) ||
+ 	    tablet_has_status(tablet, TABLET_TOOL_OUT_OF_PROXIMITY)) {
+ 		which = ARBITRATION_NOT_ACTIVE;
+-	} else if (tablet->axes.tilt.x == 0) {
+-		which = ARBITRATION_IGNORE_ALL;
+-	} else if (tablet->arbitration != ARBITRATION_IGNORE_RECT) {
+-		/* This enables rect-based arbitration, updates are sent
+-		 * elsewhere */
+-		r = tablet_calculate_arbitration_rect(tablet);
+-		rect = &r;
+-		which = ARBITRATION_IGNORE_RECT;
+ 	} else {
+-		return;
++		which = ARBITRATION_IGNORE_ALL;
+ 	}
+ 
+ 	tablet_set_touch_device_enabled(tablet, which, rect, time);

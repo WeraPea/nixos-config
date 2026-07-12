@@ -431,6 +431,12 @@ in
       config = lib.mkIf cfg.enable {
         systemd.packages = [ config.programs.mango.package ];
         wrappers.mango.nixos-config = config;
+        wrappers.mango.overrides = [
+          {
+            type = "override";
+            data = (prev: { libinput = pkgs.libinput-arbitration-ignore-all; });
+          }
+        ];
         programs.mango.enable = true;
         programs.mango.package = config.wrappers.mango.wrapper;
         services.greetd = {
