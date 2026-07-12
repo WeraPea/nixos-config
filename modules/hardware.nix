@@ -57,6 +57,16 @@ in
                 SUBSYSTEM=="tty", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0043", ATTRS{serial}=="9563533303135111E131", SYMLINK+="ttyRGBs", RUN+="${pkgs.coreutils}/bin/stty -F /dev/%k -hupcl"
               ''
             )
+            (pkgs.writeTextDir "lib/udev/rules.d/81-libinput-pinenote.rules" /* udev */ ''
+              ACTION=="remove", GOTO="libinput_device_group_end"
+              KERNEL!="event[0-9]*", GOTO="libinput_device_group_end"
+
+              ATTRS{name}=="cyttsp5", ENV{LIBINPUT_DEVICE_GROUP}="pinenotetouch"
+              ATTRS{name}=="w9013 2D1F:0095 Stylus", ENV{LIBINPUT_DEVICE_GROUP}="pinenotetouch"
+              ATTRS{name}=="cyttsp5", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+
+              LABEL="libinput_device_group_end"
+            '') # WOULD BE FUCKING AMAZING IF TOUCH ARBITRATION ACTUALLY FUCKING DID ANYTHING AT MOTHERFUCKING ALL OTHER THAN LYING ABOUT BEING ACTIVE FOR ONCE
           ];
           upower.enable = true;
         };

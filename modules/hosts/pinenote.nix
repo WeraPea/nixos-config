@@ -63,6 +63,7 @@ in
       environment.systemPackages = with pkgs; [
         brightnessctl
         inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system}.default
+        netevent
         werapi.pinenote-screenshot
         werapi.rotate
         werapi.switch-boot-partition
@@ -144,6 +145,10 @@ in
               command = "/run/current-system/sw/bin/pinenote-usb-tablet";
               options = [ "NOPASSWD" ];
             } # sudo rules don't work with symlinks, amazing
+            {
+              command = "/run/current-system/sw/bin/netevent";
+              options = [ "NOPASSWD" ];
+            }
             {
               command = lib.getExe inputs.pinenote-usb-tablet.packages.${pkgs.stdenv.hostPlatform.system}.default;
               options = [ "NOPASSWD" ];
