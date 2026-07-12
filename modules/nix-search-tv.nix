@@ -32,16 +32,6 @@ in
             text = builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh";
           })
         ];
-        hm.programs.nix-search-tv = {
-          enable = true;
-          settings = {
-            experimental = {
-              render_docs_indexes = {
-                nvf = "https://notashelf.github.io/nvf/options.html";
-              };
-            };
-          };
-        };
       };
     };
 }
