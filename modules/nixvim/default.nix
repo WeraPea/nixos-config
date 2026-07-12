@@ -28,6 +28,7 @@ in
         home-manager.sharedModules = [
           inputs.nixvim.homeModules.nixvim
         ];
+        environment.sessionVariables.EDITOR = "nvim";
         hm = {
           home.sessionVariables.EDITOR = "nvim";
           programs.nixvim = {

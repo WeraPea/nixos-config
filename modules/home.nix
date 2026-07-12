@@ -14,6 +14,7 @@ in
     }:
     let
       cfg = config.werapi.${moduleName};
+      hmConfig = config.home-manager.users.${config.werapi.username};
     in
     {
       imports = [
@@ -33,6 +34,9 @@ in
           useUserPackages = true;
           useGlobalPkgs = true;
         };
+        environment.sessionVariables = builtins.mapAttrs (
+          name: value: lib.mkDefault value
+        ) hmConfig.home.sessionVariables; # hacky
         hm = {
           home = {
             username = config.werapi.username;
