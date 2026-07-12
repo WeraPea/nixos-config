@@ -20,6 +20,7 @@ in
       hmConfig = nixos-config.home-manager.users.${nixos-config.werapi.username};
     in
     {
+      package = lib.mkOverride 500 inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.mango;
       keymodes = {
         default.binds = {
           bind =
@@ -429,7 +430,6 @@ in
       };
       config = lib.mkIf cfg.enable {
         systemd.packages = [ config.programs.mango.package ];
-        wrappers.mango.package = lib.mkDefault inputs.mango.packages.mango;
         wrappers.mango.nixos-config = config;
         programs.mango.enable = true;
         programs.mango.package = config.wrappers.mango.wrapper;
