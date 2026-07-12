@@ -25,7 +25,7 @@
           type = lib.types.str;
           default = "tile";
         };
-        bindModes = lib.mkOption {
+        keymodes = lib.mkOption {
           type = lib.types.lazyAttrsOf lib.types.anything;
         };
         nixos-config = lib.mkOption {
@@ -51,9 +51,9 @@
             EOF
           '';
         };
-        extraConfig = mango-lib.parseBindModes config.bindModes;
+        extraConfig = mango-lib.parseKeymodes config.keymodes;
         mango-lib = {
-          parseBindMode =
+          parseKeymode =
             {
               name,
               enter ? { },
@@ -63,9 +63,9 @@
               onEntry ? [ ],
               onReturn ? [ ],
               onReturnPre ? [ ],
-              returnTo ? (if (lib.isString recSubmodeOf) then recSubmodeOf else "default"),
+              returnTo ? (if (lib.isString recKeymodeOf) then recKeymodeOf else "default"),
               outerKeymode ? "default",
-              recSubmodeOf ? null, # allows for "recursive" submodes, limited by mango's 27 character keymode name limit though
+              recKeymodeOf ? null, # allows for "recursive" keymodes, limited by mango's 27 character keymode name limit though
               rsi ? 0,
               rsiLimit ? 2,
               recEnterIsReturnReturnToPass ? "default",
@@ -78,7 +78,7 @@
                   args.recEnterIsReturn
                 else
                   false;
-              name = if (lib.isString recSubmodeOf) then "${recSubmodeOf}-${args.name}" else args.name;
+              name = if (lib.isString recKeymodeOf) then "${recKeymodeOf}-${args.name}" else args.name;
               argsWithDefaults = args // {
                 inherit
                   name
@@ -87,7 +87,7 @@
                   onReturnPre
                   returnTo
                   outerKeymode
-                  recSubmodeOf
+                  recKeymodeOf
                   rsi
                   rsiLimit
                   recEnterIsReturn
@@ -135,35 +135,35 @@
                     let
                       commands = lib.toList (value.command or value);
                       shouldReturn = if value ? name then false else value.return or returnByDefault;
-                      extendSubmode = (
-                        args ? recSubmodeOf
-                        && lib.isString args.recSubmodeOf
-                        && value ? recSubmodeOf
-                        && baseMode args.recSubmodeOf != value.recSubmodeOf # shouldn't not happen
+                      extendKeymode = (
+                        args ? recKeymodeOf
+                        && lib.isString args.recKeymodeOf
+                        && value ? recKeymodeOf
+                        && baseMode args.recKeymodeOf != value.recKeymodeOf # shouldn't not happen
                       );
-                      recSubmodeOf =
-                        if extendSubmode then
-                          "${args.recSubmodeOf}-${value.recSubmodeOf}"
+                      recKeymodeOf =
+                        if extendKeymode then
+                          "${args.recKeymodeOf}-${value.recKeymodeOf}"
                         else
-                          value.recSubmodeOf or args.recSubmodeOf or null;
-                      rsi = if extendSubmode then (args.rsi or 0) + 1 else args.rsi or 0;
+                          value.recKeymodeOf or args.recKeymodeOf or null;
+                      rsi = if extendKeymode then (args.rsi or 0) + 1 else args.rsi or 0;
                       recEnterIsReturn = value.recEnterIsReturn or args.recEnterIsReturn or null;
                       recEnterIsReturnReturnToPass =
-                        if value ? recSubmodeOf then returnTo else args.recEnterIsReturnReturnToPass or "default";
+                        if value ? recKeymodeOf then returnTo else args.recEnterIsReturnReturnToPass or "default";
 
                       emitBind =
                         com:
                         if builtins.isAttrs com then
-                          if com ? setkeymode && !(lib.isString recSubmodeOf && com.setkeymode == baseMode recSubmodeOf) then
+                          if com ? setkeymode && !(lib.isString recKeymodeOf && com.setkeymode == baseMode recKeymodeOf) then
                             [
                               "${bindType}=${bind},setkeymode,${
                                 lib.concatStringsSep "-" (
-                                  (if lib.isString recSubmodeOf then [ recSubmodeOf ] else [ ]) ++ [ com.setkeymode ]
+                                  (if lib.isString recKeymodeOf then [ recKeymodeOf ] else [ ]) ++ [ com.setkeymode ]
                                 )
                               }"
                             ]
                           else
-                            mango-lib.parseBindMode (
+                            mango-lib.parseKeymode (
                               {
                                 outerKeymode = name;
                                 enter.${bindType} = bind;
@@ -171,7 +171,7 @@
                               // com
                               // {
                                 inherit
-                                  recSubmodeOf
+                                  recKeymodeOf
                                   rsi
                                   rsiLimit
                                   recEnterIsReturn
@@ -190,7 +190,7 @@
                   ) bindings
                 ));
             in
-            if (lib.isString recSubmodeOf && args.name == baseMode recSubmodeOf) then
+            if (lib.isString recKeymodeOf && args.name == baseMode recKeymodeOf) then
               lib.optionals recEnterIsReturn (emitTransition onReturn recEnterIsReturnReturnToPass enter)
             else if rsi >= rsiLimit then
               [ ]
@@ -205,13 +205,13 @@
                 ""
               ]
               ++ (builtins.concatLists (
-                map (keymode: mango-lib.parseBindMode (args // { cloneKeymodes = [ ]; } // keymode)) cloneKeymodes
+                map (keymode: mango-lib.parseKeymode (args // { cloneKeymodes = [ ]; } // keymode)) cloneKeymodes
               ));
-          parseBindModes =
-            bindModes:
+          parseKeymodes =
+            keymodes:
             builtins.concatStringsSep "\n" (
               builtins.concatLists (
-                lib.mapAttrsToList (name: value: mango-lib.parseBindMode ({ inherit name; } // value)) bindModes
+                lib.mapAttrsToList (name: value: mango-lib.parseKeymode ({ inherit name; } // value)) keymodes
               )
             );
           stripNestedModes =
@@ -219,8 +219,8 @@
             builtins.mapAttrs (
               key: bind: if bind ? name then bind // { setkeymode = bind.name; } else bind
             ) binds;
-          convertBindModes =
-            modes: recSubmodeOf:
+          convertKeymodes =
+            modes: recKeymodeOf:
             let
               enterBindToNormalBind =
                 name: mode: type: key:
@@ -229,7 +229,7 @@
                 in
                 {
                   ${type}."${key'}" = mode // {
-                    inherit name recSubmodeOf;
+                    inherit name recKeymodeOf;
                   };
                 };
               enterBindsToNormalBinds =

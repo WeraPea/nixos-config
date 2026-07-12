@@ -20,7 +20,7 @@ in
       hmConfig = nixos-config.home-manager.users.${nixos-config.werapi.username};
     in
     {
-      bindModes = {
+      keymodes = {
         default.binds = {
           bind =
             (builtins.listToAttrs (
@@ -269,8 +269,8 @@ in
                 name = "qocrt";
                 recEnterIsReturn = true;
                 return = { };
-                binds = lib.recursiveUpdate (mango-lib.convertBindModes config.bindModes "qocrt") {
-                  bind = config.bindModes.default.binds.bind;
+                binds = lib.recursiveUpdate (mango-lib.convertKeymodes config.keymodes "qocrt") {
+                  bind = config.keymodes.default.binds.bind;
                   bindp."NONE,SHIFT_L" = "spawn,${pkgs.writeScript "qocr-trigger-hover" ''
                     if [ "$(qocr ipc call ocr hover_on)" == "true" ]; then
                       ${mango-lib.qocr-trigger-popup-script}

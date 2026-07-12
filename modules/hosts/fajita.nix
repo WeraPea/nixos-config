@@ -52,7 +52,7 @@ in
         {
           mainDisplay = "DSI-1";
           defaultLayout = "scroller";
-          bindModes.power = mango-lib.mkLongPressBind {
+          keymodes.power = mango-lib.mkLongPressBind {
             name = "power";
             bind = "NONE,XF86PowerOff";
             enter.bind = "NONE,XF86PowerOff";
@@ -70,7 +70,7 @@ in
                 "NONE,XF86AudioPrev" = "spawn,mpc prev";
                 "NONE,XF86AudioNext" = "spawn,mpc next";
                 "NONE,XF86PowerOff" = mango-lib.mkLongPressBind {
-                  recSubmodeOf = "lock";
+                  recKeymodeOf = "lock";
                   name = "voldown";
                   bind = "NONE,XF86PowerOff";
                   shortCommand = [
@@ -81,14 +81,14 @@ in
                   longCommand = "spawn,mpc toggle";
                 };
                 "NONE,XF86AudioLowerVolume" = mango-lib.mkLongPressBind {
-                  recSubmodeOf = "lock";
+                  recKeymodeOf = "lock";
                   name = "voldown";
                   bind = "NONE,XF86AudioLowerVolume";
                   shortCommand = "spawn,${lib.getExe pkgs.pamixer} -d 1";
                   longCommand = "spawn,mpc prev";
                 };
                 "NONE,XF86AudioRaiseVolume" = mango-lib.mkLongPressBind {
-                  recSubmodeOf = "lock";
+                  recKeymodeOf = "lock";
                   name = "volup";
                   bind = "NONE,XF86AudioRaiseVolume";
                   shortCommand = "spawn,${lib.getExe pkgs.pamixer} -i 1";

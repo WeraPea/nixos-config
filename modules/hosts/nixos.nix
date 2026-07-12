@@ -45,7 +45,7 @@ in
 
       wrappers.mango = {
         mainDisplay = "DP-2";
-        bindModes.default.binds.bind =
+        keymodes.default.binds.bind =
           (builtins.listToAttrs (
             builtins.concatMap (w: [
               (lib.nameValuePair "SUPER,F${w}" [
