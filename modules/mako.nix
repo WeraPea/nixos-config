@@ -1,3 +1,7 @@
+{
+  inputs,
+  ...
+}:
 let
   moduleName = "mako";
 in
@@ -15,6 +19,12 @@ in
       makoOpacity = lib.toHexString (((builtins.ceil (config.stylix.opacity.popups * 100)) * 255) / 100);
     in
     {
+      imports = [
+        (inputs.wrappers.lib.getInstallModule {
+          name = "mako";
+          value = inputs.wrappers.lib.wrapperModules.mako;
+        })
+      ];
       options.werapi.${moduleName} = {
         enable = lib.mkOption {
           default = config.werapi.graphics.enable;
@@ -23,9 +33,7 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        hm.stylix.targets.mako.enable = false;
-        hm.services.mako = {
-          enable = true;
+        wrappers.mako = {
           settings = {
             background-color = base00;
             border-color = orange;
@@ -52,6 +60,8 @@ in
             };
           };
         };
+        services.dbus.packages = [ config.wrappers.mako.wrapper ];
+        environment.systemPackages = [ config.wrappers.mako.wrapper ];
       };
     };
 }
