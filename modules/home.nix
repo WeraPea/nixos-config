@@ -10,12 +10,10 @@ in
     {
       config,
       lib,
-      pkgs,
       ...
     }:
     let
       cfg = config.werapi.${moduleName};
-      hmConfig = config.home-manager.users.${config.werapi.username};
     in
     {
       imports = [
@@ -34,9 +32,6 @@ in
         home-manager = {
           useUserPackages = true;
           useGlobalPkgs = true;
-          sharedModules = [
-            inputs.nix-index-database.homeModules.nix-index
-          ];
         };
         hm = {
           home = {
@@ -45,51 +40,8 @@ in
             pointerCursor.enable = true;
           };
           programs.home-manager.enable = true;
-
-          home.shellAliases = {
-            cp = "cp -rip";
-            mv = "mv -i";
-            rm = "rm -i";
-            cl = "clear";
-            dc = "cd";
-            lc = "clear";
-            ls = "ll";
-            ns = "sudo nixos-rebuild switch --flake ~/nixos-config";
-            nt = "sudo nixos-rebuild test --flake ~/nixos-config";
-            sl = "ll";
-            vim = "nvim";
-            vm = "mv";
-            x = "exit";
-          };
           gtk.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
-
-          programs = {
-            aria2.enable = true;
-            bash.enable = true;
-            jq.enable = true;
-            nix-index.enable = true;
-            nix-index-database.comma.enable = true;
-            command-not-found.enable = lib.mkIf hmConfig.programs.nix-index.enable <| false;
-            zathura.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
-            bat = {
-              enable = true;
-              extraPackages = with pkgs.bat-extras; [
-                batdiff
-                batwatch
-              ];
-              config.paging = "never";
-            };
-            eza = {
-              enable = true;
-              git = true;
-              icons = "auto";
-              extraOptions = [ "--group-directories-first" ];
-            };
-            direnv = {
-              enable = true;
-              nix-direnv.enable = true;
-            };
-          };
+          programs.zathura.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;
 
           services = {
             cliphist.enable = lib.mkIf config.werapi.graphics.enable <| lib.mkDefault true;

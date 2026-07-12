@@ -11,7 +11,6 @@ in
     }:
     let
       cfg = config.werapi.${moduleName};
-      hmConfig = config.home-manager.users.${config.werapi.username};
     in
     {
       options.werapi.${moduleName} = {
@@ -22,41 +21,34 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        programs.fish.enable = true;
         users.users.${config.werapi.username}.shell = pkgs.fish;
         stylix.targets.fish.enable = false;
-        hm.stylix.targets.fish.enable = false;
-        hm.programs.nix-your-shell.enable = true;
-        hm.home.shell.enableFishIntegration = true;
-        hm.programs.fish = {
+        programs.fish = {
           enable = true;
           interactiveShellInit = # fish
             ''
-              export NVIMPAGER_NVIM="${hmConfig.home.sessionVariables.NVIMPAGER_NVIM}"
+              ${lib.getExe pkgs.nix-your-shell} --nom fish | source
+              export NVIMPAGER_NVIM="${config.environment.sessionVariables.NVIMPAGER_NVIM}"
               export PAGER="${lib.getExe pkgs.nvimpager}"
               export SYSTEMD_PAGERSECURE="true";
               set fish_greeting
               bind ! __history_previous_command
-            '';
-          functions = {
-            fish_user_key_bindings.body = # fish
-              ''
-                bind -M default H beginning-of-line
-                bind -M default L end-of-line
-                fish_default_key_bindings -M insert
-                fish_vi_key_bindings --no-erase insert
-              '';
-            __history_previous_command.body = # fish
-              ''
+
+              function fish_user_key_bindings
+                  bind -M default H beginning-of-line
+                  bind -M default L end-of-line
+                  fish_default_key_bindings -M insert
+                  fish_vi_key_bindings --no-erase insert
+              end
+              function __history_previous_command
                 switch (commandline -t)
                 case "!"
                   commandline -t $history[1]; commandline -f repaint
                 case "*"
                   commandline -i !
                 end
-              '';
-            fish_prompt.body = # fish
-              ''
+              end # TODO: fix this
+              function fish_prompt
                 set -l last_pipestatus $pipestatus
 
                 if not set -q __fish_git_prompt_show_informative_status
@@ -148,8 +140,11 @@ in
                 set_color normal
 
                 echo -n "$suffix "
-              '';
-          };
+              end
+
+              abbr --add '--set-cursor=%' -- ssc 'kitty +kitten ssh -t % fish -i'
+              abbr --add '--set-cursor=%' -- no 'nix % --override-input nixpkgs (pushd ~/nixos-config && nix flake metadata nixpkgs | awk '\'''/Locked URL/{print $NF}'\''' && popd)'
+            '';
           shellAbbrs = {
             cl = "clear";
             dc = "cd";
@@ -179,14 +174,6 @@ in
             x = "exit";
             rp = "rsync -avh --info=progress2 --no-inc-recursive";
             riw = "nix-shell -p efibootmgr --run 'sudo efibootmgr -n 0001'";
-            ssc = {
-              setCursor = "%";
-              expansion = "kitty +kitten ssh -t % fish -i";
-            };
-            no = {
-              setCursor = "%";
-              expansion = "nix % --override-input nixpkgs (pushd ~/nixos-config && nix flake metadata nixpkgs | awk '/Locked URL/{print $NF}' && popd)";
-            };
             lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
             ng = "nvim +:Neogit";
           };

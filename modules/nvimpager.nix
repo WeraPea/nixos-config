@@ -25,7 +25,7 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        hm.home.sessionVariables = {
+        environment.sessionVariables = {
           NVIMPAGER_NVIM = lib.getExe (
             (inputs.nixvim.legacyPackages."${pkgs.stdenv.hostPlatform.system}".makeNixvim (
               {

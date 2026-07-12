@@ -48,6 +48,7 @@ in
             (lib.mkIf cfg.default.enable [
               (_7zz.override { enableUnfree = true; })
               appimage-run
+              aria2
               bc
               catimg
               cloc
