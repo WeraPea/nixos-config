@@ -1,0 +1,50 @@
+diff --git a/lua/nvimpager/ansi2highlight.lua b/lua/nvimpager/ansi2highlight.lua
+index 3707169..2190d39 100644
+--- a/lua/nvimpager/ansi2highlight.lua
++++ b/lua/nvimpager/ansi2highlight.lua
+@@ -319,29 +319,31 @@ end
+ --- Parse the current buffer for ansi escape sequences and add buffer
+ --- highlights to the buffer instead.
+ local function ansi2highlight()
+-  nvim.nvim_command(
+-    "syntax match NvimPagerEscapeSequence conceal '\\e\\[[0-9;]*m'")
+-  nvim.nvim_command(
+-    "syntax match NvimPagerEscapeSequence conceal '\\e\\[[0-2]\\?K'")
+-  nvim.nvim_command("highlight NvimPagerConceal gui=NONE guisp=NONE " ..
+-		    "guifg=background guibg=background")
+-  nvim.nvim_win_set_option(0, "conceallevel", 3)
+-  nvim.nvim_win_set_option(0, "concealcursor", "nv")
+   local pattern = "\27%[([0-9;]*)m"
++  local patternk = "\27%[([0-9;]*)[mk]"
+   state:clear()
+   namespace = nvim.nvim_create_namespace("")
+   for lnum, line in ipairs(nvim.nvim_buf_get_lines(0, 0, -1, false)) do
+-    local start, end_, spec
++    local start, end_
+     local col = 1
++    local offset = 0
+     repeat
+-      start, end_, spec = line:find(pattern, col)
++      start, end_, _ = line:find(patternk, col)
+       if start ~= nil then
+-	state:render(state.line, state.column, lnum, start)
++        local vis_start = start - offset
++  state:render(state.line, state.column, lnum, vis_start)
+ 	state.line = lnum
+-	state.column = end_
+-	state:parse(spec)
++	state.column = vis_start
++	-- state:parse(spec)
++  local seq = line:sub(start, end_)
++  if seq:sub(-1) == "m" then
++    state:parse(seq:match(pattern))
++  end
++  nvim.nvim_buf_set_text(0, lnum - 1, start - 1 - offset,
++                         lnum - 1, end_ - offset, {""})
++  offset = offset + (end_ - start + 1)
+ 	-- update the position to find the next match in the line
+-	col = end_
++	col = end_ + 1
+       end
+     until start == nil
+   end

@@ -1,0 +1,12 @@
+diff --git a/nvimpager b/nvimpager
+index 36e2650..e2dd61c 100755
+--- a/nvimpager
++++ b/nvimpager
+@@ -113,6 +113,6 @@ args=(
+ if [[ $mode = cat || \
+       $mode = auto && $(cat "${files[@]}" | wc -l) -le $(tput lines) ]]
+ then
+-  args+=(--headless)
++  exec cat "${files[@]}"
+ fi
+ exec -a nvimpager $nvim "${args[@]}" "${files[@]}" "$@"

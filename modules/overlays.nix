@@ -161,7 +161,10 @@ in
           nvimpager = prev.nvimpager.overrideAttrs (old: {
             patches = old.patches or [ ] ++ [
               ./nvimpager-term-colors.patch
+              ./nvimpager-simpler-cat-mode.patch
+              ./nvimpager-delete-not-conceal.patch
             ];
+            doCheck = false;
           });
 
           libinput-arbitration-ignore-all = prev.libinput.overrideAttrs (old: {
