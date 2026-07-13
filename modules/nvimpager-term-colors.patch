@@ -1,0 +1,56 @@
+diff --git a/lua/nvimpager/ansi2highlight.lua b/lua/nvimpager/ansi2highlight.lua
+index e9a56b0..3707169 100644
+--- a/lua/nvimpager/ansi2highlight.lua
++++ b/lua/nvimpager/ansi2highlight.lua
+@@ -23,6 +23,13 @@ local colors = {
+   [7] = "lightgray", [15] = "white",
+ }
+ 
++local function ansi_color(n)
++  if vim.g == nil then
++    return colors[n]
++  end
++  return vim.g["terminal_color_" .. n] or colors[n]
++end
++
+ --- the names of neovim's highlighting attributes that are handled by this
+ --- module
+ --- Most attributes are referred to by their highlighting attribute name in
+@@ -188,21 +195,21 @@ function state:parse(string)
+ 	-- supported.
+ 	self[attributes[token - 20]] = false
+       elseif token >= 30 and token <= 37 then -- foreground color
+-	self.foreground = colors[token - 30]
++	self.foreground = ansi_color(token - 30)
+ 	self.ctermfg = token - 30
+       elseif token == 39 then -- reset foreground
+ 	self.foreground = ""
+ 	self.ctermfg = ""
+       elseif token >= 40 and token <= 47 then -- background color
+-	self.background = colors[token - 40]
++	self.background = ansi_color(token - 40)
+ 	self.ctermbg = token - 40
+       elseif token == 49 then -- reset background
+ 	self.background = ""
+ 	self.ctermbg = ""
+       elseif token >= 90 and token <= 97 then -- bright foreground color
+-	self.foreground = colors[token - 82]
++	self.foreground = ansi_color(token - 82)
+       elseif token >= 100 and token <= 107 then -- bright background color
+-	self.background = colors[token - 92]
++	self.background = ansi_color(token - 92)
+       end
+     end
+   end
+@@ -215,9 +222,9 @@ end
+ function state:parse8bit(fgbg, color)
+   local colornr = tonumber(color)
+   if colornr >= 0 and colornr <= 7 then
+-    color = colors[colornr]
++    color = ansi_color(colornr)
+   elseif colornr >= 8 and colornr <= 15 then -- high pallet colors
+-    color = colors[colornr] -- + 82 + 10 * (fgbg == "background" and 1 or 0)
++    color = ansi_color(colornr) -- + 82 + 10 * (fgbg == "background" and 1 or 0)
+   elseif colornr >= 16 and colornr <= 231 then -- color cube
+     color = hexformat_rgb_numbers(split_predefined_terminal_color(colornr-16))
+   else -- grayscale ramp

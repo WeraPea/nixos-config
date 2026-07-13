@@ -158,6 +158,12 @@ in
             ];
           });
 
+          nvimpager = prev.nvimpager.overrideAttrs (old: {
+            patches = old.patches or [ ] ++ [
+              ./nvimpager-term-colors.patch
+            ];
+          });
+
           libinput-arbitration-ignore-all = prev.libinput.overrideAttrs (old: {
             patches = old.patches or [ ] ++ [
               ./arbitration-ignore-all.patch # makes touch arbitration ignore all touches instead of ones only inside an unreliable rect area
