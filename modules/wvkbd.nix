@@ -59,6 +59,10 @@ in
           description = "List of client appids for which the virtual keyboard will not automatically show. Not used during deactivation.";
           type = lib.types.listOf lib.types.str;
         };
+        auto.enable = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+        };
         popups.enable = lib.mkOption {
           default = true;
           type = lib.types.bool;
@@ -86,7 +90,7 @@ in
           })
         ];
         hm = lib.mkIf cfg.enable {
-          i18n.inputMethod = {
+          i18n.inputMethod = lib.mkIf cfg.auto.enable {
             enable = true;
             type = "fcitx5";
             fcitx5 = {

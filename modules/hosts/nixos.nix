@@ -33,6 +33,10 @@ in
         quickshell.enable = true;
         streamlink.enable = true;
         vr.enable = true;
+        wvkbd = {
+          enable = true;
+          auto.enable = false;
+        };
       };
 
       environment.systemPackages = with pkgs; [
