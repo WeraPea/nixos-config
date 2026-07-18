@@ -37,7 +37,10 @@ in
       };
       config = lib.mkIf cfg.enable {
         programs = {
-          fuse.userAllowOther = true;
+          fuse = {
+            enable = true;
+            userAllowOther = true;
+          };
           gnupg.agent = {
             enable = true;
             enableSSHSupport = true;
