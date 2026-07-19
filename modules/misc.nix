@@ -96,9 +96,12 @@ in
 
         nixpkgs.config.allowUnfree = true;
         nix = {
-          gc.automatic = true;
-          optimise.automatic = true;
+          gc = {
+            automatic = true;
+            dates = "weekly";
+          };
           settings = {
+            auto-optimise-store = true;
             narinfo-cache-positive-ttl = 3600;
             trusted-users = [
               "@wheel"
