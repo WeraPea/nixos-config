@@ -1,4 +1,8 @@
-{ inputs, ... }:
+{
+  flake,
+  inputs,
+  ...
+}:
 let
   moduleName = "firefox";
 in
@@ -197,6 +201,184 @@ in
           });
         '';
 
+      mkTheme =
+        stylix: polarity:
+        with stylix.colors.withHashtag;
+        lib.strings.toJSON {
+          theme = {
+            button_background_active = base04;
+            accentcolor = base0D;
+            accentcolorInactive = base01;
+            icon_color = base04;
+            icon_attention_color = base0D;
+            ntp_background = base00;
+            ntp_text = base05;
+            popup = base00;
+            popup_border = base0D;
+            popup_highlight = base04;
+            popup_highlight_text = base05;
+            popup_text = base05;
+            sidebar = base00;
+            sidebar_border = base0D;
+            sidebar_highlight = base0D;
+            sidebar_highlight_text = base05;
+            sidebar_text = base05;
+            tab_background_separator = base0D;
+            textcolor = base05;
+            tab_line = base0D;
+            tab_loading = base05;
+            tab_selected = base00;
+            tab_text = base05;
+            toolbarColor = base00;
+            toolbar_bottom_separator = base00;
+            toolbar_field = base0D;
+            toolbar_field_border = base00;
+            toolbar_field_border_focus = base0D;
+            toolbar_field_focus = base00;
+            toolbar_field_highlight = base0D;
+            toolbar_field_highlight_text = base00;
+            toolbar_field_text = base05;
+            toolbar_text = base05;
+            toolbar_vertical_separator = base0D;
+            id = polarity;
+            color_scheme = polarity;
+          };
+        };
+
+      theme-change-by-output = /* js */ ''
+        // ==UserScript==
+        // @name            theme-change-by-output
+        // @onlyonce
+        // ==/UserScript==
+
+        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+
+        const { Subprocess } = ChromeUtils.importESModule("resource://gre/modules/Subprocess.sys.mjs");
+        const { ctypes } = ChromeUtils.importESModule("resource://gre/modules/ctypes.sys.mjs");
+
+        function setWindowTheme(win, themeData) {
+          Services.obs.notifyObservers(
+            { wrappedJSObject: { ...themeData, window: win.docShell.outerWindowID } },
+            "lightweight-theme-styling-update"
+          );
+        }
+
+        const base_theme = ${mkTheme config.lib.stylix "dark"};
+        const light_theme = ${mkTheme flake.nixosConfigurations.pinenote.config.lib.stylix "light"};
+
+        const gdk = ctypes.open("libgdk-3.so.0");
+        const gdk_window_get_screen = gdk.declare("gdk_window_get_screen", ctypes.default_abi, ctypes.voidptr_t, ctypes.voidptr_t);
+        let gdk_screen_get_monitor_at_window = gdk.declare("gdk_screen_get_monitor_at_window", ctypes.default_abi, ctypes.int, ctypes.voidptr_t, ctypes.voidptr_t);
+        let gdk_screen_get_monitor_plug_name = gdk.declare("gdk_screen_get_monitor_plug_name", ctypes.default_abi, ctypes.char.ptr, ctypes.voidptr_t, ctypes.int);
+
+        function applyThemeForWindow(parent) {
+          const doc = parent.document;
+          const browserEl = doc.getElementById("browser");
+          const toolboxEl = doc.getElementById("navigator-toolbox");
+          const urlbarEl = doc.getElementById("urlbar");
+
+          if (doc.hasFocus()) {
+            const baseWin = parent.docShell.treeOwner
+              .QueryInterface(Ci.nsIInterfaceRequestor)
+              .getInterface(Ci.nsIBaseWindow);
+            const gdk_window_ptr = ctypes.voidptr_t(ctypes.UInt64(baseWin.nativeHandle));
+            const screen = gdk_window_get_screen(gdk_window_ptr);
+            const monitorNum = gdk_screen_get_monitor_at_window(screen, gdk_window_ptr);
+            const namePtr = gdk_screen_get_monitor_plug_name(screen, monitorNum);
+            const name = namePtr.isNull() ? null : namePtr.readString();
+            if (/^HEADLESS-/.test(name)) {
+              browserEl.setAttribute("pinenote", "true");
+              toolboxEl.setAttribute("pinenote", "true");
+              urlbarEl.setAttribute("pinenote", "true");
+              setWindowTheme(parent, light_theme);
+              Services.prefs.setIntPref("layout.css.prefers-color-scheme.content-override", 1);
+            } else {
+              browserEl.removeAttribute("pinenote");
+              toolboxEl.removeAttribute("pinenote");
+              urlbarEl.removeAttribute("pinenote");
+              setWindowTheme(parent, base_theme);
+              Services.prefs.setIntPref("layout.css.prefers-color-scheme.content-override", 0);
+            }
+          }
+        };
+
+        const MonitorWatcher = {
+          proc: null,
+          windows: new Set(),
+          failTimes: [],
+          starting: null,
+
+          async ensureStarted() {
+            if (!this.proc && !this.starting)
+              this.starting = this.start().finally(() => { this.starting = null; });
+          },
+
+          async start() {
+            const proc = await Subprocess.call({
+              command: await Subprocess.pathSearch("setpriv"),
+              arguments: [
+                "--pdeathsig", "TERM", "--",
+                await Subprocess.pathSearch("stdbuf"), "-oL",
+                await Subprocess.pathSearch("mmsg"), "watch", "all-monitors",
+              ],
+            });
+            this.proc = proc;
+
+            (async () => {
+              let buf = "";
+              let chunk;
+              while ((chunk = await proc.stdout.readString())) {
+                buf += chunk;
+                let idx;
+                while ((idx = buf.indexOf("\n")) >= 0) {
+                  buf = buf.slice(idx + 1);
+                  for (const win of this.windows) applyThemeForWindow(win);
+                }
+              }
+            })();
+
+            proc.wait().then(({ exitCode }) => {
+              console.log("mmsg watch all-monitors exited", exitCode);
+              if (this.proc === proc) this.proc = null;
+
+              const now = Date.now();
+              this.failTimes.push(now);
+              this.failTimes = this.failTimes.filter((t) => now - t < 30000);
+              if (this.failTimes.length >= 5) {
+                console.error("mmsg watch all-monitors: 5 exits in 30s, not restarting");
+                return;
+              }
+              setTimeout(() => this.ensureStarted(), 500);
+            });
+          },
+
+          register(win) {
+            this.windows.add(win);
+            this.ensureStarted();
+          },
+
+          unregister(win) {
+            this.windows.delete(win);
+          },
+        };
+
+        Windows.onCreated(async (win) => {
+          const { parent } = win;
+          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+
+          await Windows.waitWindowLoading(parent);
+
+          applyThemeForWindow(parent);
+          const handler = () => applyThemeForWindow(parent);
+
+          parent.addEventListener("focus", handler)
+          MonitorWatcher.register(parent);
+          parent.addEventListener("unload", () => {
+            MonitorWatcher.unregister(parent);
+          }, { once: true });
+        });
+      '';
+
       nexusmodsDownloadfix = builtins.fetchurl {
         url = "https://github.com/randomtdev/nexusmods_downloadfix/raw/9d94d132a2ab208a08821bffa28ae6ffad1ba38b/nexusmods_downloadfix.user.js";
         sha256 = "1dyi9nkzaqkjzfzr51lwlfzg9589vx73sv52n0r3ank307gc9ml3";
@@ -301,6 +483,8 @@ in
               toggle-toolbar;
             "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/transparentBrowserByUrl.sys.mjs".text =
               transparent-browser-by-url;
+            "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/themeChangeByOutput.sys.mjs".text =
+              theme-change-by-output;
           };
 
           stylix.targets.firefox = {
@@ -687,9 +871,15 @@ in
                     #urlbar[breakout-extend] .urlbar-background {
                       background-color: ${cfg.theme.backgroundColor} !important;
                     }
+                    #urlbar[breakout-extend][pinenote] .urlbar-background {
+                      background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
+                    }
 
                     #browser, #navigator-toolbox {
                       background-color: ${cfg.theme.backgroundColor} !important;
+                    }
+                    #browser[pinenote], #navigator-toolbox[pinenote] {
+                      background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
                     }
                     #browser[transparent-url], #navigator-toolbox[transparent-url] {
                       background-color: #0000 !important;
