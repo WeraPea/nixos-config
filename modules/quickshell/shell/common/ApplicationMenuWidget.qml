@@ -7,6 +7,7 @@ import "config"
 
 Item {
     id: root
+    required property var colors
 
     // implicitWidth: 40
     // implicitHeight: 30
@@ -23,7 +24,7 @@ Item {
         id: icon
         anchors.centerIn: parent
         text: ""
-        color: Colors.foreground
+        color: colors.foreground
     }
 
     MouseArea {
@@ -69,7 +70,7 @@ Item {
                 right: true
                 bottom: true
             }
-            color: Colors.background
+            color: colors.background
 
             MouseArea {
                 anchors.fill: parent
@@ -133,7 +134,7 @@ Item {
                                 maximumLineCount: 2
                                 elide: Text.ElideRight
 
-                                color: Colors.foreground
+                                color: colors.foreground
                                 text: entry.modelData.name
                             }
                         }

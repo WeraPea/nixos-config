@@ -6,6 +6,7 @@ import "config"
 
 Item {
     id: root
+    required property var colors
     required property string text
     required property var command
     property alias commandText: commandText
@@ -18,7 +19,7 @@ Item {
         id: commandText
         anchors.centerIn: parent
         text: root.text
-        color: Colors.foreground
+        color: colors.foreground
     }
 
     MouseArea {

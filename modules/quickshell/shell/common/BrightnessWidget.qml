@@ -7,6 +7,7 @@ import "config"
 
 Item {
     id: root
+    required property var colors
     required property string device
     required property string icon
 
@@ -31,7 +32,7 @@ Item {
         id: brightnessText
         anchors.centerIn: parent
         text: root.icon
-        color: Colors.foreground
+        color: colors.foreground
     }
 
     MouseArea {
@@ -73,8 +74,8 @@ Item {
         anchor.gravity: Qt.BottomEdge | Qt.HCenter
         // margin: 10
         // border.width: 1
-        // border.color: Colors.foreground
-        // backgroundColor: Colors.background
+        // border.color: colors.foreground
+        // backgroundColor: colors.background
         backgroundColor: "transparent"
         content: Component {
             Slider {
@@ -103,14 +104,14 @@ Item {
                         width: parent.width
                         height: parent.height
                         radius: height / 2
-                        color: Colors.background
+                        color: colors.background
                     }
 
                     Rectangle {
                         width: slider.handle.x + slider.handle.width
                         height: parent.height
                         radius: height / 2
-                        color: Colors.foreground
+                        color: colors.foreground
                     }
 
                     Rectangle {
@@ -118,7 +119,7 @@ Item {
                         height: parent.height
                         radius: height / 2
                         color: "transparent"
-                        border.color: Colors.foreground
+                        border.color: colors.foreground
                         border.width: 1
                     }
                 }
@@ -129,8 +130,8 @@ Item {
                     implicitWidth: 30
                     implicitHeight: 30
                     radius: width / 2
-                    color: Colors.background
-                    border.color: Colors.foreground
+                    color: colors.background
+                    border.color: colors.foreground
                     border.width: 1
                 }
             }

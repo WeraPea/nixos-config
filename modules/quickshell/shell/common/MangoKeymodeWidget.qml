@@ -2,6 +2,7 @@ import QtQuick
 import "config"
 
 TextObject {
+    required property var colors
     required property string screen
     property int modeIndex: 0
     property var monitor: Mango.monitors.find(m => m.name == screen)
@@ -33,19 +34,19 @@ TextObject {
     }
     property var keymodeColors: function (keymode) {
         return {
-            "default": Colors.base0D,
-            "clipboard": Colors.base0E,
-            "primary": Colors.base0D,
-            "kill": Colors.base08,
-            "leader": Colors.base09,
-            "mpd": Colors.base0A,
-            "run": Colors.base0B,
-            "qocr": Colors.base0A,
-            "qocre": Colors.base0A,
-            "qocrc": Colors.base0A,
-            "qocrt": Colors.base0A,
-            "qocra": Colors.base0A
-        }[keymode] || Colors.foreground;
+            "default": colors.base0D,
+            "clipboard": colors.base0E,
+            "primary": colors.base0D,
+            "kill": colors.base08,
+            "leader": colors.base09,
+            "mpd": colors.base0A,
+            "run": colors.base0B,
+            "qocr": colors.base0A,
+            "qocre": colors.base0A,
+            "qocrc": colors.base0A,
+            "qocrt": colors.base0A,
+            "qocra": colors.base0A
+        }[keymode] || colors.foreground;
     }
 
     text: `[${mapKeymode(keymode)}]`

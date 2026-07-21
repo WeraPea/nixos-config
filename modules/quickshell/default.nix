@@ -50,7 +50,10 @@ in
           substituteInPlace $out/PinenoteBar.qml \
             --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet} \
             --replace-fail brightnessctl-pinenote ${brightnessctl-pinenote} \
-            --replace-fail busctl ${busctl-pinenote}
+            --replace-fail busctl ${busctl-pinenote} \
+            --replace-fail "\''${Quickshell.env(\"PINENOTE_COLORS_CONFIG\")}" ${
+              outputs.nixosConfigurations.pinenote.config.stylix.generated.fileTree."stylix/palette.json".source
+            }
           substituteInPlace $out/common/EinkWidget.qml \
             --replace-fail busctl ${busctl-pinenote} \
             --replace-fail pinenote-screenshot ${pinenote-screenshot}

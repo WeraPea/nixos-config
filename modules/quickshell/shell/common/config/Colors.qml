@@ -1,9 +1,9 @@
-pragma Singleton
 import Quickshell
 import Quickshell.Io
 import QtQuick
 
-Singleton {
+Item {
+    id: root
     // Assign Properties from the read in palette.json (stylix generated file)
     readonly property color base00: json.base00 ? `#${json.base00}` : "#121212"
     readonly property color base01: json.base01 ? `#${json.base01}` : "#303030"
@@ -29,9 +29,10 @@ Singleton {
     property color foreground: base06
     property color foregroundSecondary: base02
     property color accent: base0C
+    property string path: `${Quickshell.env("HOME")}/.config/stylix/palette.json`
 
     FileView {
-        path: `${Quickshell.env("HOME")}/.config/stylix/palette.json`
+        path: root.path
         watchChanges: true
         onFileChanged: reload()
         onAdapterUpdated: writeAdapter()

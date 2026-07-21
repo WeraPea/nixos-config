@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import "config"
 
 Item {
+    required property var colors
     implicitWidth: volumeText.implicitWidth
     implicitHeight: volumeText.implicitHeight
     FontMetrics {
@@ -16,7 +17,7 @@ Item {
         height: fm.height
         property int volume: Number(Audio.sink?.audio.volume * 100).toFixed(1)
         property string icon: Audio.sink == null ? "?" : (Audio.sink.audio.muted ? "󰖁" : "󰕾")
-        color: Audio.sink.audio.muted ? Colors.foregroundSecondary : Colors.foreground
+        color: Audio.sink.audio.muted ? colors.foregroundSecondary : colors.foreground
         text: `${icon} ${volume}%`
     }
     WrapperMouseArea {

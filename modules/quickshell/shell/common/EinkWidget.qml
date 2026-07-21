@@ -7,6 +7,7 @@ import "config"
 
 Item {
     id: root
+    required property var colors
     property string icon: "󰘮"
     implicitWidth: einkText.implicitWidth + 30
     implicitHeight: 30
@@ -15,7 +16,7 @@ Item {
         id: einkText
         anchors.centerIn: parent
         text: root.icon
-        color: Colors.foreground
+        color: colors.foreground
     }
 
     MouseArea {
@@ -32,8 +33,8 @@ Item {
         anchor.item: root
         anchor.edges: Qt.BottomEdge
         anchor.gravity: Qt.BottomEdge | Qt.HCenter
-        backgroundColor: Colors.background
-        border.color: Colors.foreground
+        backgroundColor: colors.background
+        border.color: colors.foreground
         border.width: 1
         visible: false
 
@@ -115,6 +116,7 @@ Item {
                 spacing: 5
 
                 CommandWidget {
+                    colors: colors
                     text: "S"
                     command: ["pinenote-screenshot"]
                     commandProc.workingDirectory: Quickshell.env("HOME") + "/screenshots"
@@ -126,6 +128,7 @@ Item {
                 }
 
                 CommandWidget {
+                    colors: colors
                     text: ({
                             Y1: "1",
                             Y2: "2",
@@ -146,6 +149,7 @@ Item {
                 }
 
                 CommandWidget {
+                    colors: colors
                     text: popup.usesDither ? "󱝊" : "󰬛"
                     command: {
                         const val = popup.bitDepth + (popup.usesDither ? "" : "|D") + (popup.usesRedraw ? "|R" : "");
@@ -154,6 +158,7 @@ Item {
                 }
 
                 CommandWidget {
+                    colors: colors
                     text: popup.usesRedraw ? "󰬙" : "󰰞"
                     command: {
                         const val = popup.bitDepth + (popup.usesDither ? "|D" : "") + (popup.usesRedraw ? "" : "|R");
@@ -162,11 +167,13 @@ Item {
                 }
 
                 CommandWidget {
+                    colors: colors
                     text: (["󰾆", "󰓅"])[popup.driverMode] ?? ""
                     command: ["busctl", "--user", "call", "org.pinenote.PineNoteCtl", "/org/pinenote/PineNoteCtl", "org.pinenote.Ebc1", "CycleDriverMode"]
                 }
 
                 CommandWidget {
+                    colors: colors
                     text: (["Bayer", "BN-16", "BN-32"])[popup.ditherMode] ?? ""
                     command: ["busctl", "--user", "call", "org.pinenote.PineNoteCtl", "/org/pinenote/PineNoteCtl", "org.pinenote.Ebc1", "CycleDitherMode"]
                 }

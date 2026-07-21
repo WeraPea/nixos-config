@@ -5,14 +5,15 @@ import "config"
 
 WrapperMouseArea {
     id: mouseArea
-    property string screen
+    required property var colors
+    required property string screen
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     visible: Mpd.mpcAvailable
     property real volAcc: 0
 
     TextObject {
         id: mpdText
-        color: Mpd.playing ? Colors.foreground : Colors.foregroundSecondary
+        color: Mpd.playing ? colors.foreground : colors.foregroundSecondary
         function truncate(str, limit) {
             if (str.length <= limit)
                 return str;
@@ -53,9 +54,9 @@ WrapperMouseArea {
 
         Rectangle {
             anchors.fill: parent
-            color: Colors.background
+            color: colors.background
             radius: 0
-            border.color: Colors.accent
+            border.color: colors.accent
             border.width: 1
 
             ColumnLayout {
@@ -63,12 +64,12 @@ WrapperMouseArea {
                 anchors.centerIn: parent
                 TextObject {
                     id: tooltipText
-                    color: Colors.foreground
+                    color: colors.foreground
                     text: `${Mpd.artist} - ${Mpd.title}`
                 }
                 TextObject {
                     id: tooltipText2
-                    color: Colors.foreground
+                    color: colors.foreground
                     text: `${Mpd.currentTime}/${Mpd.totalTime} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
                 }
             }
