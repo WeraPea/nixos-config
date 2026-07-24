@@ -132,21 +132,21 @@ in
             };
             settings.pickers = {
               find_files = {
-                no_ignore = true;
+                # no_ignore = true;
                 hidden = true;
                 follow = true;
               };
               live_grep = {
                 additional_args = [
                   "--hidden"
-                  "--no-ignore"
+                  # "--no-ignore"
                   "--follow"
                 ];
               };
               grep_string = {
                 additional_args = [
                   "--hidden"
-                  "--no-ignore"
+                  # "--no-ignore"
                   "--follow"
                 ];
               };
