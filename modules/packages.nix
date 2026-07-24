@@ -150,7 +150,7 @@ in
               steam-run
               usbutils
               werapi.anki-helper
-              werapi.aria2dl
+              (werapi.aria2dl.override { kitty = config.wrappers.kitty.wrapper; })
               werapi.nyaasi
               werapi.pinenote-vnc
               werapi.screenshot
