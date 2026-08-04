@@ -21,6 +21,7 @@ in
         defaultModules.enable = true;
         gaming.enable = true;
         beets.enable = true;
+        bgutil-ytdlp-pot-provider.enable = true;
         mpd = {
           enable = true;
           server = true;

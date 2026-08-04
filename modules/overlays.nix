@@ -182,6 +182,12 @@ in
                     ./nh-no-spinner-yes-progress.patch # gives actual info about remote copy progress instead of a fancy useless spinner
                   ];
           });
+
+          yt-dlp = prev.yt-dlp.overrideAttrs (old: {
+            propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
+              (final.python3Packages.bgutil-ytdlp-pot-provider.override { yt-dlp = final.coreutils; })
+            ];
+          });
         }
       );
     };
