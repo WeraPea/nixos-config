@@ -52,6 +52,10 @@ in
         {
           mainDisplay = "DSI-1";
           defaultLayout = "scroller";
+          settings = {
+            no_border_when_single = lib.mkForce 1;
+            focus_cross_tag = 1;
+          };
           keymodes.power = mango-lib.mkLongPressBind {
             name = "power";
             bind = "NONE,XF86PowerOff";
