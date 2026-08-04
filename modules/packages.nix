@@ -78,7 +78,6 @@ in
               sshfs
               tldr
               werapi.flake-source
-              werapi.listenbrainz-manual-submit
               werapi.rename-torrents
               werapi.yt-sub-converter
               werapi.yuru
