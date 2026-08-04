@@ -57,6 +57,7 @@ in
         "image/vnd.microsoft.icon" = mpv;
 
         "application/pdf" = [ "org.pwmt.zathura-pdf-mupdf.desktop" ];
+        "inode/directory" = [ "kitty.desktop" ];
       };
     in
     {
