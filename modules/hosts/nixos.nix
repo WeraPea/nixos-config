@@ -45,6 +45,7 @@ in
         freecad
         inkscape
         mokuro
+        werapi.add-yt-single
         xournalpp
       ];
 
