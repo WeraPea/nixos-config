@@ -176,7 +176,7 @@ writeShellApplication {
     while true; do
       hi=$(tput setaf 6)$(tput bold)
       r=$(tput sgr0)
-      read -rp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}P''${r}rint beet path, ''${hi}S''${r}ubmit listen? " ans
+      read -rp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}S''${r}ubmit listen? " ans
       ans="''${ans,,}" # lowercase
 
       case "$ans" in
@@ -197,11 +197,33 @@ writeShellApplication {
           beet udbsync -m purl:"$purl"
         fi
         ;;
+      t)
+        read -rp "touhoudb_track_id: " touhoudb_track_id
+        if [[ -n "$touhoudb_track_id" ]]; then
+          beet mod -M purl:"$purl" data_source=TouhouDB touhoudb_track_id="$touhoudb_track_id"
+          beet tdbsync -m purl:"$purl"
+        fi
+        ;;
+      https://vocadb.net/s/*)
+        vocadb_track_id=''${ans#https://vocadb.net/s/}
+        beet mod -M purl:"$purl" data_source=VocaDB vocadb_track_id="$vocadb_track_id"
+        beet vdbsync -m purl:"$purl"
+        ;;
+      https://utaitedb.net/s/*)
+        utaitedb_track_id=''${ans#https://utaitedb.net/s/}
+        beet mod -M purl:"$purl" data_source=UtaiteDB utaitedb_track_id="$utaitedb_track_id"
+        beet udbsync -m purl:"$purl"
+        ;;
+      https://touhoudb.com/s/*)
+        touhoudb_track_id=''${ans#https://touhoudb.com/s/}
+        beet mod -M purl:"$purl" data_source=TouhouDB touhoudb_track_id="$touhoudb_track_id"
+        beet tdbsync -m purl:"$purl"
+        ;;
       p) beet list purl:"$purl" ;;
       s)
         # shellcheck disable=SC2016
         listenbrainz-manual-submit "$(beet ls purl:"$purl" -f '$path')"
-      ;;
+        ;;
       esac
     done
   '';
