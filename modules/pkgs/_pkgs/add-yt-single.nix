@@ -18,11 +18,16 @@ writeShellApplication {
     cd /mnt/mnt3/youtube/archive/
     url=""
     beet=""
+    beet_skip=""
 
     while [[ $# -gt 0 ]]; do
       case "$1" in
-      --beet)
+      --beet | -b)
         beet="yes"
+        shift
+        ;;
+      --beet-skip | -bs)
+        beet_skip="yes"
         shift
         ;;
       -*)
@@ -36,7 +41,7 @@ writeShellApplication {
       esac
     done
     [[ -z "$url" ]] && {
-      echo "Usage: $0 [--beet] <video_url>"
+      echo "Usage: $0 [--beet,--beet-skip] <video_url>"
       exit 1
     }
 
@@ -172,7 +177,9 @@ writeShellApplication {
 
     purl=$(yt-dlp --print "%(webpage_url)s" --skip-download "$url")
 
-    beet import -st --set=purl="$purl" "$out_file"
+    if [[ ! ( -n "$beet_skip" || -n "$(beet ls purl:"$purl")" ) ]]; then
+      beet import -st --set=purl="$purl" "$out_file"
+    fi
     while true; do
       hi=$(tput setaf 6)$(tput bold)
       r=$(tput sgr0)
