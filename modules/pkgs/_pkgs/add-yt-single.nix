@@ -14,6 +14,7 @@ writeShellApplication {
   ];
   text = /* bash */ ''
     set -euo pipefail
+    shopt -s nullglob dotglob
 
     cd /mnt/mnt3/youtube/archive/
     url=""
@@ -93,10 +94,8 @@ writeShellApplication {
     video_dir=$video_store/$id
 
     function vid-convert() {
-      shopt -s nullglob
       mkv_files=("$video_dir"/*.mkv)
       srv3_files=("$video_dir"/*.srv3)
-      shopt -u nullglob
 
       [[ ''${#mkv_files[@]} -eq 0 || ''${#srv3_files[@]} -eq 0 ]] && return
       [[ -f "$merged_archive" ]] && grep -Fxq "$video_dir" "$merged_archive" && return
@@ -114,11 +113,9 @@ writeShellApplication {
       base="''${mkv%.mkv}"
 
       ass_subs=()
-      shopt -s nullglob
       for sub in "$base".*.ass; do
         ass_subs+=("$sub")
       done
-      shopt -u nullglob
 
       if [[ ''${#ass_subs[@]} -eq 0 ]]; then
         echo "$video_dir" >>"$merged_archive"
