@@ -5,7 +5,7 @@
   ...
 }:
 writeShellApplication {
-  name = "add-yt-single";
+  name = "add-beet-single";
   runtimeInputs = [
     werapi.yt-sub-converter
     pkgs.ffmpeg
