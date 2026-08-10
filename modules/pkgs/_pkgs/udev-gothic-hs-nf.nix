@@ -1,14 +1,23 @@
 {
   lib,
   pkgs,
-  stdenvNoCC,
-  fetchFromGitHub,
 }:
-
-stdenvNoCC.mkDerivation rec {
+let
+  pinnedPkgs =
+    import
+      (fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/d407951447dcd00442e97087bf374aad70c04cea.tar.gz";
+        sha256 = "1jgfnvi57n79zsfljh2i4b77yj6wh028z4r3wf223am8wznzqbzj";
+      })
+      {
+        system = pkgs.stdenv.hostPlatform.system;
+        inherit (pkgs) config;
+      };
+in
+pinnedPkgs.stdenvNoCC.mkDerivation rec {
   pname = "udev-gothic-hs-nf";
   version = "2.1.0";
-  src = fetchFromGitHub {
+  src = pinnedPkgs.fetchFromGitHub {
     owner = "yuru7";
     repo = "udev-gothic";
     rev = "v${version}";
@@ -16,10 +25,10 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgs.python3
-    pkgs.fontforge
-    pkgs.python3Packages.fonttools
-    pkgs.python3Packages.ttfautohint-py
+    pinnedPkgs.python3
+    pinnedPkgs.fontforge
+    pinnedPkgs.python3Packages.fonttools
+    pinnedPkgs.python3Packages.ttfautohint-py
   ];
 
   patches = [ ./udev-gothic-fontforge-20251009-workaround.patch ];

@@ -109,7 +109,6 @@ in
               osu-lazer-bin
               prismlauncher
               protonup-qt
-              rpcs3
               ryubing
               steamtinkerlaunch
               werapi.launch-osu

@@ -84,15 +84,6 @@ in
             });
           };
 
-          ffsubsync = prev.ffsubsync.overrideAttrs (old: {
-            patches = old.patches or [ ] ++ [
-              (final.fetchpatch {
-                url = "https://github.com/WeraPea/ffsubsync/commit/be3691f5134db3b665035061acb1f7d79ca5aa91.patch";
-                hash = "sha256-9UJtwVxrjoN1O7bseWDOuvaqEARaEVyTY1Y9qO+B/ys=";
-              })
-            ]; # can't easily override src as ffsubsync uses versioneer
-          });
-
           wvkbd = prev.wvkbd.overrideAttrs (old: {
             src = final.fetchFromGitHub {
               owner = "WeraPea";
@@ -187,6 +178,16 @@ in
             propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
               (final.python3Packages.bgutil-ytdlp-pot-provider.override { yt-dlp = final.coreutils; })
             ];
+          });
+
+          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: {
+            src = final.fetchFromGitHub {
+              owner = "ShayBox";
+              repo = "Lighthouse";
+              rev = old.version;
+              hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
+            };
+            buildFeatures = [ "cli" ];
           });
         }
       );

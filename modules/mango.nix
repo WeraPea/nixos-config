@@ -421,6 +421,7 @@ in
         inputs.mango.nixosModules.mango
         flake.wrappers.mango.install
       ];
+      disabledModules = [ "programs/wayland/mango.nix" ];
       options.werapi.${moduleName} = {
         enable = lib.mkOption {
           default = config.werapi.graphics.enable;
