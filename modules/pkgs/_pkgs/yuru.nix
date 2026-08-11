@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yuru";
-  version = "0.1.10";
+  version = "0.2.0";
   __structuredAttrs = true;
 
   ipadic-src = fetchurl {
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Ameyanagi";
     repo = "yuru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uf1AFdRSYxAgMHb7Q/8psiMZW4ktiTMfD9Ni3C4fCMU=";
+    hash = "sha256-4D6jGeBoZAQywEbMt6vHwgqBQsugsuEiu0vEiaTsqjg=";
   };
 
-  cargoHash = "sha256-+6lv9fqt/BbWPFNRUDuCLMliiZfyfxepSH4KGOd4fZI=";
+  cargoHash = "sha256-/lj9BoC18UUukJjJHVQbdjPjKGxcWwBUOLcPdasp9NU=";
 
   preBuild = ''
     export LINDERA_DICTIONARIES_PATH=$TMPDIR/lindera-cache
