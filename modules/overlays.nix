@@ -180,14 +180,18 @@ in
             ];
           });
 
-          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: {
+          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: rec {
+            version = "1.5.0";
             src = final.fetchFromGitHub {
               owner = "ShayBox";
               repo = "Lighthouse";
-              rev = old.version;
+              rev = version;
               hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
             };
-            buildFeatures = [ "cli" ];
+            cargoBuildFlags = (old.cargoBuildFlags or [ ]) ++ [
+              "--features"
+              "cli"
+            ];
           });
         }
       );
