@@ -63,6 +63,7 @@ writeShellApplication {
       -N 5
       --write-description
       --merge-output-format mkv
+      --remux-video mkv
       --write-subs
       --write-link
       --sub-langs all,-live_chat
