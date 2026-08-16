@@ -179,7 +179,8 @@ stdenv.mkDerivation {
     while true; do
       hi=$(tput setaf 6)$(tput bold)
       r=$(tput sgr0)
-      read -erp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen? " ans
+      read -erp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen, ''${hi}A''${r}dd another? " ans
+      org_ans="$ans"
       ans="''${ans,,}"
       history -s "$ans"
 
@@ -230,6 +231,19 @@ stdenv.mkDerivation {
       e) beet edit --all purl:"$purl" ;;
       s)
         listenbrainz-manual-submit "$(beet ls purl:"$purl" -f '$path')"
+        ;;
+      a)
+        read -erp "url: " url
+        args=("$url")
+        [[ -n "$beet" ]] && args+=("-b")
+        [[ -n "$beet_skip" ]] && args+=("-bs")
+        exec "$0" "''${args[@]}"
+        ;;
+      https://*)
+        args=("$org_ans")
+        [[ -n "$beet" ]] && args+=("-b")
+        [[ -n "$beet_skip" ]] && args+=("-bs")
+        exec "$0" "''${args[@]}"
         ;;
       esac
     done
