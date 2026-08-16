@@ -24,6 +24,7 @@
           content = lib.generators.toYAML { } config.settings;
         };
         flags."-c" = config.constructFiles.generatedConfig.path;
+        argv0type = command_string: "exec ${lib.getExe pkgs.rlwrap} ${command_string}";
         package = lib.mkDefault pkgs.beets;
         install.modules.nixos =
           {
