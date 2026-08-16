@@ -1,18 +1,18 @@
 {
-  pkgs,
+  bashInteractive,
+  ffmpeg,
+  lib,
+  makeWrapper,
+  mkvtoolnix-cli,
+  stdenv,
   werapi,
-  writeShellApplication,
-  ...
 }:
-writeShellApplication {
-  name = "add-beet-single";
-  runtimeInputs = [
-    werapi.yt-sub-converter
-    pkgs.ffmpeg
-    pkgs.mkvtoolnix-cli
-    # rest omitted on purpose
-  ];
-  text = /* bash */ ''
+stdenv.mkDerivation {
+  pname = "add-beet-single";
+  version = "1.0";
+
+  src = builtins.toFile "add-beet-single.sh" /* bash */ ''
+    #!/usr/bin/env bash
     set -euo pipefail
     shopt -s nullglob dotglob
 
@@ -52,7 +52,6 @@ writeShellApplication {
     merged_archive="mkv-merged"
     video_store="video_store"
 
-    # shellcheck disable=SC2054
     args=(
       --embed-chapters
       --embed-metadata
@@ -75,7 +74,6 @@ writeShellApplication {
 
     yt-dlp "''${args[@]}" "$url"
 
-    # shellcheck disable=SC2054
     args=(
       --download-archive ./"$download_archive_srv3"
       --no-post-overwrites
@@ -181,29 +179,33 @@ writeShellApplication {
     while true; do
       hi=$(tput setaf 6)$(tput bold)
       r=$(tput sgr0)
-      read -rp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen? " ans
-      ans="''${ans,,}" # lowercase
+      read -erp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen? " ans
+      ans="''${ans,,}"
+      history -s "$ans"
 
       case "$ans" in
       d) break ;;
       b | "") beet import -st --set=purl="$purl" "$out_file" ;;
       r) beet import -st -L purl:"$purl" ;;
       v)
-        read -rp "vocadb_track_id: " vocadb_track_id
+        read -erp "vocadb_track_id: " vocadb_track_id
+        history -s "$vocadb_track_id"
         if [[ -n "$vocadb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=VocaDB vocadb_track_id="$vocadb_track_id"
           beet vdbsync -m purl:"$purl"
         fi
         ;;
       u)
-        read -rp "utaitedb_track_id: " utaitedb_track_id
+        read -erp "utaitedb_track_id: " utaitedb_track_id
+        history -s "$utaitedb_track_id"
         if [[ -n "$utaitedb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=UtaiteDB utaitedb_track_id="$utaitedb_track_id"
           beet udbsync -m purl:"$purl"
         fi
         ;;
       t)
-        read -rp "touhoudb_track_id: " touhoudb_track_id
+        read -erp "touhoudb_track_id: " touhoudb_track_id
+        history -s "$touhoudb_track_id"
         if [[ -n "$touhoudb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=TouhouDB touhoudb_track_id="$touhoudb_track_id"
           beet tdbsync -m purl:"$purl"
@@ -227,10 +229,34 @@ writeShellApplication {
       p) beet list purl:"$purl" ;;
       e) beet edit --all purl:"$purl" ;;
       s)
-        # shellcheck disable=SC2016
         listenbrainz-manual-submit "$(beet ls purl:"$purl" -f '$path')"
         ;;
       esac
     done
   '';
+
+  dontUnpack = true;
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    install -m755 $src $out/bin/add-beet-single
+    substituteInPlace $out/bin/add-beet-single \
+      --replace-fail "#!/usr/bin/env bash" "#!${bashInteractive}/bin/bash"
+    wrapProgram $out/bin/add-beet-single \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          werapi.yt-sub-converter
+          ffmpeg
+          mkvtoolnix-cli
+          # rest omitted on purpose
+        ]
+      }
+  '';
+
+  meta = {
+    mainProgram = "add-beet-single";
+    platforms = lib.platforms.linux;
+  };
 }
