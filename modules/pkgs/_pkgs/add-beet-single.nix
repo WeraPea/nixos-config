@@ -47,6 +47,7 @@ stdenv.mkDerivation {
     }
 
     histfile=~/".$(basename "$0")_history"
+    [[ -f "$histfile" ]] || touch "$histfile"
     history -r "$histfile"
 
     downloaded_archive_main="download-archive-main"
