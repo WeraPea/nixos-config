@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       exit 1
     }
 
-    histfile=~/".$(basename "$0")_history"
+    histfile=~/.add-beet-single_history
     [[ -f "$histfile" ]] || touch "$histfile"
     history -r "$histfile"
 
