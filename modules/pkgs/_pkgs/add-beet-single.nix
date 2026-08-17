@@ -46,6 +46,9 @@ stdenv.mkDerivation {
       exit 1
     }
 
+    histfile=~/".$(basename "$0")_history"
+    history -r "$histfile"
+
     downloaded_archive_main="download-archive-main"
     download_archive_srv3="download-archive-srv3"
     converted_archive="converted-srv3"
@@ -56,6 +59,8 @@ stdenv.mkDerivation {
       while true; do
         yt-dlp "$@" && return 0
         read -erp "Retry? (Y/n)" ans
+        history -s "$ans"
+        history -a "$histfile"
         ans="''${ans,,}"
         if [[ ! ( -z "$ans" || "$ans" == "y" ) ]]; then
           exit 1
@@ -191,9 +196,10 @@ stdenv.mkDerivation {
       hi=$(tput setaf 6)$(tput bold)
       r=$(tput sgr0)
       read -erp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen, ''${hi}A''${r}dd another? " ans
+      history -s "$ans"
+      history -a "$histfile"
       org_ans="$ans"
       ans="''${ans,,}"
-      history -s "$ans"
 
       case "$ans" in
       d) break ;;
@@ -202,6 +208,7 @@ stdenv.mkDerivation {
       v)
         read -erp "vocadb_track_id: " vocadb_track_id
         history -s "$vocadb_track_id"
+        history -a "$histfile"
         if [[ -n "$vocadb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=VocaDB vocadb_track_id="$vocadb_track_id"
           beet vdbsync -m purl:"$purl"
@@ -210,6 +217,7 @@ stdenv.mkDerivation {
       u)
         read -erp "utaitedb_track_id: " utaitedb_track_id
         history -s "$utaitedb_track_id"
+        history -a "$histfile"
         if [[ -n "$utaitedb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=UtaiteDB utaitedb_track_id="$utaitedb_track_id"
           beet udbsync -m purl:"$purl"
@@ -218,6 +226,7 @@ stdenv.mkDerivation {
       t)
         read -erp "touhoudb_track_id: " touhoudb_track_id
         history -s "$touhoudb_track_id"
+        history -a "$histfile"
         if [[ -n "$touhoudb_track_id" ]]; then
           beet mod -M purl:"$purl" data_source=TouhouDB touhoudb_track_id="$touhoudb_track_id"
           beet tdbsync -m purl:"$purl"
@@ -245,6 +254,8 @@ stdenv.mkDerivation {
         ;;
       a)
         read -erp "url: " url
+        history -s "$url"
+        history -a "$histfile"
         args=("$url")
         [[ -n "$beet" ]] && args+=("-b")
         [[ -n "$beet_skip" ]] && args+=("-bs")
