@@ -52,6 +52,17 @@ stdenv.mkDerivation {
     merged_archive="mkv-merged"
     video_store="video_store"
 
+    retry_yt_dlp() {
+      while true; do
+        yt-dlp "$@" && return 0
+        read -erp "Retry? (Y/n)" ans
+        ans="''${ans,,}"
+        if [[ ! ( -z "$ans" || "$ans" == "y" ) ]]; then
+          exit 1
+        fi
+      done
+    }
+
     args=(
       --embed-chapters
       --embed-metadata
@@ -72,7 +83,7 @@ stdenv.mkDerivation {
       --compat-options no-youtube-unavailable-videos
     )
 
-    yt-dlp "''${args[@]}" "$url"
+    retry_yt_dlp "''${args[@]}" "$url" # retries probably only needed here and not elsewhere
 
     args=(
       --download-archive ./"$download_archive_srv3"
@@ -87,9 +98,9 @@ stdenv.mkDerivation {
       --compat-options no-youtube-unavailable-videos
     )
 
-    yt-dlp "''${args[@]}" "$url"
+    retry_yt_dlp "''${args[@]}" "$url"
 
-    id=$(yt-dlp --print "%(id)s" --skip-download "$url")
+    id=$(retry_yt_dlp --print "%(id)s" --skip-download "$url")
     video_dir=$video_store/$id
 
     function vid-convert() {
@@ -171,7 +182,7 @@ stdenv.mkDerivation {
       exit
     fi
 
-    purl=$(yt-dlp --print "%(webpage_url)s" --skip-download "$url")
+    purl=$(retry_yt_dlp --print "%(webpage_url)s" --skip-download "$url")
 
     if [[ ! ( -n "$beet_skip" || -n "$(beet ls purl:"$purl")" ) ]]; then
       beet import -st --set=purl="$purl" "$out_file"
