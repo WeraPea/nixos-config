@@ -55,10 +55,13 @@ stdenv.mkDerivation {
     merged_archive="mkv-merged"
     video_store="video_store"
 
+    hi=$(tput setaf 6)$(tput bold)
+    r=$(tput sgr0)
+
     retry_yt_dlp() {
       while true; do
         yt-dlp "$@" && return 0
-        read -erp "Retry? (Y/n)" ans
+        read -erp "Retry? (''${hi}Y''${r}/n): " ans
         history -s "$ans"
         history -a "$histfile"
         ans="''${ans,,}"
@@ -193,8 +196,6 @@ stdenv.mkDerivation {
       beet import -st --set=purl="$purl" "$out_file"
     fi
     while true; do
-      hi=$(tput setaf 6)$(tput bold)
-      r=$(tput sgr0)
       read -erp "''${hi}→''${r} ''${hi}D''${r}one, rerun ''${hi}[B]''${r}eet, ''${hi}R''${r}etag, enter ''${hi}V''${r}ocadb id, enter ''${hi}U''${r}taitedb id, ''${hi}T''${r}ouhoudb id, ''${hi}P''${r}rint beet path, ''${hi}E''${r}dit, ''${hi}S''${r}ubmit listen, ''${hi}A''${r}dd another? " ans
       history -s "$ans"
       history -a "$histfile"
