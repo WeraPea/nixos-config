@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     url=""
     beet=""
     beet_skip=""
+    cookies=""
 
     while [[ $# -gt 0 ]]; do
       case "$1" in
@@ -29,6 +30,10 @@ stdenv.mkDerivation {
         ;;
       --beet-skip | -bs)
         beet_skip="yes"
+        shift
+        ;;
+      --cookies | -c)
+        cookies="yes"
         shift
         ;;
       -*)
@@ -61,7 +66,11 @@ stdenv.mkDerivation {
 
     retry_yt_dlp() {
       while true; do
-        yt-dlp "$@" && return 0
+        args=("$@")
+        if [[ -n "$cookies" ]]; then
+          args+=(--cookies-from-browser="firefox")
+        fi
+        yt-dlp "''${args[@]}" && return 0
         read -erp "Retry? (''${hi}Y''${r}/n): " ans
         history -s "$ans"
         history -a "$histfile"
@@ -261,12 +270,14 @@ stdenv.mkDerivation {
         args=("$url")
         [[ -n "$beet" ]] && args+=("-b")
         [[ -n "$beet_skip" ]] && args+=("-bs")
+        [[ -n "$cookies" ]] && args+=("-c")
         exec "$0" "''${args[@]}"
         ;;
       https://*)
         args=("$org_ans")
         [[ -n "$beet" ]] && args+=("-b")
         [[ -n "$beet_skip" ]] && args+=("-bs")
+        [[ -n "$cookies" ]] && args+=("-c")
         exec "$0" "''${args[@]}"
         ;;
       esac
