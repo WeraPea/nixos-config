@@ -1,64 +1,102 @@
 diff --git a/src/scrobbler/listenbrainz/mod.rs b/src/scrobbler/listenbrainz/mod.rs
-index fb3a069..11f63bd 100644
+index fb3a069..42cccd8 100644
 --- a/src/scrobbler/listenbrainz/mod.rs
 +++ b/src/scrobbler/listenbrainz/mod.rs
-@@ -1,11 +1,12 @@
+@@ -1,11 +1,16 @@
  mod payloads;
  
- use crate::{config::ListenBrainzConfig, logger::Logger, scrobbler::REQWEST};
--use anyhow::{Context, Result, bail};
-+use anyhow::{Context, Result};
+-use crate::{config::ListenBrainzConfig, logger::Logger, scrobbler::REQWEST};
++use crate::{
++    config::{ListenBrainzConfig, SensitiveString},
++    logger::Logger,
++    scrobbler::REQWEST,
++};
+ use anyhow::{Context, Result, bail};
  use colored::Colorize;
  use payloads::{Listen, ListenType, Listens};
  use reqwest::StatusCode;
  use serde::Deserialize;
-+use std::{thread, time::Duration};
++use std::{env, fs, os::unix::fs::PermissionsExt, path::PathBuf};
  
  const API_BASE_URL: &str = "https://api.listenbrainz.org/1";
  
-@@ -37,17 +38,36 @@ impl ListenBrainzScrobbler {
+@@ -21,6 +26,7 @@ struct ListenBrainzToken {
+ 
+ impl ListenBrainzScrobbler {
+     pub fn new(config: ListenBrainzConfig) -> Result<Self> {
++        return Ok(Self { config });
+         let user_token = &config.user_token;
+ 
+         let response = REQWEST
+@@ -37,17 +43,66 @@ impl ListenBrainzScrobbler {
  
      pub fn scrobble(&self, artist: &str, title: &str, album: Option<&str>, total_length: u32) -> Result<()> {
          let user_token = &self.config.user_token;
 -        let status = REQWEST
--            .post(format!("{API_BASE_URL}/submit-listens"))
--            .header("authorization", format!("Token {user_token}"))
++        let listens = Listens::new(ListenType::Single, vec![Listen::new(artist, title, album, total_length)]);
++
++        let result = REQWEST
+             .post(format!("{API_BASE_URL}/submit-listens"))
+             .header("authorization", format!("Token {user_token}"))
 -            .json(&Listens::new(ListenType::Single, vec![Listen::new(artist, title, album, total_length)]))
 -            .send()?
 -            .status();
++            .json(&listens)
++            .send();
++
++        let status = match result {
++            Ok(response) => response.status(),
++            Err(err) => {
++                Self::save_failed_scrobble(user_token, &listens)?;
++                return Err(err).context("Failed to send scrobble request. Request saved for later.");
++            },
++        };
  
--        if status != StatusCode::OK {
+         if status != StatusCode::OK {
 -            bail!("Received status code {status}.");
-+        let mut last_err = None;
-+
-+        for attempt in 0..5 {
-+            match REQWEST
-+                .post(format!("{API_BASE_URL}/submit-listens"))
-+                .header("authorization", format!("Token {user_token}"))
-+                .json(&Listens::new(
-+                    ListenType::Single,
-+                    vec![Listen::new(artist, title, album, total_length)],
-+                ))
-+                .send()
-+            {
-+                Ok(resp) => {
-+                    let status = resp.status();
-+                    if status == StatusCode::OK {
-+                        return Ok(());
-+                    }
-+                    last_err = Some(anyhow::anyhow!("Received status code {status}."));
-+                }
-+                Err(e) => {
-+                    last_err = Some(e.into());
-+                }
-+            }
-+
-+            if attempt < 4 {
-+                thread::sleep(Duration::from_secs(2));
-+            }
++            Self::save_failed_scrobble(user_token, &listens)?;
++            bail!("Received status code {status}. Request saved for later.");
          }
  
--        Ok(())
-+        Err(last_err.unwrap_or_else(|| anyhow::anyhow!("Request failed.")))
+         Ok(())
      }
++
++    fn save_failed_scrobble(user_token: &SensitiveString, listens: &Listens) -> Result<()> {
++        let dir = PathBuf::from(env::var("HOME")?).join("osu-lb-failed");
++        fs::create_dir_all(&dir)?;
++
++        let listen = listens.payload.first().context("no listen in payload")?;
++        let filename = format!(
++            "{} - {} - {}",
++            listen.listened_at,
++            Self::sanitize(&listen.track_metadata.artist_name, 100),
++            Self::sanitize(&listen.track_metadata.track_name, 100)
++        );
++        let path = dir.join(filename);
++
++        let body = serde_json::to_string_pretty(listens)?;
++        let script = format!(
++            "curl -X POST '{API_BASE_URL}/submit-listens' -H 'authorization: Token {user_token}' -H 'content-type: application/json' --fail --data-binary @- <<'EOF' && sed -i '1i\\echo was successful; exit' \"$0\"\n{body}\nEOF\n"
++        );
++
++        fs::write(&path, script)?;
++        let mut perms = fs::metadata(&path)?.permissions();
++        perms.set_mode(perms.mode() | 0o111);
++        fs::set_permissions(&path, perms)?;
++
++        Ok(())
++    }
++
++    fn sanitize(s: &str, max_bytes: usize) -> String {
++        let clean: String = s.chars().map(|c| if c.is_alphanumeric() || c == '-' || c == '_' { c } else { '_' }).collect();
++
++        let mut end = clean.len();
++        if end > max_bytes {
++            end = max_bytes;
++            while end > 0 && !clean.is_char_boundary(end) {
++                end -= 1;
++            }
++        }
++        clean[..end].to_string()
++    }
  }
