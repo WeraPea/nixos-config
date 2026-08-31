@@ -88,6 +88,54 @@ in
           mpc
           rmpc
           cantata
+          (pkgs.writeShellScriptBin "transmpd" ''
+            to=""
+            from=""
+            prefix=""
+            pause=""
+            q=()
+
+            while [[ $# -gt 0 ]]; do
+              case "$1" in
+              from)
+                to=$(hostname)
+                from="$2"
+                shift 2
+                ;;
+              to)
+                to="$2"
+                from=$(hostname)
+                shift 2
+                ;;
+              add|rm)
+                prefix=$(printf '%s' "$2" | sed 's/[.*/[\&]/\\&/g')
+                if [ "$1" == "add" ]; then
+                  prefix="s|^|$prefix|"
+                else
+                  prefix="s|^$prefix||"
+                fi
+                shift 2
+                ;;
+              pause)
+                q=(-q)
+                pause="y"
+                shift
+                ;;
+              *)
+                exit 1
+                ;;
+              esac
+            done
+            if [ -z "$to" ] || [ -z "$from" ]; then
+              exit 1
+            fi
+
+            mpc -h "$to" clear -q
+            mpc -h "$from" playlist -f %file% | sed "$prefix" | xargs -I% mpc -h "$to" add %
+            mpc -h "$from" current -f %position% | xargs mpc -h "$to" play "''${q[@]}"
+            [ -n "$pause" ] && mpc -h "$to" pause
+            exit 0
+          '')
           (pkgs.writeShellScriptBin "mpd-playlists-remote-to-local" ''
             out_dir=/home/${config.werapi.username}/music/playlists/
             sync_music_dir=/home/${config.werapi.username}/music/sync/
