@@ -45,6 +45,7 @@ in
           "vocadb"
           "utaitedb"
           "touhoudb"
+          "play"
         ];
         musicbrainz = {
           genres = true;
@@ -65,6 +66,17 @@ in
             "CD"
           ];
           original_year = true;
+        };
+        play = {
+          relative_to = "/mpd/music";
+          warning_threshold = false;
+          command = "${pkgs.writeShellScript "beet-play" ''
+            mpc clear >/dev/null
+            while read -r line; do
+              mpc add "$line"
+            done <"$1"
+            mpc play
+          ''} $playlist $args";
         };
       };
     };
