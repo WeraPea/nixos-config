@@ -131,7 +131,7 @@ in
             fi
 
             mpc -h "$to" clear -q
-            mpc -h "$from" playlist -f %file% | sed "$prefix" | xargs -I% mpc -h "$to" add %
+            mpc -h "$from" playlist -f %file% | sed "$prefix" | tr '\n' '\0' | xargs -0 -I% mpc -h "$to" add %
             mpc -h "$from" current -f %position% | xargs mpc -h "$to" play "''${q[@]}"
             [ -n "$pause" ] && mpc -h "$to" pause
             exit 0
