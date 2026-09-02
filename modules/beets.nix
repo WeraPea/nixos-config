@@ -70,13 +70,13 @@ in
         play = {
           relative_to = "/mpd/music";
           warning_threshold = false;
-          command = "${pkgs.writeShellScript "beet-play" ''
+          command = pkgs.writeShellScript "beet-play" ''
             mpc clear >/dev/null
             while read -r line; do
               mpc add "$line"
             done <"$1"
             mpc play
-          ''} $playlist $args";
+          '';
         };
       };
     };
