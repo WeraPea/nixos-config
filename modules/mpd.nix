@@ -11,6 +11,7 @@ in
     }:
     let
       cfg = config.werapi.${moduleName};
+      hmConfig = config.home-manager.users.${config.werapi.username};
     in
     {
       options.werapi.${moduleName} = {
@@ -88,6 +89,14 @@ in
           mpc
           rmpc
           cantata
+          (pkgs.writeShellScriptBin "mpd-load-playlist" ''
+            if [[ $# -ge 1 ]]; then
+              cp "$1" "${hmConfig.services.mpd.playlistDirectory}/load-playlist.m3u"
+            else
+              cat <&0 > "${hmConfig.services.mpd.playlistDirectory}/load-playlist.m3u"
+            fi
+            mpc load load-playlist
+          '')
           (pkgs.writeShellScriptBin "transmpd" ''
             to=""
             from=""
@@ -131,7 +140,7 @@ in
             fi
 
             mpc -h "$to" clear -q
-            mpc -h "$from" playlist -f %file% | sed "$prefix" | tr '\n' '\0' | xargs -0 -I% mpc -h "$to" add %
+            mpc -h "$from" playlist -f %file% | sed "$prefix" | ssh "$to" mpd-load-playlist
             mpc -h "$from" current -f %position% | xargs mpc -h "$to" play "''${q[@]}"
             [ -n "$pause" ] && mpc -h "$to" pause
             exit 0
