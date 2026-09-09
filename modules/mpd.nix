@@ -146,7 +146,7 @@ in
                 *.*) filename="''${basename%.*}-sync.''${basename##*.}" ;;
                 *) filename="''${basename}-sync" ;;
               esac
-              sed -e "s|^/mpd/music/|$sync_music_dir|" "$f" > "$out_dir"/$filename
+              sed -e "s|^/mpd/music/|$sync_music_dir|" -e "s|^[^/]|$sync_music_dir&|" "$f" > "$out_dir"/$filename
             done
           '') # for offline copy
         ];
