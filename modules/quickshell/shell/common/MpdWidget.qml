@@ -1,18 +1,39 @@
-import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Io
 import "config"
 
-WrapperMouseArea {
-    id: mouseArea
+Rectangle {
+    id: root
     required property var colors
     required property string screen
-    acceptedButtons: Qt.LeftButton | Qt.RightButton
     visible: Mpd.mpcAvailable
     property real volAcc: 0
+    property bool ipcVisibilityState: Mpd.ipcVisibilityState
+
+    implicitHeight: 30
+    implicitWidth: mpdText.implicitWidth
+    color: colors.background
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onPressed: function (mouse) {
+            if (mouse.button == Qt.LeftButton) {
+                Mpd.command("toggle");
+            } else if (mouse.button == Qt.RightButton) {
+                Mango.dispatch("spawn,cantata");
+            }
+        }
+        onWheel: event => {
+            volAcc += Math.max(Math.min(event.angleDelta.y / 120, 1), -1);
+        }
+    }
 
     TextObject {
         id: mpdText
+        anchors.centerIn: parent
         color: Mpd.playing ? colors.foreground : colors.foregroundSecondary
         function truncate(str, limit) {
             if (str.length <= limit)
@@ -20,17 +41,7 @@ WrapperMouseArea {
             return str.slice(0, limit) + "…";
         }
 
-        text: `${truncate(Mpd.artist, (mouseArea.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (mouseArea.screen == "DP-2" ? 90 : (mouseArea.screen == "HDMI-A-1" ? 20 : 40)))}` // TODO: make this info .config/
-    }
-    onPressed: function (mouse) {
-        if (mouse.button == Qt.LeftButton) {
-            Mpd.command("toggle");
-        } else if (mouse.button == Qt.RightButton) {
-            Mango.dispatch("spawn,cantata");
-        }
-    }
-    onWheel: event => {
-        volAcc += Math.max(Math.min(event.angleDelta.y / 120, 1), -1);
+        text: `${truncate(Mpd.artist, (root.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (root.screen == "DP-2" ? 90 : (root.screen == "HDMI-A-1" ? 20 : 40)))}` // TODO: make this info .config/
     }
     onVolAccChanged: {
         if (Math.abs(volAcc) >= 1) {
@@ -38,18 +49,29 @@ WrapperMouseArea {
             volAcc -= Math.round(volAcc);
         }
     }
+    onIpcVisibilityStateChanged: if (ipcVisibilityState) {
+        tooltipWindow.visible = true;
+        const pos = root.mapToGlobal(0, root.height);
+        tooltipWindow.x = pos.x;
+        tooltipWindow.y = pos.y;
+    } else {
+        tooltipWindow.visible = false;
+    }
     HoverHandler {
         id: hover
+        onHoveredChanged: tooltipWindow.visible = hovered
+        onPointChanged: {
+            tooltipWindow.x = point.scenePosition.x + (root.Window.window ? root.Window.window.x : 0) - tooltipWindow.width;
+            tooltipWindow.y = point.scenePosition.y + (root.Window.window ? root.Window.window.y : 0) + 20;
+        }
     }
     Window {
         id: tooltipWindow
-        visible: hover.hovered
+        visible: false
         onVisibleChanged: Mpd.continous = visible
         flags: Qt.ToolTip | Qt.FramelessWindowHint
         width: columnLayout.width + 12
         height: columnLayout.height + 8
-        x: hover.point.scenePosition.x + (mouseArea.Window.window ? mouseArea.Window.window.x : 0) - width
-        y: hover.point.scenePosition.y + (mouseArea.Window.window ? mouseArea.Window.window.y : 0) + 20
         color: "transparent"
 
         Rectangle {

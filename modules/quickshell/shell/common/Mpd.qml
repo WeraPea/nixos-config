@@ -10,6 +10,17 @@ Singleton {
     property bool mpcAvailable: false
     property bool continous: false
     property string host: "localhost"
+    property bool ipcVisibilityState: false
+
+    IpcHandler {
+        target: "mpd"
+        function on(): void {
+            ipcVisibilityState = true;
+        }
+        function off(): void {
+            ipcVisibilityState = false;
+        }
+    }
 
     Process {
         id: whichProc

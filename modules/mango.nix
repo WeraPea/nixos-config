@@ -220,6 +220,8 @@ in
         };
         mpd = {
           enter.bind = "SUPER,x";
+          onEntry = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd on";
+          onReturnPre = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd off";
           returnByDefault = true;
           binds.bind = {
             "SUPER,x" = "spawn,mpc toggle";
