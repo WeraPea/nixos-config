@@ -258,7 +258,7 @@ stdenv.mkDerivation {
         beet mod -M purl:"$purl" data_source=TouhouDB touhoudb_track_id="$touhoudb_track_id"
         beet tdbsync -m purl:"$purl"
         ;;
-      p) beet list purl:"$purl" ;;
+      p) beet list purl:"$purl" -f '$path' ;;
       e) beet edit --all purl:"$purl" ;;
       s)
         listenbrainz-manual-submit "$(beet ls purl:"$purl" -f '$path')"
