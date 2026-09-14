@@ -191,7 +191,11 @@
                 ));
             in
             if (lib.isString recKeymodeOf && args.name == baseMode recKeymodeOf) then
-              lib.optionals recEnterIsReturn (emitTransition onReturn recEnterIsReturnReturnToPass enter)
+              lib.optionals recEnterIsReturn (
+                emitTransition (
+                  (lib.toList onReturn) ++ (lib.toList onReturnPre)
+                ) recEnterIsReturnReturnToPass enter
+              )
             else if rsi >= rsiLimit then
               [ ]
             else
@@ -199,7 +203,7 @@
               ++ (emitTransition onEntry name enter)
               ++ [ "keymode=${name}" ]
               ++ (builtins.concatLists (lib.mapAttrsToList emitBinds binds))
-              ++ (emitTransition onReturn returnTo return)
+              ++ (emitTransition ((lib.toList onReturn) ++ (lib.toList onReturnPre)) returnTo return)
               ++ [
                 "keymode=${outerKeymode}"
                 ""
