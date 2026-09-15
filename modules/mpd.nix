@@ -138,9 +138,14 @@ in
             if [ -z "$to" ] || [ -z "$from" ]; then
               exit 1
             fi
+            if [ "$to" != "$(hostname)" ]; then
+              load=(ssh "$to" mpd-load-playlist)
+            else
+              load=(mpd-load-playlist)
+            fi
 
             mpc -h "$to" clear -q
-            mpc -h "$from" playlist -f %file% | sed "$prefix" | ssh "$to" mpd-load-playlist
+            mpc -h "$from" playlist -f %file% | sed "$prefix" | "''${load[@]}"
             mpc -h "$from" current -f %position% | xargs mpc -h "$to" play "''${q[@]}"
             [ -n "$pause" ] && mpc -h "$to" pause
             exit 0
