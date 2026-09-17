@@ -176,6 +176,7 @@ stdenv.mkDerivation {
     file=$(printf '%s' ./"$video_store/$id"/*.mkv)
     base_name="$(basename "''${file%.mkv}")"
     out_file="$audio_dir/''${base_name}.opus"
+    metadata_fields=(PURL SYNOPSIS comment title artist album DATE)
 
     function audio-convert() {
       [[ -e "$out_file" ]] && return
@@ -186,10 +187,17 @@ stdenv.mkDerivation {
 
       echo "$file ($codec)"
 
+      metadata=(-map_metadata -1)
+      for field in "''${metadata_fields[@]}"; do
+        value=$(ffprobe -v error -show_entries "format_tags=$field" \
+          -of default=noprint_wrappers=1:nokey=1 "$file")
+        [[ -n "$value" ]] && metadata+=(-metadata "$field=$value")
+      done
+
       if [[ "$codec" == "opus" ]]; then
-        ffmpeg -i "$file" -vn -c:a copy "$out_file"
+        ffmpeg -i "$file" -vn "''${metadata[@]}" -c:a copy "$out_file"
       else
-        ffmpeg -i "$file" -vn -c:a libopus -ar 48000 -ac 2 "$out_file"
+        ffmpeg -i "$file" -vn "''${metadata[@]}" -c:a libopus -ar 48000 -ac 2 "$out_file"
       fi
 
       echo "$id" >>"$audio_archive"
