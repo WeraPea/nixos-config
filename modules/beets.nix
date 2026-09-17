@@ -59,14 +59,18 @@ in
             }
           ];
         };
-        match.preffered = {
-          countries = [ "JP" ];
-          media = [
-            "Digital Media|File"
-            "CD"
-          ];
-          original_year = true;
+        match = {
+          medium_rec_thresh = 0.1;
+          preffered = {
+            countries = [ "JP" ];
+            media = [
+              "Digital Media|File"
+              "CD"
+            ];
+            original_year = true;
+          };
         };
+        import.default_action = "none";
         play = {
           relative_to = "/mpd/music";
           warning_threshold = false;
