@@ -83,22 +83,103 @@ in
         documentation.man.man-db.package = manPackage;
         documentation.man.cache.generateAtRuntime = !cross;
         wrappers.mango.package = mango-pkg;
-        nixpkgs.overlays = lib.mkOrder 2000 [
-          # overlays.nix is 1500 from mkAfter
-          (final: prev: {
-            werapi = prev.werapi or { } // {
-              yuru =
+        nixpkgs.overlays = lib.mkMerge [
+          (lib.mkOrder 2000 [
+            # overlays.nix is 1500 from mkAfter
+            (final: prev: {
+              werapi = prev.werapi or { } // {
+                yuru =
+                  if cross then
+                    ((pkgsCross.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs (old: {
+                      preBuild = (old.preBuild or "") + ''
+                        export CC_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/cc
+                        export CXX_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/c++
+                      '';
+                    }))
+                  else
+                    prev.werapi.yuru;
+              };
+            })
+          ])
+          (lib.mkOrder 100 [
+            (final: prev: {
+              mpd =
                 if cross then
-                  ((pkgsCross.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs (old: {
-                    preBuild = (old.preBuild or "") + ''
-                      export CC_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/cc
-                      export CXX_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/c++
-                    '';
-                  }))
+                  pkgsCross.mpd.override (
+                    lib.genAttrs [
+                      "systemd"
+                      "glib"
+                      "fmt"
+                      "curl"
+                      "libcdio"
+                      "libcdio-paranoia"
+                      "libmms"
+                      "libnfs"
+                      "liburing"
+                      "samba"
+                      # Archive support"
+                      "bzip2"
+                      "zziplib"
+                      # Codecs
+                      "audiofile"
+                      "faad2"
+                      "ffmpeg"
+                      "flac"
+                      "fluidsynth"
+                      "game-music-emu"
+                      "libmad"
+                      "libmikmod"
+                      "mpg123"
+                      "libopus"
+                      "libvorbis"
+                      "lame"
+                      # Filters
+                      "libsamplerate"
+                      "soxr"
+                      # Outputs
+                      "alsa-lib"
+                      "libao"
+                      "libjack2"
+                      "libpulseaudio"
+                      "libshout"
+                      "pipewire"
+                      # Misc
+                      "icu"
+                      "sqlite"
+                      "dbus"
+                      "pcre2"
+                      "libgcrypt"
+                      "expat"
+                      "nlohmann_json"
+                      "zlib"
+                      "libupnp"
+                      # Client support
+                      "libmpdclient"
+                      # Tag support
+                      "libid3tag"
+                      # For documentation
+                      "doxygen"
+                    ] (name: final.${name})
+                    // {
+                      avahi = pkgsCross.avahi.override (
+                        lib.genAttrs [
+                          "libdaemon"
+                          "dbus"
+                          "libpcap"
+                          "expat"
+                          "gettext"
+                          "glib"
+                          "autoconf-archive"
+                          "libiconv"
+                          "libevent"
+                        ] (name: final.${name})
+                      );
+                    }
+                  )
                 else
-                  prev.werapi.yuru;
-            };
-          })
+                  prev.mpd;
+            })
+          ])
         ];
       };
     };
