@@ -26,7 +26,81 @@ in
       package = (
         # workaround: for whatever reason the above decided to ignore the plugin override after an update
         pkgs.python3.pkgs.beets.overrideAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.werapi.beets-vocadb ];
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [
+            pkgs.werapi.beets-vocadb
+            (pkgs.writeTextDir "lib/python${pkgs.python3.pythonVersion}/site-packages/beetsplug/copyurl.py" /* python */ ''
+              # """Add a "copy url" choice to beets' interactive importer prompt."""
+              #
+              from __future__ import annotations
+
+              import shutil
+              import subprocess
+              from typing import TYPE_CHECKING
+
+              from beets import ui
+              from beets.plugins import BeetsPlugin
+              from beets.util import PromptChoice
+              from beets.util.color import colorize
+
+              if TYPE_CHECKING:
+                  from collections.abc import Sequence
+
+                  from beets.autotag.hooks import AlbumMatch, TrackMatch
+                  from beets.importer import ImportSession, ImportTask
+
+
+              def _copy_to_clipboard(text: str) -> bool:
+                  cmd = ["wl-copy", "-p"]
+                  if shutil.which(cmd[0]):
+                      subprocess.run(cmd, input=text.encode("utf-8"), check=True)
+                      return True
+                  return False
+
+
+              class CopyUrlPlugin(BeetsPlugin):
+                  def __init__(self) -> None:
+                      super().__init__()
+                      self.register_listener("before_choose_candidate", self.before_choose_candidate_listener)
+
+                  def before_choose_candidate_listener(self, session: ImportSession, task: ImportTask) -> list[PromptChoice]:
+                      if not task.candidates:
+                          return []
+                      return [PromptChoice("o", "cOpy url", self.copy_url)]
+
+                  def copy_url(self, session: ImportSession, task: ImportTask) -> None:
+                      candidates: Sequence[AlbumMatch | TrackMatch] = task.candidates
+
+                      if len(candidates) == 1:
+                          match = candidates[0]
+                      else:
+                          sel = ui.input_(
+                              f"Candidate # to copy the URL of "
+                              f"(1-{len(candidates)}, default 1):"
+                          ).strip()
+                          try:
+                              match = candidates[int(sel) - 1 if sel else 0]
+                          except (ValueError, IndexError):
+                              ui.print_(colorize("text_warning", "Invalid selection."))
+                              return None
+
+                      url = getattr(match.info, "data_url", None)
+                      if not url:
+                          ui.print_(colorize("text_warning", "This candidate has no URL."))
+                          return None
+
+                      if _copy_to_clipboard(url):
+                          ui.print_(
+                              f"Copied to clipboard:",
+                              f"{url}"
+                          )
+                      else:
+                          ui.print_(colorize(
+                              "text_warning",
+                              "No clipboard tool found (wl-copy)",
+                          ))
+                      return None
+            '')
+          ];
           doInstallCheck = false;
         })
       );
@@ -46,6 +120,7 @@ in
           "utaitedb"
           "touhoudb"
           "play"
+          "copyurl"
         ];
         musicbrainz = {
           genres = true;
