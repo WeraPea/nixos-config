@@ -149,6 +149,24 @@ in
             ];
           });
 
+          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: rec {
+            version = "1.5.0";
+            src = final.fetchFromGitHub {
+              owner = "ShayBox";
+              repo = "Lighthouse";
+              rev = version;
+              hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
+            };
+            cargoBuildFlags = (old.cargoBuildFlags or [ ]) ++ [
+              "--features"
+              "cli"
+            ];
+          });
+        }
+      );
+
+      tweaks = (
+        final: prev: {
           nvimpager = prev.nvimpager.overrideAttrs (old: {
             patches = old.patches or [ ] ++ [
               ./nvimpager-term-colors.patch
@@ -180,18 +198,8 @@ in
             ];
           });
 
-          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: rec {
-            version = "1.5.0";
-            src = final.fetchFromGitHub {
-              owner = "ShayBox";
-              repo = "Lighthouse";
-              rev = version;
-              hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
-            };
-            cargoBuildFlags = (old.cargoBuildFlags or [ ]) ++ [
-              "--features"
-              "cli"
-            ];
+          mpd = prev.mpd.overrideAttrs (old: {
+            patches = (old.patches or [ ]) ++ [ ./mpd-yeet-tcp-restriction.patch ];
           });
         }
       );

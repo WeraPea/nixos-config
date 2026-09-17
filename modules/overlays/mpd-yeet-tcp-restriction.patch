@@ -1,0 +1,14 @@
+diff --git a/src/client/File.cxx b/src/client/File.cxx
+index 26ded863b..f05d44be0 100644
+--- a/src/client/File.cxx
++++ b/src/client/File.cxx
+@@ -19,9 +19,6 @@ Client::AllowFile(Path path_fs) const
+ 		   instance */
+ 		return;
+ 
+-	if (uid < 0)
+-		/* unauthenticated client */
+-		throw ProtocolError(ACK_ERROR_PERMISSION, "Access to local files via TCP is not allowed");
+ 
+ 	const FileInfo fi(path_fs);
+ 
