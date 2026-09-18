@@ -137,8 +137,11 @@ in
       # programs.calls.enable = true;
 
       services.udev.packages = [
-        (pkgs.writeTextDir "lib/udev/rules.d/83-backlight.rules" ''
+        (pkgs.writeTextDir "lib/udev/rules.d/83-backlight.rules" /* udev */ ''
           SUBSYSTEM=="backlight", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
+        '')
+        (pkgs.writeTextDir "lib/udev/rules.d/67-fajita-charge-current.rules" /* udev */ ''
+          SUBSYSTEM=="power_supply", KERNEL=="pmi8998-charger", ACTION=="add|change", ATTR{current_max}="1200000"
         '')
       ];
       services.logind.settings.Login = {
