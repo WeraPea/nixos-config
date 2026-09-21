@@ -1,0 +1,77 @@
+diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+index 9436c6bbf51f..cda528773978 100644
+--- a/drivers/power/supply/rk817_charger.c
++++ b/drivers/power/supply/rk817_charger.c
+@@ -16,6 +16,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/regmap.h>
++#include <linux/sysfs.h>
+ 
+ /* Charging statuses reported by hardware register */
+ enum rk817_charge_status {
+@@ -1056,6 +1057,53 @@ static void rk817_cleanup_node(void *data)
+ 	of_node_put(node);
+ }
+ 
++static ssize_t chrg_en_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
++{
++	struct rk817_charger *charger = dev_get_drvdata(dev);
++	unsigned int reg;
++	int ret;
++
++	ret = regmap_read(charger->rk808->regmap, RK817_PMIC_CHRG_TERM, &reg);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d\n", !!(reg & RK817_CHRG_EN));
++}
++
++static ssize_t chrg_en_store(struct device *dev,
++			     struct device_attribute *attr,
++			     const char *buf, size_t count)
++{
++	struct rk817_charger *charger = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
++
++	ret = kstrtouint(buf, 0, &val);
++	if (ret)
++		return ret;
++
++	if (val != 0 && val != 1)
++		return -EINVAL;
++
++	ret = regmap_update_bits(charger->rk808->regmap, RK817_PMIC_CHRG_TERM,
++				  RK817_CHRG_EN, val ? RK817_CHRG_EN : 0);
++	if (ret)
++		return ret;
++
++	return count;
++}
++static DEVICE_ATTR_RW(chrg_en);
++
++static struct attribute *rk817_charger_attrs[] = {
++	&dev_attr_chrg_en.attr,
++	NULL,
++};
++
++static const struct attribute_group rk817_charger_attr_group = {
++	.attrs = rk817_charger_attrs,
++};
++
+ static int rk817_charger_probe(struct platform_device *pdev)
+ {
+ 	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
+@@ -1085,6 +1133,10 @@ static int rk817_charger_probe(struct platform_device *pdev)
+ 	charger->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, charger);
+ 
++	ret = devm_device_add_group(&pdev->dev, &rk817_charger_attr_group);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to create sysfs attrs\n");
++
+ 	rk817_bat_calib_vol(charger);
+ 
+ 	pscfg.drv_data = charger;

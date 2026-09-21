@@ -172,6 +172,12 @@ in
           }
         )
       );
+      boot.kernelPatches = [
+        {
+          name = "chrg_en-sysfs";
+          patch = ./pinenote-kernel-chrg_en-sysfs.patch;
+        }
+      ];
 
       fileSystems."/" = {
         label = "nixos";
