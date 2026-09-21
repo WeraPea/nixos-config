@@ -136,6 +136,29 @@ in
 
       # programs.calls.enable = true;
 
+      systemd.services.battery-charge-limit = {
+        serviceConfig.Type = "oneshot";
+        script = ''
+          CHARGER=/sys/class/power_supply/pmi8998-charger
+          CAP=$(cat /sys/class/power_supply/bq27411-0/capacity)
+          ONLINE=$(cat "$CHARGER/online")
+          if [ "$ONLINE" = "0" ]; then exit; fi
+          LIMIT=$(cat "$CHARGER/current_max")
+          if [ "$CAP" -ge 80 ] && [ "$LIMIT" != "0" ]; then
+            echo 0 > "$CHARGER/current_max"
+          elif [ "$CAP" -le 70 ] && [ "$LIMIT" = "0" ]; then
+            echo 1200000 > "$CHARGER/current_max"
+          fi
+        '';
+      };
+      systemd.timers.battery-charge-limit = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "30s";
+          OnUnitActiveSec = "60s";
+        };
+      };
+
       services.udev.packages = [
         (pkgs.writeTextDir "lib/udev/rules.d/83-backlight.rules" /* udev */ ''
           SUBSYSTEM=="backlight", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
