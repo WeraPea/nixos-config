@@ -18,6 +18,7 @@ in
     {
       werapi = {
         hostname = "nixos";
+        ccache.enable = true;
         defaultModules.enable = true;
         gaming.enable = true;
         beets.enable = true;

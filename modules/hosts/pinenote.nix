@@ -22,6 +22,7 @@ in
         crossSystem = {
           config = "aarch64-unknown-linux-gnu";
         };
+        overlays = [ flake.overlays._ccache ];
       };
       pkgsX86_64 = import inputs.nixpkgs {
         system = "x86_64-linux";
@@ -33,6 +34,10 @@ in
         hostname = "pinenote";
         defaultModules.enable = true;
 
+        ccache = {
+          enable = true;
+          targetOnly.enable = true;
+        };
         firefox = {
           mobile.enable = true;
           minimal.enable = true;
@@ -162,7 +167,9 @@ in
 
       boot.kernelPackages = lib.mkIf (config.werapi.buildSystem == "x86_64-linux") (
         pkgsCross.linuxPackagesFor (
-          pkgsCross.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" { }
+          pkgsCross.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" {
+            stdenv = pkgsCross.ccacheStdenv;
+          }
         )
       );
 
