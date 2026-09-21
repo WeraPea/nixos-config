@@ -162,6 +162,30 @@ in
         }
       ];
 
+      systemd.services.battery-charge-limit = {
+        serviceConfig.Type = "oneshot";
+        script = ''
+          CHARGER=/sys/class/power_supply/rk817-charger
+          CAP=$(cat /sys/class/power_supply/rk817-battery/capacity)
+          ONLINE=$(cat "$CHARGER/online")
+          if [ "$ONLINE" = "0" ]; then exit; fi
+          CHRG_EN_PATH=$(find /sys/devices/platform/*.i2c/i2c-0/0-0020/ -maxdepth 2 -name chrg_en 2>/dev/null)
+          CHRG_EN=$(cat "$CHRG_EN_PATH")
+          if [ "$CAP" -ge 80 ] && [ "$CHRG_EN" = "1" ]; then
+            echo 0 > "$CHRG_EN_PATH"
+          elif [ "$CAP" -le 70 ] && [ "$CHRG_EN" = "0" ]; then
+            echo 1 > "$CHRG_EN_PATH"
+          fi
+        '';
+      };
+      systemd.timers.battery-charge-limit = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "30s";
+          OnUnitActiveSec = "60s";
+        };
+      };
+
       system.stateVersion = "25.05";
       nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
