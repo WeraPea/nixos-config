@@ -9,7 +9,7 @@ Rectangle {
     required property string screen
     visible: Mpd.mpcAvailable
     property real volAcc: 0
-    property bool ipcVisibilityState: Mpd.ipcVisibilityState
+    property bool tooltipForced: Mpd.ipcVisibilityState
 
     implicitHeight: 30
     implicitWidth: mpdText.implicitWidth
@@ -30,6 +30,12 @@ Rectangle {
             volAcc += Math.max(Math.min(event.angleDelta.y / 120, 1), -1);
         }
     }
+    onVolAccChanged: {
+        if (Math.abs(volAcc) >= 1) {
+            Mpd.volumePercent += Math.round(volAcc);
+            volAcc -= Math.round(volAcc);
+        }
+    }
 
     TextObject {
         id: mpdText
@@ -43,31 +49,26 @@ Rectangle {
 
         text: `${truncate(Mpd.artist, (root.screen == "DP-2" ? 40 : 20))} - ${truncate(Mpd.title, (root.screen == "DP-2" ? 90 : (root.screen == "HDMI-A-1" ? 20 : 40)))}` // TODO: make this info .config/
     }
-    onVolAccChanged: {
-        if (Math.abs(volAcc) >= 1) {
-            Mpd.volumePercent += Math.round(volAcc);
-            volAcc -= Math.round(volAcc);
-        }
-    }
-    onIpcVisibilityStateChanged: if (ipcVisibilityState) {
-        tooltipWindow.visible = true;
+
+    function updateTooltipPosition() {
         const pos = root.mapToGlobal(0, root.height);
         tooltipWindow.x = pos.x;
         tooltipWindow.y = pos.y;
-    } else {
-        tooltipWindow.visible = false;
     }
+    onTooltipForcedChanged: if (tooltipForced)
+        updateTooltipPosition()
+    onWidthChanged: if (tooltipForced)
+        Qt.callLater(updateTooltipPosition)
     HoverHandler {
         id: hover
-        onHoveredChanged: tooltipWindow.visible = hovered
-        onPointChanged: {
+        onPointChanged: if (!tooltipForced) {
             tooltipWindow.x = point.scenePosition.x + (root.Window.window ? root.Window.window.x : 0) - tooltipWindow.width;
             tooltipWindow.y = point.scenePosition.y + (root.Window.window ? root.Window.window.y : 0) + 20;
         }
     }
     Window {
         id: tooltipWindow
-        visible: false
+        visible: tooltipForced || hover.hovered
         onVisibleChanged: Mpd.continous = visible
         flags: Qt.ToolTip | Qt.FramelessWindowHint
         width: columnLayout.width + 12

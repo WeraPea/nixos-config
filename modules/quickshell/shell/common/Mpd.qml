@@ -20,6 +20,9 @@ Singleton {
         function off(): void {
             ipcVisibilityState = false;
         }
+        function toggle(): void {
+            ipcVisibilityState = !ipcVisibilityState;
+        }
     }
 
     Process {

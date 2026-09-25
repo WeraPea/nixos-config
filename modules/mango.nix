@@ -78,6 +78,8 @@ in
 
               "NONE,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1";
               "NONE,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1";
+              "SUPER,XF86AudioLowerVolume" = "spawn,mpc volume -5";
+              "SUPER,XF86AudioRaiseVolume" = "spawn,mpc volume +5";
               "SHIFT,XF86AudioLowerVolume" = "spawn,${lib.getExe pkgs.pamixer} -d 1 --allow-boost";
               "SHIFT,XF86AudioRaiseVolume" = "spawn,${lib.getExe pkgs.pamixer} -i 1 --allow-boost";
 
@@ -115,6 +117,7 @@ in
               "NONE,XF86MonBrightnessDown" = "spawn,brightnessctl set 10%-";
 
               "NONE,XF86AudioPlay" = "spawn,mpc toggle";
+              "SUPER,XF86AudioPlay" = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd toggle";
               "NONE,XF86AudioPause" = "spawn,mpc pause";
               "NONE,XF86AudioPrev" = "spawn,mpc prev";
               "NONE,XF86AudioNext" = "spawn,mpc next";
