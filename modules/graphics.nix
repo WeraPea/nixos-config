@@ -29,8 +29,33 @@ in
           packages = with pkgs; [
             noto-fonts
             noto-fonts-cjk-sans
+            noto-fonts-cjk-serif
             noto-fonts-color-emoji
           ];
+          fontconfig.localConf = ''
+            <?xml version="1.0"?>
+            <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+            <fontconfig>
+              <alias>
+                <family>sans-serif</family>
+                <prefer>
+                  <family>Noto Sans CJK JP</family>
+                </prefer>
+              </alias>
+              <alias>
+                <family>serif</family>
+                <prefer>
+                  <family>Noto Serif CJK JP</family>
+                </prefer>
+              </alias>
+              <alias>
+                <family>monospace</family>
+                <prefer>
+                  <family>Noto Sans Mono CJK JP</family>
+                </prefer>
+              </alias>
+            </fontconfig>
+          '';
         };
 
         programs.dconf.enable = true;
