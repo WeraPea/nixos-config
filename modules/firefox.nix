@@ -77,67 +77,6 @@ in
         sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
       };
 
-      toggle-toolbar = # js
-        ''
-          // ==UserScript==
-          // @name            Toggle Toolbar
-          // @author          werapi
-          // @version         1
-          // @description
-          // @onlyonce
-          // ==/UserScript==
-          import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
-
-          Windows.onCreated(async (win) => {
-            const { parent } = win;
-            if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
-
-            await Windows.waitWindowLoading(parent);
-
-            const doc = parent.document;
-            const toolbox = doc.getElementById("navigator-toolbox");
-
-            const menuitem = doc.createXULElement("menuitem");
-            menuitem.id = "context-toggle-toolbar";
-            menuitem.setAttribute("label", "Toggle Toolbar");
-            menuitem.setAttribute("accesskey", "T");
-
-            menuitem.addEventListener("command", () => {
-              if (toolbox) {
-                const isHidden = toolbox.style.display === "none";
-                if (isHidden) {
-                  toolbox.style.display = "";
-                  toolbox.style.visibility = "";
-                } else {
-                  toolbox.style.display = "none";
-                  toolbox.style.visibility = "collapse";
-                }
-              }
-            });
-
-            const contentAreaContextMenu = doc.getElementById("contentAreaContextMenu");
-            if (contentAreaContextMenu) {
-              const separator = doc.createXULElement("menuseparator");
-              separator.id = "context-toggle-toolbar-separator";
-              contentAreaContextMenu.appendChild(separator);
-              contentAreaContextMenu.appendChild(menuitem);
-            }
-
-            const key = doc.createXULElement("key");
-            key.id = "key-toggle-toolbar";
-            key.setAttribute("modifiers", "alt");
-            key.setAttribute("key", "T");
-            key.addEventListener("command", () => {
-              menuitem.click();
-            });
-
-            const keyset = doc.getElementById("mainKeyset");
-            if (keyset) {
-              keyset.appendChild(key);
-            }
-          });
-        '';
-
       transparent-browser-by-url = # js
         ''
           // ==UserScript==
@@ -479,8 +418,6 @@ in
             "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/utils".source = utils;
             "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/enforceTransparent.sys.mjs".source =
               enforce-transparent;
-            "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/toggleToolbar.sys.mjs".text =
-              toggle-toolbar;
             "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/transparentBrowserByUrl.sys.mjs".text =
               transparent-browser-by-url;
             "${hmConfig.programs.firefox.configPath}/${profileName}/chrome/JS/themeChangeByOutput.sys.mjs".text =
@@ -670,10 +607,7 @@ in
                       cliget
                       cookies-txt
                       enhancer-for-youtube
-                      gitako-github-file-tree
-                      github-file-icons
                       github-isometric-contributions
-                      hyperchat
                       indie-wiki-buddy
                       inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.darkreader-declarative
                       inputs.firefox-extensions-declarative.packages.${pkgs.stdenv.hostPlatform.system}.violentmonkey-declarative
@@ -689,7 +623,6 @@ in
                       translate-web-pages
                       unhook
                       videospeed
-                      web-scrobbler
                       youtube-no-translation
 
                       # ff2mpv # TODO:
@@ -767,32 +700,6 @@ in
                     urls = [ { template = "https://noogle.dev?term={searchTerms}"; } ];
                     iconMapObj."32" = "https://noogle.dev/favicon.ico";
                     definedAliases = [ "@nog" ];
-                  };
-                  hmopts = {
-                    name = "Home Manager Options";
-                    urls = [
-                      { template = "https://home-manager-options.extranix.com?release=master&query={searchTerms}"; }
-                    ];
-                    icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                    definedAliases = [ "@hm" ];
-                  };
-                  nix-options = {
-                    name = "Nix Options";
-                    urls = [ { template = "https://search.nixos.org/options?channel=unstable&query={searchTerms}"; } ];
-                    icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                    definedAliases = [ "@no" ];
-                  };
-                  nix-packages = {
-                    name = "Nix Packages";
-                    urls = [ { template = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}"; } ];
-                    icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                    definedAliases = [ "@np" ];
-                  };
-                  nixos-wiki = {
-                    name = "NixOS Wiki";
-                    urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
-                    iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
-                    definedAliases = [ "@nw" ];
                   };
                   nixpkgs = {
                     name = "Nixpkgs";
@@ -927,23 +834,6 @@ in
                       background: #0000 !important;
                     }
                   }
-
-                  @-moz-document regexp("https://anilist\\.co/.*") {
-                    :root, html, body, .site-theme-dark, .site-theme-dark .nav-unscoped, .footer, .banner {
-                      --color-background-100: #0000 !important;
-                      --color-background-200: #0000 !important;
-                      --color-background: #0000 !important;
-                      --color-foreground: #0000 !important;
-                      background-color: #0000 !important;
-                    }
-                    .media-card, .hover-data {
-                      box-shadow: none !important;
-                    }
-                    .list-preview .media-preview-card .content,
-                    .hover-data {
-                      background-color: ${cfg.theme.backgroundColor} !important;
-                    }
-                  }
                   @-moz-document regexp("https://renji-xd.github.io/texthooker-ui/") {
                     :root, body, .bg-base-100 {
                       background-color: #0000 !important;
@@ -1007,7 +897,6 @@ in
                       "ublock0_raymondhill_net-browser-action"
                       "addon_darkreader_org-browser-action"
                       "_446900e4-71c2-419f-a6a7-df9c091e268b_-browser-action" # bitwarden
-                      "_799c0914-748b-41df-a25c-22d008f9e83f_-browser-action" # web-scrobbler
                       "_3c078156-979c-498b-8990-85f7987dd929_-browser-action" # sidebery
                     ];
                     toolbar-menubar = [ "menubar-items" ];
