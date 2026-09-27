@@ -27,6 +27,7 @@ in
         # workaround: for whatever reason the above decided to ignore the plugin override after an update
         pkgs.python3.pkgs.beets.overrideAttrs (old: {
           propagatedBuildInputs = old.propagatedBuildInputs ++ [
+            pkgs.werapi.beets-multivalue
             pkgs.werapi.beets-vocadb
             (pkgs.writeTextDir "lib/python${pkgs.python3.pythonVersion}/site-packages/beetsplug/copyurl.py" /* python */ ''
               # """Add a "copy url" choice to beets' interactive importer prompt."""
@@ -121,7 +122,11 @@ in
           "touhoudb"
           "play"
           "copyurl"
+          "multivalue"
         ];
+        multivalue.string_fields = {
+          grouping = ";";
+        };
         musicbrainz = {
           genres = true;
         };
