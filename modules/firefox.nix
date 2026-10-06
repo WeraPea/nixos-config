@@ -566,6 +566,7 @@ in
                     "connect.prusa3d.com"
                     "docs.google.com"
                     "duckduckgo.com"
+                    "start.duckduckgo.com"
                     "google.com/maps"
                     "mapy.geoportal.gov.pl"
                     "web.archive.org"
@@ -828,7 +829,7 @@ in
                     --in-content-box-background: #0000 !important;
                     --newtab-background-color: #0000 !important;
                   }
-                  @-moz-document regexp("https://duckduckgo\\.com/.*") {
+                  @-moz-document regexp("https://.*\.duckduckgo\\.com/.*") {
                     html, body, .body--home, .site-wrapper, .region__body, .badge-link, .module--carousel__image-wrapper, .result__image, .vertical--map__sidebar, .vertical--map__sidebar__header, .page-chrome_newtab, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded .metabar:not(.is-stuck), .header-wrap {
                       --theme-bg-home-custom: #0000 !important;
                       background: #0000 !important;
@@ -854,7 +855,7 @@ in
                 "browser.gesture.swipe.left" = ""; # to not go back in history by mistake when using a touchpad
                 "browser.gesture.swipe.right" = "";
                 "browser.search.separatePrivateDefault" = false;
-                "browser.startup.homepage" = "https://duckduckgo.com/";
+                "browser.startup.homepage" = "https://start.duckduckgo.com/";
                 "browser.startup.page" = 3; # previous-session
                 "browser.tabs.allow_transparent_browser" = true;
                 "browser.tabs.unloadOnLowMemory" = true;
