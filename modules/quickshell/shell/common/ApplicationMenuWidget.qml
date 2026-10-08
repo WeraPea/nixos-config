@@ -144,7 +144,7 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 usageFile.incrementUsage(entry.modelData.id);
-                                entry.modelData.execute();
+                                Mango.dispatch("spawn," + entry.modelData.command.join(""));
                                 menuLoader.active = false;
                             }
                         }
