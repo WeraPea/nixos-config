@@ -29,7 +29,8 @@ Item {
     property color foreground: base06
     property color foregroundSecondary: base02
     property color accent: base0C
-    property string path: `${Quickshell.env("HOME")}/.config/stylix/palette.json`
+    property string path: defaultPath
+    readonly property string defaultPath: `${Quickshell.env("HOME")}/.config/stylix/palette.json`
 
     FileView {
         path: root.path

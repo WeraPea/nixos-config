@@ -91,7 +91,14 @@ Item {
 
                 Repeater {
                     id: entries
-                    model: [...DesktopEntries.applications.values].sort(function (a, b) {
+                    model: [
+                        {
+                            id: "mpdWindow",
+                            icon: "",
+                            name: "Music",
+                            command: "mpd"
+                        },
+                        ...DesktopEntries.applications.values].sort(function (a, b) {
                         var countA = usageFile.getUsageCount(a.id);
                         var countB = usageFile.getUsageCount(b.id);
                         if (countB !== countA) {
@@ -102,7 +109,7 @@ Item {
 
                     Rectangle {
                         id: entry
-                        required property DesktopEntry modelData
+                        required property var modelData
                         property int margins: 5
 
                         color: "transparent"
@@ -144,7 +151,10 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 usageFile.incrementUsage(entry.modelData.id);
-                                Mango.dispatch("spawn," + entry.modelData.command.join(""));
+                                if (entry.modelData.command === "mpd")
+                                    Mpd.ipcWindowVisibilityState = true;
+                                else
+                                    Mango.dispatch("spawn," + entry.modelData.command.join(" "));
                                 menuLoader.active = false;
                             }
                         }

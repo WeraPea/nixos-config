@@ -1,11 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Io
 import "config"
 
 Rectangle {
     id: root
-    required property var colors
+    required property Colors colors
     required property string screen
     visible: Mpd.mpcAvailable
     property real volAcc: 0
@@ -23,7 +22,7 @@ Rectangle {
             if (mouse.button == Qt.LeftButton) {
                 Mpd.command("toggle");
             } else if (mouse.button == Qt.RightButton) {
-                Mango.dispatch("spawn,cantata");
+                Mpd.ipcWindowVisibilityState = !Mpd.ipcWindowVisibilityState;
             }
         }
         onWheel: event => {
@@ -69,31 +68,48 @@ Rectangle {
     Window {
         id: tooltipWindow
         visible: tooltipForced || hover.hovered
-        onVisibleChanged: Mpd.continous = visible
+        onVisibleChanged: Mpd.setContinous(this, visible)
         flags: Qt.ToolTip | Qt.FramelessWindowHint
-        width: columnLayout.width + 12
-        height: columnLayout.height + 8
+        width: rect.width + 12
+        height: rect.height + 8
         color: "transparent"
 
         Rectangle {
-            anchors.fill: parent
+            id: rect
             color: colors.background
             radius: 0
             border.color: colors.accent
             border.width: 1
+            width: rowLayout.width + rowLayout.anchors.leftMargin + 6 + border.width // other half of border in leftMargin
+            height: columnLayout.height + 8 + border.width * 2
 
-            ColumnLayout {
-                id: columnLayout
-                anchors.centerIn: parent
-                TextObject {
-                    id: tooltipText
-                    color: colors.foreground
-                    text: `${Mpd.artist} - ${Mpd.title}`
+            RowLayout {
+                id: rowLayout
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: cover.visible ? rect.border.width : 6 + rect.border.width
+                spacing: 8
+                MpdCover {
+                    id: cover
+                    colors: root.colors
+                    size: columnLayout.height + 8
+                    Layout.preferredWidth: size * aspect
+                    store: MpdThumbs.thumbs
+                    file: Mpd.file
+                    visible: thumb.status != Image.Null
                 }
-                TextObject {
-                    id: tooltipText2
-                    color: colors.foreground
-                    text: `${Mpd.currentTime}/${Mpd.totalTime} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
+                ColumnLayout {
+                    id: columnLayout
+                    TextObject {
+                        id: tooltipText
+                        color: colors.foreground
+                        text: `${Mpd.artist} - ${Mpd.title}`
+                    }
+                    TextObject {
+                        id: tooltipText2
+                        color: colors.foreground
+                        text: `${Mpd.fmtSec(Mpd.currentTime)}/${Mpd.fmtSec(Mpd.totalTime)} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
+                    }
                 }
             }
         }
