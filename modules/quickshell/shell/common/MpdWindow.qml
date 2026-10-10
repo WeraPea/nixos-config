@@ -16,6 +16,7 @@ Item {
         property Flickable scroller
         property real wheelStep: 52
         property bool mouseFlick: root.mouseFlick
+        readonly property bool moving: dragHandler.active || wheelTimer.running || scroller.flicking
 
         function clampY(y) {
             const f = scroller;
@@ -24,16 +25,23 @@ Item {
             return Math.max(minY, Math.min(maxY, y));
         }
 
+        Timer {
+            id: wheelTimer
+            interval: 300
+        }
+
         WheelHandler {
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: event => {
                 const dy = event.pixelDelta.y !== 0 ? event.pixelDelta.y : event.angleDelta.y / 120 * scrollBase.wheelStep;
+                wheelTimer.restart();
                 scrollBase.scroller.cancelFlick();
                 scrollBase.scroller.contentY = scrollBase.clampY(scrollBase.scroller.contentY - dy);
             }
         }
 
         DragHandler {
+            id: dragHandler
             property real startY: 0
             target: null
             xAxis.enabled: false
@@ -575,7 +583,10 @@ Item {
                                     required property int position
                                     colors: floatingWindow.colors
                                     highlighted: position === Mpd.currentTrack
-                                    onTapped: Mpd.command(`play ${position}`)
+                                    onTapped: {
+                                        queueList.ignoreNextChange = true;
+                                        Mpd.command(`play ${position}`);
+                                    }
                                 }
                                 // TODO: swipe for remove, move, etc
                                 TextButton {
@@ -594,7 +605,33 @@ Item {
                                 Component.onCompleted: Qt.callLater(_ => {
                                     if (Mpd.currentTrack > 0)
                                         view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center);
+                                    queueList.lastTrack = Mpd.currentTrack;
                                 }) // without callLater causes persistent high cpu usage ???
+                                property int lastTrack: Mpd.currentTrack
+                                property bool ignoreNextChange: false
+                                property real lastHeight: view.height
+
+                                Connections {
+                                    target: Mpd
+                                    function onCurrentTrackChanged() {
+                                        if (!queueList.ignoreNextChange) {
+                                            const prev = queueList.view.itemAtIndex(queueList.lastTrack - 1);
+                                            const wasVisible = prev.y + prev.height > queueList.view.contentY && prev.y < queueList.view.contentY + queueList.view.height;
+                                            const amount = Mpd.currentTrack - queueList.lastTrack;
+                                            if (wasVisible && !queueList.interacting)
+                                                queueList.view.contentY = queueList.clampY(queueList.view.contentY + prev.height * amount + queueList.view.spacing);
+                                        }
+                                        queueList.ignoreNextChange = false;
+                                        queueList.lastTrack = Mpd.currentTrack;
+                                    }
+                                }
+                                onHeightChanged: {
+                                    const current = queueList.view.itemAtIndex(Mpd.currentTrack - 1);
+                                    const wasVisible = current.y + current.height > view.contentY && current.y < view.contentY + lastHeight;
+                                    if (wasVisible && !queueList.interacting)
+                                        queueList.view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Contain);
+                                    lastHeight = view.height;
+                                }
                             }
 
                             // Library / search
