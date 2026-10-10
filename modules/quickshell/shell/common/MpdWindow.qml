@@ -8,7 +8,6 @@ import "config"
 Item {
     id: root
     property bool active: Mpd.ipcWindowVisibilityState
-    // property bool active: Mpd.ipcWindowVisibilityState | Hostname.hostname === "fajita"
 
     property bool mouseFlick: true
 
@@ -298,13 +297,97 @@ Item {
                                 }
                             }
                         }
-                        MpdCover {
-                            colors: floatingWindow.colors
+                        // Cover
+                        ListView {
+                            id: coverSwipe
                             Layout.fillHeight: true
-                            Layout.preferredWidth: songMenu.width
-                            Layout.preferredHeight: songMenu.width / aspect
-                            store: MpdThumbs.thumbs
-                            file: Mpd.file
+                            Layout.fillWidth: true
+
+                            orientation: ListView.Horizontal
+                            model: Mpd.queue
+                            snapMode: ListView.NoSnap
+                            highlightRangeMode: ListView.NoHighlightRange
+                            cacheBuffer: width
+                            clip: true
+                            boundsBehavior: Flickable.StopAtBounds
+
+                            property real commitFraction: 0.33
+                            property real commitVelocity: 500
+                            property real dragStartX: 0
+                            property int dragStartPage: 0
+                            property int page: 0
+
+                            delegate: Item {
+                                id: coverItem
+                                required property string file
+                                width: ListView.view.width
+                                height: ListView.view.height
+
+                                MpdCover {
+                                    anchors.centerIn: parent
+                                    colors: floatingWindow.colors
+                                    width: parent.width
+                                    height: width / aspect
+                                    store: MpdThumbs.thumbs
+                                    file: coverItem.file
+                                }
+                            }
+
+                            function goTo(index) {
+                                const i = Math.max(0, Math.min(count - 1, index));
+                                page = i;
+                                cancelFlick();
+                                snapAnim.stop();
+                                snapAnim.to = originX + i * width;
+                                snapAnim.start();
+                            }
+
+                            NumberAnimation {
+                                id: snapAnim
+                                target: coverSwipe
+                                property: "contentX"
+                                duration: 250
+                                easing.type: Easing.OutCubic
+                            }
+
+                            onDragStarted: {
+                                snapAnim.stop();
+                                dragStartX = contentX;
+                                dragStartPage = page;
+                            }
+
+                            onDragEnded: {
+                                const delta = contentX - dragStartX;
+                                const v = horizontalVelocity;
+                                let target = dragStartPage;
+                                if (delta > width * commitFraction || v > commitVelocity)
+                                    target += 1;
+                                else if (delta < -width * commitFraction || v < -commitVelocity)
+                                    target -= 1;
+                                goTo(target);
+                                if (page + 1 !== Mpd.currentTrack)
+                                    Mpd.command(`play ${page + 1}`);
+                            }
+
+                            // onFlickStarted: cancelFlick()
+
+                            Connections {
+                                target: Mpd
+                                function onCurrentTrackChanged() {
+                                    if (coverSwipe.page + 1 !== Mpd.currentTrack && !coverSwipe.dragging)
+                                        coverSwipe.goTo(Mpd.currentTrack - 1);
+                                }
+                            }
+
+                            Component.onCompleted: Qt.callLater(() => {
+                                const i = Math.max(0, Mpd.currentTrack - 1);
+                                positionViewAtIndex(i, ListView.Beginning);
+                                page = i;
+                            })
+
+                            TapHandler {
+                                onTapped: Mpd.command("toggle")
+                            }
                         }
                         // Progress bar
                         MpdSlider {
