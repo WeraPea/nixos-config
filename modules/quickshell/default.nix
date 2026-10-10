@@ -1,4 +1,5 @@
 {
+  flake,
   outputs,
   ...
 }:
@@ -6,6 +7,60 @@ let
   moduleName = "quickshell";
 in
 {
+  flake.wrappers.quickshell =
+    {
+      config,
+      lib,
+      pkgs,
+      wlib,
+      ...
+    }:
+    {
+      imports = [
+        wlib.wrapperModules.quickshell
+      ];
+      options = {
+        path = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
+          default = [ ];
+        };
+      };
+      config = {
+        configDir = ./shell;
+        env.PINENOTE_COLORS_CONFIG =
+          outputs.nixosConfigurations.pinenote.config.stylix.generated.fileTree."stylix/palette.json".source;
+        path = with pkgs; [
+          brightnessctl
+          werapi.prusa-status
+          werapi.usb-tablet
+          werapi.rotate
+        ];
+        suffixVar = [
+          [
+            "PATH"
+            ":"
+            "${lib.makeBinPath (config.path)}"
+          ]
+        ];
+      };
+    };
+  flake.devshells.quickshell =
+    {
+      lib,
+      pkgs,
+      mkShell,
+      quickshell,
+    }:
+    let
+      qs = flake.wrappers.quickshell.eval { inherit pkgs; };
+    in
+    mkShell {
+      packages = qs.config.path ++ [ quickshell ];
+      shellHook = ''
+        export PINENOTE_COLORS_CONFIG=${lib.escapeShellArg qs.config.env.PINENOTE_COLORS_CONFIG.data}
+      '';
+    };
+
   flake.modules.${moduleName}.nixos =
     {
       config,
@@ -16,52 +71,30 @@ in
     let
       cfg = config.werapi.${moduleName};
 
-      brightnessctl-pinenote = lib.getExe (
-        pkgs.werapi.mkRemoteWrapper {
-          hostname = config.werapi.hostname;
-          targetHostname = "pinenote";
-          package = outputs.nixosConfigurations.pinenote.pkgs.brightnessctl;
-        }
-      );
-      busctl-pinenote = lib.getExe (
-        pkgs.werapi.mkRemoteWrapper {
-          hostname = config.werapi.hostname;
-          targetHostname = "pinenote";
-          package = outputs.nixosConfigurations.pinenote.pkgs.systemd;
-          name = "busctl";
-        }
-      );
-      pinenote-screenshot = lib.getExe (
-        pkgs.werapi.mkRemoteWrapper {
-          hostname = config.werapi.hostname;
-          targetHostname = "pinenote";
-          package = outputs.nixosConfigurations.pinenote.pkgs.werapi.pinenote-screenshot;
-        }
-      );
-
-      make-config =
-        base:
-        pkgs.runCommand "quickshell-config" { } ''
-          cp -r ${base}/. $out/
-          substituteInPlace $out/common/BrightnessWidget.qml \
-            --replace-fail '"brightnessctl"' '"${lib.getExe pkgs.brightnessctl}"'
-          substituteInPlace $out/common/PrusaStatus.qml \
-            --replace-fail prusa-status ${lib.getExe pkgs.werapi.prusa-status}
-          substituteInPlace $out/PinenoteBar.qml \
-            --replace-fail usb-tablet ${lib.getExe pkgs.werapi.usb-tablet} \
-            --replace-fail brightnessctl-pinenote ${brightnessctl-pinenote} \
-            --replace-fail busctl ${busctl-pinenote} \
-            --replace-fail "\''${Quickshell.env(\"PINENOTE_COLORS_CONFIG\")}" ${
-              outputs.nixosConfigurations.pinenote.config.stylix.generated.fileTree."stylix/palette.json".source
-            }
-          substituteInPlace $out/common/EinkWidget.qml \
-            --replace-fail busctl ${busctl-pinenote} \
-            --replace-fail pinenote-screenshot ${pinenote-screenshot}
-          substituteInPlace $out/PinenoteBar.qml $out/FajitaBar.qml \
-            --replace-fail rotate-screen ${lib.getExe pkgs.werapi.rotate}
-        '';
+      brightnessctl-pinenote = pkgs.werapi.mkRemoteWrapper {
+        hostname = config.werapi.hostname;
+        targetHostname = "pinenote";
+        suffix = "-pinenote";
+        package = outputs.nixosConfigurations.pinenote.pkgs.brightnessctl;
+      };
+      busctl-pinenote = pkgs.werapi.mkRemoteWrapper {
+        hostname = config.werapi.hostname;
+        targetHostname = "pinenote";
+        suffix = "";
+        package = outputs.nixosConfigurations.pinenote.pkgs.systemd;
+        name = "busctl";
+      };
+      pinenote-screenshot = pkgs.werapi.mkRemoteWrapper {
+        hostname = config.werapi.hostname;
+        targetHostname = "pinenote";
+        suffix = "";
+        package = outputs.nixosConfigurations.pinenote.pkgs.werapi.pinenote-screenshot;
+      };
     in
     {
+      imports = [
+        flake.wrappers.quickshell.install
+      ];
       options.werapi.${moduleName} = {
         enable = lib.mkOption {
           default = config.werapi.graphics.enable;
@@ -70,11 +103,26 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        hm.programs.quickshell = {
-          enable = true;
-          activeConfig = "default";
-          configs.default = make-config ./shell;
-          systemd.enable = true;
+        wrappers.quickshell.path = [
+          brightnessctl-pinenote
+          busctl-pinenote
+          pinenote-screenshot
+        ];
+        environment.systemPackages = [
+          pkgs.quickshell
+          (pkgs.runCommand "qs-wrapped" { } ''
+            mkdir -p $out/bin
+            ln -s ${config.wrappers.quickshell.wrapper}/bin/quickshell $out/bin/qs-wrapped
+          '')
+        ];
+        systemd.user.services.quickshell = {
+          wantedBy = [ "graphical-session.target" ];
+          after = [ "graphical-session.target" ];
+          path = lib.mkForce [ ]; # use default systemd user env path
+          serviceConfig = {
+            ExecStart = lib.getExe' config.wrappers.quickshell.wrapper "quickshell";
+            Restart = "on-failure";
+          };
         };
       };
     };

@@ -117,7 +117,7 @@ in
               "NONE,XF86MonBrightnessDown" = "spawn,brightnessctl set 10%-";
 
               "NONE,XF86AudioPlay" = "spawn,mpc toggle";
-              "SUPER,XF86AudioPlay" = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd toggle";
+              "SUPER,XF86AudioPlay" = "spawn,qs-wrapped ipc call mpd toggle";
               "NONE,XF86AudioPause" = "spawn,mpc pause";
               "NONE,XF86AudioPrev" = "spawn,mpc prev";
               "NONE,XF86AudioNext" = "spawn,mpc next";
@@ -147,7 +147,7 @@ in
 
             "up,bottom,medium,1" = "toggleoverview";
             "down,top,any,1" =
-              "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call app-menu toggle";
+              "spawn,qs-wrapped ipc call app-menu toggle";
 
             "down_left,top,medium,1" = "killclient";
             "right,left,any,3" = "reload_config";
@@ -263,8 +263,8 @@ in
         };
         mpd = {
           enter.bind = "SUPER,x";
-          onEntry = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd on";
-          onReturnPre = "spawn,qs -c ${hmConfig.programs.quickshell.activeConfig} ipc call mpd off";
+          onEntry = "spawn,qs-wrapped ipc call mpd on";
+          onReturnPre = "spawn,qs-wrapped ipc call mpd off";
           returnByDefault = true;
           binds.bind = {
             "SUPER,x" = "spawn,mpc toggle";

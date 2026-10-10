@@ -37,8 +37,9 @@ in
                   else
                     lib.tail (lib.splitString "/" exe),
                 exe ? lib.getExe' package name,
+                suffix ? "-remote-wrapped",
               }:
-              writeShellScriptBin "${name}-remote-wrapped" (
+              writeShellScriptBin "${name}${suffix}" (
                 if hostname == targetHostname then # sh
                   ''
                     exec "${exe}" "$@"
