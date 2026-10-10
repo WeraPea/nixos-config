@@ -108,7 +108,7 @@ Rectangle {
                     TextObject {
                         id: tooltipText2
                         color: colors.foreground
-                        text: `${Mpd.fmtSec(Mpd.currentTime)}/${Mpd.fmtSec(Mpd.totalTime)} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
+                        text: `${Mpd.currentTimeText}/${Mpd.totalTimeText} (${Mpd.progressPercent}%) - ${Mpd.realVolumePercent}%`
                     }
                 }
             }

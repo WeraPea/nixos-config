@@ -174,7 +174,9 @@ Singleton {
     }
 
     property int totalTime: 0
+    property string totalTimeText: fmtSec(totalTime)
     property int currentTime: 0
+    property string currentTimeText: fmtSec(currentTime)
     property int progressPercent: 0
 
     property int currentTrack: 0

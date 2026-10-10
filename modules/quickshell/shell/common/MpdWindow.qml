@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import "config"
@@ -7,6 +8,7 @@ import "config"
 Item {
     id: root
     property bool active: Mpd.ipcWindowVisibilityState
+    // property bool active: Mpd.ipcWindowVisibilityState | Hostname.hostname === "fajita"
 
     property bool mouseFlick: true
 
@@ -157,19 +159,83 @@ Item {
     component TextButton: Rectangle {
         id: textButton
         property string label
+        property alias textObject: textObject
         required property Colors colors
+        property color textColor: textButton.colors.foreground
         signal clicked
         color: "transparent"
-        border.color: textButton.colors.accent
+        border.color: mouseArea.pressed ? textButton.colors.accent : textButton.colors.foregroundSecondary
         border.width: 1
         TextObject {
+            id: textObject
             anchors.centerIn: parent
-            color: textButton.colors.foreground
+            color: textButton.textColor
             text: textButton.label
         }
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
             onClicked: textButton.clicked()
+        }
+    }
+    component MpdSlider: Item {
+        id: mpdSlider
+        Layout.fillWidth: true
+        implicitHeight: 2
+        signal changed
+
+        property alias slider: slider
+        property alias position: slider.position
+        property alias max: slider.to
+        property alias color: sliderFill.color
+        required property real current
+        // required property color color
+
+        Rectangle {
+            id: sliderFill
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: slider.visualPosition * parent.width
+            height: 2
+            color: mpdSlider.colors.accent
+        }
+        Slider {
+            id: slider
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            implicitHeight: 18
+
+            from: 0
+            stepSize: 1
+            handle: null
+            background: null
+            snapMode: Slider.SnapOnRelease
+            live: false
+            onPressedChanged: if (!pressed) {
+                changed();
+                showRealTimer.restart();
+            } else {
+                slider.showReal = false;
+            }
+
+            property bool showReal: true
+            Binding {
+                target: slider
+                property: "value"
+                value: mpdSlider.current
+                when: slider.showReal
+            }
+            Timer {
+                id: showRealTimer
+                interval: 250
+                onTriggered: slider.showReal = true
+            }
+
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
         }
     }
 
@@ -191,353 +257,495 @@ Item {
                 path: (Hostname.hostname == "pinenote" || floatingWindow.screen.name.startsWith("HEADLESS-")) ? `${Quickshell.env("PINENOTE_COLORS_CONFIG")}` : defaultPath
             }
 
-            property int tab: 0
-            readonly property var tabNames: ["Queue", "Library", "Playlists", "Lyrics", "Info"]
-            property string openPlaylist: "" // "" = playlist list
-
-            ColumnLayout {
+            property int tab: 1
+            StackLayout {
                 anchors.fill: parent
-                spacing: 0
+                currentIndex: floatingWindow.tab
 
-                // Now playing header
-                Rectangle {
-                    Layout.fillWidth: true
-                    implicitHeight: columnLayout.implicitHeight
-                    color: colors.background
-
+                Item {
+                    id: songMenu
                     ColumnLayout {
-                        id: columnLayout
                         anchors.fill: parent
                         spacing: 0
-                        RowLayout {
-                            id: nowPlayingContent
-                            Layout.margins: 8
-                            spacing: 8
 
+                        Item {
+                            id: header
+                            Layout.fillWidth: true
+                            implicitHeight: headerContent.implicitHeight
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: floatingWindow.tab = 1
+                            }
                             RowLayout {
-                                MpdCover {
-                                    colors: floatingWindow.colors
-                                    Layout.margins: -8
-                                    Layout.rightMargin: 0
-                                    size: columnLayout.implicitHeight - progressBar.height
-                                    store: MpdThumbs.thumbs
-                                    file: Mpd.file
-                                }
+                                id: headerContent
+                                anchors.fill: parent
                                 TitleArtist {
                                     Layout.fillWidth: true
                                     Layout.preferredWidth: 0
+                                    Layout.margins: 8
 
                                     colors: floatingWindow.colors
                                     title: Mpd.title
                                     subtitle: Mpd.artist
                                 }
-                            }
-
-                            RowLayout {
-                                spacing: 8
-                                Repeater {
-                                    model: [
-                                        {
-                                            // TODO: svg icons
-                                            label: "󰒮",
-                                            cmd: "prev"
-                                        },
-                                        {
-                                            label: Mpd.playing ? "󰏤" : "󰐊",
-                                            cmd: "toggle"
-                                        },
-                                        {
-                                            label: "󰒭",
-                                            cmd: "next"
-                                        }
-                                    ]
-                                    delegate: TextButton {
-                                        Layout.preferredWidth: 52
-                                        Layout.preferredHeight: 52
-                                        required property var modelData
-                                        colors: floatingWindow.colors
-                                        label: modelData.label
-                                        onClicked: Mpd.command(modelData.cmd)
-                                    }
+                                TextButton {
+                                    id: menu
+                                    Layout.preferredWidth: header.height
+                                    Layout.preferredHeight: header.height
+                                    colors: floatingWindow.colors
+                                    label: ""
+                                    onClicked: {}
                                 }
                             }
                         }
-
+                        MpdCover {
+                            colors: floatingWindow.colors
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: songMenu.width
+                            Layout.preferredHeight: songMenu.width / aspect
+                            store: MpdThumbs.thumbs
+                            file: Mpd.file
+                        }
                         // Progress bar
-                        Rectangle {
-                            id: progressBar
-                            height: 2
-                            implicitWidth: parent.width * Mpd.progressPercent / 100
-                            color: colors.accent
+                        MpdSlider {
+                            onChanged: Mpd.command(`seek ${Mpd.fmtSec(Math.round(slider.valueAt(position)))}`)
+                            max: Mpd.totalTime
+                            current: Mpd.currentTime
+                            color: floatingWindow.colors.accent
+                        }
+                        RowLayout {
+                            TextObject {
+                                Layout.margins: 8
+                                text: Mpd.currentTimeText
+                                color: floatingWindow.colors.foreground
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                            }
+                            TextObject {
+                                Layout.margins: 8
+                                text: Mpd.totalTimeText
+                                color: floatingWindow.colors.foreground
+                            }
+                        }
+                        RowLayout {
+                            // spacing: 8
+                            Layout.fillWidth: true
+                            spacing: 0
+                            Repeater {
+                                model: [
+                                    // TODO: svg icons
+                                    {
+                                        label: "󰑖",
+                                        cmd: "repeat",
+                                        textColor: Mpd.repeat ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
+                                    },
+                                    {
+                                        label: "󰒮",
+                                        cmd: "prev"
+                                    },
+                                    {
+                                        label: Mpd.playing ? "󰏤" : "󰐊",
+                                        cmd: "toggle"
+                                    },
+                                    {
+                                        label: "󰓛",
+                                        cmd: "stop"
+                                    },
+                                    {
+                                        label: "󰒭",
+                                        cmd: "next"
+                                    },
+                                    {
+                                        label: "󰮯",
+                                        cmd: "consume",
+                                        textColor: Mpd.consume ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
+                                    },
+                                ]
+                                delegate: TextButton {
+                                    id: textButton
+                                    Layout.fillWidth: true
+                                    implicitWidth: 52
+                                    implicitHeight: 52
+                                    required property var modelData
+                                    textColor: modelData.textColor ?? colors.foreground
+                                    border.color: "transparent"
+                                    colors: floatingWindow.colors
+                                    textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
+                                    label: modelData.label
+                                    onClicked: Mpd.command(modelData.cmd)
+                                }
+                            }
                         }
                     }
                 }
+                Item {
+                    id: tabbed
+                    property int tab: 0
+                    readonly property var tabNames: ["Queue", "Library", "Playlists", "Lyrics", "Info"]
+                    property string openPlaylist: "" // "" = playlist list
 
-                // Views
-                StackLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    currentIndex: floatingWindow.tab
-
-                    // Queue
-                    TouchList {
-                        id: queueList
-                        model: Mpd.queue
-                        delegate: TrackRow {
-                            required property int position
-                            colors: floatingWindow.colors
-                            highlighted: position === Mpd.currentTrack
-                            onTapped: Mpd.command(`play ${position}`)
-                        }
-                        // TODO: swipe for remove, move, etc
-                        TextButton {
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            anchors.margins: 12
-                            width: 52
-                            height: 52
-                            visible: Mpd.currentTrack > 0
-                            colors: floatingWindow.colors
-                            color: floatingWindow.colors.background
-                            label: "Cur"
-                            onClicked: queueList.view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center)
-                        }
-                        Component.onCompleted: Qt.callLater(_ => {
-                            if (Mpd.currentTrack > 0)
-                                view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center);
-                        }) // without callLater causes persistent high cpu usage ???
-                    }
-
-                    // Library / search
                     ColumnLayout {
+                        anchors.fill: parent
                         spacing: 0
+
+                        // Now playing header
                         Rectangle {
                             Layout.fillWidth: true
-                            implicitHeight: 44
-                            color: "transparent"
-                            border.color: colors.accent
-                            border.width: 1
-                            TextInput {
-                                id: searchInput
-                                font: GlobalSettings.font
+                            implicitHeight: columnLayout.implicitHeight
+                            color: colors.background
+                            z: 1 // for progressBar clicks
+
+                            ColumnLayout {
+                                id: columnLayout
                                 anchors.fill: parent
-                                anchors.margins: 8
-                                verticalAlignment: TextInput.AlignVCenter
-                                color: colors.foreground
-                                selectionColor: colors.base0F
-                                selectedTextColor: colors.background
-                                clip: true
-                                onTextChanged: searchDebounce.restart()
-                            }
-                            Timer {
-                                id: searchDebounce
-                                interval: 250
-                                onTriggered: f.query = searchInput.text
-                            }
-                        }
-                        TouchList {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            MpdFilter {
-                                id: f
-                                source: Mpd.library
-                            }
-                            model: f.filtered
-                            delegate: TrackRow {
-                                colors: floatingWindow.colors
-                                onTapped: {
-                                    Mpd.command(`insert "${file}"`);
-                                    Mpd.command(`next`);
-                                }
-                            }
-                        }
-                    }
+                                spacing: 0
 
-                    // Playlists (list -> playlist detail)
-                    StackLayout {
-                        currentIndex: floatingWindow.openPlaylist === "" ? 0 : 1
+                                Item {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    implicitHeight: nowPlayingContent.implicitHeight + 16
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: floatingWindow.tab = 0
+                                    }
 
-                        // Playlist list
-                        TouchList {
-                            model: Mpd.playlists
-                            delegate: Rectangle {
-                                id: plRow
-                                required property string name
-                                width: ListView.view.width
-                                height: 52
-                                color: "transparent"
-                                TextObject {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 12
-                                    color: colors.foreground
-                                    text: plRow.name
-                                }
-                                TapHandler {
-                                    onTapped: {
-                                        floatingWindow.openPlaylist = plRow.name;
-                                        Mpd.getPlaylist(plRow.name);
-                                    }
-                                }
-                            }
-                        }
+                                    RowLayout {
+                                        id: nowPlayingContent
+                                        anchors.fill: parent
+                                        anchors.margins: 8
+                                        spacing: 8
 
-                        // Playlist detail
-                        ColumnLayout {
-                            spacing: 0
-                            Rectangle {
-                                Layout.fillWidth: true
-                                implicitHeight: 44
-                                color: "transparent"
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 12
-                                    anchors.rightMargin: 12
-                                    TextObject {
-                                        color: colors.accent
-                                        text: "← " + floatingWindow.openPlaylist
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                    }
-                                    TextObject {
-                                        color: colors.foreground
-                                        text: "Load"
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            anchors.margins: -8
-                                            onClicked: {
-                                                Mpd.command(`clear`);
-                                                Mpd.command(`load "${floatingWindow.openPlaylist}"`);
-                                                Mpd.command(`play`);
+                                        RowLayout {
+                                            MpdCover {
+                                                colors: floatingWindow.colors
+                                                Layout.margins: -8
+                                                Layout.rightMargin: 0
+                                                size: columnLayout.implicitHeight - progressBar.height
+                                                store: MpdThumbs.thumbs
+                                                file: Mpd.file
+                                            }
+                                            TitleArtist {
+                                                Layout.fillWidth: true
+                                                Layout.preferredWidth: 0
+
+                                                colors: floatingWindow.colors
+                                                title: Mpd.title
+                                                subtitle: Mpd.artist
+                                            }
+                                        }
+
+                                        RowLayout {
+                                            spacing: 8
+                                            Repeater {
+                                                model: [
+                                                    {
+                                                        // TODO: svg icons
+                                                        label: "󰒮",
+                                                        cmd: "prev"
+                                                    },
+                                                    {
+                                                        label: Mpd.playing ? "󰏤" : "󰐊",
+                                                        cmd: "toggle"
+                                                    },
+                                                    {
+                                                        label: "󰒭",
+                                                        cmd: "next"
+                                                    }
+                                                ]
+                                                delegate: TextButton {
+                                                    Layout.preferredWidth: 52
+                                                    Layout.preferredHeight: 52
+                                                    required property var modelData
+                                                    colors: floatingWindow.colors
+                                                    textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
+                                                    label: modelData.label
+                                                    onClicked: Mpd.command(modelData.cmd)
+                                                }
                                             }
                                         }
                                     }
                                 }
-                                MouseArea {
-                                    anchors.left: parent.left
-                                    anchors.top: parent.top
-                                    anchors.bottom: parent.bottom
-                                    width: parent.width / 2
-                                    onClicked: floatingWindow.openPlaylist = ""
+
+                                // Progress bar
+                                MpdSlider {
+                                    id: progressBar
+                                    onChanged: Mpd.command(`seek ${Mpd.fmtSec(Math.round(slider.valueAt(position)))}`)
+                                    max: Mpd.totalTime
+                                    current: Mpd.currentTime
+                                    color: floatingWindow.colors.accent
                                 }
                             }
+                        }
+
+                        // Views
+                        StackLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            currentIndex: tabbed.tab
+
+                            // Queue
                             TouchList {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                model: Mpd.playlist
+                                id: queueList
+                                model: Mpd.queue
                                 delegate: TrackRow {
-                                    colors: floatingWindow.colors
                                     required property int position
-                                    onTapped: {
-                                        Mpd.command(`clear`);
-                                        Mpd.command(`load "${floatingWindow.openPlaylist}"`);
-                                        Mpd.command(`play ${position}`);
+                                    colors: floatingWindow.colors
+                                    highlighted: position === Mpd.currentTrack
+                                    onTapped: Mpd.command(`play ${position}`)
+                                }
+                                // TODO: swipe for remove, move, etc
+                                TextButton {
+                                    anchors.right: parent.right
+                                    anchors.bottom: parent.bottom
+                                    anchors.margins: 12
+                                    width: 52
+                                    height: 52
+                                    visible: Mpd.currentTrack > 0
+                                    colors: floatingWindow.colors
+                                    color: floatingWindow.colors.background
+                                    label: "󰹹"
+                                    textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
+                                    onClicked: queueList.view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center)
+                                }
+                                Component.onCompleted: Qt.callLater(_ => {
+                                    if (Mpd.currentTrack > 0)
+                                        view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center);
+                                }) // without callLater causes persistent high cpu usage ???
+                            }
+
+                            // Library / search
+                            ColumnLayout {
+                                spacing: 0
+                                Rectangle {
+                                    Layout.fillWidth: true
+                                    implicitHeight: 44
+                                    color: "transparent"
+                                    border.color: colors.accent
+                                    border.width: 1
+                                    TextInput {
+                                        id: searchInput
+                                        font: GlobalSettings.font
+                                        anchors.fill: parent
+                                        anchors.margins: 8
+                                        verticalAlignment: TextInput.AlignVCenter
+                                        color: colors.foreground
+                                        selectionColor: colors.base0F
+                                        selectedTextColor: colors.background
+                                        clip: true
+                                        onTextChanged: searchDebounce.restart()
+                                    }
+                                    Timer {
+                                        id: searchDebounce
+                                        interval: 250
+                                        onTriggered: f.query = searchInput.text
+                                    }
+                                }
+                                TouchList {
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    MpdFilter {
+                                        id: f
+                                        source: Mpd.library
+                                    }
+                                    model: f.filtered
+                                    delegate: TrackRow {
+                                        colors: floatingWindow.colors
+                                        onTapped: {
+                                            Mpd.command(`insert "${file}"`);
+                                            Mpd.command(`next`);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Playlists (list -> playlist detail)
+                            StackLayout {
+                                currentIndex: tabbed.openPlaylist === "" ? 0 : 1
+
+                                // Playlist list
+                                TouchList {
+                                    model: Mpd.playlists
+                                    delegate: Rectangle {
+                                        id: plRow
+                                        required property string name
+                                        width: ListView.view.width
+                                        height: 52
+                                        color: "transparent"
+                                        TextObject {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.left: parent.left
+                                            anchors.leftMargin: 12
+                                            color: colors.foreground
+                                            text: plRow.name
+                                        }
+                                        TapHandler {
+                                            onTapped: {
+                                                tabbed.openPlaylist = plRow.name;
+                                                Mpd.getPlaylist(plRow.name);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Playlist detail
+                                ColumnLayout {
+                                    spacing: 0
+                                    Rectangle {
+                                        Layout.fillWidth: true
+                                        implicitHeight: 44
+                                        color: "transparent"
+                                        RowLayout {
+                                            anchors.fill: parent
+                                            anchors.leftMargin: 12
+                                            anchors.rightMargin: 12
+                                            TextObject {
+                                                color: colors.accent
+                                                text: "← " + tabbed.openPlaylist
+                                            }
+                                            Item {
+                                                Layout.fillWidth: true
+                                            }
+                                            TextObject {
+                                                color: colors.foreground
+                                                text: "Load"
+                                                MouseArea {
+                                                    anchors.fill: parent
+                                                    anchors.margins: -8
+                                                    onClicked: {
+                                                        Mpd.command(`clear`);
+                                                        Mpd.command(`load "${tabbed.openPlaylist}"`);
+                                                        Mpd.command(`play`);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        MouseArea {
+                                            anchors.left: parent.left
+                                            anchors.top: parent.top
+                                            anchors.bottom: parent.bottom
+                                            width: parent.width / 2
+                                            onClicked: tabbed.openPlaylist = ""
+                                        }
+                                    }
+                                    TouchList {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        model: Mpd.playlist
+                                        delegate: TrackRow {
+                                            colors: floatingWindow.colors
+                                            required property int position
+                                            onTapped: {
+                                                Mpd.command(`clear`);
+                                                Mpd.command(`load "${tabbed.openPlaylist}"`);
+                                                Mpd.command(`play ${position}`);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Lyrics
+                            TouchFlick {
+                                contentHeight: lyricsText.implicitHeight + 24
+                                SelectableText {
+                                    id: lyricsText
+                                    x: 12
+                                    y: 12
+                                    colors: floatingWindow.colors
+                                    width: parent.width - 24
+                                    text: Mpd.lyrics
+                                }
+                            }
+
+                            // Info
+                            TouchList {
+                                model: [
+                                    {
+                                        key: "Title",
+                                        value: Mpd.title
+                                    },
+                                    {
+                                        key: "Artist",
+                                        value: Mpd.artist
+                                    },
+                                    {
+                                        key: "Artists",
+                                        value: Mpd.tags.ARTISTS?.split(";").join(", ") ?? ""
+                                    },
+                                    {
+                                        key: "File",
+                                        value: Mpd.file
+                                    },
+                                    {
+                                        key: "Genres",
+                                        value: Mpd.tags.GENRE?.split(";").join(", ") ?? ""
+                                    },
+                                    {
+                                        key: "PURL",
+                                        value: Mpd.tags.PURL
+                                    },
+                                    {
+                                        key: "Date",
+                                        value: Mpd.tags.DATE
+                                    },
+                                ].filter(m => m.value != "" && m.value)
+                                // TODO: display all tags, with some getting priority, parsing, default hidden state
+                                delegate: Rectangle {
+                                    required property string key
+                                    required property string value
+                                    width: ListView.view.width
+                                    height: 44
+                                    color: "transparent"
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
+                                        TextObject {
+                                            Layout.preferredWidth: 90
+                                            color: colors.foregroundSecondary
+                                            text: key
+                                        }
+                                        SelectableText {
+                                            colors: floatingWindow.colors
+                                            Layout.fillWidth: true
+                                            text: value
+                                        }
+                                        // TODO: click to toggle hide/fold
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Lyrics
-                    TouchFlick {
-                        contentHeight: lyricsText.implicitHeight + 24
-                        SelectableText {
-                            id: lyricsText
-                            x: 12
-                            y: 12
-                            colors: floatingWindow.colors
-                            width: parent.width - 24
-                            text: Mpd.lyrics
-                        }
-                    }
-
-                    // Info
-                    TouchList {
-                        model: [
-                            {
-                                key: "Title",
-                                value: Mpd.title
-                            },
-                            {
-                                key: "Artist",
-                                value: Mpd.artist
-                            },
-                            {
-                                key: "Artists",
-                                value: Mpd.tags.ARTISTS?.split(";").join(", ") ?? ""
-                            },
-                            {
-                                key: "File",
-                                value: Mpd.file
-                            },
-                            {
-                                key: "Genres",
-                                value: Mpd.tags.GENRE?.split(";").join(", ") ?? ""
-                            },
-                            {
-                                key: "PURL",
-                                value: Mpd.tags.PURL
-                            },
-                            {
-                                key: "Date",
-                                value: Mpd.tags.DATE
-                            },
-                        ].filter(m => m.value != "" && m.value)
-                        // TODO: display all tags, with some getting priority, parsing, default hidden state
-                        delegate: Rectangle {
-                            required property string key
-                            required property string value
-                            width: ListView.view.width
-                            height: 44
-                            color: "transparent"
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 12
-                                anchors.rightMargin: 12
-                                TextObject {
-                                    Layout.preferredWidth: 90
-                                    color: colors.foregroundSecondary
-                                    text: key
-                                }
-                                SelectableText {
-                                    colors: floatingWindow.colors
-                                    Layout.fillWidth: true
-                                    text: value
-                                }
-                                // TODO: click to toggle hide/fold
-                            }
-                        }
-                    }
-                }
-
-                // tab navigation
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 0
-                    Repeater {
-                        model: floatingWindow.tabNames
-                        delegate: Rectangle {
-                            required property int index
-                            required property string modelData
+                        // tab navigation
+                        RowLayout {
                             Layout.fillWidth: true
-                            implicitHeight: 52
-                            property bool active: floatingWindow.tab === index
-                            color: active ? Qt.alpha(colors.accent, 0.2) : "transparent"
-                            Rectangle {
-                                anchors.top: parent.top
-                                width: parent.width
-                                height: 2
-                                color: active ? colors.accent : "transparent"
-                            }
-                            TextObject {
-                                anchors.centerIn: parent
-                                color: active ? colors.foreground : colors.foregroundSecondary
-                                text: modelData
-                            }
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: floatingWindow.tab = index
+                            spacing: 0
+                            Repeater {
+                                model: tabbed.tabNames
+                                delegate: Rectangle {
+                                    required property int index
+                                    required property string modelData
+                                    Layout.fillWidth: true
+                                    implicitHeight: 52
+                                    property bool active: tabbed.tab === index
+                                    color: active ? Qt.alpha(colors.accent, 0.2) : "transparent"
+                                    Rectangle {
+                                        anchors.top: parent.top
+                                        width: parent.width
+                                        height: 2
+                                        color: active ? colors.accent : "transparent"
+                                    }
+                                    TextObject {
+                                        anchors.centerIn: parent
+                                        color: active ? colors.foreground : colors.foregroundSecondary
+                                        text: modelData
+                                    }
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: tabbed.tab = index
+                                    }
+                                }
                             }
                         }
                     }
