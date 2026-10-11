@@ -306,78 +306,87 @@ Item {
                             }
                         }
                         // Cover
-                        ListView {
+                        Item {
                             id: coverSwipe
                             Layout.fillHeight: true
                             Layout.fillWidth: true
 
-                            orientation: ListView.Horizontal
-                            model: Mpd.queue
-                            snapMode: ListView.NoSnap
-                            highlightRangeMode: ListView.NoHighlightRange
-                            cacheBuffer: width
-                            clip: true
-                            boundsBehavior: Flickable.StopAtBounds
-
+                            property int page: Math.max(0, Mpd.currentTrack - 1)
+                            property int prevPage: -1
+                            property real offset: 0
+                            readonly property bool dragging: drag.active
                             property real commitFraction: 0.33
                             property real commitVelocity: 500
-                            property real dragStartX: 0
-                            property int dragStartPage: 0
-                            property int page: 0
-
-                            delegate: Item {
-                                id: coverItem
-                                required property string file
-                                width: ListView.view.width
-                                height: ListView.view.height
-
-                                MpdCover {
-                                    anchors.centerIn: parent
-                                    colors: floatingWindow.colors
-                                    width: parent.width
-                                    height: width / aspect
-                                    store: MpdThumbs.thumbs
-                                    file: coverItem.file
-                                }
-                            }
+                            clip: true
 
                             function goTo(index) {
-                                const i = Math.max(0, Math.min(count - 1, index));
-                                page = i;
-                                cancelFlick();
+                                const i = Math.max(0, Math.min(repeater.count - 1, index));
                                 snapAnim.stop();
-                                snapAnim.to = originX + i * width;
-                                snapAnim.start();
+                                offset += (i - page) * width;
+                                prevPage = page;
+                                page = i;
+                                snapAnim.restart();
                             }
 
                             NumberAnimation {
                                 id: snapAnim
                                 target: coverSwipe
-                                property: "contentX"
+                                property: "offset"
+                                to: 0
                                 duration: 250
                                 easing.type: Easing.OutCubic
                             }
 
-                            onDragStarted: {
-                                snapAnim.stop();
-                                dragStartX = contentX;
-                                dragStartPage = page;
+                            Repeater {
+                                id: repeater
+                                model: Mpd.queue
+                                delegate: Item {
+                                    id: coverItem
+                                    required property string file
+                                    required property int index
+                                    readonly property bool shown: Math.abs(index - coverSwipe.page) <= 1 || (snapAnim.running && index === coverSwipe.prevPage)
+                                    visible: shown
+                                    width: coverSwipe.width
+                                    height: coverSwipe.height
+                                    x: (index - coverSwipe.page) * width + coverSwipe.offset
+
+                                    MpdCover {
+                                        anchors.fill: parent
+                                        colors: floatingWindow.colors
+                                        store: MpdThumbs.thumbs
+                                        file: coverItem.shown ? coverItem.file : ""
+                                    }
+                                }
                             }
 
-                            onDragEnded: {
-                                const delta = contentX - dragStartX;
-                                const v = horizontalVelocity;
-                                let target = dragStartPage;
-                                if (delta > width * commitFraction || v > commitVelocity)
-                                    target += 1;
-                                else if (delta < -width * commitFraction || v < -commitVelocity)
-                                    target -= 1;
-                                goTo(target);
-                                if (page + 1 !== Mpd.currentTrack)
-                                    Mpd.command(`play ${page + 1}`);
+                            DragHandler {
+                                id: drag
+                                target: null
+                                yAxis.enabled: false
+                                property real startOffset: 0
+                                property real v: 0
+                                onActiveChanged: {
+                                    if (active) {
+                                        snapAnim.stop();
+                                        startOffset = coverSwipe.offset;
+                                        v = 0;
+                                    } else {
+                                        const delta = coverSwipe.offset - startOffset;
+                                        let target = coverSwipe.page;
+                                        if (delta < -coverSwipe.width * coverSwipe.commitFraction || v < -coverSwipe.commitVelocity)
+                                            target += 1;
+                                        else if (delta > coverSwipe.width * coverSwipe.commitFraction || v > coverSwipe.commitVelocity)
+                                            target -= 1;
+                                        coverSwipe.goTo(target);
+                                        if (coverSwipe.page + 1 !== Mpd.currentTrack)
+                                            Mpd.command(`play ${coverSwipe.page + 1}`);
+                                    }
+                                }
+                                onTranslationChanged: if (active) {
+                                    coverSwipe.offset = startOffset + translation.x;
+                                    v = centroid.velocity.x;
+                                }
                             }
-
-                            // onFlickStarted: cancelFlick()
 
                             Connections {
                                 target: Mpd
@@ -386,12 +395,6 @@ Item {
                                         coverSwipe.goTo(Mpd.currentTrack - 1);
                                 }
                             }
-
-                            Component.onCompleted: Qt.callLater(() => {
-                                const i = Math.max(0, Mpd.currentTrack - 1);
-                                positionViewAtIndex(i, ListView.Beginning);
-                                page = i;
-                            })
 
                             TapHandler {
                                 onTapped: Mpd.command("toggle")
