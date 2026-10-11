@@ -84,6 +84,7 @@ Singleton {
                 switch (line) {
                 case "player":
                     currentProc.rerun();
+                    statusProc.player = true;
                     statusProc.rerun();
                     break;
                 case "options":
@@ -191,8 +192,10 @@ Singleton {
     property bool repeat: false
     property bool single: false
     property bool consume: false
+    signal statusChange
     RerunProcess {
         id: statusProc
+        property bool player: false
         command: ["mpc", "-h", root.host, "status", "%totaltime%\n%currenttime%\n%percenttime%\n%songpos%\n%length%\n%state%\n%volume%\n%random%\n%repeat%\n%single%\n%consume%"]
         stdout: StdioCollector {
             onStreamFinished: if (!statusProc.restart) {
@@ -226,6 +229,10 @@ Singleton {
                     root.repeat = false;
                     root.single = false;
                     root.consume = false;
+                }
+                if (statusProc.player) {
+                    root.statusChange();
+                    statusProc.player = false;
                 }
             }
         }
@@ -293,17 +300,18 @@ Singleton {
         function parseTracks(text) {
             const lines = root.splitLines(text);
             const out = [];
-            for (let i = 0; i + 2 < lines.length; i += 3)
+            for (let i = 0; i + 3 < lines.length; i += 4)
                 out.push({
                     file: lines[i],
                     title: lines[i + 1],
                     artist: lines[i + 2],
-                    position: i / 3 + 1
+                    time: root.toSec(lines[i + 3]),
+                    position: i / 4 + 1
                 });
             return out;
         }
 
-        command: ["mpc", "-h", root.host, cmd, "--format", "%file%\n%title%\n%artist%", ...extra]
+        command: ["mpc", "-h", root.host, cmd, "--format", "%file%\n%title%\n%artist%\n%time%", ...extra]
         stdout: StdioCollector {
             onStreamFinished: if (!pl.restart)
                 pl.syncModel(pl.target, pl.parseTracks(text))

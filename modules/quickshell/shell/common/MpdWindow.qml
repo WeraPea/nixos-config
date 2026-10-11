@@ -122,6 +122,7 @@ Item {
         required property string file
         required property string title
         required property string artist
+        required property int time
         required property Colors colors
         property bool highlighted: false
         signal tapped
@@ -145,6 +146,10 @@ Item {
                 title: trackRow.title
                 subtitle: trackRow.artist
                 colors: trackRow.colors
+            }
+            TextObject {
+                color: trackRow.colors.foregroundSecondary
+                text: Mpd.fmtSec(trackRow.time)
             }
         }
         TapHandler {
@@ -212,7 +217,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            implicitHeight: 18
+            implicitHeight: 32
 
             from: 0
             stepSize: 1
@@ -271,6 +276,109 @@ Item {
 
                 Item {
                     id: songMenu
+                    Timer {
+                        id: sleepTimer
+                        interval: 1000 * 60 * 30
+                        property double startedAt: Date.now()
+                        onRunningChanged: if (running)
+                            startedAt = Date.now()
+                        onTriggered: {
+                            // will discard changes between timer trigger and song end
+                            lastRepeat = Mpd.repeat;
+                            lastSingle = Mpd.single;
+                            wasSleeping = true;
+                            Mpd.command("single on");
+                            Mpd.command("repeat off");
+                        }
+                        function toggle() {
+                            sleepTimer.running = !sleepTimer.running;
+                            sleepTimer.updateSleepEndIndex();
+                        }
+
+                        property int sleepEndIndex: -1
+                        property bool lastRepeat: Mpd.repeat
+                        property bool lastSingle: Mpd.single
+                        property bool wasSleeping: false
+                        property bool gonnaPause: wasSleeping || running
+                        onGonnaPauseChanged: if (!gonnaPause)
+                            sleepEndIndex = -1
+                        function updateSleepEndIndex() {
+                            if (sleepTimer.running) { // TODO: doesn't account for random, looping around the queue, nor single playback
+                                let remaining = songMenu.sleepRemaining - (Mpd.totalTime - Mpd.currentTime);
+                                let songIndex = Mpd.currentTrack - 1;
+                                while (songIndex + 1 < Mpd.queue.count && remaining > 0) {
+                                    songIndex++;
+                                    remaining -= Mpd.queue.get(songIndex).time;
+                                }
+                                sleepEndIndex = songIndex;
+                            }
+
+                            if (wasSleeping) {
+                                if (lastRepeat)
+                                    Mpd.command("repeat on");
+                                if (!lastSingle)
+                                    Mpd.command("single off");
+                                wasSleeping = false;
+                            }
+                        }
+                    }
+                    Connections {
+                        target: Mpd
+                        function onStatusChange() {
+                            sleepTimer.updateSleepEndIndex();
+                        }
+                        function onQueueChanged() {
+                            sleepTimer.updateSleepEndIndex();
+                        }
+                    }
+                    SystemClock {
+                        id: sleepClock
+                        enabled: sleepTimer.running
+                        precision: SystemClock.Seconds
+                    }
+                    readonly property int sleepRemaining: sleepTimer.running ? Math.max(0, Math.ceil(Math.min(sleepTimer.interval, sleepTimer.interval - (sleepClock.date.getTime() - sleepTimer.startedAt)) / 1000)) : sleepTimer.interval / 1000
+                    ColumnLayout {
+                        id: menu
+                        z: 1
+                        anchors.right: songMenu.right
+                        anchors.top: songMenu.top
+                        anchors.topMargin: header.height
+                        spacing: 0
+                        visible: false
+                        Repeater {
+                            model: [
+                                {
+                                    label: "Toggle sleep timer",
+                                    cmd: _ => sleepTimer.toggle(),
+                                    textColor: sleepTimer.running ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
+                                },
+                            ]
+                            delegate: TextButton {
+                                id: textButton
+                                required property var modelData
+                                textColor: modelData.textColor ?? colors.foreground
+                                colors: floatingWindow.colors
+                                color: colors.background
+
+                                label: modelData.label
+                                onClicked: modelData.cmd()
+
+                                Layout.preferredWidth: 300
+                                Layout.preferredHeight: textObject.implicitHeight + 2 * textObject.anchors.margins
+                                textObject.anchors.centerIn: null
+                                textObject.anchors.fill: textButton
+                                textObject.anchors.margins: 22
+                                textObject.horizontalAlignment: Text.AlignLeft
+                                textObject.verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        z: 0.5
+                        visible: menu.visible
+                        onClicked: menu.visible = false
+                    }
                     ColumnLayout {
                         anchors.fill: parent
                         spacing: 0
@@ -296,12 +404,14 @@ Item {
                                     subtitle: Mpd.artist
                                 }
                                 TextButton {
-                                    id: menu
+                                    id: menuButton
                                     Layout.preferredWidth: header.height
                                     Layout.preferredHeight: header.height
                                     colors: floatingWindow.colors
+                                    border.color: "transparent"
                                     label: ""
-                                    onClicked: {}
+                                    textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
+                                    onClicked: menu.visible = !menu.visible
                                 }
                             }
                         }
@@ -421,6 +531,12 @@ Item {
                                 text: Mpd.totalTimeText
                                 color: floatingWindow.colors.foreground
                             }
+                            TextObject {
+                                visible: sleepTimer.gonnaPause
+                                Layout.margins: 8
+                                text: sleepTimer.running ? Mpd.fmtSec(songMenu.sleepRemaining) : "0:00"
+                                color: floatingWindow.colors.foreground
+                            }
                         }
                         RowLayout {
                             // spacing: 8
@@ -451,13 +567,12 @@ Item {
                                         cmd: "next"
                                     },
                                     {
-                                        label: "󰮯",
-                                        cmd: "consume",
-                                        textColor: Mpd.consume ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
+                                        label: "1",
+                                        cmd: "single",
+                                        textColor: Mpd.single ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
                                     },
                                 ]
                                 delegate: TextButton {
-                                    id: textButton
                                     Layout.fillWidth: true
                                     implicitWidth: 52
                                     implicitHeight: 52
@@ -586,6 +701,8 @@ Item {
                                     required property int position
                                     colors: floatingWindow.colors
                                     highlighted: position === Mpd.currentTrack
+                                    border.width: sleepTimer.gonnaPause && position === sleepTimer.sleepEndIndex + 1 ? 1 : 0
+                                    border.color: colors.base0F
                                     onTapped: {
                                         queueList.ignoreNextChange = true;
                                         Mpd.command(`play ${position}`);
