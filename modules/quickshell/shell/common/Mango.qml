@@ -52,6 +52,7 @@ Singleton {
                     const ac = m.active_client;
                     monitor.title = ac?.title ?? "";
                     monitor.appid = ac?.appid ?? "";
+                    monitor.id = ac?.id ?? -1;
 
                     for (const t of m.tags) {
                         const index = t.index;

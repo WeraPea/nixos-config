@@ -8,8 +8,9 @@ QtObject {
     property int width
     property int height
     property list<MangoTag> tags
-    property string appid
-    property string title
+    property string appid // active client
+    property string title // active client
+    property int id // active client
     property string layout
     property bool fullscreen // TODO: is it bool?
     property bool floating

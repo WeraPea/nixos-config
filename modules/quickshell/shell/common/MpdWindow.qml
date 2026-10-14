@@ -99,9 +99,11 @@ Item {
     }
 
     component TitleArtist: ColumnLayout {
+        id: titleArtist
         property string title
         property string subtitle
         required property Colors colors
+        required property string monitor_name
         spacing: 0
         clip: true
         TextObject {
@@ -109,12 +111,22 @@ Item {
             elide: Text.ElideRight
             color: parent.colors.foreground
             text: parent.title
+            QocrPopup {
+                anchors.fill: parent
+                textTarget: parent
+                monitor_name: titleArtist.monitor_name
+            }
         }
         TextObject {
             Layout.fillWidth: true
             elide: Text.ElideRight
             color: parent.colors.foregroundSecondary
             text: parent.subtitle
+            QocrPopup {
+                anchors.fill: parent
+                textTarget: parent
+                monitor_name: titleArtist.monitor_name
+            }
         }
     }
     component TrackRow: Rectangle {
@@ -124,6 +136,7 @@ Item {
         required property string artist
         required property int time
         required property Colors colors
+        required property string monitor_name
         property bool highlighted: false
         signal tapped
         width: ListView.view.width
@@ -146,6 +159,7 @@ Item {
                 title: trackRow.title
                 subtitle: trackRow.artist
                 colors: trackRow.colors
+                monitor_name: trackRow.monitor_name
             }
             TextObject {
                 color: trackRow.colors.foregroundSecondary
@@ -402,6 +416,7 @@ Item {
                                     colors: floatingWindow.colors
                                     title: Mpd.title
                                     subtitle: Mpd.artist
+                                    monitor_name: floatingWindow.screen.name
                                 }
                                 TextButton {
                                     id: menuButton
@@ -641,6 +656,7 @@ Item {
                                                 colors: floatingWindow.colors
                                                 title: Mpd.title
                                                 subtitle: Mpd.artist
+                                                monitor_name: floatingWindow.screen.name
                                             }
                                         }
 
@@ -699,6 +715,7 @@ Item {
                                 model: Mpd.queue
                                 delegate: TrackRow {
                                     required property int position
+                                    monitor_name: floatingWindow.screen.name
                                     colors: floatingWindow.colors
                                     highlighted: position === Mpd.currentTrack
                                     border.width: sleepTimer.gonnaPause && position === sleepTimer.sleepEndIndex + 1 ? 1 : 0
@@ -790,6 +807,7 @@ Item {
                                     }
                                     model: f.filtered
                                     delegate: TrackRow {
+                                        monitor_name: floatingWindow.screen.name
                                         colors: floatingWindow.colors
                                         onTapped: {
                                             Mpd.command(`insert "${file}"`);
@@ -873,6 +891,7 @@ Item {
                                         Layout.fillHeight: true
                                         model: Mpd.playlist
                                         delegate: TrackRow {
+                                            monitor_name: floatingWindow.screen.name
                                             colors: floatingWindow.colors
                                             required property int position
                                             onTapped: {
@@ -895,6 +914,11 @@ Item {
                                     colors: floatingWindow.colors
                                     width: parent.width - 24
                                     text: Mpd.lyrics
+                                    QocrPopup {
+                                        anchors.fill: parent
+                                        textTarget: lyricsText
+                                        monitor_name: floatingWindow.screen.name
+                                    }
                                 }
                             }
 
@@ -950,6 +974,11 @@ Item {
                                             colors: floatingWindow.colors
                                             Layout.fillWidth: true
                                             text: value
+                                            QocrPopup {
+                                                anchors.fill: parent
+                                                textTarget: parent
+                                                monitor_name: floatingWindow.screen.name
+                                            }
                                         }
                                         // TODO: click to toggle hide/fold
                                     }
