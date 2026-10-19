@@ -693,11 +693,11 @@ Item {
                                 }
 
                                 // Progress bar
-                                MpdSlider {
+                                Rectangle {
                                     id: progressBar
-                                    onChanged: Mpd.command(`seek ${Mpd.fmtSec(Math.round(slider.valueAt(position)))}`)
-                                    max: Mpd.totalTime
-                                    current: Mpd.currentTime
+                                    Layout.alignment: Qt.AlignLeft
+                                    implicitWidth: Mpd.currentTime / Mpd.totalTime * parent.width
+                                    implicitHeight: 2
                                     color: floatingWindow.colors.accent
                                 }
                             }
