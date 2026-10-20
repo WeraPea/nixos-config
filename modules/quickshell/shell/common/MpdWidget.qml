@@ -38,7 +38,8 @@ Rectangle {
 
     TextObject {
         id: mpdText
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: Math.round((parent.height - mpdText.primaryLineHeight) / 2)
         color: Mpd.playing ? colors.foreground : colors.foregroundSecondary
         function truncate(str, limit) {
             if (str.length <= limit)

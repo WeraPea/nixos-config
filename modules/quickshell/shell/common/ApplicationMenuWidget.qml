@@ -129,12 +129,7 @@ Item {
                             TextObject {
                                 id: entryText
                                 width: entryIcon.width
-                                height: maximumLineCount * fm.height
-                                FontMetrics {
-                                    id: fm
-                                    font: entryText.font
-                                }
-
+                                height: maximumLineCount * entryText.primaryLineHeight
                                 horizontalAlignment: Text.AlignHCenter
 
                                 wrapMode: Text.Wrap

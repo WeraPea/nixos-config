@@ -170,17 +170,37 @@ Item {
             onTapped: trackRow.tapped()
         }
     }
-    component SelectableText: TextEdit {
+    component SelectableText: Item {
         id: selectableText
         required property Colors colors
-        font: GlobalSettings.font
-        readOnly: true
-        selectByMouse: true
-        wrapMode: TextEdit.Wrap
-        color: selectableText.colors.foreground
-        selectionColor: selectableText.colors.base0F
-        selectedTextColor: selectableText.colors.background
-        // TODO: prevent keyboard appearing on mobile when interacting with this
+        property alias text: textEdit.text
+        property alias font: textEdit.font
+
+        FontMetrics {
+            id: selectableTextMetrics
+            font: textEdit.font
+        }
+
+        readonly property real primaryLineHeight: Math.ceil(selectableTextMetrics.height)
+        implicitHeight: textEdit.lineCount * primaryLineHeight
+
+        TextEdit {
+            id: textEdit
+            width: parent.width
+            height: contentHeight
+            font: GlobalSettings.font
+
+            transform: Translate {
+                y: Math.round(selectableTextMetrics.ascent - textEdit.baselineOffset + textEdit.topPadding)
+            }
+            readOnly: true
+            selectByMouse: true
+            wrapMode: TextEdit.Wrap
+            color: selectableText.colors.foreground
+            selectionColor: selectableText.colors.base0F
+            selectedTextColor: selectableText.colors.background
+            // TODO: prevent keyboard appearing on mobile when interacting with this
+        }
     }
     component TextButton: Rectangle {
         id: textButton
@@ -378,7 +398,7 @@ Item {
                                 onClicked: modelData.cmd()
 
                                 Layout.preferredWidth: 300
-                                Layout.preferredHeight: textObject.implicitHeight + 2 * textObject.anchors.margins
+                                Layout.preferredHeight: textObject.primaryLineHeight + 2 * textObject.anchors.margins
                                 textObject.anchors.centerIn: null
                                 textObject.anchors.fill: textButton
                                 textObject.anchors.margins: 22
@@ -906,7 +926,7 @@ Item {
 
                             // Lyrics
                             TouchFlick {
-                                contentHeight: lyricsText.implicitHeight + 24
+                                contentHeight: lyricsText.height + 24
                                 SelectableText {
                                     id: lyricsText
                                     x: 12

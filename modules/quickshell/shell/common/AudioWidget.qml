@@ -6,15 +6,10 @@ import "config"
 Item {
     required property var colors
     implicitWidth: volumeText.implicitWidth
-    implicitHeight: volumeText.implicitHeight
-    FontMetrics {
-        id: fm
-        font: volumeText.font
-    }
+    implicitHeight: volumeText.primaryLineHeight
     TextObject {
         id: volumeText
         anchors.centerIn: parent
-        height: fm.height
         property int volume: Number(Audio.sink?.audio.volume * 100).toFixed(1)
         property string icon: Audio.sink == null ? "?" : (Audio.sink.audio.muted ? "󰖁" : "󰕾")
         color: Audio.sink.audio.muted ? colors.foregroundSecondary : colors.foreground
@@ -23,8 +18,8 @@ Item {
     WrapperMouseArea {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         anchors.fill: parent
-        anchors.topMargin: -((30 - volumeText.implicitHeight) / 2)
-        anchors.bottomMargin: -((30 - volumeText.implicitHeight) / 2)
+        anchors.topMargin: -((30 - volumeText.primaryLineHeight) / 2)
+        anchors.bottomMargin: -((30 - volumeText.primaryLineHeight) / 2)
         property real volAcc: 0
 
         onPressed: function (mouse) {

@@ -67,7 +67,7 @@ Item {
                     popup_x = monitor.width - 400;
                 if (popup_y < 0)
                     popup_y = Math.round(client_info.y - monitor.y + global_pos.y) + r.height + 10;
-                Quickshell.execDetached(["qocr", "ipc", "call", "ocr", "trigger_popup_term", popup_x, popup_y, floatingWindow.screen.name, lb.line.slice(lb.idx), lb.text, lb.idx]);
+                Quickshell.execDetached(["qocr", "ipc", "call", "ocr", "trigger_popup_term", popup_x, popup_y, floatingWindow.screen.name, lb.line.slice(lb.idx), lb.line, lb.idx]);
             };
             clientProc.running = true;
         }
