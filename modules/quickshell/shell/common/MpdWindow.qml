@@ -759,20 +759,40 @@ Item {
                                     textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
                                     onClicked: queueList.view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center)
                                 }
-                                Component.onCompleted: Qt.callLater(_ => {
-                                    if (Mpd.currentTrack > 0)
-                                        view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center);
-                                    queueList.lastTrack = Mpd.currentTrack;
-                                }) // without callLater causes persistent high cpu usage ???
                                 property int lastTrack: Mpd.currentTrack
                                 property bool ignoreNextChange: false
                                 property real lastHeight: view.height
+                                property bool wannaCenter: true // center on start
 
+                                function tryCenter() {
+                                    if (!wannaCenter)
+                                        return;
+                                    if (Mpd.currentTrack <= 0) {
+                                        wannaCenter = false;
+                                        return;
+                                    }
+                                    view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Center);
+                                    const item = view.itemAtIndex(Mpd.currentTrack - 1);
+                                    if (item && (view.atYEnd || Math.abs(item.y + item.height / 2 - (view.contentY + view.height / 2)) < 1))
+                                        wannaCenter = false;
+                                }
+                                Connections {
+                                    target: queueList.view
+                                    function onContentHeightChanged() {
+                                        queueList.tryCenter();
+                                    }
+                                }
                                 Connections {
                                     target: Mpd
                                     function onCurrentTrackChanged() {
-                                        if (!queueList.ignoreNextChange) {
-                                            const prev = queueList.view.itemAtIndex(queueList.lastTrack - 1);
+                                        const prev = queueList.view.itemAtIndex(queueList.lastTrack - 1);
+                                        if (!prev) {
+                                            if (Mpd.currentTrack !== 0) {
+                                                queueList.wannaCenter = true;
+                                                queueList.tryCenter();
+                                            }
+                                            return;
+                                        } else if (!queueList.ignoreNextChange) {
                                             const wasVisible = prev.y + prev.height > queueList.view.contentY && prev.y < queueList.view.contentY + queueList.view.height;
                                             const amount = Mpd.currentTrack - queueList.lastTrack;
                                             if (wasVisible && !queueList.interacting)
@@ -784,7 +804,7 @@ Item {
                                 }
                                 onHeightChanged: {
                                     const current = queueList.view.itemAtIndex(Mpd.currentTrack - 1);
-                                    const wasVisible = current.y + current.height > view.contentY && current.y < view.contentY + lastHeight;
+                                    const wasVisible = current && current.y + current.height > view.contentY && current.y < view.contentY + lastHeight;
                                     if (wasVisible && !queueList.interacting)
                                         queueList.view.positionViewAtIndex(Mpd.currentTrack - 1, ListView.Contain);
                                     lastHeight = view.height;
