@@ -4,9 +4,9 @@ import "config"
 TextObject {
     required property var colors
     required property string screen
-    property var monitor: Mango.monitors.find(m => m.name == screen)
+    property var layout: Mango.monitors.find(m => m.name == screen)?.layout ?? ""
 
-    text: `[${monitor.layout}]`
+    text: `[${layout}]`
     property var layoutColors: function (layout) {
         return {
             "M": colors.base0A,
@@ -21,5 +21,5 @@ TextObject {
         }[layout] || colors.foreground;
     }
 
-    color: layoutColors(monitor.layout)
+    color: layoutColors(layout)
 }

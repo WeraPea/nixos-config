@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell.Widgets
-import Quickshell.Hyprland
 import "config"
 
 Item {
@@ -12,7 +11,7 @@ Item {
         anchors.centerIn: parent
         property int volume: Number(Audio.sink?.audio.volume * 100).toFixed(1)
         property string icon: Audio.sink == null ? "?" : (Audio.sink.audio.muted ? "󰖁" : "󰕾")
-        color: Audio.sink.audio.muted ? colors.foregroundSecondary : colors.foreground
+        color: Audio.sink?.audio.muted ?? true ? colors.foregroundSecondary : colors.foreground
         text: `${icon} ${volume}%`
     }
     WrapperMouseArea {

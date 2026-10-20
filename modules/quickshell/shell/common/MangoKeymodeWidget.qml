@@ -9,6 +9,8 @@ TextObject {
     visible: keymode !== "default"
 
     property string keymode: {
+        if (!monitor)
+          return "";
         var parts = monitor.keymode.split("-");
         if (parts.length <= modeIndex)
             return "default";

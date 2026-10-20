@@ -11,9 +11,9 @@ TextObject {
 
     property var device: UPower.devices.values.find(d => query(d))
 
-    property string d_icon: device && (device.state === UPowerDeviceState.Charging || device.state === UPowerDeviceState.FullyCharged || device.state === UPowerDeviceState.PendingCharge ? icon_charging : icon)
+    property string d_icon: device && (device.state === UPowerDeviceState.Charging || device.state === UPowerDeviceState.FullyCharged || device.state === UPowerDeviceState.PendingCharge) ? icon_charging : icon
 
-    text: `${prefix}${d_icon}${Math.round(device.percentage * 100)}%`
+    text: `${prefix}${d_icon}${Math.round(device?.percentage ?? 0 * 100)}%`
     color: colors.foreground
     visible: !!device
 }
