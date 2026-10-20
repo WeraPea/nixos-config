@@ -29,6 +29,7 @@ in
         configDir = ./shell;
         env.PINENOTE_COLORS_CONFIG =
           outputs.nixosConfigurations.pinenote.config.stylix.generated.fileTree."stylix/palette.json".source;
+        env.QS_ICON_THEME = "breeze-dark";
         path = with pkgs; [
           brightnessctl
           werapi.prusa-status
@@ -58,6 +59,7 @@ in
       packages = qs.config.path ++ [ quickshell ];
       shellHook = ''
         export PINENOTE_COLORS_CONFIG=${lib.escapeShellArg qs.config.env.PINENOTE_COLORS_CONFIG.data}
+        export QS_ICON_THEME="breeze-dark"
       '';
     };
 

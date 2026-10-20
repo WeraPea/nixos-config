@@ -25,6 +25,10 @@ in
           "video"
         ];
 
+        environment.systemPackages = [
+          pkgs.kdePackages.breeze-icons
+        ];
+
         fonts = {
           packages = with pkgs; [
             noto-fonts

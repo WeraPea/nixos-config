@@ -10,6 +10,7 @@ in
     {
       config,
       lib,
+      pkgs,
       ...
     }:
     let
