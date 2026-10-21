@@ -34,30 +34,23 @@ in
               };
             };
           };
-          configPackages = [
-            (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-switch-channels.conf" ''
-              context.modules = [
-               { name = libpipewire-module-loopback
-                    args = {
-                        node.description = "Analog Output - channel remap"
-                        capture.props = {
-                            media.class = Audio/Sink
-                            node.name = analog_output_channel_remap
-                            audio.position = [ FL FR ]
-                            priority.driver = 2000
-                            priority.session = 2000
-                        }
-                        playback.props = {
-                            node.name = analog_output_channel_remap_playback
-                            audio.position = [ FR FL ]
-                            target.object = "alsa_output.pci-0000_18_00.6.analog-stereo"
-                        }
+          wireplumber.configPackages = [
+            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-switch-channels.conf" ''
+              monitor.alsa.rules = [
+                {
+                  matches = [
+                    {
+                      node.name = "alsa_output.pci-0000_18_00.6.analog-stereo"
                     }
+                  ]
+                  actions = {
+                    update-props = {
+                      audio.position = [ FR FL ]
+                    }
+                  }
                 }
               ]
             '')
-          ];
-          wireplumber.configPackages = [
             (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-mpv-fix.conf" ''
               stream.rules = [
                 {
