@@ -8,6 +8,7 @@ Image {
     asynchronous: true
     cache: false
     fillMode: Image.PreserveAspectFit
+    mipmap: true
     source: {
         thumb.store.rev;
         return key !== "" && store.has(key) ? "file://" + Mpd.cache_dir + "/" + key + ".img" : "";
