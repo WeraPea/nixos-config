@@ -23,6 +23,7 @@ in
         gaming.enable = true;
         beets.enable = true;
         bgutil-ytdlp-pot-provider.enable = true;
+        kdeconnect.enable = true;
         listenbrainz-manual-submit.enable = true;
         mpd = {
           enable = true;
