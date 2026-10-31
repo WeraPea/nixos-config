@@ -107,6 +107,7 @@ in
       environment.systemPackages = with pkgs; [
         # chatty
         brightnessctl
+        wlinhibit
       ];
 
       boot.supportedFilesystems = lib.mkOverride 5 [ "nfs" ];
@@ -125,6 +126,51 @@ in
       hm = {
         home.stateVersion = "25.11";
         programs.zathura.enable = false;
+        services.swayidle = {
+          enable = true;
+          events = {
+            before-sleep = lib.getExe (
+              pkgs.writeShellScriptBin "before-sleep" ''
+                  export PATH="${lib.makeBinPath [ config.programs.mango.package ]}:$PATH"
+                mmsg dispatch sleep_monitor,DSI-1
+                mmsg dispatch disable_touchscreen
+                mmsg dispatch setkeymode,lock
+              ''
+            );
+
+            after-resume = lib.getExe (
+              pkgs.writeShellScriptBin "after-resume" ''
+                export PATH="${lib.makeBinPath [ config.programs.mango.package ]}:$PATH"
+                mmsg dispatch wakeup_monitor,DSI-1
+              ''
+            );
+          };
+          timeouts = [
+            {
+              timeout = 5 * 60;
+              command = lib.getExe (
+                pkgs.writeShellScriptBin "screen-off-timeout" ''
+                  export PATH="${lib.makeBinPath [ config.programs.mango.package ]}:$PATH"
+                  mmsg dispatch sleep_monitor,DSI-1
+                  mmsg dispatch disable_touchscreen
+                  mmsg dispatch setkeymode,lock
+                ''
+              );
+              resumeCommand = lib.getExe (
+                pkgs.writeShellScriptBin "screen-off-timeout-resume" ''
+                  export PATH="${lib.makeBinPath [ config.programs.mango.package ]}:$PATH"
+                  mmsg dispatch wakeup_monitor,DSI-1
+                  mmsg dispatch enable_touchscreen
+                  mmsg dispatch setkeymode,default
+                ''
+              );
+            }
+            {
+              timeout = 30 * 60;
+              command = "${lib.getExe' pkgs.systemd "systemctl"} suspend";
+            }
+          ];
+        };
       };
 
       stylix.fonts.monospace.package = lib.mkForce (

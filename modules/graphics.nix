@@ -63,7 +63,23 @@ in
         };
 
         programs.dconf.enable = true;
-        security.polkit.enable = true;
+        security.polkit = {
+          enable = true;
+          extraConfig = /* js */ ''
+            polkit.addRule(function (action, subject) {
+              if (
+                subject.isInGroup("wheel") &&
+                [
+                  "org.freedesktop.login1.suspend",
+                  "org.freedesktop.login1.suspend-multiple-sessions",
+                  "org.freedesktop.login1.suspend-ignore-inhibit",
+                ].indexOf(action.id) !== -1
+              ) {
+                return polkit.Result.YES;
+              }
+            });
+          '';
+        };
         security.rtkit.enable = true;
       };
     };
