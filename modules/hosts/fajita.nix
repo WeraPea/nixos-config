@@ -21,12 +21,19 @@ in
       pkgsX86_64 = import inputs.nixpkgs {
         system = "x86_64-linux";
       };
+      pkgsCross = import inputs.nixpkgs {
+        system = "x86_64-linux";
+        crossSystem = {
+          config = "aarch64-unknown-linux-gnu";
+        };
+      };
     in
     {
       imports = [
         (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-fajita"; })
         # Minimize the build to produce a smaller closure
         "${modulesPath}/profiles/minimal.nix"
+        inputs.wayland-pipewire-idle-inhibit.nixosModules.default
       ];
       nixpkgs.hostPlatform = "aarch64-linux";
       werapi = {
@@ -170,6 +177,22 @@ in
               command = "${lib.getExe' pkgs.systemd "systemctl"} suspend";
             }
           ];
+        };
+      };
+
+      services.wayland-pipewire-idle-inhibit = {
+        enable = true;
+        package =
+          let
+            packagePath = "${inputs.wayland-pipewire-idle-inhibit}/default.nix";
+          in
+          if (config.werapi.buildSystem == "x86_64-linux") then
+            pkgsCross.callPackage packagePath { pipewire = pkgs.pipewire; }
+          else
+            pkgs.callPackage packagePath { };
+        settings = {
+          # verbosity = "INFO";
+          media_minimum_duration = 2;
         };
       };
 
