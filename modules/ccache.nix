@@ -13,7 +13,7 @@ in
       final: prev: {
         # from ccache module, at the time of writing this only gets added when ccache.packageNames is non-empty
         ccacheWrapper = prev.ccacheWrapper.override {
-          extraConfig = ''
+          extraConfig = /* sh */ ''
             export CCACHE_COMPRESS=1
             export CCACHE_SLOPPINESS=random_seed
             export CCACHE_DIR="${cacheDir}"

@@ -42,7 +42,7 @@ in
             ROCKET_LOG = "critical";
           };
         };
-        services.caddy.virtualHosts."${domain}".extraConfig = ''
+        services.caddy.virtualHosts."${domain}".extraConfig = /* caddy */ ''
           encode zstd gzip
 
           reverse_proxy :${toString config.services.vaultwarden.config.ROCKET_PORT} {

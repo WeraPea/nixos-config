@@ -77,68 +77,67 @@ in
         sha256 = "0v50qc8d7klg4y7f135lj06ymywwbgl1qx2f9y9hv7waga65zlkv";
       };
 
-      transparent-browser-by-url = # js
-        ''
-          // ==UserScript==
-          // @name            Transparent Browser By URL
-          // @author          werapi
-          // @version         1
-          // @description     Make #browser transparent for matching URLs
-          // @onlyonce
-          // ==/UserScript==
-          import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
+      transparent-browser-by-url = /* js */ ''
+        // ==UserScript==
+        // @name            Transparent Browser By URL
+        // @author          werapi
+        // @version         1
+        // @description     Make #browser transparent for matching URLs
+        // @onlyonce
+        // ==/UserScript==
+        import { Windows } from "chrome://userchromejs/content/uc_api.sys.mjs";
 
-          Windows.onCreated(async (win) => {
-            const { parent } = win;
-            if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
+        Windows.onCreated(async (win) => {
+          const { parent } = win;
+          if (parent.location.href !== "chrome://browser/content/browser.xhtml") return;
 
-            await Windows.waitWindowLoading(parent);
+          await Windows.waitWindowLoading(parent);
 
-            const doc = parent.document;
-            const browserEl = doc.getElementById("browser");
-            const toolboxEl = doc.getElementById("navigator-toolbox");
+          const doc = parent.document;
+          const browserEl = doc.getElementById("browser");
+          const toolboxEl = doc.getElementById("navigator-toolbox");
 
-            const transparentUrls = [
-              /^https:\/\/renji-xd\.github\.io\/texthooker-ui/,
-            ];
+          const transparentUrls = [
+            /^https:\/\/renji-xd\.github\.io\/texthooker-ui/,
+          ];
 
-            function shouldBeTransparent(url) {
-              if (!url) return false;
-              return transparentUrls.some(pattern => pattern.test(url));
+          function shouldBeTransparent(url) {
+            if (!url) return false;
+            return transparentUrls.some(pattern => pattern.test(url));
+          }
+
+          function updateBrowserBackground(url) {
+            if (!browserEl || !toolboxEl) return;
+
+            if (shouldBeTransparent(url)) {
+              browserEl.setAttribute("transparent-url", "true");
+              toolboxEl.setAttribute("transparent-url", "true");
+            } else {
+              browserEl.removeAttribute("transparent-url");
+              toolboxEl.removeAttribute("transparent-url");
             }
+          }
 
-            function updateBrowserBackground(url) {
-              if (!browserEl || !toolboxEl) return;
+          if (parent.gBrowser.selectedBrowser) {
+            updateBrowserBackground(parent.gBrowser.selectedBrowser.currentURI?.spec);
+          }
 
-              if (shouldBeTransparent(url)) {
-                browserEl.setAttribute("transparent-url", "true");
-                toolboxEl.setAttribute("transparent-url", "true");
-              } else {
-                browserEl.removeAttribute("transparent-url");
-                toolboxEl.removeAttribute("transparent-url");
-              }
-            }
-
-            if (parent.gBrowser.selectedBrowser) {
-              updateBrowserBackground(parent.gBrowser.selectedBrowser.currentURI?.spec);
-            }
-
-            parent.gBrowser.tabContainer.addEventListener("TabSelect", () => {
-              const url = parent.gBrowser.selectedBrowser?.currentURI?.spec;
-              updateBrowserBackground(url);
-            });
-
-            const TransparencyListener = {
-              onLocationChange(browser, webProgress, request, uri, flags) {
-                // Only update if this is the selected browser and it's the top-level frame
-                if (browser === parent.gBrowser.selectedBrowser && webProgress.isTopLevel) {
-                  updateBrowserBackground(uri?.spec);
-                }
-              }
-            };
-            parent.gBrowser.addTabsProgressListener(TransparencyListener);
+          parent.gBrowser.tabContainer.addEventListener("TabSelect", () => {
+            const url = parent.gBrowser.selectedBrowser?.currentURI?.spec;
+            updateBrowserBackground(url);
           });
-        '';
+
+          const TransparencyListener = {
+            onLocationChange(browser, webProgress, request, uri, flags) {
+              // Only update if this is the selected browser and it's the top-level frame
+              if (browser === parent.gBrowser.selectedBrowser && webProgress.isTopLevel) {
+                updateBrowserBackground(uri?.spec);
+              }
+            }
+          };
+          parent.gBrowser.addTabsProgressListener(TransparencyListener);
+        });
+      '';
 
       mkTheme =
         stylix: polarity:
@@ -337,20 +336,18 @@ in
         sha256 = "18h7qwflgxw6k50gbg7dh8gcvyjix5z3mkffawjhsasicq2mcxsy";
       };
 
-      texthooker-clear =
-        pkgs.writeText "texthooker-clear.js" # js
-          ''
-            // ==UserScript==
-            // @name         texthooker-ui clear
-            // @match        https://renji-xd.github.io/texthooker-ui/*
-            // ==/UserScript==
-            (function () {
-              window.addEventListener('blur', () => {
-                window.getSelection().removeAllRanges();
-                document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-              });
-            })();
-          '';
+      texthooker-clear = pkgs.writeText "texthooker-clear.js" /* js */ ''
+        // ==UserScript==
+        // @name         texthooker-ui clear
+        // @match        https://renji-xd.github.io/texthooker-ui/*
+        // ==/UserScript==
+        (function () {
+          window.addEventListener('blur', () => {
+            window.getSelection().removeAllRanges();
+            document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          });
+        })();
+      '';
 
       cfg = config.werapi.${moduleName};
       hmConfig = config.home-manager.users.${config.werapi.username};
@@ -744,110 +741,104 @@ in
                 };
               };
 
-              userChrome =
-                # lib.mkIf (!cfg.mobile.enable)
-                # css
-                ''
-                  @-moz-document url(chrome://browser/content/browser.xul), url(chrome://browser/content/browser.xhtml) {
-                    #browser,
-                    #main-window,
-                    #nav-bar,
-                    #PersonalToolbar,
-                    #tabbrowser-tabpanels,
-                    #tabpanels,
-                    #TabsToolbar,
-                    .urlbar-background,
-                    .tabbrowser-arrowscrollbox {
-                      background: transparent !important;
-                      background-color: transparent !important;
-                    }
-
-                    #nav-bar {
-                      border-top: 0 !important;
-                      border-bottom: 0 !important;
-                    }
-                    #navigator-toolbox {
-                      border-bottom: 0 !important;
-                    }
-                    #tabbrowser-tabs {
-                      border-inline: 0 !important;
-                    }
-
-                    #urlbar:not([breakout-extend]) .urlbar-background {
-                      border: none !important;
-                    }
-                    #urlbar[breakout-extend] .urlbar-background {
-                      background-color: ${cfg.theme.backgroundColor} !important;
-                    }
-                    #urlbar[breakout-extend][pinenote] .urlbar-background {
-                      background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
-                    }
-
-                    #browser, #navigator-toolbox {
-                      background-color: ${cfg.theme.backgroundColor} !important;
-                    }
-                    #browser[pinenote], #navigator-toolbox[pinenote] {
-                      background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
-                    }
-                    #browser[transparent-url], #navigator-toolbox[transparent-url] {
-                      background-color: #0000 !important;
-                    }
-
-                    :root {
-                      background: transparent;
-                    }
-
-                    * {
-                      --toolbox-bgcolor: #0000 !important;
-                      --toolbox-bgcolor-inactive: #0000 !important;
-                      --tab-selected-bgcolor: #0000 !important;
-                      --browser-page-background: #0000 !important;
-                      --content-view-background: #0000 !important;
-                      --tabpanel-background-color: #0000 !important;
-
-                      --in-content-page-background: #0000 !important;
-                      --in-content-box-background: #0000 !important;
-                      --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
-                      /*--toolbarbutton-border-radius: 0 !important;*/
-                      /*--arrowpanel-border-radius: 0 !important;*/
-                      /*--urlbar-border-radius: 0 !important;*/
-                      --border-radius-medium: 0 !important;
-                      --border-radius-small: 0 !important;
-                      --panel-border-radius: 0 !important;
-                      --focus-outline-width: 0 !important;
-                      --lwt-accent-color-inactive: #0000 !important;
-                      --lwt-accent-color: #0000 !important;
-                    }
+              userChrome = /* css */ ''
+                @-moz-document url(chrome://browser/content/browser.xul), url(chrome://browser/content/browser.xhtml) {
+                  #browser,
+                  #main-window,
+                  #nav-bar,
+                  #PersonalToolbar,
+                  #tabbrowser-tabpanels,
+                  #tabpanels,
+                  #TabsToolbar,
+                  .urlbar-background,
+                  .tabbrowser-arrowscrollbox {
+                    background: transparent !important;
+                    background-color: transparent !important;
                   }
-                '';
-              userContent =
-                # lib.mkIf (!cfg.mobile.enable)
-                # css
-                ''
+
+                  #nav-bar {
+                    border-top: 0 !important;
+                    border-bottom: 0 !important;
+                  }
+                  #navigator-toolbox {
+                    border-bottom: 0 !important;
+                  }
+                  #tabbrowser-tabs {
+                    border-inline: 0 !important;
+                  }
+
+                  #urlbar:not([breakout-extend]) .urlbar-background {
+                    border: none !important;
+                  }
+                  #urlbar[breakout-extend] .urlbar-background {
+                    background-color: ${cfg.theme.backgroundColor} !important;
+                  }
+                  #urlbar[breakout-extend][pinenote] .urlbar-background {
+                    background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
+                  }
+
+                  #browser, #navigator-toolbox {
+                    background-color: ${cfg.theme.backgroundColor} !important;
+                  }
+                  #browser[pinenote], #navigator-toolbox[pinenote] {
+                    background-color: ${flake.nixosConfigurations.pinenote.config.werapi.firefox.theme.backgroundColor} !important;
+                  }
+                  #browser[transparent-url], #navigator-toolbox[transparent-url] {
+                    background-color: #0000 !important;
+                  }
+
                   :root {
+                    background: transparent;
+                  }
+
+                  * {
+                    --toolbox-bgcolor: #0000 !important;
+                    --toolbox-bgcolor-inactive: #0000 !important;
+                    --tab-selected-bgcolor: #0000 !important;
+                    --browser-page-background: #0000 !important;
+                    --content-view-background: #0000 !important;
+                    --tabpanel-background-color: #0000 !important;
+
                     --in-content-page-background: #0000 !important;
                     --in-content-box-background: #0000 !important;
-                    --newtab-background-color: #0000 !important;
+                    --chrome-content-separator-color: transparent !important; /* removes border under navigation toolbox */
+                    /*--toolbarbutton-border-radius: 0 !important;*/
+                    /*--arrowpanel-border-radius: 0 !important;*/
+                    /*--urlbar-border-radius: 0 !important;*/
+                    --border-radius-medium: 0 !important;
+                    --border-radius-small: 0 !important;
+                    --panel-border-radius: 0 !important;
+                    --focus-outline-width: 0 !important;
+                    --lwt-accent-color-inactive: #0000 !important;
+                    --lwt-accent-color: #0000 !important;
                   }
-                  @-moz-document regexp("https://.*\.duckduckgo\\.com/.*") {
-                    html, body, .body--home, .site-wrapper, .region__body, .badge-link, .module--carousel__image-wrapper, .result__image, .vertical--map__sidebar, .vertical--map__sidebar__header, .page-chrome_newtab, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded .metabar:not(.is-stuck), .header-wrap {
-                      --theme-bg-home-custom: #0000 !important;
-                      background: #0000 !important;
-                    }
+                }
+              '';
+              userContent = /* css */ ''
+                :root {
+                  --in-content-page-background: #0000 !important;
+                  --in-content-box-background: #0000 !important;
+                  --newtab-background-color: #0000 !important;
+                }
+                @-moz-document regexp("https://.*\.duckduckgo\\.com/.*") {
+                  html, body, .body--home, .site-wrapper, .region__body, .badge-link, .module--carousel__image-wrapper, .result__image, .vertical--map__sidebar, .vertical--map__sidebar__header, .page-chrome_newtab, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded, .zci--type--tiles:not(.is-fallback).is-full-page.is-expanded .metabar:not(.is-stuck), .header-wrap {
+                    --theme-bg-home-custom: #0000 !important;
+                    background: #0000 !important;
                   }
-                  @-moz-document regexp("https://renji-xd.github.io/texthooker-ui/") {
-                    :root, body, .bg-base-100 {
-                      background-color: #0000 !important;
-                    }
-                    * {
-                      text-shadow:
-                        0 0 2px rgba(0, 0, 0, 0.9),
-                        0 0 4px rgba(0, 0, 0, 0.9),
-                        0 0 6px rgba(0, 0, 0, 0.9),
-                        1px 1px 2px rgba(0, 0, 0, 1) !important;
-                    }
+                }
+                @-moz-document regexp("https://renji-xd.github.io/texthooker-ui/") {
+                  :root, body, .bg-base-100 {
+                    background-color: #0000 !important;
                   }
-                '';
+                  * {
+                    text-shadow:
+                      0 0 2px rgba(0, 0, 0, 0.9),
+                      0 0 4px rgba(0, 0, 0, 0.9),
+                      0 0 6px rgba(0, 0, 0, 0.9),
+                      1px 1px 2px rgba(0, 0, 0, 1) !important;
+                  }
+                }
+              '';
 
               settings = {
                 "browser.aboutConfig.showWarning" = false;

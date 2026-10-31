@@ -40,12 +40,12 @@ in
                 suffix ? "-remote-wrapped",
               }:
               writeShellScriptBin "${name}${suffix}" (
-                if hostname == targetHostname then # sh
-                  ''
+                if hostname == targetHostname then
+                  /* sh */ ''
                     exec "${exe}" "$@"
-                  '' # sh
-                else
                   ''
+                else
+                  /* sh */ ''
                     exe="${builtins.unsafeDiscardStringContext exe}"
                     remote_cmd=$(printf '%q ' "$exe" "$@")
                     ${lib.getExe openssh} ${targetSsh} "sh -c $(printf '%q ' "$remote_cmd")"

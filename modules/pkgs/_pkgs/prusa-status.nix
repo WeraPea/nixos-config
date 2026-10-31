@@ -4,8 +4,7 @@ writers.writePython3Bin "prusa-status"
     libraries = [ python3Packages.requests ];
     doCheck = false;
   }
-  # python
-  ''
+  /* python */ ''
     import os
     import time
     import requests

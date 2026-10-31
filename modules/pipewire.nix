@@ -35,7 +35,7 @@ in
             };
           };
           wireplumber.configPackages = [
-            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-switch-channels.conf" ''
+            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-switch-channels.conf" /* hocon */ ''
               monitor.alsa.rules = [
                 {
                   matches = [
@@ -51,7 +51,7 @@ in
                 }
               ]
             '')
-            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-mpv-fix.conf" ''
+            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/51-mpv-fix.conf" /* hocon */ ''
               stream.rules = [
                 {
                   matches = [
@@ -67,12 +67,12 @@ in
                 }
               ]
             '') # taken from https://howthefu.cc/posts/04/index.html
-            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/52-linking-settings.conf" ''
+            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/52-linking-settings.conf" /* hocon */ ''
               wireplumber.settings = {
                 linking.follow-default-target = false
               }
             '')
-            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/53-device-priorities.conf" ''
+            (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/53-device-priorities.conf" /* hocon */ ''
               monitor.bluez.rules = [
                 {
                   matches = [

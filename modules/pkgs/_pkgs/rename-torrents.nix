@@ -7,7 +7,7 @@ writers.writePython3Bin "rename-torrents"
   {
     libraries = [ python3Packages.bencode-py ];
   }
-  ''
+  /* python */ ''
     import os
     import bencodepy
     import argparse

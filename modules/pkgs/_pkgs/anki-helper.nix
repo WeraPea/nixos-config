@@ -19,7 +19,7 @@ writers.writePython3Bin "anki-helper"
       ]}"
     ];
   }
-  ''
+  /* python */ ''
     import json
     import subprocess
     import sys

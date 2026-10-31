@@ -15,8 +15,7 @@ writers.writePython3Bin "usb-tablet"
   {
     doCheck = false;
   }
-  # python
-  ''
+  /* python */ ''
     import os
     import sys
     import signal

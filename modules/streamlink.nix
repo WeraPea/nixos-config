@@ -32,7 +32,7 @@ in
           };
           xdg.configFile.streamlink = {
             target = "streamlink/config";
-            text = ''
+            text = /* properties */ ''
               player=mpv
               default-stream=best
               twitch-disable-ads

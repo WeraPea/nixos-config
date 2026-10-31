@@ -81,7 +81,7 @@ in
         [fast]
         vo=vdpau
       '';
-      "mpv.input".content = ''
+      "mpv.input".content = /* properties */ ''
         t script-binding webtorrent/toggle-info
         c script-binding progressbar/toggle-inactive-bar
         tab script-binding progressbar/request-display

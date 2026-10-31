@@ -36,7 +36,7 @@
         # modified from niri module (mango does not provide a unit file so you need to start this service yourself)
         buildCommand.mangoReloadConfig = {
           after = [ "symlinkScript" ];
-          data = ''
+          data = /* sh */ ''
             mkdir -p ${placeholder config.outputName}/lib/systemd/user/;
             cat > ${placeholder config.outputName}/lib/systemd/user/mango-reload.service<<EOF
             [Unit]

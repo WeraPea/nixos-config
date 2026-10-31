@@ -36,7 +36,7 @@ in
             noto-fonts-cjk-serif
             noto-fonts-color-emoji
           ];
-          fontconfig.localConf = ''
+          fontconfig.localConf = /* xml */ ''
             <?xml version="1.0"?>
             <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
             <fontconfig>

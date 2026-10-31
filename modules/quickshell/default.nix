@@ -57,7 +57,7 @@ in
     in
     mkShell {
       packages = qs.config.path ++ [ quickshell ];
-      shellHook = ''
+      shellHook = /* sh */ ''
         export PINENOTE_COLORS_CONFIG=${lib.escapeShellArg qs.config.env.PINENOTE_COLORS_CONFIG.data}
         export QS_ICON_THEME="breeze-dark"
       '';

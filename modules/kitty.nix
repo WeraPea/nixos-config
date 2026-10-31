@@ -85,7 +85,7 @@ in
               size = config.stylix.fonts.sizes.terminal;
             };
             settings.background_opacity = with config.stylix.opacity; "${toString terminal}";
-            extraConfig = ''
+            extraConfig = /* properties */ ''
               include ${theme}
               active_tab_background   ${blue}
               active_tab_foreground   ${base00}

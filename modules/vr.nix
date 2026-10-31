@@ -79,7 +79,7 @@ in
         ];
         hm.xdg.configFile."openxr/1/active_runtime.json".source =
           "${pkgs.monado}/share/openxr/1/openxr_monado.json";
-        hm.xdg.configFile."openvr/openvrpaths.vrpath-monado".text = ''
+        hm.xdg.configFile."openvr/openvrpaths.vrpath-monado".text = /* json */ ''
           {
             "config" :
             [

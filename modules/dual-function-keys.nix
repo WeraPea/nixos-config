@@ -21,7 +21,7 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        environment.etc."dual-function-keys.yaml".text = ''
+        environment.etc."dual-function-keys.yaml".text = /* yaml */ ''
           MAPPINGS:
             - KEY: KEY_LEFTMETA
               TAP: KEY_ESC
@@ -33,7 +33,7 @@ in
         services.interception-tools = {
           enable = true;
           plugins = with pkgs.interception-tools-plugins; [ dual-function-keys ];
-          udevmonConfig = ''
+          udevmonConfig = /* yaml */ ''
             - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.dual-function-keys}/bin/dual-function-keys -c /etc/dual-function-keys.yaml | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
               DEVICE:
                 NAME: "splitkb.com Kyria rev2*"

@@ -15,7 +15,7 @@ writers.writePython3Bin "nyaasi"
       "${lib.makeBinPath [ curl ]}"
     ];
   }
-  ''
+  /* python */ ''
     import os
     import sys
     from rofi import Rofi

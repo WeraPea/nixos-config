@@ -34,29 +34,22 @@ in
         services = {
           udev.packages = with pkgs; [
             platformio-core.udev
-            (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules"
-              # udev
-              ''
-                # DFU (Internal bootloader for STM32 and AT32 MCUs)
-                SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
-                SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
-              ''
-            )
-            (writeTextDir "lib/udev/rules.d/99-pinenote-gadget-touch.rules" # udev
-              ''
-                # for use with OpenTabletDriver
-                SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0095", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_IGNORE_DEVICE}="0", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1", ENV{LIBINPUT_DEVICE_GROUP}="OpenTabletDriver"
+            (writeTextDir "lib/udev/rules.d/70-stm32-dfu.rules" /* udev */ ''
+              # DFU (Internal bootloader for STM32 and AT32 MCUs)
+              SUBSYSTEM=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
+              SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+            '')
+            (writeTextDir "lib/udev/rules.d/99-pinenote-gadget-touch.rules" /* udev */ ''
+              # for use with OpenTabletDriver
+              SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0095", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_IGNORE_DEVICE}="0", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1", ENV{LIBINPUT_DEVICE_GROUP}="OpenTabletDriver"
 
-                # for use without OpenTabletDriver (different product id)
-                SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
-                SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ENV{LIBINPUT_DEVICE_GROUP}="pinenote-gadget-touch"
-              ''
-            )
-            (writeTextDir "lib/udev/rules.d/99-arduino-rgbs.rules" # udev
-              ''
-                SUBSYSTEM=="tty", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0043", ATTRS{serial}=="9563533303135111E131", SYMLINK+="ttyRGBs", RUN+="${pkgs.coreutils}/bin/stty -F /dev/%k -hupcl"
-              ''
-            )
+              # for use without OpenTabletDriver (different product id)
+              SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ATTRS{phys}=="usb-*/input1", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+              SUBSYSTEM=="input", ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{id/vendor}=="2d1f", ATTRS{id/product}=="0096", ENV{LIBINPUT_DEVICE_GROUP}="pinenote-gadget-touch"
+            '')
+            (writeTextDir "lib/udev/rules.d/99-arduino-rgbs.rules" /* udev */ ''
+              SUBSYSTEM=="tty", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0043", ATTRS{serial}=="9563533303135111E131", SYMLINK+="ttyRGBs", RUN+="${pkgs.coreutils}/bin/stty -F /dev/%k -hupcl"
+            '')
             (pkgs.writeTextDir "lib/udev/rules.d/81-libinput-pinenote.rules" /* udev */ ''
               ACTION=="remove", GOTO="libinput_device_group_end"
               KERNEL!="event[0-9]*", GOTO="libinput_device_group_end"
@@ -66,7 +59,7 @@ in
               ATTRS{name}=="cyttsp5", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
 
               LABEL="libinput_device_group_end"
-            '') # WOULD BE FUCKING AMAZING IF TOUCH ARBITRATION ACTUALLY FUCKING DID ANYTHING AT MOTHERFUCKING ALL OTHER THAN LYING ABOUT BEING ACTIVE FOR ONCE
+            '')
           ];
           upower.enable = true;
         };
