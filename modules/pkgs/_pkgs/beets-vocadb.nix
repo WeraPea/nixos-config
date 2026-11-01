@@ -20,7 +20,7 @@ python3.pkgs.buildPythonPackage {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.1,<0.12.0" "uv_build<0.12.0";
+      --replace-fail "uv_build>=0.11.1,<0.12.0" "uv_build<0.13.0";
   '';
 
   build-system = [

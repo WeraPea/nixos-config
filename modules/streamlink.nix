@@ -22,10 +22,7 @@ in
       };
       config = lib.mkIf cfg.enable {
         hm = {
-          home.packages = with pkgs; [
-            streamlink
-            streamlink-twitch-gui-bin
-          ];
+          home.packages = with pkgs; [ streamlink ];
           xdg.dataFile.streamlink-ttvlol = {
             target = "streamlink/plugins/twitch.py";
             source = pkgs.werapi.streamlink-ttvlol;

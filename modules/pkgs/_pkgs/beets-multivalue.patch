@@ -1,0 +1,55 @@
+diff --git a/beetsplug/multivalue.py b/beetsplug/multivalue.py
+index 39dff86..e451744 100644
+--- a/beetsplug/multivalue.py
++++ b/beetsplug/multivalue.py
+@@ -4,16 +4,7 @@ import mediafile
+ from beets import dbcore, library, plugins, ui
+ from beets.plugins import BeetsPlugin
+ from beets.ui import Subcommand, UserError, decargs, print_
+-
+-try:
+-    # Old beets <2.6
+-    from beets.ui.commands import _do_query as do_query
+-    from beets.ui.commands import print_and_modify
+-except ImportError:
+-    from beets.ui.commands.utils import do_query
+-    from beets.ui.commands.modify import print_and_modify
+-
+-from beets.util import functemplate
++from beets.ui.commands.modify import print_and_modify
+ 
+ SearchTuple = tuple[str, Type[dbcore.query.FieldQuery]]
+ 
+@@ -296,8 +287,9 @@ class MultiValuePlugin(BeetsPlugin):
+         model_cls = library.Album if album else library.Item
+ 
+         # Get the items to modify.
+-        items, albums = do_query(lib, query, album, False)
+-        objs = albums if album else items
++        objs = list(lib.albums(query) if album else lib.items(query))
++        if not objs:
++            raise UserError(f"No matching {'album' if album else 'item'}s found.")
+ 
+         # Apply changes *temporarily*, preview them, and collect modified
+         # objects.
+@@ -309,17 +301,17 @@ class MultiValuePlugin(BeetsPlugin):
+         for key, value, query in adds:
+             if key not in templates:
+                 templates[key] = self.get_default_template()
+-            templates[key]["adds"].append((functemplate.template(value), query))
++            templates[key]["adds"].append((value, query))
+ 
+         for key, value, query in removes:
+             if key not in templates:
+                 templates[key] = self.get_default_template()
+-            templates[key]["removes"].append((functemplate.template(value), query))
++            templates[key]["removes"].append((value, query))
+ 
+         for key, value in mods.items():
+             if key not in templates:
+                 templates[key] = self.get_default_template()
+-            templates[key]["set"] = functemplate.template(value)
++            templates[key]["set"] = value
+ 
+         for obj in objs:
+             obj_mods = {}

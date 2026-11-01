@@ -107,7 +107,6 @@ in
                 if cross then
                   pkgsCross.mpd.override (
                     lib.genAttrs [
-                      "systemd"
                       "glib"
                       "fmt"
                       "curl"

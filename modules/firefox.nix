@@ -352,12 +352,13 @@ in
       cfg = config.werapi.${moduleName};
       hmConfig = config.home-manager.users.${config.werapi.username};
 
+      glidePackage = inputs.glide.packages.${pkgs.stdenv.hostPlatform.system}.glide-browser-bin;
       baseFirefoxPackage =
         if cfg.mobile.enable then
           # pkgs.firefox-mobile
           pkgs.firefox
         else
-          inputs.glide.packages.${pkgs.stdenv.hostPlatform.system}.glide-browser-bin;
+          glidePackage;
 
       firefoxPackage = baseFirefoxPackage.override {
         extraPrefsFiles = [
@@ -394,6 +395,9 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
+        warnings = lib.optionals (
+          glidePackage.version != "0.1.65a"
+        ) "glide updated, change firefox release";
         nixpkgs.overlays = [
           inputs.rycee.overlays.default
         ];
@@ -429,7 +433,7 @@ in
           programs.firefox = {
             enable = true;
             package = firefoxPackage;
-            release = lib.mkIf (!cfg.mobile.enable) "153.0b5";
+            release = lib.mkIf (!cfg.mobile.enable) "159.0b4"; # NOTE: bump on input bump
             configPath =
               if cfg.mobile.enable then
                 "${hmConfig.xdg.configHome}/mozilla/firefox"

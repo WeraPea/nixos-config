@@ -124,48 +124,7 @@ in
           });
         }
       );
-      fixes = (
-        final: prev: {
-          bs-manager = prev.bs-manager.overrideAttrs (old: {
-            desktopItems = [
-              (final.makeDesktopItem {
-                desktopName = "BSManager";
-                name = "BSManager";
-                exec = "bs-manager %u"; # add %u
-                terminal = false;
-                type = "Application";
-                icon = "bs-manager";
-                mimeTypes = [
-                  "x-scheme-handler/bsmanager"
-                  "x-scheme-handler/beatsaver"
-                  "x-scheme-handler/bsplaylist"
-                  "x-scheme-handler/modelsaber"
-                  "x-scheme-handler/web+bsmap"
-                ];
-                categories = [
-                  "Utility"
-                  "Game"
-                ];
-              })
-            ];
-          });
-
-          lighthouse-steamvr = prev.lighthouse-steamvr.overrideAttrs (old: rec {
-            version = "1.5.0";
-            src = final.fetchFromGitHub {
-              owner = "ShayBox";
-              repo = "Lighthouse";
-              rev = version;
-              hash = "sha256-qlQyDY+ZU4m3GBtn60DUiGJDhC8OF+WTqXc4BQIf+OI=";
-            };
-            cargoBuildFlags = (old.cargoBuildFlags or [ ]) ++ [
-              "--features"
-              "cli"
-            ];
-          });
-        }
-      );
-
+      fixes = (final: prev: { });
       tweaks = (
         final: prev: {
           nvimpager = prev.nvimpager.overrideAttrs (old: {

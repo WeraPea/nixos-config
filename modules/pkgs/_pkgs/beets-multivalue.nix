@@ -25,6 +25,10 @@ python3.pkgs.callPackage (
       hash = "sha256-u9dr+kEC4qentrjQKoefZDX5Je55UiTfhyrvlzUEqxA=";
     };
 
+    patches = [
+      ./beets-multivalue.patch
+    ];
+
     build-system = [
       setuptools
     ];

@@ -33,7 +33,7 @@ Item {
         WheelHandler {
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: event => {
-                const dy = event.pixelDelta.y !== 0 ? event.pixelDelta.y : event.angleDelta.y / 120 * scrollBase.wheelStep;
+                const dy = event.angleDelta.y / 120 * scrollBase.wheelStep;
                 wheelTimer.restart();
                 scrollBase.scroller.cancelFlick();
                 scrollBase.scroller.contentY = scrollBase.clampY(scrollBase.scroller.contentY - dy);

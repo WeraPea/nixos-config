@@ -36,7 +36,7 @@ in
           enable = true;
           package = pkgs.caddy.withPlugins {
             plugins = [ "github.com/caddy-dns/duckdns@v0.5.0" ];
-            hash = "sha256-H+SBMsiqSMwH0//WzcPukkAqIjPCj6c35f5E4892yQQ=";
+            hash = "sha256-IJkUtJc9Gz9WnHyBmHXTjXI6K1wyHQoVRRP8l3A3na0=";
           };
           environmentFile = config.sops.templates."caddy.env".path;
           globalConfig = ''
