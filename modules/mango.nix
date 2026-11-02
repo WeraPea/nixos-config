@@ -146,8 +146,7 @@ in
             "right,left,any,1" = "spawn,${lib.getExe pkgs.wtype} -P escape -p escape";
 
             "up,bottom,medium,1" = "toggleoverview";
-            "down,top,any,1" =
-              "spawn,qs-wrapped ipc call app-menu toggle";
+            "down,top,any,1" = "spawn,qs-wrapped ipc call app-menu toggle";
 
             "down_left,top,medium,1" = "killclient";
             "right,left,any,3" = "reload_config";
@@ -235,6 +234,27 @@ in
               done &
               jq_pid=$!
               wait "$jq_pid"
+            ''}";
+            "SUPER,i" = "spawn,${pkgs.writeShellScript "passthrough-toggle" ''
+              pidfile="/tmp/$(basename "$0").pid"
+              export PATH="${lib.makeBinPath [ pkgs.index_camera_passthrough ]}:$PATH"
+              if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
+                kill "$(cat "$pidfile")"
+                rm -f "$pidfile"
+                exit 0
+              fi
+
+              echo $$ > "$pidfile"
+
+              cleanup() {
+                kill "$p_pid" 2>/dev/null
+                rm -f "$tmp" "$pidfile"
+              }
+              trap cleanup EXIT INT TERM
+
+              index_camera_passthrough 2>/dev/null &
+              p_pid=$!
+              wait "$p_pid"
             ''}";
           };
         };
