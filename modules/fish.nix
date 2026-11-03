@@ -142,7 +142,7 @@ in
             end
 
             abbr --add '--set-cursor=%' -- ssc 'kitty +kitten ssh -t % fish -i'
-            abbr --add '--set-cursor=%' -- no 'nix % --override-input nixpkgs (pushd ~/nixos-config && nix flake metadata nixpkgs | awk '\'''/Locked URL/{print $NF}'\''' && popd)'
+            abbr --add '--set-cursor=%' -- no 'nix % --override-input nixpkgs "$(nix flake metadata --json ~/nixos-config | jq -r \'.locks.nodes as $nodes | $nodes[$nodes.root.inputs.nixpkgs].locked | "github:\\(.owner)/\\(.repo)/\\(.rev)"\')"'
           '';
           shellAbbrs = {
             cl = "clear";
