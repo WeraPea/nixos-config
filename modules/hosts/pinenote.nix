@@ -88,7 +88,6 @@ in
         in
         p.callPackage "${inputs.pinenote-nixos}/packages/pinenote-service.nix" { };
 
-      boot.initrd.systemd.tpm2.enable = false;
       boot.kernelModules = [ "libcomposite" ];
 
       stylix.targets.fish.enable = false;
@@ -134,7 +133,7 @@ in
         HandlePowerKey = "suspend";
         HandlePowerKeyLongPress = "poweroff";
       };
-      services.journald.storage = "volatile";
+      services.journald.settings.Journal.Storage = "volatile";
 
       hardware.opentabletdriver.enable = lib.mkForce false;
 
