@@ -173,7 +173,7 @@ in
             x = "exit";
             rp = "rsync -avh --info=progress2 --no-inc-recursive";
             riw = "nix-shell -p efibootmgr --run 'sudo efibootmgr -n 0001'";
-            lsblkk = "lsblk -o name,mountpoint,fsuse%,fsused,fsavail,fssize,model,label";
+            lsblkk = "lsblk -o name,mountpoint,fstype,fsuse%,fsused,fsavail,fssize,size,model,label,partlabel";
             ng = "nvim +:Neogit";
           };
         };
