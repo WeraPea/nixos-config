@@ -117,6 +117,15 @@ in
         wlinhibit
       ];
 
+      nixpkgs.overlays = [
+        (final: prev: {
+          aggregateModules =
+            modules:
+            final.lib.makeOverridable ({ name }: final.runCommand name { } "mkdir -p $out") {
+              name = "kernel-modules";
+            };
+        })
+      ]; # workaround till https://github.com/NixOS/nixpkgs/pull/579390 gets merged
       boot.supportedFilesystems = lib.mkOverride 5 [ "nfs" ];
       mobile.kernel.structuredConfig = [
         (
