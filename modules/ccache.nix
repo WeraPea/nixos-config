@@ -68,6 +68,10 @@ in
         };
         nix.settings.extra-sandbox-paths = [ config.programs.ccache.cacheDir ];
         nixpkgs.overlays = [ flake.overlays._ccache ];
+        system.activationScripts.makeCcacheDir = ''
+          mkdir -m0770 -p '${cacheDir}'
+          chown root:nixbld '${cacheDir}'
+        '';
       };
     };
 }
