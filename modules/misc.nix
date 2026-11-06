@@ -54,6 +54,7 @@ in
 
         zramSwap.enable = true;
 
+        sops.secrets."users/${config.werapi.username}/password".neededForUsers = true;
         users.users.${config.werapi.username} = {
           extraGroups = [
             "networkmanager"
@@ -62,6 +63,7 @@ in
             "dialout"
           ];
           isNormalUser = true;
+          hashedPasswordFile = config.sops.secrets."users/${config.werapi.username}/password".path;
         };
 
         environment.pathsToLink = [
