@@ -112,15 +112,17 @@ in
 
       services.ddccontrol.enable = true;
 
-      networking.firewall.allowedTCPPorts = [
-        5900 # vnc
-      ];
-
       hm.home.stateVersion = "23.11";
       system.stateVersion = "23.11";
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-      networking.interfaces.enp10s0.wakeOnLan.enable = true;
+      networking = {
+        firewall.allowedTCPPorts = [
+          5900 # vnc
+        ];
+        interfaces.enp10s0.wakeOnLan.enable = true;
+        networkmanager.ensureProfiles.profiles.home-net.connection.autoconnect = false;
+      };
 
       boot = {
         binfmt.emulatedSystems = [ "aarch64-linux" ];

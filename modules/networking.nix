@@ -35,9 +35,51 @@ in
             "--hostname=${config.networking.hostName}-ts"
           ];
         };
+
+        sops = {
+          secrets."wifi/home/psk" = { };
+          secrets."wifi/home/ssid" = { };
+          templates."nm-wifi-env" = {
+            content = ''
+              WIFI_HOME_PSK=${config.sops.placeholder."wifi/home/psk"}
+              WIFI_HOME_SSID=${config.sops.placeholder."wifi/home/ssid"}
+            '';
+            owner = "root";
+            group = "root";
+            mode = "0400";
+          };
+        };
+
         networking = {
           hostName = config.werapi.hostname;
-          networkmanager.enable = true;
+          networkmanager = {
+            enable = true;
+            ensureProfiles = {
+              environmentFiles = [ config.sops.templates."nm-wifi-env".path ];
+              profiles.home-net = {
+                connection = {
+                  id = "home-net";
+                  type = "wifi";
+                };
+                wifi = {
+                  mode = "infrastructure";
+                  ssid = "$WIFI_HOME_SSID";
+                };
+                wifi-security = {
+                  auth-alg = "open";
+                  key-mgmt = "wpa-psk";
+                  psk = "$WIFI_HOME_PSK";
+                };
+                ipv4 = {
+                  method = "auto";
+                };
+                ipv6 = {
+                  addr-gen-mode = "default";
+                  method = "auto";
+                };
+              };
+            };
+          };
         };
       };
     };
