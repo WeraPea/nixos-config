@@ -124,7 +124,30 @@ in
           });
         }
       );
-      fixes = (final: prev: { });
+      fixes = (
+        final: prev: {
+          edhm-ui = prev.edhm-ui.overrideAttrs (
+            finalAttrs: previousAttrs: {
+              version = "3.0.75";
+              src = final.fetchzip {
+                url = "https://github.com/BlueMystical/EDHM_UI/releases/download/v${finalAttrs.version}/edhm-ui-v3-linux-x64.zip";
+                hash = "sha256-hc3rF641jdk+qPKyiy6KKMU4xHz2hwE3GS7nyajP5BY=";
+              };
+            }
+          );
+          edhm-ui-wrapped = (
+            final.symlinkJoin {
+              name = "edhm-ui-wrapped";
+              paths = [ final.edhm-ui ];
+              nativeBuildInputs = [ final.makeWrapper ];
+              postBuild = ''
+                wrapProgram $out/bin/edhm-ui \
+                  --add-flags "--ozone-platform=x11"
+              '';
+            }
+          );
+        }
+      );
       tweaks = (
         final: prev: {
           nvimpager = prev.nvimpager.overrideAttrs (old: {

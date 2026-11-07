@@ -102,6 +102,8 @@ in
               alsa-oss
               bs-manager
               ckan
+              edhm-ui-wrapped
+              edmarketconnector
               # kaon # broken?
               lutris
               mangohud
