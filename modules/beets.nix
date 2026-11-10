@@ -29,6 +29,7 @@ in
           propagatedBuildInputs = old.propagatedBuildInputs ++ [
             pkgs.werapi.beets-multivalue
             pkgs.werapi.beets-vocadb
+            pkgs.werapi.beets-getlrc
             (pkgs.writeTextDir "lib/python${pkgs.python3.pythonVersion}/site-packages/beetsplug/copyurl.py" /* python */ ''
               # """Add a "copy url" choice to beets' interactive importer prompt."""
               #
@@ -123,6 +124,7 @@ in
           "play"
           "copyurl"
           "multivalue"
+          "getlrc"
         ];
         multivalue.string_fields = {
           grouping = ";";
