@@ -29,10 +29,11 @@ in
       config = lib.mkIf cfg.enable {
         sops = {
           defaultSopsFormat = "yaml";
-          age.keyFile = "/home/${config.werapi.username}/.config/sops/age/keys.txt";
+          age.keyFile = "/var/lib/sops-nix/key.txt";
           defaultSopsFile = "/etc/sops/secrets.yaml";
           validateSopsFiles = false;
         };
+        environment.sessionVariables."SOPS_AGE_KEY_FILE" = config.sops.age.keyFile;
       };
     };
 }
