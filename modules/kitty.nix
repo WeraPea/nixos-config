@@ -48,6 +48,7 @@ in
         tab_title_template = "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{index}:{title[:15]}";
         clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
         scrollback_pager = "${lib.getExe pkgs.nvimpager} -p";
+        scrollback_lines = 100 * 1000;
       };
     };
   flake.modules.${moduleName}.nixos =
