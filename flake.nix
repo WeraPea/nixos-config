@@ -7,7 +7,8 @@
     };
     nixvim.url = "github:nix-community/nixvim";
     stylix = {
-      url = "github:nix-community/stylix";
+      # url = "github:nix-community/stylix";
+      url = "github:nix-community/stylix/pull/2503/head";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rycee = {
