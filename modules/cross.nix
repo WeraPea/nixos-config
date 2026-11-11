@@ -7,16 +7,15 @@ let
   moduleName = "cross";
 in
 {
+  flake.nixpkgs-patches.expose-nixpkgsFun = pkgs: ./expose-nixpkgsFun.patch;
   flake.overlays.cross = (
     final: prev: {
       werapi = (prev.werapi or { }) // {
-        pkgsX86_64 = import final.path {
+        pkgsX86_64 = final.nixpkgsFun {
           system = "x86_64-linux";
-          overlays = flake.lib.publicAttrValues flake.overlays;
         };
-        pkgsCrossFromX86 = import final.path {
+        pkgsCrossFromX86 = final.nixpkgsFun {
           system = "x86_64-linux";
-          overlays = flake.lib.publicAttrValues flake.overlays;
           crossSystem = {
             inherit (final.stdenv.hostPlatform) config;
           };
