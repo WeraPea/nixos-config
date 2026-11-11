@@ -46,7 +46,7 @@ in
         koreader.enable = true;
         mpv.enable = false;
         wvkbd = {
-          enable = true;
+          enable = config.werapi.graphics.enable;
           popups.enable = false;
         };
       };
