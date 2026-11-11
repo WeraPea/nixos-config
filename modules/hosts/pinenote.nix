@@ -16,18 +16,6 @@ in
       config,
       ...
     }:
-    let
-      pkgsCross = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        crossSystem = {
-          config = "aarch64-unknown-linux-gnu";
-        };
-        overlays = [ flake.overlays._ccache ];
-      };
-      pkgsX86_64 = import inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
-    in
     {
       imports = [ inputs.pinenote-nixos.nixosModules.default ];
       werapi = {
@@ -83,7 +71,7 @@ in
       pinenote.pinenote-service.enable = true;
       pinenote.pinenote-service.package =
         let
-          p = if (config.werapi.buildSystem == "x86_64-linux") then pkgsCross else pkgs;
+          p = if (config.werapi.buildSystem == "x86_64-linux") then pkgs.werapi.pkgsCrossFromX86 else pkgs;
         in
         p.callPackage "${inputs.pinenote-nixos}/packages/pinenote-service.nix" { };
 
@@ -93,7 +81,7 @@ in
       stylix = {
         fonts.monospace.package = lib.mkForce (
           if (config.werapi.buildSystem == "x86_64-linux") then
-            pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
+            pkgs.werapi.pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
           else
             pkgs.werapi.udev-gothic-hs-nf
         );
@@ -185,9 +173,9 @@ in
       nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
       boot.kernelPackages = lib.mkIf (config.werapi.buildSystem == "x86_64-linux") (
-        pkgsCross.linuxPackagesFor (
-          pkgsCross.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" {
-            stdenv = pkgsCross.ccacheStdenv;
+        pkgs.werapi.pkgsCrossFromX86.linuxPackagesFor (
+          pkgs.werapi.pkgsCrossFromX86.callPackage "${inputs.pinenote-nixos}/packages/pinenote-kernel.nix" {
+            stdenv = pkgs.werapi.pkgsCrossFromX86.ccacheStdenv;
           }
         )
       );

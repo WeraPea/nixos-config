@@ -16,18 +16,6 @@ in
       config,
       ...
     }:
-    let
-      pkgsCross = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        crossSystem = {
-          config = "aarch64-unknown-linux-gnu";
-        };
-        overlays = [ flake.overlays._ccache ];
-      };
-      pkgsX86_64 = import inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
-    in
     {
       imports = [ flake.nixosModules._pinenote-from-x86_64 ];
       werapi = {
@@ -40,12 +28,12 @@ in
         graphics.enable = false;
       };
 
-      system.build.script = pkgsX86_64.writeShellScriptBin "build-flash-run-script" /* bash */ ''
+      system.build.script = pkgs.werapi.pkgsX86_64.writeShellScriptBin "build-flash-run-script" /* bash */ ''
         export PATH="${
           lib.makeBinPath (
-            with pkgsX86_64;
+            with pkgs.werapi.pkgsX86_64;
             [
-              inputs.pinenote-nixos.packages.${pkgsX86_64.stdenv.hostPlatform.system}.usb-helper
+              inputs.pinenote-nixos.packages.${stdenv.hostPlatform.system}.usb-helper
               iproute2
               squashfs-tools
               nbdkit
@@ -138,7 +126,7 @@ in
       };
 
       pinenote.netboot.enable = true;
-      pinenote.netboot.squashfsPkgs = pkgsX86_64;
+      pinenote.netboot.squashfsPkgs = pkgs.werapi.pkgsX86_64;
 
       boot.initrd.systemd.emergencyAccess = true;
 

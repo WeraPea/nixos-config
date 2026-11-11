@@ -7,6 +7,23 @@ let
   moduleName = "cross";
 in
 {
+  flake.overlays.cross = (
+    final: prev: {
+      werapi = (prev.werapi or { }) // {
+        pkgsX86_64 = import final.path {
+          system = "x86_64-linux";
+          overlays = flake.lib.publicAttrValues flake.overlays;
+        };
+        pkgsCrossFromX86 = import final.path {
+          system = "x86_64-linux";
+          overlays = flake.lib.publicAttrValues flake.overlays;
+          crossSystem = {
+            inherit (final.stdenv.hostPlatform) config;
+          };
+        };
+      };
+    }
+  );
   flake.modules.${moduleName}.nixos =
     {
       config,
@@ -16,15 +33,6 @@ in
     }:
     let
       cfg = config.werapi.${moduleName};
-      pkgsX86_64 = import inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
-      pkgsCross = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        crossSystem = {
-          config = "aarch64-unknown-linux-gnu";
-        };
-      };
       cross =
         config.werapi.buildSystem == "x86_64-linux" && pkgs.stdenv.hostPlatform.system != "x86_64-linux";
       manPackage =
@@ -33,12 +41,12 @@ in
             name = "man-with-x86_64-mandb";
             paths = [
               pkgs.man
-              pkgsX86_64.man
+              pkgs.werapi.pkgsX86_64.man
             ];
 
             postBuild = ''
               rm -f $out/bin/mandb
-              ln -s ${pkgsX86_64.man}/bin/mandb $out/bin/mandb
+              ln -s ${pkgs.werapi.pkgsX86_64.man}/bin/mandb $out/bin/mandb
             '';
           }
         else
@@ -46,7 +54,7 @@ in
 
       mango-pkg =
         if cross then
-          (pkgsCross.callPackage "${inputs.mango}/nix/default.nix" {
+          (pkgs.werapi.pkgsCrossFromX86.callPackage "${inputs.mango}/nix/default.nix" {
             cjson = pkgs.cjson;
             libdrm = pkgs.libdrm;
             libGL = pkgs.libGL;
@@ -65,7 +73,7 @@ in
             xwayland = pkgs.xwayland;
           }).overrideAttrs
             (old: {
-              nativeBuildInputs = old.nativeBuildInputs ++ [ pkgsCross.autoPatchelfHook ];
+              nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.werapi.pkgsCrossFromX86.autoPatchelfHook ];
             })
         else
           inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.default;
@@ -90,12 +98,14 @@ in
               werapi = prev.werapi or { } // {
                 yuru =
                   if cross then
-                    ((pkgsCross.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs (old: {
-                      preBuild = (old.preBuild or "") + ''
-                        export CC_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/cc
-                        export CXX_x86_64_unknown_linux_gnu=${pkgsCross.buildPackages.stdenv.cc}/bin/c++
-                      '';
-                    }))
+                    ((pkgs.werapi.pkgsCrossFromX86.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs
+                      (old: {
+                        preBuild = (old.preBuild or "") + ''
+                          export CC_x86_64_unknown_linux_gnu=${pkgs.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/cc
+                          export CXX_x86_64_unknown_linux_gnu=${pkgs.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/c++
+                        '';
+                      })
+                    )
                   else
                     prev.werapi.yuru;
               };
@@ -105,7 +115,7 @@ in
             (final: prev: {
               mpd =
                 if cross then
-                  pkgsCross.mpd.override (
+                  pkgs.werapi.pkgsCrossFromX86.mpd.override (
                     lib.genAttrs [
                       "glib"
                       "fmt"
@@ -160,7 +170,7 @@ in
                       "doxygen"
                     ] (name: final.${name})
                     // {
-                      avahi = pkgsCross.avahi.override (
+                      avahi = pkgs.werapi.pkgsCrossFromX86.avahi.override (
                         lib.genAttrs [
                           "libdaemon"
                           "dbus"

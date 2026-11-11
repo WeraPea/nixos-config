@@ -17,17 +17,6 @@ in
       config,
       ...
     }:
-    let
-      pkgsX86_64 = import inputs.nixpkgs {
-        system = "x86_64-linux";
-      };
-      pkgsCross = import inputs.nixpkgs {
-        system = "x86_64-linux";
-        crossSystem = {
-          config = "aarch64-unknown-linux-gnu";
-        };
-      };
-    in
     {
       imports = [
         (import "${inputs.mobile-nixos}/lib/configuration.nix" { device = "oneplus-fajita"; })
@@ -195,7 +184,7 @@ in
             packagePath = "${inputs.wayland-pipewire-idle-inhibit}/default.nix";
           in
           if (config.werapi.buildSystem == "x86_64-linux") then
-            pkgsCross.callPackage packagePath { pipewire = pkgs.pipewire; }
+            pkgs.werapi.pkgsCrossFromX86.callPackage packagePath { pipewire = pkgs.pipewire; }
           else
             pkgs.callPackage packagePath { };
         settings = {
@@ -206,7 +195,7 @@ in
 
       stylix.fonts.monospace.package = lib.mkForce (
         if (config.werapi.buildSystem == "x86_64-linux") then
-          pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
+          pkgs.werapi.pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
         else
           pkgs.werapi.udev-gothic-hs-nf
       );
