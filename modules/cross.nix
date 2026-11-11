@@ -14,6 +14,7 @@ in
         werapi = (prev.werapi or { }) // {
           pkgsX86_64 = final.nixpkgsFun {
             localSystem = "x86_64-linux";
+            crossSystem = "x86_64-linux";
           };
           pkgsCrossFromX86 = final.nixpkgsFun {
             localSystem = "x86_64-linux";
