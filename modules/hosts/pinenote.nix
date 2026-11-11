@@ -45,7 +45,6 @@ in
         };
         koreader.enable = true;
         mpv.enable = false;
-        quickshell.enable = true;
         wvkbd = {
           enable = true;
           popups.enable = false;

@@ -34,7 +34,6 @@ in
           gaming.enable = true;
         };
         qocr.enable = true;
-        quickshell.enable = true;
         streamlink.enable = true;
         vr.enable = true;
         wvkbd = {

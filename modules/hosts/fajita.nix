@@ -47,7 +47,6 @@ in
         koreader.enable = true;
         mpd.enable = true;
         mpv.enable = false;
-        quickshell.enable = true;
         wvkbd.enable = true;
       };
 

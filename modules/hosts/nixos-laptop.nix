@@ -22,7 +22,6 @@ in
 
         jack-detection-fix.enable = true;
         packages.desktop.enable = true;
-        quickshell.enable = true;
         streamlink.enable = true;
       };
 
