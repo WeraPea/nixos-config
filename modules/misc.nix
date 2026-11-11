@@ -96,7 +96,7 @@ in
 
         systemd.coredump.settings.Coredump.Storage = "none";
 
-        nixpkgs.config.allowUnfree = true;
+        werapi.nixpkgs.config.allowUnfree = true;
         nix = {
           gc = {
             automatic = true;

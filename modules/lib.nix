@@ -5,7 +5,7 @@
     foreachSystem = f: lib.genAttrs flake.settings.systems f;
     pkgsBySystem = foreachSystem (
       system:
-      import flake.inputs.nixpkgs {
+      flake.nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = publicAttrValues flake.overlays;
