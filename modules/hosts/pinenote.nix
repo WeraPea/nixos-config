@@ -79,13 +79,6 @@ in
 
       stylix.targets.fish.enable = false;
       stylix = {
-        fonts.monospace.package = lib.mkForce (
-          if (config.werapi.buildSystem == "x86_64-linux") then
-            pkgs.werapi.pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
-          else
-            pkgs.werapi.udev-gothic-hs-nf
-        );
-
         cursor.name = lib.mkForce "Bibata-Modern-Ice";
 
         opacity = lib.mkForce {

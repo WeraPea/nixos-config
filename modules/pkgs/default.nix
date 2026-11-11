@@ -13,7 +13,7 @@
     );
     flake.overlays.packages = (
       final: prev: {
-        werapi = prev.werapi or { } // flake.packages.${final.stdenv.hostPlatform.system};
+        werapi = prev.werapi or { } // flake.lib.importPackages final ./_pkgs;
       }
     );
   };

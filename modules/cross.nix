@@ -8,21 +8,118 @@ let
 in
 {
   flake.nixpkgs-patches.expose-nixpkgsFun = pkgs: ./expose-nixpkgsFun.patch;
-  flake.overlays.cross = (
-    final: prev: {
-      werapi = (prev.werapi or { }) // {
-        pkgsX86_64 = final.nixpkgsFun {
-          system = "x86_64-linux";
-        };
-        pkgsCrossFromX86 = final.nixpkgsFun {
-          system = "x86_64-linux";
-          crossSystem = {
-            inherit (final.stdenv.hostPlatform) config;
+  flake.overlays = {
+    cross = (
+      final: prev: {
+        werapi = (prev.werapi or { }) // {
+          pkgsX86_64 = final.nixpkgsFun {
+            localSystem = "x86_64-linux";
+          };
+          pkgsCrossFromX86 = final.nixpkgsFun {
+            localSystem = "x86_64-linux";
+            crossSystem = {
+              inherit (final.stdenv.hostPlatform) config;
+            };
           };
         };
-      };
-    }
-  );
+      }
+    );
+    _cross-pkgs-post = (
+      final: prev:
+      if prev.stdenv.buildPlatform.system == "x86_64-linux" then
+        { }
+      else
+        {
+          werapi = prev.werapi or { } // {
+            udev-gothic-hs-nf = final.werapi.pkgsX86_64.werapi.udev-gothic-hs-nf;
+            yuru = final.werapi.pkgsCrossFromX86.werapi.yuru.overrideAttrs (old: {
+              preBuild = (old.preBuild or "") + ''
+                export CC_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/cc
+                export CXX_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/c++
+              '';
+            });
+          };
+        }
+    );
+    _cross-pkgs-pre = (
+      final: prev:
+      if prev.stdenv.buildPlatform.system == "x86_64-linux" then
+        { }
+      else
+        {
+          mpd = final.werapi.pkgsCrossFromX86.mpd.override (
+            final.lib.genAttrs [
+              "glib"
+              "fmt"
+              "curl"
+              "libcdio"
+              "libcdio-paranoia"
+              "libmms"
+              "libnfs"
+              "liburing"
+              "samba"
+              # Archive support"
+              "bzip2"
+              "zziplib"
+              # Codecs
+              "audiofile"
+              "faad2"
+              "ffmpeg"
+              "flac"
+              "fluidsynth"
+              "game-music-emu"
+              "libmad"
+              "libmikmod"
+              "mpg123"
+              "libopus"
+              "libvorbis"
+              "lame"
+              # Filters
+              "libsamplerate"
+              "soxr"
+              # Outputs
+              "alsa-lib"
+              "libao"
+              "libjack2"
+              "libpulseaudio"
+              "libshout"
+              "pipewire"
+              # Misc
+              "icu"
+              "sqlite"
+              "dbus"
+              "pcre2"
+              "libgcrypt"
+              "expat"
+              "nlohmann_json"
+              "zlib"
+              "libupnp"
+              # Client support
+              "libmpdclient"
+              # Tag support
+              "libid3tag"
+              # For documentation
+              "doxygen"
+            ] (name: final.${name})
+            // {
+              avahi = final.werapi.pkgsCrossFromX86.avahi.override (
+                final.lib.genAttrs [
+                  "libdaemon"
+                  "dbus"
+                  "libpcap"
+                  "expat"
+                  "gettext"
+                  "glib"
+                  "autoconf-archive"
+                  "libiconv"
+                  "libevent"
+                ] (name: final.${name})
+              );
+            }
+          );
+        }
+    );
+  };
   flake.modules.${moduleName}.nixos =
     {
       config,
@@ -33,7 +130,7 @@ in
     let
       cfg = config.werapi.${moduleName};
       cross =
-        config.werapi.buildSystem == "x86_64-linux" && pkgs.stdenv.hostPlatform.system != "x86_64-linux";
+        config.werapi.buildSystem == "x86_64-linux" && config.nixpkgs.hostPlatform.system != "x86_64-linux";
       manPackage =
         if cross then
           pkgs.symlinkJoin {
@@ -90,105 +187,13 @@ in
         documentation.man.man-db.package = manPackage;
         documentation.man.cache.generateAtRuntime = !cross;
         wrappers.mango.package = mango-pkg;
-        nixpkgs.overlays = lib.mkMerge [
-          (lib.mkOrder 2000 [
-            # overlays.nix is 1500 from mkAfter
-            (final: prev: {
-              werapi = prev.werapi or { } // {
-                yuru =
-                  if cross then
-                    ((pkgs.werapi.pkgsCrossFromX86.callPackage "${flake}/modules/pkgs/_pkgs/yuru.nix" { }).overrideAttrs
-                      (old: {
-                        preBuild = (old.preBuild or "") + ''
-                          export CC_x86_64_unknown_linux_gnu=${pkgs.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/cc
-                          export CXX_x86_64_unknown_linux_gnu=${pkgs.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/c++
-                        '';
-                      })
-                    )
-                  else
-                    prev.werapi.yuru;
-              };
-            })
-          ])
-          (lib.mkOrder 100 [
-            (final: prev: {
-              mpd =
-                if cross then
-                  pkgs.werapi.pkgsCrossFromX86.mpd.override (
-                    lib.genAttrs [
-                      "glib"
-                      "fmt"
-                      "curl"
-                      "libcdio"
-                      "libcdio-paranoia"
-                      "libmms"
-                      "libnfs"
-                      "liburing"
-                      "samba"
-                      # Archive support"
-                      "bzip2"
-                      "zziplib"
-                      # Codecs
-                      "audiofile"
-                      "faad2"
-                      "ffmpeg"
-                      "flac"
-                      "fluidsynth"
-                      "game-music-emu"
-                      "libmad"
-                      "libmikmod"
-                      "mpg123"
-                      "libopus"
-                      "libvorbis"
-                      "lame"
-                      # Filters
-                      "libsamplerate"
-                      "soxr"
-                      # Outputs
-                      "alsa-lib"
-                      "libao"
-                      "libjack2"
-                      "libpulseaudio"
-                      "libshout"
-                      "pipewire"
-                      # Misc
-                      "icu"
-                      "sqlite"
-                      "dbus"
-                      "pcre2"
-                      "libgcrypt"
-                      "expat"
-                      "nlohmann_json"
-                      "zlib"
-                      "libupnp"
-                      # Client support
-                      "libmpdclient"
-                      # Tag support
-                      "libid3tag"
-                      # For documentation
-                      "doxygen"
-                    ] (name: final.${name})
-                    // {
-                      avahi = pkgs.werapi.pkgsCrossFromX86.avahi.override (
-                        lib.genAttrs [
-                          "libdaemon"
-                          "dbus"
-                          "libpcap"
-                          "expat"
-                          "gettext"
-                          "glib"
-                          "autoconf-archive"
-                          "libiconv"
-                          "libevent"
-                        ] (name: final.${name})
-                      );
-                    }
-                  )
-                else
-                  prev.mpd;
-            })
-          ])
-        ];
+        nixpkgs.overlays = lib.optionals cross (
+          lib.mkMerge [
+            # overlays/default.nix is 1500 from mkAfter
+            (lib.mkOrder 2000 [ flake.overlays._cross-pkgs-post ])
+            (lib.mkOrder 100 [ flake.overlays._cross-pkgs-pre ])
+          ]
+        );
       };
     };
 }

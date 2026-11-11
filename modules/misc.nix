@@ -30,7 +30,7 @@ in
           type = lib.types.str;
         };
         buildSystem = lib.mkOption {
-          default = pkgs.stdenv.hostPlatform.system;
+          default = config.nixpkgs.hostPlatform.system;
           description = "Sets buildSystem for cross compiling.";
           type = lib.types.str;
         }; # this is a mess and i probably don't need it

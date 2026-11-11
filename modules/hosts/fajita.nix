@@ -193,13 +193,6 @@ in
         };
       };
 
-      stylix.fonts.monospace.package = lib.mkForce (
-        if (config.werapi.buildSystem == "x86_64-linux") then
-          pkgs.werapi.pkgsX86_64.callPackage "${flake}/modules/pkgs/_pkgs/udev-gothic-hs-nf.nix" { }
-        else
-          pkgs.werapi.udev-gothic-hs-nf
-      );
-
       # programs.calls.enable = true;
 
       systemd.services.battery-charge-limit = {
@@ -237,9 +230,6 @@ in
       networking.networkmanager.wifi.macAddress = "stable";
 
       virtualisation.waydroid.enable = true;
-      nixpkgs.config.permittedInsecurePackages = [
-        "olm-3.2.16"
-      ];
 
       users.users.${config.werapi.username}.extraGroups = [
         "feedbackd"
