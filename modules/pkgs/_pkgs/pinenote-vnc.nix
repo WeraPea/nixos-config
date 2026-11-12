@@ -16,6 +16,22 @@ writeShellScriptBin "pinenote-vnc" ''
     ]
   }:$PATH"
 
+  usb="";
+  host="pinenote";
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    host|-h|--host)
+      host="$2";
+      shift 2
+    ;;
+    usb|-u|--usb)
+      usb="y"
+      shift 1
+    ;;
+    esac
+  done
+
   display=$(wlr-randr | grep HEADLESS- | cut -d' ' -f1 | grep HEADLESS-)
   if [[ "$display" == "" ]]; then
     mmsg dispatch create_virtual_output
@@ -26,7 +42,7 @@ writeShellScriptBin "pinenote-vnc" ''
   mmsg dispatch setoption,tablet_map_to_mon,$display
   mmsg dispatch setoption,touchscreen_map_to_mon,$display
   wayvnc 0.0.0.0 5900 --output $display --render-cursor & wpid=$!;
-  if [ "$1" == "usb" ]; then
+  if [[ -n "$usb" ]]; then
     input="sudo pinenote-usb-tablet --use-touchscreen --product 0096"
   else
     # input="sudo netevent daemon -s <(echo -e \"device add touch /dev/input/by-path/platform-fe5e0000.i2c-event\n device add tablet /dev/input/\$(exa -d1 /sys/class/input/event*/device/name | xargs grep -l \"w9013 2D1F:0095 Stylus\" | cut -d/ -f5)\n output add nixos exec:ssh wera@nixos $(which netevent) create\n use nixos\n grab-devices on\n write-events on\n\") /tmp/netevent-vnc.sock"
@@ -41,7 +57,7 @@ writeShellScriptBin "pinenote-vnc" ''
   sudo netevent daemon -s "$tmpcfg" /tmp/netevent-vnc.sock; rm -f "$tmpcfg"'
     # trap="" # socat READLINE UNIX-CONNECT:netevent-command.sock
   fi
-  ssh -t pinenote "sh -c '
+  ssh -t $host "sh -c '
     trap \"\" INT
     export WAYLAND_DISPLAY=wayland-0
     transform=\$(wlr-randr --json | jq -r \'.[] | select(.name == \"DPI-1\") | .transform\')
