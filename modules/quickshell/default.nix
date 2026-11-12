@@ -36,7 +36,7 @@ in
           werapi.usb-tablet
           werapi.rotate
         ];
-        suffixVar = [
+        prefixVar = [
           [
             "PATH"
             ":"
