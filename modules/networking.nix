@@ -50,6 +50,7 @@ in
           };
         };
 
+        services.resolved.enable = false;
         networking = {
           hostName = config.werapi.hostname;
           networkmanager = {
