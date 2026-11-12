@@ -33,6 +33,7 @@ in
         };
         koreader.enable = true;
         mpv.enable = false;
+        pinenote-usbnet.dev.enable = true;
         wvkbd = {
           enable = config.werapi.graphics.enable;
           popups.enable = false;

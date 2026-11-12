@@ -33,6 +33,7 @@ in
           desktop.enable = true;
           gaming.enable = true;
         };
+        pinenote-usbnet.host.enable = true;
         qocr.enable = true;
         streamlink.enable = true;
         vr.enable = true;
