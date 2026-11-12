@@ -33,6 +33,10 @@ in
       config = lib.mkIf cfg.enable {
         networking.networkmanager.unmanaged = lib.mkIf cfg.host.enable [ "mac:02:10:55:00:00:01" ]; # gadget already unmanaged by default
         networking.firewall.interfaces.usb0.allowedUDPPorts = lib.mkIf cfg.dev.enable [ 67 ];
+        networking.hosts = {
+          "10.55.0.1" = [ "host-usb" ];
+          "10.55.0.2" = [ "pinenote-usb" ];
+        };
 
         systemd.network = {
           enable = true;
