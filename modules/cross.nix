@@ -31,23 +31,6 @@ in
         { }
       else
         {
-          werapi = prev.werapi or { } // {
-            udev-gothic-hs-nf = final.werapi.pkgsX86_64.werapi.udev-gothic-hs-nf;
-            yuru = final.werapi.pkgsCrossFromX86.werapi.yuru.overrideAttrs (old: {
-              preBuild = (old.preBuild or "") + ''
-                export CC_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/cc
-                export CXX_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/c++
-              '';
-            });
-          };
-        }
-    );
-    _cross-pkgs-pre = (
-      final: prev:
-      if prev.stdenv.buildPlatform.system == "x86_64-linux" then
-        { }
-      else
-        {
           mpd = final.werapi.pkgsCrossFromX86.mpd.override (
             final.lib.genAttrs [
               "glib"
@@ -118,7 +101,19 @@ in
               );
             }
           );
+          werapi = prev.werapi or { } // {
+            udev-gothic-hs-nf = final.werapi.pkgsX86_64.werapi.udev-gothic-hs-nf;
+            yuru = final.werapi.pkgsCrossFromX86.werapi.yuru.overrideAttrs (old: {
+              preBuild = (old.preBuild or "") + ''
+                export CC_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/cc
+                export CXX_x86_64_unknown_linux_gnu=${final.werapi.pkgsCrossFromX86.buildPackages.stdenv.cc}/bin/c++
+              '';
+            });
+          };
         }
+    );
+    _cross-pkgs-pre = (
+      final: prev: if prev.stdenv.buildPlatform.system == "x86_64-linux" then { } else { }
     );
   };
   flake.modules.${moduleName}.nixos =
