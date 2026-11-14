@@ -901,11 +901,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1791382957,
-        "narHash": "sha256-iRgwVh3rcU3Nd5p0guPA95t+pzDncDtHBfvC/wp+v4A=",
+        "lastModified": 1794689041,
+        "narHash": "sha256-uwbTKs7XPWQwpGtGRwZqUnlLcB9pfx8ltKQ/aagEBm4=",
         "owner": "WeraPea",
         "repo": "qocr",
-        "rev": "719afa3b993f9c57cc7475beeadb238dbd56e07d",
+        "rev": "ae3d1dd2e7e3d42d0bfcb9bbe78be2af8a6eb0b4",
         "type": "github"
       },
       "original": {
