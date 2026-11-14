@@ -5,6 +5,7 @@ in
   flake.modules.${moduleName}.nixos =
     {
       lib,
+      pkgs,
       ...
     }:
     {
@@ -47,12 +48,64 @@ in
         };
       };
 
-      systemd.network.links."10-wan" = {
-        matchConfig.MACAddress = "60:e3:27:1c:e9:33";
-        linkConfig.Name = "wan0";
+      systemd.network = {
+        enable = true;
+        links = {
+          "10-wan" = {
+            matchConfig.MACAddress = "60:e3:27:1c:e9:33";
+            linkConfig.Name = "wan0";
+          };
+          "10-usb" = {
+            matchConfig.Driver = "rndis_host cdc_ncm ipheth";
+            linkConfig.Name = "usb0";
+          };
+        };
+        networks = {
+          "10-usb" = {
+            matchConfig.Name = "usb0";
+            networkConfig.DHCP = "ipv4";
+            dhcpV4Config.RouteMetric = 1000;
+            linkConfig.RequiredForOnline = "no";
+          };
+          "10-wan" = {
+            matchConfig.Name = "wan0";
+            networkConfig.DHCP = "ipv4";
+            dhcpV4Config.RouteMetric = 500;
+          };
+        };
+      };
+
+      systemd.services.wan-failover = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        path = with pkgs; [
+          iproute2 # ip
+          iputils # ping
+          gnugrep
+        ];
+        script = ''
+          primary="wan0"
+          usb="usb0"
+          fails=0
+          while true; do
+            if ping -I "$primary" -c1 -W2 1.1.1.1 >/dev/null 2>&1 || ping -I "$primary" -c1 -W2 9.9.9.9 >/dev/null 2>&1; then
+              fails=0
+              ip route del default dev "$usb" metric 50 2>/dev/null || true
+            else
+              fails=$((fails + 1))
+              if [ "$fails" -ge 3 ]; then
+                gw=$(ip -4 route show default dev "$usb" | grep -oP 'via \K\S+' | head -n1 2>/dev/null)
+                [ -n "$gw" ] && ip route replace default via "$gw" dev "$usb" metric 50
+              fi
+            fi
+            sleep 5
+          done
+        '';
       };
 
       networking = {
+        useNetworkd = true;
         firewall = {
           allowedTCPPorts = [ 53 ]; # dns
           allowedUDPPorts = [
@@ -62,9 +115,11 @@ in
           # too lazy to go over all modules that open firewall ports on their own:
           extraCommands = ''
             iptables -I nixos-fw 1 -i wan0 -m conntrack --ctstate NEW -j nixos-fw-refuse
+            iptables -I nixos-fw 1 -i usb0 -m conntrack --ctstate NEW -j nixos-fw-refuse
           '';
           extraStopCommands = ''
             iptables -D nixos-fw -i wan0 -m conntrack --ctstate NEW -j nixos-fw-refuse 2>/dev/null || true
+            iptables -D nixos-fw -i usb0 -m conntrack --ctstate NEW -j nixos-fw-refuse 2>/dev/null || true
           '';
           # ip6tables -I nixos-fw6 1 -i wan0 -m conntrack --ctstate NEW -j nixos-fw-refuse
           # ip6tables -D nixos-fw6 -i wan0 -m conntrack --ctstate NEW -j nixos-fw-refuse 2>/dev/null || true
@@ -77,7 +132,6 @@ in
         ];
         nat = {
           enable = true;
-          externalInterface = "wan0";
           internalIPs = [ "192.168.1.0/24" ];
         };
         networkmanager.enable = lib.mkForce false;
