@@ -55,6 +55,7 @@ in
                 pattern = [
                   "markdown"
                   "text"
+                  "gitcommit"
                 ];
                 command = "setlocal spell spelllang=en";
               }
