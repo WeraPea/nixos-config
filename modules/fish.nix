@@ -167,6 +167,8 @@ in
             nspu = "nh os switch -H pinenote-from-x86_64 ~/nixos-config --target-host pinenote-usb -k -o ~/nh-os/pinenote-(date -Is)-switch";
             ntf = "nh os test -H fajita-from-x86_64 ~/nixos-config --target-host fajita -k -o ~/nh-os/fajita-(date -Is)";
             nsf = "nh os switch -H fajita-from-x86_64 ~/nixos-config --target-host fajita -k -o ~/nh-os/fajita-(date -Is)-switch";
+            ntfu = "nh os test -H fajita-from-x86_64 ~/nixos-config --target-host fajita-usb -k -o ~/nh-os/fajita-(date -Is)";
+            nsfu = "nh os switch -H fajita-from-x86_64 ~/nixos-config --target-host fajita-usb -k -o ~/nh-os/fajita-(date -Is)-switch";
             fbi = "nom build ~/nixos-config#nixosConfigurations.fajita.config.mobile.outputs.android.android-bootimg";
             fbic = "nom build ~/nixos-config#nixosConfigurations.fajita-from-x86_64.config.mobile.outputs.android.android-bootimg";
             sl = "ll";

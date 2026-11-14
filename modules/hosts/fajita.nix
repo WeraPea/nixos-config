@@ -36,6 +36,7 @@ in
         koreader.enable = true;
         mpd.enable = true;
         mpv.enable = false;
+        usbnet.enable = true;
         wvkbd.enable = true;
       };
 

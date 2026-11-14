@@ -51,6 +51,7 @@ in
         };
 
         services.resolved.enable = false;
+        systemd.network.wait-online.enable = false;
         networking = {
           hostName = config.werapi.hostname;
           networkmanager = {
