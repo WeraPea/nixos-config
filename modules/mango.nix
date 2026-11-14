@@ -509,7 +509,8 @@ in
           enable = true;
           settings = rec {
             mango = {
-              command = "mango 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
+              command = "mango";
+              # command = "mango 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
               # command = "mango -d 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
               # command = "~/mango -d 2>&1 | ${lib.getExe' pkgs.systemd "systemd-cat"} -t mango";
               user = config.werapi.username;
