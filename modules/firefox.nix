@@ -427,7 +427,7 @@ in
 
           stylix.targets.firefox = {
             profileNames = [ profileName ];
-            colorTheme.enable = true;
+            colorTheme.enable = false;
           };
 
           programs.firefox = {
@@ -633,60 +633,6 @@ in
                     ];
                   in
                   if cfg.minimal.enable then minimalExtensions else allExtensions;
-
-                settings = {
-                  "{9a3104a2-02c2-464c-b069-82344e5ed4ec}".settings = {
-                    settings = {
-                      titleTranslation = true;
-                      originalThumbnails.enabled = true;
-                      audioTranslation = {
-                        enabled = true;
-                        language = "original";
-                      };
-                      descriptionTranslation = true;
-                      subtitlesTranslation = {
-                        enabled = true;
-                        language = "original";
-                        asrEnabled = false;
-                      };
-                      youtubeDataApi = {
-                        enabled = false;
-                        apiKey = "";
-                      };
-                      askForSupport.enabled = false;
-                    };
-                  };
-                  "enhancerforyoutube@maximerf.addons.mozilla.org".settings = {
-                    controls = [
-                      "loop"
-                      "reverse-playlist"
-                      "cards-end-screens"
-                      "cinema-mode"
-                      "size"
-                      "options"
-                    ];
-                    controlbar = {
-                      active = true;
-                      autohide = false;
-                      centered = false;
-                      position = "absolute";
-                    };
-                    selectquality = true;
-                    qualityvideos = "highres";
-                    qualityplaylists = "highres";
-                    qualityembeds = "hd1080";
-                    controlspeedmousebutton = true;
-                    ignoreplaylists = false;
-                    pausevideos = false;
-                    miniplayersize = "_640x360";
-                    hidecardsendscreens = true;
-                    blackbars = true;
-                    theatermode = true;
-                    hideshorts = true;
-                    convertshorts = true;
-                    hiderelated = true;
-                  };
-                };
               };
               search = {
                 force = true;
@@ -854,6 +800,7 @@ in
                 "browser.startup.page" = 3; # previous-session
                 "browser.tabs.allow_transparent_browser" = true;
                 "browser.tabs.unloadOnLowMemory" = true;
+                "browser.tabs.insertAfterCurrent" = true;
                 "browser.toolbars.bookmarks.visibility" = "always";
                 "browser.uidensity" = if cfg.mobile.enable then 2 else 1;
                 "extensions.autoDisableScopes" = 0; # extensions
