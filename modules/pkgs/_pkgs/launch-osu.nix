@@ -1,6 +1,7 @@
 {
   writeShellApplication,
   werapi,
+  opentabletdriver,
   ...
 }:
 writeShellApplication {
@@ -21,13 +22,14 @@ writeShellApplication {
         hash=$(jq -r '.hash' <<<"$prefetch_output")
         echo "hash = $hash"
       fi
-      # copied from nixpkgs
+      # copied from nixpkgs + otd patched
       nix-build -E "with import <nixpkgs> {}; callPackage (
         {
           lib,
           appimageTools,
           fetchurl,
           makeWrapper,
+          runCommand,
           nativeWayland ? false,
         }:
 
@@ -38,19 +40,33 @@ writeShellApplication {
             url = \"https://github.com/ppy/osu/releases/download/\''${version}-lazer/osu.AppImage\";
             hash = \"$hash\";
           };
+          otd = builtins.storePath \"${opentabletdriver}\";
+          extracted = appimageTools.extract { inherit pname version src; };
+          patched = runCommand \"osu-lazer-bin-patched-\''${version}\" { } '''
+            cp -r \''${extracted} \$out
+            chmod -R u+w \$out
+            for f in \$out/usr/bin/OpenTabletDriver*.dll \$out/usr/bin/HidSharpCore.dll; do
+              new=\''${otd}/lib/OpenTabletDriver/\$(basename \$f)
+              if [ -e \$new ]; then
+                install -m 644 \$new \$f
+              else
+                echo \"missing \$new\" >&2
+              fi
+            done
+          ''';
         in
-        appimageTools.wrapType2 {
+        appimageTools.wrapAppImage {
           inherit
             pname
             version
-            src
             ;
+          src = patched;
 
           extraPkgs = pkgs: with pkgs; [ icu ];
 
           extraInstallCommands =
             let
-              contents = appimageTools.extract { inherit pname version src; };
+              contents = patched;
             in
             '''
               . \''${makeWrapper}/nix-support/setup-hook
