@@ -13,10 +13,10 @@ in
       hosts = builtins.filter (d: d.type == "host") (builtins.attrValues cfg.devices);
       devs = builtins.filter (d: d.type == "dev") (builtins.attrValues cfg.devices);
       configureFor = lib.head (
-        builtins.filter (d: d.hostname == cfg.configureFor) (builtins.attrValues cfg.devices)
+        (builtins.filter (d: d.hostname == cfg.configureFor) (builtins.attrValues cfg.devices)) ++ [ null ]
       );
-      isHost = configureFor.type == "host";
-      isDev = configureFor.type == "dev";
+      isHost = if configureFor ? type then configureFor.type == "host" else false;
+      isDev = if configureFor ? type then configureFor.type == "dev" else false;
       mkHex = n: lib.fixedWidthString 2 "0" (lib.toHexString n);
       mkIp = dev: host: "10.55.${toString dev.id}.${toString host.id}";
       mkMac = dev: n: "02:00:10:55:${mkHex dev.id}:${mkHex n}";
