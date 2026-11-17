@@ -88,15 +88,27 @@ in
           primary="wan0"
           usb="usb0"
           fails=0
+          was_down="?"
           while true; do
             if ping -I "$primary" -c1 -W2 1.1.1.1 >/dev/null 2>&1 || ping -I "$primary" -c1 -W2 9.9.9.9 >/dev/null 2>&1; then
               fails=0
-              ip route del default dev "$usb" metric 50 2>/dev/null || true
+              if [ "$was_down" != "n" ]; then
+                was_down="n"
+                echo "$primary up"
+                ip route del default dev "$usb" metric 50
+              fi
             else
               fails=$((fails + 1))
               if [ "$fails" -ge 3 ]; then
-                gw=$(ip -4 route show default dev "$usb" | grep -oP 'via \K\S+' | head -n1 2>/dev/null)
-                [ -n "$gw" ] && ip route replace default via "$gw" dev "$usb" metric 50
+                if [ "$was_down" != "y" ]; then
+                  was_down="y"
+                  echo "$primary down"
+                fi
+                gw=$(ip -4 route show default dev "$usb" 2>/dev/null | grep -v "metric 50" | grep -oP 'via \K\S+' | head -n1)
+                if [ -n "$gw" ] && ! ip -4 route show default dev "$usb" | grep "default via $gw metric 50" >/dev/null 2>&1; then
+                  echo "switching to $usb"
+                  ip route replace default via "$gw" dev "$usb" metric 50
+                fi
               fi
             fi
             sleep 5
