@@ -8,9 +8,9 @@ import "config"
 Singleton {
     id: root
 
-    property string host: "localhost"
-    property string cache_dir: Quickshell.env("HOME") + "/.cache/werapi-mpd/thumbnails"
-    property string musicDir: if (Hostname.hostname === "fajita") {
+    property string host: Hostname.hostname
+    property string cache_dir: Quickshell.env("HOME") + "/.cache/werapi-mpd/thumbnails/" + host
+    property string musicDir: if (Hostname.hostname === "fajita" && host === "fajita") {
         return Quickshell.env("HOME") + "/music/";
     } else {
         return "/mpd/music/";

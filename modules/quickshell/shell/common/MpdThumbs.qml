@@ -10,7 +10,7 @@ Singleton {
 
     Process {
         id: listProc
-        running: true
+        running: Mpd.host !== ""
         command: ["sh", "-c", "mkdir -p \"$1\" && ls -1 \"$1\"", "sh", Mpd.cache_dir]
         stdout: StdioCollector {
             onStreamFinished: {
@@ -62,7 +62,7 @@ Singleton {
 
         Process {
             id: thumbProc
-            command: ["sh", "-c", "ffmpeg -y -v quiet -i \"$1\" -map 0:v:0 -c copy -frames:v 1 -f image2 -update 1 \"$2.tmp\" && mv \"$2.tmp\" \"$2\"", "sh", Mpd.musicDir + "/" + thumbs.current, Mpd.cache_dir + "/" + Qt.md5(thumbs.current) + ".img"]
+            command: ["sh", "-c", "mpc -h \"$3\" readpicture \"$1\" > \"$2.tmp\" && [ -s \"$2.tmp\" ] && mv \"$2.tmp\" \"$2\" || { rm -f \"$2.tmp\"; exit 1; }", "sh", thumbs.current, Mpd.cache_dir + "/" + Qt.md5(thumbs.current) + ".img", Mpd.host]
             onExited: (exitCode, exitStatus) => {
                 const key = Qt.md5(thumbs.current);
                 thumbs.current = "";
