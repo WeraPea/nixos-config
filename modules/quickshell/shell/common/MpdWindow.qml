@@ -430,7 +430,7 @@ Item {
                             Layout.fillHeight: true
                             Layout.fillWidth: true
 
-                            property int page: Math.max(0, Mpd.currentTrack - 1)
+                            property int page: 0
                             property int prevPage: -1
                             property real offset: 0
                             readonly property bool dragging: drag.active
@@ -438,8 +438,16 @@ Item {
                             property real commitVelocity: 500
                             clip: true
 
-                            function goTo(index) {
-                                const i = Math.max(0, Math.min(repeater.count - 1, index));
+                            Component.onCompleted: {
+                                page = Math.max(0, Mpd.currentTrack - 1);
+                            }
+
+                            function goTo(index, force) {
+                                var i;
+                                if (force)
+                                    i = index;
+                                else
+                                    i = Math.max(0, Math.min(repeater.count - 1, index));
                                 snapAnim.stop();
                                 offset += (i - page) * width;
                                 prevPage = page;
@@ -496,7 +504,7 @@ Item {
                                             target += 1;
                                         else if (delta > coverSwipe.width * coverSwipe.commitFraction || v > coverSwipe.commitVelocity)
                                             target -= 1;
-                                        coverSwipe.goTo(target);
+                                        coverSwipe.goTo(target, false);
                                         if (coverSwipe.page + 1 !== Mpd.currentTrack)
                                             Mpd.command(`play ${coverSwipe.page + 1}`);
                                     }
@@ -511,7 +519,7 @@ Item {
                                 target: Mpd
                                 function onCurrentTrackChanged() {
                                     if (coverSwipe.page + 1 !== Mpd.currentTrack && !coverSwipe.dragging)
-                                        coverSwipe.goTo(Mpd.currentTrack - 1);
+                                        coverSwipe.goTo(Mpd.currentTrack - 1, true);
                                 }
                             }
 
