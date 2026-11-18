@@ -89,6 +89,9 @@ in
           mpc
           rmpc
           cantata
+          (pkgs.writeShellScriptBin "mpd-get-metadata" ''
+            ffprobe -v quiet -print_format json -show_streams -show_format ${hmConfig.services.mpd.musicDirectory}/"$1"
+          '')
           (pkgs.writeShellScriptBin "mpd-load-playlist" ''
             if [[ $# -ge 1 ]]; then
               cp "$1" "${hmConfig.services.mpd.playlistDirectory}/load-playlist.m3u"

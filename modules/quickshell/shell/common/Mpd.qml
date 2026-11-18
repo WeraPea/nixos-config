@@ -10,11 +10,6 @@ Singleton {
 
     property string host: Hostname.hostname
     property string cache_dir: Quickshell.env("HOME") + "/.cache/werapi-mpd/thumbnails/" + host
-    property string musicDir: if (Hostname.hostname === "fajita" && host === "fajita") {
-        return Quickshell.env("HOME") + "/music/";
-    } else {
-        return "/mpd/music/";
-    }
 
     property bool continous: false
     property var continousLads: ({})
@@ -416,7 +411,7 @@ Singleton {
             return null;
         }
 
-        command: ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_streams", "-show_format", root.musicDir + "/" + root.file]
+        command: host != Hostname.hostname ? ["ssh", root.host, "mpd-get-metadata", root.file] : ["mpd-get-metadata", root.file]
         stdout: StdioCollector {
             onStreamFinished: if (!metadataProc.restart) {
                 root.metadata = JSON.parse(this.text);
