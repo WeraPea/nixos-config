@@ -310,67 +310,6 @@ Item {
 
                 Item {
                     id: songMenu
-                    Timer {
-                        id: sleepTimer
-                        interval: 1000 * 60 * 30
-                        property double startedAt: Date.now()
-                        onRunningChanged: if (running)
-                            startedAt = Date.now()
-                        onTriggered: {
-                            // will discard changes between timer trigger and song end
-                            lastRepeat = Mpd.repeat;
-                            lastSingle = Mpd.single;
-                            wasSleeping = true;
-                            Mpd.command("single on");
-                            Mpd.command("repeat off");
-                        }
-                        function toggle() {
-                            sleepTimer.running = !sleepTimer.running;
-                            sleepTimer.updateSleepEndIndex();
-                        }
-
-                        property int sleepEndIndex: -1
-                        property bool lastRepeat: Mpd.repeat
-                        property bool lastSingle: Mpd.single
-                        property bool wasSleeping: false
-                        property bool gonnaPause: wasSleeping || running
-                        onGonnaPauseChanged: if (!gonnaPause)
-                            sleepEndIndex = -1
-                        function updateSleepEndIndex() {
-                            if (sleepTimer.running) { // TODO: doesn't account for random, looping around the queue, nor single playback
-                                let remaining = songMenu.sleepRemaining - (Mpd.totalTime - Mpd.currentTime);
-                                let songIndex = Mpd.currentTrack - 1;
-                                while (songIndex + 1 < Mpd.queue.count && remaining > 0) {
-                                    songIndex++;
-                                    remaining -= Mpd.queue.get(songIndex).time;
-                                }
-                                sleepEndIndex = songIndex;
-                            }
-
-                            if (wasSleeping) {
-                                if (lastRepeat)
-                                    Mpd.command("repeat on");
-                                if (!lastSingle)
-                                    Mpd.command("single off");
-                                wasSleeping = false;
-                            }
-                        }
-                    }
-                    Connections {
-                        target: Mpd
-                        function onStatusChange() {
-                            sleepTimer.updateSleepEndIndex();
-                        }
-                        function onQueueChanged() {
-                            sleepTimer.updateSleepEndIndex();
-                        }
-                    }
-                    SystemClock {
-                        id: sleepClock
-                        enabled: sleepTimer.running
-                        precision: SystemClock.Seconds
-                    }
-                    readonly property int sleepRemaining: sleepTimer.running ? Math.max(0, Math.ceil(Math.min(sleepTimer.interval, sleepTimer.interval - (sleepClock.date.getTime() - sleepTimer.startedAt)) / 1000)) : sleepTimer.interval / 1000
                     ColumnLayout {
                         id: menu
                         z: 1
@@ -383,8 +322,8 @@ Item {
                             model: [
                                 {
                                     label: "Toggle sleep timer",
-                                    cmd: _ => sleepTimer.toggle(),
-                                    textColor: sleepTimer.running ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
+                                    cmd: _ => Mpd.sleepTimer.toggle(),
+                                    textColor: Mpd.sleepTimer.running ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
                                 },
                             ]
                             delegate: TextButton {
@@ -567,9 +506,9 @@ Item {
                                 color: floatingWindow.colors.foreground
                             }
                             TextObject {
-                                visible: sleepTimer.gonnaPause
+                                visible: Mpd.sleepTimer.gonnaPause
                                 Layout.margins: 8
-                                text: sleepTimer.running ? Mpd.fmtSec(songMenu.sleepRemaining) : "0:00"
+                                text: Mpd.sleepTimer.running ? Mpd.fmtSec(Mpd.sleepTimer.sleepRemaining) : "0:00"
                                 color: floatingWindow.colors.foreground
                             }
                         }
@@ -738,7 +677,7 @@ Item {
                                     monitor_name: floatingWindow.screen.name
                                     colors: floatingWindow.colors
                                     highlighted: position === Mpd.currentTrack
-                                    border.width: sleepTimer.gonnaPause && position === sleepTimer.sleepEndIndex + 1 ? 1 : 0
+                                    border.width: Mpd.sleepTimer.gonnaPause && position === Mpd.sleepTimer.sleepEndIndex + 1 ? 1 : 0
                                     border.color: colors.base0F
                                     onTapped: {
                                         queueList.ignoreNextChange = true;

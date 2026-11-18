@@ -426,4 +426,61 @@ Singleton {
             return;
         Qt.callLater(metadataProc.rerun); // needed for command binding to work properly on the first run for some reason
     }
+
+    property alias sleepTimer: sleepTimer
+    Timer {
+        id: sleepTimer
+        interval: 1000 * 60 * 30
+        property double startedAt: Date.now()
+        readonly property int sleepRemaining: sleepTimer.running ? Math.max(0, Math.ceil(Math.min(sleepTimer.interval, sleepTimer.interval - (sleepClock.date.getTime() - sleepTimer.startedAt)) / 1000)) : sleepTimer.interval / 1000
+        onRunningChanged: if (running)
+            startedAt = Date.now()
+        onTriggered: {
+            // will discard changes between timer trigger and song end
+            lastRepeat = Mpd.repeat;
+            lastSingle = Mpd.single;
+            wasSleeping = true;
+            Mpd.command("single on");
+            Mpd.command("repeat off");
+        }
+        function toggle() {
+            sleepTimer.running = !sleepTimer.running;
+            sleepTimer.updateSleepEndIndex();
+        }
+
+        property int sleepEndIndex: -1
+        property bool lastRepeat: Mpd.repeat
+        property bool lastSingle: Mpd.single
+        property bool wasSleeping: false
+        property bool gonnaPause: wasSleeping || running
+        onGonnaPauseChanged: if (!gonnaPause)
+            sleepEndIndex = -1
+        function updateSleepEndIndex() {
+            if (sleepTimer.running) { // TODO: doesn't account for random, looping around the queue, nor single playback
+                let remaining = sleepTimer.sleepRemaining - (Mpd.totalTime - Mpd.currentTime);
+                let songIndex = Mpd.currentTrack - 1;
+                while (songIndex + 1 < Mpd.queue.count && remaining > 0) {
+                    songIndex++;
+                    remaining -= Mpd.queue.get(songIndex).time;
+                }
+                sleepEndIndex = songIndex;
+            }
+
+            if (wasSleeping) {
+                if (lastRepeat)
+                    Mpd.command("repeat on");
+                if (!lastSingle)
+                    Mpd.command("single off");
+                wasSleeping = false;
+            }
+        }
+    }
+    onStatusChange: sleepTimer.updateSleepEndIndex()
+    onQueueChanged: sleepTimer.updateSleepEndIndex()
+
+    SystemClock {
+        id: sleepClock
+        enabled: sleepTimer.running
+        precision: SystemClock.Seconds
+    }
 }
