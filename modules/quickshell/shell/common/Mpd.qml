@@ -411,19 +411,26 @@ Singleton {
             return null;
         }
 
-        command: host != Hostname.hostname ? ["ssh", root.host, "mpd-get-metadata", root.file] : ["mpd-get-metadata", root.file]
+        command: host != Hostname.hostname ? ["ssh", root.host, `mpd-get-metadata '${root.file.replace(/'/g, "'\\''")}'`] : ["mpd-get-metadata", root.file]
         stdout: StdioCollector {
             onStreamFinished: if (!metadataProc.restart) {
-                root.metadata = JSON.parse(this.text);
+                let parsed = ({});
+                try {
+                    parsed = JSON.parse(this.text);
+                } catch (e) {}
+                root.metadata = parsed;
                 root.tags = metadataProc.findTags(root.metadata);
                 root.lyrics = metadataProc.findLyrics(tags).trim();
             }
         }
     }
     onFileChanged: {
-        lyrics = "";
-        if (file === "")
+        if (file === "") {
+            lyrics = "";
+            metadata = ({});
+            tags = ({});
             return;
+        }
         Qt.callLater(metadataProc.rerun); // needed for command binding to work properly on the first run for some reason
     }
 
