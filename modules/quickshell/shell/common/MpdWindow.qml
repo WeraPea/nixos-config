@@ -284,6 +284,69 @@ Item {
             }
         }
     }
+    component Menu: Item {
+        id: menu
+
+        required property Colors colors
+
+        visible: false
+        implicitWidth: columnLayout.implicitWidth
+        implicitHeight: columnLayout.implicitHeight
+        MouseArea {
+            x: {
+                menu.x; // for bindings
+                menu.y;
+                return menu.mapFromItem(menu.parent, 0, 0).x;
+            }
+            y: {
+                menu.x;
+                menu.y;
+                return menu.mapFromItem(menu.parent, 0, 0).y;
+            }
+            width: menu.parent.width
+            height: menu.parent.height
+            onClicked: menu.visible = false
+        }
+        ColumnLayout {
+            id: columnLayout
+            spacing: 0
+            Repeater {
+                model: [
+                    {
+                        label: "Toggle sleep timer",
+                        cmd: _ => Mpd.sleepTimer.toggle(),
+                        textColor: Mpd.sleepTimer.running ? menu.colors.foreground : menu.colors.foregroundSecondary
+                    },
+                ]
+                delegate: TextButton {
+                    id: textButton
+                    required property var modelData
+                    textColor: modelData.textColor ?? colors.foreground
+                    colors: menu.colors
+                    color: colors.background
+
+                    label: modelData.label
+                    onClicked: modelData.cmd()
+
+                    Layout.preferredWidth: 300
+                    Layout.preferredHeight: textObject.primaryLineHeight + 2 * textObject.anchors.margins
+                    textObject.anchors.centerIn: null
+                    textObject.anchors.fill: textButton
+                    textObject.anchors.margins: 22
+                    textObject.horizontalAlignment: Text.AlignLeft
+                    textObject.verticalAlignment: Text.AlignVCenter
+                }
+            }
+        }
+    }
+    component MenuButton: TextButton {
+        id: menuButton
+        border.color: "transparent"
+        label: ""
+        textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
+        onClicked: menuButton.menu.visible = !menuButton.menu.visible
+        property Menu menu
+    }
 
     Loader {
         id: loader
@@ -310,48 +373,16 @@ Item {
 
                 Item {
                     id: songMenu
-                    ColumnLayout {
+
+                    Menu {
                         id: menu
+                        colors: floatingWindow.colors
                         z: 1
                         anchors.right: songMenu.right
                         anchors.top: songMenu.top
                         anchors.topMargin: header.height
-                        spacing: 0
-                        visible: false
-                        Repeater {
-                            model: [
-                                {
-                                    label: "Toggle sleep timer",
-                                    cmd: _ => Mpd.sleepTimer.toggle(),
-                                    textColor: Mpd.sleepTimer.running ? floatingWindow.colors.foreground : floatingWindow.colors.foregroundSecondary
-                                },
-                            ]
-                            delegate: TextButton {
-                                id: textButton
-                                required property var modelData
-                                textColor: modelData.textColor ?? colors.foreground
-                                colors: floatingWindow.colors
-                                color: colors.background
-
-                                label: modelData.label
-                                onClicked: modelData.cmd()
-
-                                Layout.preferredWidth: 300
-                                Layout.preferredHeight: textObject.primaryLineHeight + 2 * textObject.anchors.margins
-                                textObject.anchors.centerIn: null
-                                textObject.anchors.fill: textButton
-                                textObject.anchors.margins: 22
-                                textObject.horizontalAlignment: Text.AlignLeft
-                                textObject.verticalAlignment: Text.AlignVCenter
-                            }
-                        }
                     }
-                    MouseArea {
-                        anchors.fill: parent
-                        z: 0.5
-                        visible: menu.visible
-                        onClicked: menu.visible = false
-                    }
+
                     ColumnLayout {
                         anchors.fill: parent
                         spacing: 0
@@ -377,15 +408,11 @@ Item {
                                     subtitle: Mpd.artist
                                     monitor_name: floatingWindow.screen.name
                                 }
-                                TextButton {
-                                    id: menuButton
+                                MenuButton {
                                     Layout.preferredWidth: header.height
                                     Layout.preferredHeight: header.height
                                     colors: floatingWindow.colors
-                                    border.color: "transparent"
-                                    label: ""
-                                    textObject.font.pointSize: GlobalSettings.font.pointSize * 1.5
-                                    onClicked: menu.visible = !menu.visible
+                                    menu: menu
                                 }
                             }
                         }
@@ -568,12 +595,22 @@ Item {
                     readonly property var tabNames: ["Queue", "Library", "Playlists", "Lyrics", "Info"]
                     property string openPlaylist: "" // "" = playlist list
 
+                    Menu {
+                        id: tabbedMenu
+                        colors: floatingWindow.colors
+                        z: 1
+                        anchors.right: tabbed.right
+                        anchors.top: tabbed.top
+                        anchors.topMargin: nowPlayingHeader.height
+                    }
+
                     ColumnLayout {
                         anchors.fill: parent
                         spacing: 0
 
                         // Now playing header
                         Rectangle {
+                            id: nowPlayingHeader
                             Layout.fillWidth: true
                             implicitHeight: columnLayout.implicitHeight
                             color: colors.background
@@ -647,6 +684,13 @@ Item {
                                                     onClicked: Mpd.command(modelData.cmd)
                                                 }
                                             }
+                                        }
+
+                                        MenuButton {
+                                            Layout.preferredWidth: header.height
+                                            Layout.preferredHeight: header.height
+                                            colors: floatingWindow.colors
+                                            menu: tabbedMenu
                                         }
                                     }
                                 }
