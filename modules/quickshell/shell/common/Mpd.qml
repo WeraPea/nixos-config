@@ -483,4 +483,37 @@ Singleton {
         enabled: sleepTimer.running
         precision: SystemClock.Seconds
     }
+
+    function resetState() {
+        mpcCommandProc.cmds = [];
+        playlistProc.playlistName = "";
+        title = "";
+        artist = "";
+        album = "";
+        file = "";
+        totalTime = 0;
+        currentTime = 0;
+        progressPercent = 0;
+        currentTrack = 0;
+        totalTracks = 0;
+        playing = false;
+        realVolumePercent = 0; // needs to be before volumePercent
+        volumePercent = 0;
+        random = false;
+        repeat = false;
+        single = false;
+        consume = false;
+        queue.clear();
+        library.clear();
+        playlist.clear();
+        playlists.clear();
+        metadata = ({});
+        tags = ({});
+        lyrics = "";
+    }
+    onHostChanged: {
+        idleProc.running = false;
+        resetState();
+        Qt.callLater(runAll);
+    }
 }

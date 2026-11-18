@@ -602,6 +602,12 @@ Item {
                     property int tab: 0
                     readonly property var tabNames: ["Queue", "Library", "Playlists", "Lyrics", "Info"]
                     property string openPlaylist: "" // "" = playlist list
+                    Connections {
+                        target: Mpd
+                        function onHostChanged() {
+                            tabbed.openPlaylist = "";
+                        }
+                    }
 
                     Menu {
                         id: tabbedMenu
@@ -966,7 +972,7 @@ Item {
                                     },
                                     {
                                         key: "Artists",
-                                        value: Mpd.tags.ARTISTS?.split(";").join(", ") ?? ""
+                                        value: Mpd.tags?.ARTISTS?.split(";").join(", ") ?? ""
                                     },
                                     {
                                         key: "File",
@@ -974,15 +980,15 @@ Item {
                                     },
                                     {
                                         key: "Genres",
-                                        value: Mpd.tags.GENRE?.split(";").join(", ") ?? ""
+                                        value: Mpd.tags?.GENRE?.split(";").join(", ") ?? ""
                                     },
                                     {
                                         key: "PURL",
-                                        value: Mpd.tags.PURL
+                                        value: Mpd.tags?.PURL ?? ""
                                     },
                                     {
                                         key: "Date",
-                                        value: Mpd.tags.DATE
+                                        value: Mpd.tags?.DATE ?? ""
                                     },
                                 ].filter(m => m.value != "" && m.value)
                                 // TODO: display all tags, with some getting priority, parsing, default hidden state

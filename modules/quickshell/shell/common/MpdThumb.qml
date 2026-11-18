@@ -16,4 +16,10 @@ Image {
     onFileChanged: store.request(file)
     Component.onCompleted: store.request(file)
     Component.onDestruction: store.cancel(file)
+    Connections {
+        target: thumb.store
+        function onReloaded() {
+            thumb.store.request(thumb.file);
+        }
+    }
 }

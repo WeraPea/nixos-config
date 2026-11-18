@@ -22,6 +22,7 @@ Singleton {
                 thumbs.ready = true;
                 thumbs.rev++;
                 thumbs.next();
+                thumbs.reloaded();
             }
         }
     }
@@ -35,6 +36,7 @@ Singleton {
         property var failed: ({})
         property var pending: []
         property string current: ""
+        signal reloaded
 
         function has(key) {
             return have[key] === true;
@@ -64,6 +66,9 @@ Singleton {
             id: thumbProc
             command: ["sh", "-c", "mpc -h \"$3\" readpicture \"$1\" > \"$2.tmp\" && [ -s \"$2.tmp\" ] && mv \"$2.tmp\" \"$2\" || { rm -f \"$2.tmp\"; exit 1; }", "sh", thumbs.current, Mpd.cache_dir + "/" + Qt.md5(thumbs.current) + ".img", Mpd.host]
             onExited: (exitCode, exitStatus) => {
+                if (!thumbs.ready) {
+                    return;
+                }
                 const key = Qt.md5(thumbs.current);
                 thumbs.current = "";
                 if (exitCode === 0) {
@@ -79,11 +84,14 @@ Singleton {
     Connections {
         target: Mpd
         function onHostChanged() {
-            thumbs.have = [];
+            thumbs.have = ({});
             thumbs.failed = ({});
+            thumbs.pending = [];
+            thumbs.current = "";
+            thumbProc.running = false;
             thumbs.ready = false;
             thumbs.rev++;
-            listProc.rerun();
+            Qt.callLater(listProc.rerun); // callLater just in case
         }
     }
 }
