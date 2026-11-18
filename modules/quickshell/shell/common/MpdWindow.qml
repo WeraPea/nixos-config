@@ -317,6 +317,14 @@ Item {
                         cmd: _ => Mpd.sleepTimer.toggle(),
                         textColor: Mpd.sleepTimer.running ? menu.colors.foreground : menu.colors.foregroundSecondary
                     },
+                    {
+                        label: "Cycle hosts: " + Mpd.host,
+                        cmd: _ => {
+                            const hosts = ["nixos", "fajita",];
+                            Mpd.host = hosts[(hosts.indexOf(Mpd.host) + 1) % hosts.length];
+                        },
+                        textColor: menu.colors.foreground
+                    },
                 ]
                 delegate: TextButton {
                     id: textButton
