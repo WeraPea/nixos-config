@@ -64,7 +64,14 @@ Singleton {
 
         Process {
             id: thumbProc
-            command: ["sh", "-c", "mpc -h \"$3\" readpicture \"$1\" > \"$2.tmp\" && [ -s \"$2.tmp\" ] && mv \"$2.tmp\" \"$2\" || { rm -f \"$2.tmp\"; exit 1; }", "sh", thumbs.current, Mpd.cache_dir + "/" + Qt.md5(thumbs.current) + ".img", Mpd.host]
+            command: ["sh", "-c", `
+                file="$1"
+                out="$2"
+                host="$3"
+                mpc -q -h "$host" readpicture "$file" > "$out.tmp" || { rm -f "$out.tmp"; exit 1; }
+                [ -s "$out.tmp" ] || { rm -f "$out.tmp"; exit 1; }
+                mv "$out.tmp" "$out"
+            `, "sh", thumbs.current, Mpd.cache_dir + "/" + Qt.md5(thumbs.current) + ".img", Mpd.host]
             onExited: (exitCode, exitStatus) => {
                 if (!thumbs.ready) {
                     return;
