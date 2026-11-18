@@ -8,12 +8,12 @@ Singleton {
     id: root
     property alias thumbs: thumbs
 
-    Process {
+    RerunProcess {
         id: listProc
         running: Mpd.host !== ""
         command: ["sh", "-c", "mkdir -p \"$1\" && ls -1 \"$1\"", "sh", Mpd.cache_dir]
         stdout: StdioCollector {
-            onStreamFinished: {
+            onStreamFinished: if (!listProc.restart) {
                 const have = {};
                 for (const name of this.text.split('\n'))
                     if (name.endsWith(".img"))
@@ -74,6 +74,16 @@ Singleton {
                 }
                 thumbs.next();
             }
+        }
+    }
+    Connections {
+        target: Mpd
+        function onHostChanged() {
+            thumbs.have = [];
+            thumbs.failed = ({});
+            thumbs.ready = false;
+            thumbs.rev++;
+            listProc.rerun();
         }
     }
 }
