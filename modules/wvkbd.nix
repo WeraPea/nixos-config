@@ -132,7 +132,7 @@ in
                         --fn "${config.stylix.fonts.sansSerif.name}"\
                         -R 0 -H 500 ''
                   + lib.optionalString (!cfg.popups.enable) "--hide-popups "
-                  + lib.optionalString (cfg.fake_repeat_delay) "--long-press-ms ${toString cfg.repeat_delay} "
+                  + lib.optionalString cfg.fake_repeat_delay "--long-press-ms ${toString cfg.repeat_delay} "
                 );
               Restart = "on-failure";
               RestartSec = 1;

@@ -185,7 +185,7 @@ in
             packagePath = "${inputs.wayland-pipewire-idle-inhibit}/default.nix";
           in
           if (config.werapi.buildSystem == "x86_64-linux") then
-            pkgs.werapi.pkgsCrossFromX86.callPackage packagePath { pipewire = pkgs.pipewire; }
+            pkgs.werapi.pkgsCrossFromX86.callPackage packagePath { inherit (pkgs) pipewire; }
           else
             pkgs.callPackage packagePath { };
         settings = {

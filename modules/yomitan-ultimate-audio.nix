@@ -126,7 +126,7 @@ in
         systemd.services.yomitan-ultimate-audio = {
           requires = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
-          environment = cfg.environment;
+          inherit (cfg) environment;
           serviceConfig = {
             Type = "simple";
             Restart = "on-failure";
@@ -149,7 +149,7 @@ in
         users.users = mkIf (cfg.user == "yomitan-ultimate-audio") {
           yomitan-ultimate-audio = {
             name = "yomitan-ultimate-audio";
-            group = cfg.group;
+            inherit (cfg) group;
             isSystemUser = true;
           };
         };

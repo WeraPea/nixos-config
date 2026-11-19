@@ -17,7 +17,6 @@ in
     }:
     let
       inherit (config) nixos-config mango-lib;
-      hmConfig = nixos-config.home-manager.users.${nixos-config.werapi.username};
     in
     {
       package = lib.mkOverride 500 inputs.mango.packages.${pkgs.stdenv.hostPlatform.system}.mango;
@@ -500,7 +499,7 @@ in
         wrappers.mango.overrides = [
           {
             type = "override";
-            data = (prev: { libinput = pkgs.libinput-arbitration-ignore-all; });
+            data = prev: { libinput = pkgs.libinput-arbitration-ignore-all; };
           }
         ];
         programs.mango.enable = true;

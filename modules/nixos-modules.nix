@@ -12,9 +12,7 @@
     nixosModules = lib.mkOption { };
     # nixosModules = lib.mkOption { type = lib.types.attrsOf (lib.types.uniq lib.types.anything); };
   };
-  config.flake.nixosModules = (
-    lib.concatMapAttrs (
-      name: value: lib.optionalAttrs (value ? nixos) { ${name} = value.nixos; }
-    ) config.flake.modules
-  );
+  config.flake.nixosModules = lib.concatMapAttrs (
+    name: value: lib.optionalAttrs (value ? nixos) { ${name} = value.nixos; }
+  ) config.flake.modules;
 }

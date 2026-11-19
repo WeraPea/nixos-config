@@ -11,10 +11,8 @@
     flake.packages = flake.lib.foreachSystem (
       system: flake.lib.importPackages flake.lib.pkgsBySystem.${system} ./_pkgs
     );
-    flake.overlays.packages = (
-      final: prev: {
-        werapi = prev.werapi or { } // flake.lib.importPackages final ./_pkgs;
-      }
-    );
+    flake.overlays.packages = final: prev: {
+      werapi = prev.werapi or { } // flake.lib.importPackages final ./_pkgs;
+    };
   };
 }

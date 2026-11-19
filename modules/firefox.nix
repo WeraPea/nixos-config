@@ -67,10 +67,10 @@ in
             hash = "sha256-czNgt62fofg3hXw7F4wXSv/+ZAsGtO6bg3sUOiUXcu4=";
           };
         in
-        (pkgs.runCommand "fx-autoconfig-utils" { } ''
+        pkgs.runCommand "fx-autoconfig-utils" { } ''
           mkdir -p "$out"
           cp ${src}/profile/chrome/utils/* "$out/"
-        '');
+        '';
 
       enforce-transparent = builtins.fetchurl {
         url = "https://gist.githubusercontent.com/wrldspawn/9e76f2b4600d2a84a460735d6c037dfa/raw/enforceTransparent.sys.mjs";

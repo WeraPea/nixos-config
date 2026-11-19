@@ -100,7 +100,7 @@
                   command' =
                     builtins.replaceStrings # _
                       (lib.mapAttrsToList (name: value: "%${name}%") argsWithDefaults)
-                      (lib.mapAttrsToList (name: value: toString value) argsWithDefaults)
+                      (lib.mapAttrsToList (name: toString) argsWithDefaults)
                       command;
                   command'' =
                     if (lib.hasPrefix "spawn" command' && builtins.stringLength "${binding},${command'}" > 255) then
@@ -135,12 +135,11 @@
                     let
                       commands = lib.toList (value.command or value);
                       shouldReturn = if value ? name then false else value.return or returnByDefault;
-                      extendKeymode = (
+                      extendKeymode =
                         args ? recKeymodeOf
                         && lib.isString args.recKeymodeOf
                         && value ? recKeymodeOf
-                        && baseMode args.recKeymodeOf != value.recKeymodeOf # shouldn't not happen
-                      );
+                        && baseMode args.recKeymodeOf != value.recKeymodeOf; # shouldn't not happen
                       recKeymodeOf =
                         if extendKeymode then
                           "${args.recKeymodeOf}-${value.recKeymodeOf}"

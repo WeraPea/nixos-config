@@ -40,7 +40,7 @@ in
           [
             "PATH"
             ":"
-            "${lib.makeBinPath (config.path)}"
+            "${lib.makeBinPath config.path}"
           ]
         ];
       };

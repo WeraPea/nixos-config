@@ -9,23 +9,21 @@ in
 {
   flake.nixpkgs-patches.expose-nixpkgsFun = pkgs: ./expose-nixpkgsFun.patch;
   flake.overlays = {
-    cross = (
-      final: prev: {
-        werapi = (prev.werapi or { }) // {
-          pkgsX86_64 = final.nixpkgsFun {
-            localSystem = "x86_64-linux";
-            crossSystem = "x86_64-linux";
-          };
-          pkgsCrossFromX86 = final.nixpkgsFun {
-            localSystem = "x86_64-linux";
-            crossSystem = {
-              inherit (final.stdenv.hostPlatform) config;
-            };
+    cross = final: prev: {
+      werapi = (prev.werapi or { }) // {
+        pkgsX86_64 = final.nixpkgsFun {
+          localSystem = "x86_64-linux";
+          crossSystem = "x86_64-linux";
+        };
+        pkgsCrossFromX86 = final.nixpkgsFun {
+          localSystem = "x86_64-linux";
+          crossSystem = {
+            inherit (final.stdenv.hostPlatform) config;
           };
         };
-      }
-    );
-    _cross-pkgs-post = (
+      };
+    };
+    _cross-pkgs-post =
       final: prev:
       if prev.stdenv.buildPlatform.system == "x86_64-linux" then
         { }
@@ -110,11 +108,9 @@ in
               '';
             });
           };
-        }
-    );
-    _cross-pkgs-pre = (
-      final: prev: if prev.stdenv.buildPlatform.system == "x86_64-linux" then { } else { }
-    );
+        };
+    _cross-pkgs-pre =
+      final: prev: if prev.stdenv.buildPlatform.system == "x86_64-linux" then { } else { };
   };
   flake.modules.${moduleName}.nixos =
     {
@@ -147,22 +143,24 @@ in
       mango-pkg =
         if cross then
           (pkgs.werapi.pkgsCrossFromX86.callPackage "${inputs.mango}/nix/default.nix" {
-            cjson = pkgs.cjson;
-            libdrm = pkgs.libdrm;
-            libGL = pkgs.libGL;
-            libinput = pkgs.libinput;
-            libX11 = pkgs.libX11;
-            libxcb = pkgs.libxcb;
-            libxcb-wm = pkgs.libxcb-wm;
-            libxkbcommon = pkgs.libxkbcommon;
-            pango = pkgs.pango;
-            pcre2 = pkgs.pcre2;
-            pixman = pkgs.pixman;
+            inherit (pkgs)
+              cjson
+              libdrm
+              libGL
+              libinput
+              libX11
+              libxcb
+              libxcb-wm
+              libxkbcommon
+              pango
+              pcre2
+              wayland
+              wayland-protocols
+              wlroots_0_20
+              xwayland
+              pixman
+              ;
             scenefx = inputs.mango.inputs.scenefx.packages.${pkgs.stdenv.hostPlatform.system}.default;
-            wayland = pkgs.wayland;
-            wayland-protocols = pkgs.wayland-protocols;
-            wlroots_0_20 = pkgs.wlroots_0_20;
-            xwayland = pkgs.xwayland;
           }).overrideAttrs
             (old: {
               nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.werapi.pkgsCrossFromX86.autoPatchelfHook ];

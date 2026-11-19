@@ -91,7 +91,7 @@
       };
 
       flakeModules = lib.evalModules {
-        modules = (import ./modules/_import-tree.nix lib ./modules);
+        modules = import ./modules/_import-tree.nix lib ./modules;
         inherit specialArgs;
       };
     in
