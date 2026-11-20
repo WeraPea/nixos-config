@@ -26,7 +26,7 @@ in
         firefox.enable = false;
         koreader.enable = lib.mkForce false;
         graphics.enable = false;
-        pinenote-usbnet.dev.enable = lib.mkForce false; # netboot handles it
+        usbnet.enable = lib.mkForce false; # netboot handles it
       };
 
       system.build.script = pkgs.werapi.pkgsX86_64.writeShellScriptBin "build-flash-run-script" /* bash */ ''
