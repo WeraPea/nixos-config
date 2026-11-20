@@ -395,9 +395,7 @@ in
         };
       };
       config = lib.mkIf cfg.enable {
-        warnings = lib.optionals (
-          glidePackage.version != "0.1.65a"
-        ) "glide updated, change firefox release";
+        warnings = lib.optional (glidePackage.version != "0.1.65a") "glide updated, change firefox release";
         nixpkgs.overlays = [
           inputs.rycee.overlays.default
         ];
@@ -812,6 +810,7 @@ in
                 "general.smoothScroll.msdPhysics.motionBeginSpringConstant" = 300;
                 "layout.css.prefers-color-scheme.content-override" = if cfg.theme.dark.enable then 0 else 1;
                 "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
+                "network.lna.websocket.enabled" = false; # SkipDomains does not appear to work so this have to do
                 "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
                 "xpinstall.signatures.required" = false;
                 "browser.uiCustomization.state" = builtins.toJSON {
