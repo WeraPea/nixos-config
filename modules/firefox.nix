@@ -810,6 +810,7 @@ in
                 "general.smoothScroll.msdPhysics.motionBeginSpringConstant" = 300;
                 "layout.css.prefers-color-scheme.content-override" = if cfg.theme.dark.enable then 0 else 1;
                 "media.videocontrols.picture-in-picture.video-toggle.enabled" = false;
+                "network.lna.skip-domains" = "*.werapi.duckdns.org";
                 "network.lna.websocket.enabled" = false; # SkipDomains does not appear to work so this have to do
                 "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
                 "xpinstall.signatures.required" = false;
