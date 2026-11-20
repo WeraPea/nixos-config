@@ -18,8 +18,8 @@ in
     }:
     {
       imports = [
-        "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-        "${pkgs.path}/nixos/modules/installer/cd-dvd/channel.nix"
+        "${flake.inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+        "${flake.inputs.nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
       ];
 
       werapi = {
@@ -41,6 +41,7 @@ in
       networking.useDHCP = lib.mkDefault true;
 
       users.users.wera.initialPassword = "12345";
+      users.users.wera.hashedPasswordFile = lib.mkForce null;
 
       boot = {
         supportedFilesystems = lib.mkForce [
