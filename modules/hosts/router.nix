@@ -95,7 +95,7 @@ in
               if [ "$was_down" != "n" ]; then
                 was_down="n"
                 echo "$primary up"
-                ip route del default dev "$usb" metric 50
+                ip route del default dev "$usb" metric 50 || true
               fi
             else
               fails=$((fails + 1))
