@@ -93,9 +93,9 @@ in
         base16Scheme = lib.mkForce {
           scheme = "eink-light";
           base00 = "#ffffff";
-          base01 = "#eeeeee";
-          base02 = "#cccccc";
-          base03 = "#666666";
+          base01 = "#cccccc";
+          base02 = "#777777";
+          base03 = "#555555";
           base04 = "#444444";
           base05 = "#222222";
           base06 = "#111111";
