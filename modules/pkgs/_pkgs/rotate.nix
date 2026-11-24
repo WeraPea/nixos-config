@@ -2,6 +2,7 @@
   lib,
   writeShellScriptBin,
   bc,
+  gnugrep,
   jq,
   wlr-randr,
 }:
@@ -11,6 +12,7 @@ writeShellScriptBin "rotate-screen" ''
   export PATH="${
     lib.makeBinPath [
       bc
+      gnugrep
       jq
       wlr-randr
     ]
@@ -23,7 +25,7 @@ writeShellScriptBin "rotate-screen" ''
 
   [[ $# -lt 2 || $# -gt 3 ]] && usage
 
-  [[ $# -ne 3 ]] && BASE=/sys/bus/iio/devices/iio:device1 || BASE="$3"
+  [[ $# -ne 3 ]] && BASE=$(dirname "$(dirname "$(grep -lx accelerometer /sys/bus/iio/devices/iio:device*/of_node/name)")") || BASE="$3"
 
   order=(normal 90 180 270)
 
