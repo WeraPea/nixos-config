@@ -14,9 +14,10 @@ Item {
     component ScrollBase: Item {
         id: scrollBase
         property Flickable scroller
-        property real wheelStep: 52
+        property real step: 52
         property bool mouseFlick: root.mouseFlick
         readonly property bool moving: dragHandler.active || wheelTimer.running || scroller.flicking
+        required property bool reducedMotion
 
         function clampY(y) {
             const f = scroller;
@@ -33,7 +34,7 @@ Item {
         WheelHandler {
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: event => {
-                const dy = event.angleDelta.y / 120 * scrollBase.wheelStep;
+                const dy = event.angleDelta.y / 120 * scrollBase.step;
                 wheelTimer.restart();
                 scrollBase.scroller.cancelFlick();
                 scrollBase.scroller.contentY = scrollBase.clampY(scrollBase.scroller.contentY - dy);
@@ -46,16 +47,27 @@ Item {
             target: null
             xAxis.enabled: false
             acceptedDevices: scrollBase.mouseFlick ? PointerDevice.AllDevices : (PointerDevice.TouchScreen | PointerDevice.Stylus)
+            property real dy: 0
             onActiveChanged: {
                 if (active) {
-                    scrollBase.scroller.cancelFlick();
+                    if (!reducedMotion)
+                        scrollBase.scroller.cancelFlick();
                     startY = scrollBase.scroller.contentY;
+                    dy = 0;
                 } else {
-                    scrollBase.scroller.flick(0, centroid.velocity.y);
+                    if (!reducedMotion)
+                        scrollBase.scroller.flick(0, centroid.velocity.y);
                 }
             }
-            onTranslationChanged: if (active)
-                scrollBase.scroller.contentY = scrollBase.clampY(startY - translation.y)
+            onTranslationChanged: if (active) {
+                dy = translation.y;
+                if (!reducedMotion) {
+                    scrollBase.scroller.contentY = scrollBase.clampY(startY - translation.y);
+                } else {
+                    const steps = Math.round(dy / scrollBase.step);
+                    scrollBase.scroller.contentY = scrollBase.clampY(startY - steps * scrollBase.step);
+                }
+            }
         }
     }
 
@@ -368,10 +380,12 @@ Item {
             color: colors.background
             onClosed: Mpd.ipcWindowVisibilityState = false
 
+            property bool onPinenote: (Hostname.hostname == "pinenote" || floatingWindow.screen.name.startsWith("HEADLESS-"))
+            property bool reducedMotion: onPinenote
             property alias colors: colors
             Colors {
                 id: colors
-                path: (Hostname.hostname == "pinenote" || floatingWindow.screen.name.startsWith("HEADLESS-")) ? `${Quickshell.env("PINENOTE_COLORS_CONFIG")}` : defaultPath
+                path: onPinenote ? `${Quickshell.env("PINENOTE_COLORS_CONFIG")}` : defaultPath
             }
 
             property int tab: 1
@@ -460,7 +474,7 @@ Item {
                                 target: coverSwipe
                                 property: "offset"
                                 to: 0
-                                duration: 250
+                                duration: floatingWindow.reducedMotion ? 0 : 250
                                 easing.type: Easing.OutCubic
                             }
 
@@ -491,18 +505,19 @@ Item {
                                 target: null
                                 yAxis.enabled: false
                                 property real startOffset: 0
+                                property real dx: 0
                                 property real v: 0
                                 onActiveChanged: {
                                     if (active) {
                                         snapAnim.stop();
                                         startOffset = coverSwipe.offset;
+                                        dx = 0;
                                         v = 0;
                                     } else {
-                                        const delta = coverSwipe.offset - startOffset;
                                         let target = coverSwipe.page;
-                                        if (delta < -coverSwipe.width * coverSwipe.commitFraction || v < -coverSwipe.commitVelocity)
+                                        if (dx < -coverSwipe.width * coverSwipe.commitFraction || v < -coverSwipe.commitVelocity)
                                             target += 1;
-                                        else if (delta > coverSwipe.width * coverSwipe.commitFraction || v > coverSwipe.commitVelocity)
+                                        else if (dx > coverSwipe.width * coverSwipe.commitFraction || v > coverSwipe.commitVelocity)
                                             target -= 1;
                                         coverSwipe.goTo(target, false);
                                         if (coverSwipe.page + 1 !== Mpd.currentTrack)
@@ -510,7 +525,9 @@ Item {
                                     }
                                 }
                                 onTranslationChanged: if (active) {
-                                    coverSwipe.offset = startOffset + translation.x;
+                                    dx = translation.x;
+                                    if (!floatingWindow.reducedMotion)
+                                        coverSwipe.offset = startOffset + translation.x;
                                     v = centroid.velocity.x;
                                 }
                             }
@@ -737,6 +754,7 @@ Item {
                             // Queue
                             TouchList {
                                 id: queueList
+                                reducedMotion: floatingWindow.reducedMotion
                                 model: Mpd.queue
                                 delegate: TrackRow {
                                     required property int position
@@ -850,6 +868,7 @@ Item {
                                         id: f
                                         source: Mpd.library
                                     }
+                                    reducedMotion: floatingWindow.reducedMotion
                                     model: f.filtered
                                     delegate: TrackRow {
                                         monitor_name: floatingWindow.screen.name
@@ -868,6 +887,7 @@ Item {
 
                                 // Playlist list
                                 TouchList {
+                                    reducedMotion: floatingWindow.reducedMotion
                                     model: Mpd.playlists
                                     delegate: Rectangle {
                                         id: plRow
@@ -934,6 +954,7 @@ Item {
                                     TouchList {
                                         Layout.fillWidth: true
                                         Layout.fillHeight: true
+                                        reducedMotion: floatingWindow.reducedMotion
                                         model: Mpd.playlist
                                         delegate: TrackRow {
                                             monitor_name: floatingWindow.screen.name
@@ -951,6 +972,7 @@ Item {
 
                             // Lyrics
                             TouchFlick {
+                                reducedMotion: floatingWindow.reducedMotion
                                 contentHeight: lyricsText.height + 24
                                 SelectableText {
                                     id: lyricsText
@@ -969,6 +991,7 @@ Item {
 
                             // Info
                             TouchList {
+                                reducedMotion: floatingWindow.reducedMotion
                                 model: [
                                     {
                                         key: "Title",
