@@ -194,6 +194,32 @@ in
         };
       };
 
+      systemd.user.services.wlinhibit = {
+        serviceConfig.ExecStart = lib.getExe' pkgs.wlinhibit "wlinhibit";
+      };
+      systemd.user.services.wlinhibit-upower = {
+        wants = [ "graphical-session.target" ];
+        wantedBy = [ "graphical-session.target" ];
+        after = [ "graphical-session.target" ];
+        path = [ pkgs.dbus ];
+        script = ''
+          sync() {
+            if [ "$(busctl --system get-property org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower OnBattery)" = "b false" ]; then
+              systemctl --user start wlinhibit.service
+            else
+              systemctl --user stop wlinhibit.service
+            fi
+          }
+          sync
+          dbus-monitor --system "type='signal',sender='org.freedesktop.UPower',path='/org/freedesktop/UPower',interface='org.freedesktop.DBus.Properties'" |
+            while read -r line; do
+              case "$line" in
+                *'"OnBattery"'*) sync ;;
+              esac
+            done
+        '';
+      };
+
       # programs.calls.enable = true;
 
       systemd.services.battery-charge-limit = {
