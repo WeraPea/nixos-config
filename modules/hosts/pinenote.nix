@@ -61,6 +61,7 @@ in
         werapi.rotate
         werapi.switch-boot-partition
         xournalpp
+        mpc
       ];
 
       hm = {
